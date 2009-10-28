@@ -1,0 +1,221 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(中华人民共和国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#include ""res\\Custom.rc2""  // 非 Microsoft Visual C++ 编辑过的资源\r\n"
+    "#include ""afxres.rc""         // 标准组件\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\Custom.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_CUSTOM_DIALOG DIALOGEX 0, 0, 187, 261
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | 
+    WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "Custom"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Save",IDOK,96,240,42,12
+    PUSHBUTTON      "Close",IDCANCEL,138,240,42,12
+    GROUPBOX        "Keyboard",IDC_STATIC,6,24,84,174
+    GROUPBOX        "Joystick",IDC_STATIC,96,24,84,75
+    GROUPBOX        "Frame Skip",IDC_STATIC,6,204,82,30
+    GROUPBOX        "Screen Mode",IDC_STATIC,96,102,84,24
+    CONTROL         "Full",IDC_FULLSCREEN,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP,144,111,30,12
+    CONTROL         "Window",IDC_WINDOW,"Button",BS_AUTORADIOBUTTON,102,111,
+                    36,12
+    CONTROL         "Default",IDC_DEFAULTWINDOW,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,102,144,36,12
+    EDITTEXT        IDC_FILENAME,6,6,174,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_KEY_UP,48,36,36,12,ES_CENTER | ES_AUTOHSCROLL
+    EDITTEXT        IDC_KEY_DOWN,48,48,36,12,ES_CENTER | ES_AUTOHSCROLL
+    EDITTEXT        IDC_KEY_LEFT,48,60,36,12,ES_CENTER | ES_AUTOHSCROLL
+    EDITTEXT        IDC_KEY_RIGHT,48,72,36,12,ES_CENTER | ES_AUTOHSCROLL
+    EDITTEXT        IDC_KEY_FIRE,48,84,36,12,ES_CENTER | ES_AUTOHSCROLL
+    EDITTEXT        IDC_KEY_SPECIAL,48,96,36,12,ES_CENTER | ES_AUTOHSCROLL
+    EDITTEXT        IDC_KEY_SLOW,48,108,36,12,ES_CENTER | ES_AUTOHSCROLL
+    EDITTEXT        IDC_KEY_CHANGE,48,120,36,12,ES_CENTER | ES_AUTOHSCROLL
+    EDITTEXT        IDC_KEY_PAUSE,48,132,36,12,ES_CENTER | ES_AUTOHSCROLL
+    EDITTEXT        IDC_KEY_SKIP,48,144,36,12,ES_CENTER | ES_AUTOHSCROLL
+    EDITTEXT        IDC_KEY_ENTER,48,156,36,12,ES_CENTER | ES_AUTOHSCROLL
+    EDITTEXT        IDC_KEY_ESCAPE,48,168,36,12,ES_CENTER | ES_AUTOHSCROLL
+    EDITTEXT        IDC_KEY_CAPTURE,48,180,36,12,ES_CENTER | ES_AUTOHSCROLL
+    CTEXT           "Up",IDC_STATIC,12,36,36,12,WS_BORDER,WS_EX_CLIENTEDGE
+    CTEXT           "Down",IDC_STATIC,12,48,36,12,WS_BORDER,WS_EX_CLIENTEDGE
+    CTEXT           "Left",IDC_STATIC,12,60,36,12,WS_BORDER,WS_EX_CLIENTEDGE
+    CTEXT           "Right",IDC_STATIC,12,72,36,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CTEXT           "Shoot",IDC_STATIC,12,84,36,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CTEXT           "Special",IDC_STATIC,12,96,36,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CTEXT           "Slow",IDC_STATIC,12,108,36,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CTEXT           "Change",IDC_STATIC,12,120,36,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CTEXT           "Pause",IDC_STATIC,12,132,36,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CTEXT           "Skip",IDC_STATIC,12,144,36,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CTEXT           "OK",IDC_STATIC,12,156,36,12,WS_BORDER,WS_EX_CLIENTEDGE
+    CTEXT           "Quit",IDC_STATIC,12,168,36,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CTEXT           "SnapShot",IDC_STATIC,12,180,36,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    EDITTEXT        IDC_JOY_FIRE,138,36,37,12,ES_CENTER | ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    EDITTEXT        IDC_JOY_SPECIAL,138,48,37,12,ES_CENTER | ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    EDITTEXT        IDC_JOY_SLOW,138,60,37,12,ES_CENTER | ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    EDITTEXT        IDC_JOY_CHANGE,138,72,37,12,ES_CENTER | ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    EDITTEXT        IDC_JOY_PAUSE,138,84,37,12,ES_CENTER | ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    CTEXT           "Shoot",IDC_STATIC,102,36,36,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CTEXT           "Special",IDC_STATIC,102,48,36,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CTEXT           "Slow",IDC_STATIC,102,60,36,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CTEXT           "Change",IDC_STATIC,102,72,36,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CTEXT           "Pause",IDC_STATIC,102,84,36,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CONTROL         "TopMost",IDC_TOPMOST,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,137,144,39,12
+    GROUPBOX        "Custom Window",IDC_STATIC,96,132,84,76
+    EDITTEXT        IDC_LEFTX,133,156,42,12,ES_CENTER | ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    EDITTEXT        IDC_TOPY,133,168,42,12,ES_CENTER | ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    EDITTEXT        IDC_WINDOWW,133,180,42,12,ES_CENTER | ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    EDITTEXT        IDC_WINDOWH,133,192,42,12,ES_CENTER | ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    CTEXT           "Left",IDC_STATIC,102,156,30,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CTEXT           "Top",IDC_STATIC,102,168,30,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CTEXT           "Width",IDC_STATIC,102,180,30,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CTEXT           "Height",IDC_STATIC,102,192,30,12,WS_BORDER,
+                    WS_EX_CLIENTEDGE
+    CONTROL         "No",IDC_RENDERSKIP_0,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP,13,216,21,12
+    CONTROL         "1/2",IDC_RENDERSKIP_2,"Button",BS_AUTORADIOBUTTON,35,
+                    216,22,12
+    CONTROL         "1/3",IDC_RENDERSKIP_3,"Button",BS_AUTORADIOBUTTON,63,
+                    216,24,12
+    DEFPUSHBUTTON   "Reset",IDC_RELOAD,6,240,42,12
+    PUSHBUTTON      "Default",IDC_RESET,48,240,42,12
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_CUSTOM_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 180
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 254
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // 中文(中华人民共和国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+#pragma code_page(936)
+#include "res\Custom.rc2"  // 非 Microsoft Visual C++ 编辑过的资源
+#include "afxres.rc"         // 标准组件
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,185 @@
+DES_TH_TOB_SCRIPTFILE 0x073
+
+STAGEFILE
+
+// ///////////////////////////////////////// //
+
+# 202	// T24
+
+@ @@> 0
+
+EXECUTE CT_STAGE 201 TIME
+
+// Spell 206
+# 206
+
+@ 1
+
+IF MODE - MODE_SPELL !
+{
+	BGSETUP $LayerNormal $EnemyID_12 true 0xffff
+}
+
+SPELLUP $EnemyID_12 CenterBossX CenterBossY
+
+EB 0x0206 0 $EnemyID_12
+	TX $EnemyID_12 TY $EnemyID_12 9000 0.0
+	$EnemyID_12 120 180 0x00000040
+
+BOSSUP
+
+// Spell 210
+# 210
+
+@ QUIT@
+
+MUSICSLIDE 3.0 0 -101 -1
+
+@ 1
+
+IF MODE - MODE_SPELL !
+{
+	BGSETUP $LayerNormal $EnemyID_12 true 0xffff
+}
+
+SPELLUP $EnemyID_12 CenterBossX CenterBossY
+
+EB 0x0210 0 $EnemyID_12
+	TX $EnemyID_12 TY $EnemyID_12 9000 0.0
+	$EnemyID_12 120 180 0x00000040
+
+BOSSUP
+
+// T25
+# 214
+
+@ @@> 0
+
+EXECUTE CT_STAGE 213 TIME
+
+// Spell 218
+# 218
+
+@ QUIT@
+
+EFFOFF 0
+
+@ 1
+
+IF MODE - MODE_SPELL !
+{
+	BGSETUP $LayerNormal $EnemyID_13 true 0xffff
+}
+
+SPELLUP $EnemyID_13 CenterBossX CenterBossY
+
+EB 0x0218 0 $EnemyID_13
+	TX $EnemyID_13 TY $EnemyID_13 9000 0.0
+	$EnemyID_13 120 180 0x00000060
+
+BOSSUP
+
+// Spell 222
+# 222
+
+@ 1
+
+IF MODE - MODE_SPELL !
+{
+	BGSETUP $LayerNormal $EnemyID_13 true 0xffff
+}
+
+SPELLUP $EnemyID_13 CenterBossX CenterBossY
+
+EB 0x0222 0 $EnemyID_13
+	TX $EnemyID_13 TY $EnemyID_13 9000 0.0
+	$EnemyID_13 120 180 0x00000060
+
+BOSSUP
+
+// Spell 226
+# 226
+
+@ QUIT@
+
+MUSICSLIDE 3.0 0 -101 -1
+
+@ 1
+
+IF MODE - MODE_SPELL !
+{
+	BGSETUP $LayerNormal $EnemyID_13 true 0xffff
+}
+
+SPELLUP $EnemyID_13 CenterBossX CenterBossY
+
+EB 0x0226 0 $EnemyID_13
+	TX $EnemyID_13 TY $EnemyID_13 9000 0.0
+	$EnemyID_13 140 180 0x00000060
+
+BOSSUP
+
+// T26
+# 230
+
+@ @@> 0
+
+EXECUTE CT_STAGE 229 TIME
+
+// Spell 234
+# 234
+
+@ 1
+
+IF MODE - MODE_SPELL !
+{
+	BGSETUP $LayerNormal $EnemyID_18 true 0xffff
+}
+
+SPELLUP $EnemyID_18 CenterBossX CenterBossY
+
+EB 0x0234 0 $EnemyID_18
+	TX $EnemyID_18 TY $EnemyID_18 9000 0.0
+	$EnemyID_18 140 180 0x00000080
+
+BOSSUP
+
+// Spell 238
+# 238
+
+@ 1
+
+IF MODE - MODE_SPELL !
+{
+	BGSETUP $LayerNormal $EnemyID_18 true 0xffff
+}
+
+SPELLUP $EnemyID_18 CenterBossX CenterBossY
+
+EB 0x0238 0 $EnemyID_18
+	TX $EnemyID_18 TY $EnemyID_18 9000 0.0
+	$EnemyID_18 160 180 0x00000080
+
+BOSSUP
+
+// Spell 242
+# 242
+
+@ QUIT@
+
+MUSICSLIDE 3.0 0 -101 -1
+
+@ 1
+
+IF MODE - MODE_SPELL !
+{
+	BGSETUP $LayerNormal $EnemyID_18 true 0xffff
+}
+
+SPELLUP $EnemyID_18 CenterBossX CenterBossY
+
+EB 0x0242 0 $EnemyID_18
+	TX $EnemyID_18 TY $EnemyID_18 9000 0.0
+	$EnemyID_18 160 180 0x00000080
+
+BOSSUP

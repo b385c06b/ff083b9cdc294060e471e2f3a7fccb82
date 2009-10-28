@@ -1,0 +1,627 @@
+
+/L13"Lua" Line Comment = -- Block Comment On = --[[ Block Comment Off = ]] String Chars = "' File Extensions = LUA
+/Delimiters = ~!@%^&*()-+=|\/{}[]:;"'<> ,	.?
+/Function String = "%[a-zA-Z]*)"
+/Open Brace Strings =  "function","if","elseif","for","{"
+/Close Brace Strings = "end","}"
+/Open Fold Strings = "function","if","elseif","for","{"
+/Close Fold Strings = "end","}"
+/Indent Strings = "function","if","elseif","for","{"
+/Unindent Strings = "end","}"
+/C1 "key words"
+and
+do
+else elseif end
+for function
+if in
+local
+nil not
+or
+repeat return
+then
+until
+while
+/C2
+abs acos appendto ascii asin assert atan atan2
+call ceil clock collectgarbage copytagmethods cos
+date deg dofile dostring
+error execute exit
+false floor foreach foreachvar format frexp
+getbinmethod getenv getglobal gettagmethod gsub
+ldexp log log10
+max min mod
+newtag next nextvar
+print
+rad random randomseed rawgetglobal rawgettable rawsetglobal rawsettable read
+readfrom remove rename
+seterrormethod setglobal setlocale settag settagmethod sin sqrt strbyte
+strchar strfind strlen strlower strrep strsub strupper
+tag tan tmpname tonumber tostring true type
+write writeto
+/C3
+$debug
+$else
+$end
+$endinput
+$if
+$ifnot
+$nodebug
+/C4
+PI
+_INPUT _OUTPUT _STDERR _STDIN _STDOUT
+/C5
++
+-
+*
+// /
+^
+<
+>
+=
+~
+%
+.
+:
+/C6
+;
+,
+(
+)
+{
+}
+[
+]
+/C7
+cgi cgilua cgilua_url char2hexa chdir
+dbluaerrorfb dblua_escape decode default_script
+encodecgi encodetable escape
+filetype
+getvalue
+hexa hexa2char html_mask
+includehtml insertfield
+lua_mask
+maketable map mkurl
+nopipe
+preprocess
+redirect relativeurl relative_url
+saveluavar savestate script_path script_pdir script_vdir stateerrormethod
+statefile stdin strsplit
+unescape
+/C8
+** LuaFn_
+DBClose DBExec DBOpen DBRow
+
+
+/L20"DES_GOBSTG" Line Comment = // Block Comment On = /* Block Comment Off = */ Escape Char = \ String Chars = "' File Extensions = SCRIPT
+/Delimiters = -:;"' ,	.?
+/Function String = "# [0-9]"
+/Function String 1 = "# STATE_[A-Z]"
+/Indent Strings = "{" ":"
+/Unindent Strings = "}"
+/Open Brace Strings =  "{" "(" "["
+/Close Brace Strings = "}" ")" "]"
+/Open Fold Strings = "{"
+/Close Fold Strings = "}"
+
+/C1"Keywords" STYLE_KEYWORD
+#
+@
+{
+}
+CONTROLFILE
+DES_TH_TOB_SCRIPTFILE
+EDEFFILE
+ELSE
+ELSEIF
+EVENTFILE
+FUNCTIONFILE
+IF
+LOOP
+RETURN
+SCENEFILE
+SKIP
+STAGEFILE
+
+/C2"Operator" STYLE_OPERATOR
+-
+-f
+-u
+!
+%
+%u
+*
+*f
+*u
+/
+/f
+/u
+~
++
++f
++u
+<
+<f
+<u
+>
+>f
+>u
+
+/C3"Method" STYLE_METHOD
+A
+ACONTROL
+B
+BC
+BCONTROL
+BEB
+BEHOLD
+BEPIN
+BEVECTOR
+BG4V
+BGBLEND
+BGCOLOR
+BGFLAG
+BGMOVE
+BGOFF
+BGPARAL
+BGRECT
+BGSCALE
+BGSETUP
+BGSI
+BGTEXRECT
+BGVALEX
+BGVALUE
+BGZ
+BL
+BONUSFLAG
+BOSSATTACK
+BOSSSTORE
+BOSSUP
+BUDECANCEL
+CALL
+CALLEX
+CHASEAIM
+CHATOFF
+CHATON
+COLLAPSE
+COLLISION_CIRCLE
+COLLISION_SQUARE
+DAMAGEZONE
+DATAGET
+DATAGETf
+DATASET
+DATASETf
+DISABLEALLKEY
+DIST
+EA
+EB
+EFFMOVETO
+EFFOFF
+EFFSET
+EFFSETUP
+EFFSETUPEX
+EFFSETUPCHASE
+EFFSTOP
+ENCHANGE
+ENCHASE
+ENSAIM
+EXECUTE
+GETFLAG
+GB
+GHCHANGE
+GHCHASE
+GHSAIM
+GHSET
+HSVTORGB
+INTER
+ISELBUILD
+ISELCLEAR
+ISELCOLOR
+ISELFLAG
+ISELSET
+ITEMBUILD
+IZEZONE
+MUSICCHANGE
+MUSICSLIDE
+RAMA
+SD
+SDf
+SE
+SELBUILD
+SELCLEAR
+SELCONFIRM
+SELFLAG
+SELSET
+SEOFF
+SETCHARA
+SETDIFFI
+SETFLAG
+SETFRAMESKIP
+SETKEY
+SETMODE
+SETPBBORDER
+SETPBINFI
+SETPBSLOW
+SETPFAITH
+SETPLIFE
+SETPPOINT
+SETPPOS
+SETPPOWER
+SETPSLOWSPEED
+SETPSPEED
+SETPSPEEDFACTOR
+SETPUSHEVENT
+SETSCENE
+SETSHAKE
+SETSTATE
+SETTIME
+SPELLUP
+ST
+STARTPREP
+STOPACTION
+TRYSTAGE
+UPDATEPUSHEVENT
+
+/C4"Function" STYLE_FUNCTION
+ACOS2
+ASIN2
+ATAN2
+BGS@
+BE@
+BEANGLE
+BEHOLDTAR
+BEI
+BEPINTAR
+BESPEED
+BETIMER
+BEX
+BEY
+BOSSFAILED
+BOSSFLAG
+BOSSNAME
+BU@
+BUANGLE
+BUCANCELABLE
+BUHAVEGRAY
+BUI
+BUSPEED
+BUTIMER
+BUX
+BUY
+CHARA
+CHATI
+CHECKKEY
+COSA
+D
+DIFFI
+Du
+EN@
+ENAIMX
+ENAIMY
+ENAMAP
+ENANGLE
+ENI
+ENLIFE
+ENRMAP
+ENSETLIFE
+ENSPEED
+ENX
+ENY
+FRAMESKIP
+GETSCENE
+GH@
+GHAC
+GHAIMX
+GHAIMY
+GHAMAP
+GHANGLE
+GHI
+GHLIFE
+GHRMAP
+GHSETLIFE
+GHSPEED
+GHX
+GHY
+HAVEPLAYER
+ISEL
+ISELCOMPLETE
+ISELFIRSTID
+MODE
+NOW#
+NOW@
+PBBORDER
+PBINFI
+PBOMB
+PBSLOW
+PFAITH
+PGX
+PGY
+PLAYERNAME
+PLIFE
+PPOINT
+PPOWER
+PSLOWSPEED
+PSPEED
+PX
+PY
+RAND
+RANDR
+REPLAYMODE
+ROLL
+SEED
+SEL
+SELCOMPLETE
+SELFIRSTID
+SHOOTPB
+SIGN
+SINA
+SNOBATTLE
+SNODIFFI
+SNOSTAGE
+SNOUSER
+SPELLNAME
+SPELLUSERENAME
+SPELLUSERNAME
+SQRT
+TANA
+TIME
+TX
+TY
+
+/C5"Identifier" STYLE_IDENTIFIER
+true
+false
+** STATE_ INFO_ SE_ BTYPE_ CT_ KS_ $ EVENT_ MODE_ CS_
+_A
+_B
+_C
+_D
+_DATASTART_
+_E
+_H
+_L
+_N
+_P
+_X
+Aliveness
+AllTime
+AND
+ANGELSETAMA
+ANGLEADJUST
+ANGLEEQUAL
+ANGLEGREAT
+ANGLELESS
+ANGLERANGE
+ANGLESET
+ANGLESETADD
+ANGLESETAMAP
+ANGLESETAMAT
+ANGLESETRMA
+ANGLESETRMAP
+ANGLESETRMAT
+BEAMFLAG_HORIZON
+BEAMFLAG_HS
+BEAMFLAG_NOGRAZE
+BEAMFLAG_NONE
+BEAMFLAG_STOP
+BG_FADEIN
+BG_FADEINHALF
+BG_FADEOUT
+BG_LIGHTRED
+BG_LIGHTUP
+BG_LIGHTUPNORMAL
+BG_NONE
+BG_PAUSEIN
+BG_PAUSEOUT
+BG_REDFLASH
+BG_REDOUT
+BG_WHITEFLASH
+BG_WHITEOUT
+BG_YELLOWFLASH
+BGMASK
+BGMT_FADE
+BGMT_FLASH
+BGMT_LIGHT
+BGMT_OUT
+BLEND_ALPHAADD
+BLEND_COLORADD
+BLEND_COLORMUL
+BLEND_DEFAULT
+BLEND_DEFAULT_Z
+BLEND_NOZWRITE
+BLEND_ZWRITE
+Bomb
+Bonus
+BOUNCE
+CALLEVENT
+CenterBossX
+CenterBossY
+CenterH
+CenterW
+CenterX
+CenterY
+CHASE
+CircleRate
+ClearTime
+COLOREQUAL
+COLORSET
+Continue
+CustomConst
+Day
+ENAC_ATTENUATION_TFER
+ENAC_BROKENLINE_CATE
+ENAC_CHASEPLAYER_TFR
+ENAC_CHASETO_CXY
+ENAC_CIRCLE_TXYE
+ENAC_DIRECTSET_XYAS
+ENAC_NONE
+ENAC_OVERPLAYER_CXYT
+ENAC_REPOSITION_T
+ENAC_STOPANDSTRIKE_TEA
+EndPos
+EnemyName
+EnemyPinYin
+EVERY
+EVERYMOD
+Explain
+FADEOUT
+FAITHLIZE
+FastRate
+FGMT_PAUSE
+FGPAUSE
+FileType
+FirstRunTime
+GameVersion
+GetGame
+GetPractice
+GetSpell
+HEADANGLESET
+HEADANGLESETADD
+Header
+Hour
+INDEXMODEQUAL
+INDEXMODGREAT
+INDEXMODLESS
+INDEXMODRANGE
+INIT@
+IsAuto
+IsSpell
+IsWait
+ITEM_BIGPOWER
+ITEM_BOMB
+ITEM_EXTEND
+ITEM_FAITH
+ITEM_FULL
+ITEM_POINT
+ITEM_POWER
+ITEM_SMALLFAITH
+ITEM_STARTSPEED
+IZE_EVENT
+IZE_FADEOUT
+IZE_FAITH
+IZE_POINT
+IZE_SCORE
+IZEOVERZONE
+IZEZONE_DEFAULTTIME
+KEY_DOWN
+KEY_PRESSED
+KEY_UP
+LastStage
+LoopPos
+Lost
+MaxPlayer
+MeetGame
+MeetPractice
+Minute
+Miss
+MODE
+Month
+Music
+MusicFileName
+MusicName
+NOT
+OR
+Pause
+PBACK
+PGO
+PlayTime
+PLBONUS_GRAZE
+PLBONUS_SHOOT
+PLBONUS_TIME
+Point
+POINTLIZE
+POK
+POST@
+PQUIT
+PracticeTime
+PSKIP
+PTURN
+PUSH_FIRST
+PUSH_ROLLTO
+PUSH_SKIP
+PUSHID_GAMEUSE
+PUSHID_UIUSE
+QUIT@
+Spell
+SpellGet
+SpellName
+Remain
+REMAIN
+RESERVEBEGIN
+Score
+SCORELIZE
+SECTIONEND
+SEL_GRAY
+SEL_NONACTIVE
+SEL_NOSHIFT
+SEL_NULL
+SEL_STAY
+Signature
+SPEEDEQUAL
+SPEEDGREAT
+SPEEDLESS
+SPEEDRANGE
+SPEEDSET
+SPEEDSETADD
+StagePractice
+StartPos
+StringDesc
+STOPFLAG_WORLDSHAKE
+STOPFLAG_PLAYER
+STOPFLAG_PLAYERBULLET
+STOPFLAG_ENEMY
+STOPFLAG_GHOST
+STOPFLAG_BULLET
+STOPFLAG_BEAM
+STOPFLAG_ITEM
+STOPFLAG_LAYER
+STOPFLAG_EFFECTSYS
+STOPFLAG_PLAYERSET
+STOPFLAG_ENEMYSET
+THEN
+TimeLimit
+TIMEREQUAL
+TIMERGREAT
+TIMERLESS
+TIMERLESS
+TIMERRANGE
+TIMERRANGE
+Top
+TopBonus
+TopScore
+Total
+TotalCenterX
+TotalCenterY
+TotalH
+TotalW
+TotalPlayTime
+TryTime
+TurnToScene
+TYPEEQUAL
+TYPEEQUAL
+TYPESET
+Username
+VALEQUAL
+VALGREAT
+VALLESS
+VALRANGE
+VALSET
+VALSETADD
+XGREAT
+XLESS
+XRANGE
+XSET
+XSETACCADD
+XSETADD
+Year
+YGREAT
+YLESS
+YRANGE
+YSET
+YSETACCADD
+YSETADD
+
+/C6"Event" STYLE_EVENT
+** @@
+
+/C7"Debug" STYLE_COMMAND
+** DEBUG_

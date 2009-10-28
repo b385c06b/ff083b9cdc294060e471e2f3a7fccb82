@@ -1,0 +1,286 @@
+DES_TH_TOB_SCRIPTFILE 0x073
+
+FUNCTIONFILE
+
+// /////////////
+# $Chat_T31	
+
+@ 0
+
+CHATON 0xff
+	0xff $EnemyID_16 CS_RNN
+	$EnemyID_16 CS_RNN "満月の夜に来て命知らずどもね。"
+	$EnemyID_16 CS_RNN "どうせ霊書をもらってきたもの。今のうち帰れ。身のためよ。"
+	$EnemyID_16 CS_RNN "ったくどいつもこいつも。ことを大きくならないように頑張ってきたのに。"
+	$EnemyID_16 CS_RNN "人気ていうか、神を超える信仰集めてるんじゃないか、巫女のくせに！"
+	$EnemyID_16 CS_RNN "あんなもの引き寄せるのも当然なこと！"
+CHATOFF
+
+@ 1
+
+CHATON 0xff
+	$PlayerID_17 $EnemyID_16 CS_RNN
+	$EnemyID_16 CS_RNN "へぇ、結構偉い奴も来てくれたね。"
+	$PlayerID_17 CS_LNN "霊書もらってきたけど、道どいてくれない？"
+	$EnemyID_16 CS_RNN "なら今すぐ引き返せ。問題はあんたたちほどが解決できるレベルじゃない。"
+	$PlayerID_19 CS_LNN "それは挑発か。なら受け止める。"
+	$EnemyID_16 CS_RNN "ややこしいこと。頼むからもう邪魔をよせ！私たち何とかするから！"
+	$PlayerID_17 CS_LNN "霊夢直々の救援請求を断るわけがない。それにあなたは敵か味方か今のうちわかるまい。"
+	$PlayerID_19 CS_LNN "化け物姿ゆえに、なんか陰謀ありそうだし。"
+	$EnemyID_16 CS_RNN "あぁもう！あたまきた！"
+CHATOFF
+
+@ 4
+
+CHATON 0xff
+	$PlayerID_14 $EnemyID_16 CS_LNN
+	$PlayerID_14 CS_LNN "おや、きもけーねだ。"
+	$EnemyID_16 CS_RNN "なんだと！"
+	$PlayerID_14 CS_LNN "あら、失礼。よくみれば上白沢さんではありませんか。"
+	$EnemyID_16 CS_RNN "よく見なくても私だ！そんなことより引き返れ、あんたに用がない。"
+	$PlayerID_14 CS_LNN "それはいけません。せっかく貧乏霊夢が霊書を送ってきたのに、行かなきゃ礼儀に合いません。"
+	$EnemyID_16 CS_RNN "問題は解決済み…だそうです。"
+	$PlayerID_14 CS_LNN "なんだ今の間は。"
+CHATOFF
+
+@ @@[ 0
+
+IF CHATI - 0xff !
+{
+	SETTIME 0
+	SETSCENE GETSCENE + 4
+}
+
+// /////////
+# $Chat_T32
+
+
+@ 1
+
+CHATON 0xff
+	$PlayerID_03 $EnemyID_23 CS_RFN
+	$EnemyID_23 CS_RNN "けーねやられちゃったか。まぁよい。"
+	$PlayerID_03 CS_LNN "お前ら敵じゃなかったっけ？やっぱり最近の幻想郷は変だ。"
+	$PlayerID_18 CS_LNN "やけに死人出るのも一連の仕業か。"
+	$EnemyID_23 CS_RNN "世の中知らない方がいいことはたまにある。"
+	$PlayerID_03 CS_LNN "霊書をもらった以上、引き返るわけにもない。もしかしてあんたたちが首謀者？"
+	$EnemyID_23 CS_RNN "どう見ても問題を解決しようとしている方だ！だがあんまり人が近づくと危険ですから…。"
+	$PlayerID_18 CS_LNN "やっぱりなんかたくらんでる。放っていくわけがない。おとなしく白状しろ。"
+	$EnemyID_23 CS_RNN "…身のために思ってやったのに、どうやら情を通さなかったな。"
+CHATOFF
+
+@ 2
+
+CHATON 0xff
+	$PlayerID_04 $EnemyID_23 CS_RNN
+	$EnemyID_23 CS_RNN "歓迎しないぞ。"
+	$PlayerID_04 CS_LNN "歓迎しても喜ばない。で、博麗神社ってこの前か。"
+	$PlayerID_08 CS_LNN "道迷わなくてよかった。"
+	$EnemyID_23 CS_RNN "霊夢ってやっぱり人気あるな。半人半霊はともかく、⑨は帰れ。"
+	$PlayerID_08 CS_LNN "失礼だな！あたいも霊夢を気使ってきたから！"
+	$EnemyID_23 CS_RNN "お、それは感動した。"
+	$PlayerID_04 CS_LNN "どうやら邪魔する気満々だな。"
+	$EnemyID_23 CS_RNN "邪魔する方があんたたちよ！"
+CHATOFF
+
+@ 3
+
+CHATON 0xff
+	$PlayerID_17 $EnemyID_23 CS_LNN
+	$PlayerID_17 CS_LNN "永琳よ、いったい何が守ろうとしている。"
+	$EnemyID_23 CS_RNN "霊夢のために言えません。どうか私を信じてください。今のうちに引き返ってください。"
+	$PlayerID_20 CS_LNN "私ならここにいるんだけど？"
+	$EnemyID_23 CS_RNN "あ、あんたが犯人だね！よくも幻想郷にこんなひどいこと！"
+	$PlayerID_20 CS_LNN "私は何でもしなかったよ。勝手に罪人扱いするな。"
+	$PlayerID_17 CS_LNN "そうだ。私の判断で彼女は無罪だ。"
+	$EnemyID_23 CS_RNN "あんたね…。もう一度天月砲されたい？"
+	$PlayerID_20 CS_LNN "それだけは勘弁してくれ！それより事情をきけ！"
+	$EnemyID_23 CS_RNN "問答無用！"
+CHATOFF
+
+@ 4
+
+CHATON 0xff
+	$PlayerID_19 $EnemyID_23 CS_LNN
+	$PlayerID_19 CS_LNN "あれは天月砲だな。ご立派に。"
+	$EnemyID_23 CS_RNN "吸血鬼のくせに目がいいわね。で、なにしにきた？もうすぐ朝だよ。"
+	$PlayerID_19 CS_LNN "あれを神社か。道理で騒ぎに起こす。"
+	$EnemyID_23 CS_RNN "仕方ないじゃない。私は好き好んであれを発動したとでも思ったか。"
+	$PlayerID_19 CS_LNN "事情は大体わかるようになった。結局何も解決しなかった。"
+	$EnemyID_23 CS_RNN "もう一発は準備しておる。だから邪魔されたくないよ。たとえあんたでも。"
+	$PlayerID_19 CS_LNN "お前らがしようとしたことは間違ってる。異世界人をひたすら削除すべきではなく、まず共存を考えることが先だ。"
+	$EnemyID_23 CS_RNN "ふん。侵略されたこともなく紅魔館の奴に言われたくない。もう二度とあんなこと…。"
+	$PlayerID_19 CS_LNN "ヴォヤージュ一九六九か。ちっ、バンパイアの屋城とは血の色だ。だが気持ちだけは理解できるつもりだ。"
+CHATOFF
+
+@ @@[ 0
+
+SD [nochat] NOW@ !
+SD [nochat] TIME > 60 * nochat
+IF CHATI - 0xff ! * NOW@ + nochat
+{
+	SETTIME 0
+	SETSCENE GETSCENE + 4
+}
+
+// //////////
+# $Chat_T33
+
+@ 1
+
+CHATON 0xff
+	$PlayerID_04 $EnemyID_31 CS_RNN
+	$EnemyID_31 CS_RNN "なかなか手ごわいな。霊を切れる妖刀ってどっち？"
+	$PlayerID_04 CS_LNN "知ってどうする？あんたもともと人間だろう、迷いを打ち消してあげようか。"
+	$EnemyID_31 CS_RNN "結構です。で、そっちは犯人のレイムというわけ？この前永琳に一発もらってよくも帰ってきたじゃない。"
+	$PlayerID_20 CS_LNN "大きなお世話。あいつ侵略者とか言って、問答無用でっ私を追い払うから。別に何でもしてないのに。"
+	$EnemyID_31 CS_RNN "足一歩でも踏み違えばすでに侵略者となる。悪いのは事前何も言わなかったおまえだ。"
+	$PlayerID_04 CS_LNN "月とか蓬莱とかは従来外人を排斥している。霊なら何でも歓迎する白玉楼とは大違いだ。"
+	$EnemyID_31 CS_RNN "残念ながら不老不死とか月の文明や生命など地上の人間に知られると大変だから。霊ならわれわれも大歓迎よ。"
+	$PlayerID_20 CS_LNN "霊ですよ、一応。"
+	$EnemyID_31 CS_RNN "言葉遊びするな。おとなしく元の世界へ帰れ！"
+	$PlayerID_20 CS_LNN "…。"
+CHATOFF
+
+@ 2
+
+CHATON 0xff
+	$PlayerID_22 $EnemyID_31 CS_RNN
+	$EnemyID_31 CS_RNN "ひょっとして一連のことはあんたの仕業じゃないでしょうね。"
+	$PlayerID_22 CS_LNN "あれ？ばれたか。"
+	$EnemyID_31 CS_RNN "ほかの世界との境界張ってとんでもないお客様を引き寄せたな。"
+	$PlayerID_22 CS_LNN "ごめんごめん。寝てたからつい。"
+	$EnemyID_31 CS_RNN "おまえ！それで済むとでも思ったか！こっちはどれほど大変だったと思う？"
+	$PlayerID_06 CS_LNN "まぁまぁもこたん落ち着いて。"
+	$EnemyID_31 CS_RNN "も、もこたんだと？"
+	$PlayerID_06 CS_LNN "ゆかりんはそんなことしたのもなにか事情があるに違いません。私のした彼女は迷惑掛けるのが好きではありませんから。"
+	$EnemyID_31 CS_RNN "だったら今すぐあんな忌々しい連中を連れ帰れ！"
+	$PlayerID_22 CS_LNN "そう頭くるな。ゆっくりしようよ。"
+CHATOFF
+
+@ 3
+
+CHATON 0xff
+	$PlayerID_11 $EnemyID_31 CS_LNN
+	$PlayerID_11 CS_LNN "不老不死の蓬莱人か。なかなか興味深いな。"
+	$EnemyID_31 CS_RNN "楽団まできたなんて。いったいどれだけ霊書を…。"
+	$PlayerID_09 CS_LNN "霊書ってこれのこと？私たち字を読めないから説明してくれる？"
+	$EnemyID_31 CS_RNN "おい！字を読めないあんたたちがどうしてここに？"
+	$PlayerID_09 CS_LNN "さぁ。"
+	$PlayerID_11 CS_LNN "幻想郷の皆さんがごく特殊な音率を発生して何箇所に集中してへんだと思ったから。"
+	$EnemyID_31 CS_RNN "そ、そんなこともできるのか！"
+	$PlayerID_11 CS_LNN "うわさの博麗神社の方向ももちろん、この月まで伸びたのは普通じゃない。"
+	$EnemyID_31 CS_RNN "天月砲のせいか。厄介なことだ。"
+CHATOFF
+
+@ 4
+
+CHATON 0xff
+	$PlayerID_22 $EnemyID_31 CS_LNN
+	$PlayerID_22 CS_LNN "白状します。"
+	$EnemyID_31 CS_RNN "へぇ、ずいぶんとおとなしいな。"
+	$PlayerID_22 CS_LNN "何もしてませんから。寝るうちに境界が勝手に開いて、天月砲に起こされたじまいだ。"
+	$EnemyID_31 CS_RNN "やっぱりそうだったかこのバカ者！いま死なすから！"
+	$PlayerID_22 CS_LNN "そう熱くならないで。今のうそ。あっちの世界での異変は大きすぎるのでしばらくこっちに預けようとしていただけだ。"
+	$EnemyID_31 CS_RNN "ほかの世界を見る余裕があるならまずこのとんでもないこと収めろ！"
+	$PlayerID_22 CS_LNN "ごめん。無理。"
+CHATOFF
+
+@ @@[ 0
+
+SD [nochat] NOW@ !
+SD [nochat] TIME > 60 * nochat
+IF CHATI - 0xff ! * NOW@ + nochat
+{
+	SETTIME 0
+	SETSCENE GETSCENE + 4
+}
+
+// ///////
+# $Chat_T34
+
+@ 0
+
+CHATON 0xff
+	0xff $EnemyID_32 CS_RNN
+	$EnemyID_32 CS_RNN "ようこそ、とでもいった方がいいんでしょうか。"
+	$EnemyID_32 CS_RNN "歴史を再築し、不死身の妹紅もあなたたちを阻止できませんでしたね。まことに残念なこと。"
+	$EnemyID_32 CS_RNN "月の姫様としてお願いする、引き返ってください。"
+	$EnemyID_32 CS_RNN "ほかの世界が存在するというパニックを幻想郷の皆さんに知られたくありません。"
+	$EnemyID_32 CS_RNN "あなたたちが見たとおり、天月砲まで通用しない連中ですゆえ、あっちの世界とはどれほど危険でしょう。"
+	$EnemyID_32 CS_RNN "さ、霊書のことを忘れて。早く自分の居場所に帰ってください。"
+	$EnemyID_32 CS_RNN "そうならば、罪を負うのは私だけで済みます。"
+	$EnemyID_32 CS_RNN "どうか、ここまで。"
+CHATOFF
+
+@ 1
+
+CHATON 0xff
+	$PlayerID_22 $EnemyID_32 CS_RNN
+	$EnemyID_32 CS_RNN "八雲ゆかりどの、どうか力になってください。"
+	$PlayerID_22 CS_LNN "わたしの引き寄せたものを責任とれっというのか。"
+	$EnemyID_32 CS_RNN "そんなことはございません。ですが私だけが力不足ですゆえ、あなたの能力がほしいです。"
+	$PlayerID_22 CS_LNN "こっちの咲夜はどう？能力からみればこいつの方がやくにたつじゃない。"
+	$PlayerID_03 CS_LNN "めんどいからパス。"
+	$PlayerID_22 CS_LNN "即拒絶だそうだな。"
+	$EnemyID_32 CS_RNN "八雲ゆかりよ、なにゆえにこのようなことをしたのか、ぜひ聞かせていただきたいです。"
+	$PlayerID_22 CS_LNN "…あの世界のレイムやマリサを助けたいです。"
+	$EnemyID_32 CS_RNN "ですが、動物の世界で弱肉強食という法則がありまして、あんまり外の力を注入しすぎるとバランスが崩れることも多いです。"
+	$PlayerID_22 CS_LNN "それは知っている…つもりだ。"
+	$EnemyID_32 CS_RNN "よい。あなたの心を理解しています。やさしいですけど、間違っています。"
+	$PlayerID_22 CS_LNN "それも知っているつもりだ。"
+CHATOFF
+
+@ 2
+
+CHATON 0xff
+	$PlayerID_01 $EnemyID_32 CS_RNN
+	$EnemyID_32 CS_RNN "れ、霊夢ではありませんか？なにゆえここに…？"
+	$PlayerID_01 CS_LNN "いいことしてくれたじゃない！どういうつもりです？"
+	$EnemyID_32 CS_RNN "あなたは理解できると思いましたが。幻想郷または桃源のさと、世に知られてはいけません。"
+	$PlayerID_21 CS_LNN "疎外感ありすぎてびびったゼ。別に帰るつもりないからいいんじゃない。"
+	$EnemyID_32 CS_RNN "誰が保証できます？大昔に地上の人間と約束しましたのに、またそんなことを。"
+	$PlayerID_21 CS_LNN "それは偏見だゼ。ごく一部の行動で全体を否定するな。"
+	$EnemyID_32 CS_RNN "可能性が見えていますから全力で予防すべきです。"
+	$PlayerID_01 CS_LNN "そんなに緊張しやすいと老けるよ。のんびりお話しあいしたらいいんじゃない。"
+	$EnemyID_32 CS_RNN "そんな余裕はできません。一秒も早く返させてあげたいです。"
+	$PlayerID_01 CS_LNN "なら敵だね。こいつと友達になったから追い払うわけがない。"
+CHATOFF
+
+@ 3
+
+CHATON 0xff
+	$PlayerID_02 $EnemyID_32 CS_LNN
+	$PlayerID_02 CS_LNN "よっ、久しぶりだぜ。"
+	$EnemyID_32 CS_RNN "お久しぶりです。天月砲を発動して誠にすみませんでしたが…。"
+	$PlayerID_02 CS_LNN "いい。それより天月砲はもらうぜ。"
+	$EnemyID_32 CS_RNN "何をするつもりです？"
+	$PlayerID_02 CS_LNN "研究よ。マスタースパークにより大きくパワーを手に入れたいぜ。"
+	$PlayerID_16 CS_LFN "わ、わたしも見学したいです。"
+	$EnemyID_32 CS_RNN "ふざけたことを。忙しいですから失礼いたします。"
+	$PlayerID_02 CS_LNN "おっと、逃がさないぜ。"
+CHATOFF
+
+@ 4
+
+CHATON 0xff
+	$PlayerID_08 $EnemyID_32 CS_LNN
+	$PlayerID_08 CS_LNN "あれ、ここってもしかして月？"
+	$EnemyID_32 CS_RNN "そうですが、用事がないなら帰ってください。"
+	$PlayerID_08 CS_LNN "ははっ、道迷ってたか？すみませんが、霊書が指すとこってここなの？"
+	$EnemyID_32 CS_RNN "霊書には『お帰りなさい』と指しています。"
+	$PlayerID_08 CS_LNN "そっか、じゃ帰るぞ。"
+	$EnemyID_32 CS_RNN "お気をつけて…。"
+	$PlayerID_08 CS_LNN "バカにしないでよ！博麗神社があんたの天月砲を一発もらったことぐらいは知ってるぞ！"
+	$EnemyID_32 CS_RNN "それでどうします？異世界人を追い払う最高の手段ではありませんか。"
+	$PlayerID_08 CS_LNN "ひどいよ！あいつら何でもしていないのに。"
+	$EnemyID_32 CS_RNN "そうですね。悪いことをしましたのようですが、月の民の安全を最優先と判断して行動をとりましただけです。"
+CHATOFF
+
+@ @@[ 0
+
+IF CHATI - 0xff !
+{
+	SETTIME 0
+	SETSCENE GETSCENE + 4
+}

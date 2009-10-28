@@ -1,0 +1,288 @@
+DES_TH_TOB_SCRIPTFILE 0x073
+
+EDEFFILE
+
+// ///////////////////////////////////////// //
+	
+// ////////////// //
+# 0x0305
+
+@ 1
+
+EA 2 ENAC_REPOSITION_T
+	60
+
+// Intro
+@ @@]%= 500 250 144
+
+SD [ttimemod] EN@ % 500 < 250
+A 3
+	TIMEREQUAL 90 FADEOUT
+BL 15 0 45 8
+	ENX ENY 9000 0.0
+	3 SIGN ttimemod * 2 + 4 8 0
+A 0
+
+@ @@]%= 500 250 234
+
+SD [ttimemod] EN@ % 500 < 250
+SD [ttimemod] SIGN ttimemod
+SD [i] 6
+SD [trandx] RAND % 31 - 15
+SD [trandy] RAND % 31 - 15
+LOOP [i]
+{
+	A 8
+		TIMERLESS 80 ANGLESETADD i * 10 + 200 * ttimemod
+		TIMERLESS 160 SPEEDSETADD i / 3 + 2
+	BL 13 0 50 8
+		i * 1.2f +f ENX + trandx ENY + trandy -9000 i *f 0.15
+		1 ttimemod * 2 + 4 8 0
+}
+A 0
+
+// Disturb
+@ @@[% 240 120
+
+BC 16 ENAMAP 0 0
+	ENX ENY 1.5
+	2 EN@ % 180 < 90 * 2 + 4 8 0
+
+// Drive
+
+@ @@>% 240 5
+
+IF PY <f ENX
+{
+	BC 40 RAND 0
+		ENX ENY 3.5
+		1 7 8 0
+}
+
+
+@ @@[%<% 600 200 60 30
+
+SD [ttimemod] EN@ % 200 !
+SD [ttimemod] SIGN ttimemod
+A 3
+	TIMEREQUAL 90 FADEOUT
+BL 13 0 50 8
+	ttimemod *f 8.0 +f ENX ENY 9000 0.0
+	3 ttimemod * 2 + 4 8 0
+A 0
+
+@ @@[%[<% 600 200 90 150 30
+
+SD [ttimemod] EN@ - 90 % 200 !
+SD [ttimemod] SIGN ttimemod
+SD [i] 7
+SD [trandx] RAND % 31 - 15
+SD [trandy] RAND % 31 - 15
+LOOP [i]
+{
+	A 8
+		TIMERLESS 80 ANGLESETADD i * 11 + 200 * ttimemod
+		TIMERLESS 105 SPEEDSETADD i / 4 + 2
+	BL 15 0 45 8
+		i *f 1.2 +f ENX + trandx ENY + trandy -9000 i *f 0.15
+		1 ttimemod * 2 + 4 8 0
+}
+A 0
+
+
+////////
+# 0x0309
+
+@ 1
+
+EA 5 ENAC_OVERPLAYER_CXYT
+	60 CenterBossX CenterBossY 180
+
+@ @@% 180
+
+SD [tmod] EN@ / 180 % 6
+SD [_0] + tmod 0
+
+@ @@%[] 180 60 80
+
+SD [tmod] EN@ / 180 % 6
+SD [_0] + tmod 1
+
+@ @@%= 180 90
+
+SD [tmod] EN@ / 180 % 6
+SD [_0] + tmod 2
+
+@ @@%= 180 91
+
+EXECUTE CT_EDEF NOW# 180
+
+@ @@%[] 180 140 177
+
+SD [tmod] EN@ / 180 % 6
+SD [_0] + tmod 4
+
+@ @@%= 180 178
+
+SD [tmod] EN@ / 180 % 6
+SD [_0] + tmod 3
+
+@ @@%= 180 179
+
+EXECUTE CT_EDEF NOW# 180
+
+@ @@>%]%< 180 180 60 4 3
+
+SD [ttimemod] EN@ % 60
+SD [tmod] EN@ / 180 % 6
+A 25
+	VALEQUAL [_0] + tmod 1 SPEEDSETADD ttimemod / 15 + 5
+	VALEQUAL [_0] + tmod 2 TYPESET 17
+	VALEQUAL [_0] + tmod 2 ANGLESETADD SIGN tmod * ttimemod * 480 * tmod
+	VALEQUAL [_0] + tmod 3 TYPESET 5
+	VALEQUAL [_0] + tmod 4 SPEEDSETADD -1
+SD [i] 5
+LOOP [i]
+{
+	SD [ti] i * 87
+	SD [tsign] SIGN tmod
+	BC 3 EN@ * 537 * tsign + ti ttimemod
+		ENX ENY i *f 0.05 +f 0.3
+		5 ttimemod / 20 + tmod % 3 * 2 + 2 8 0
+}
+A 0
+
+///////
+# 0x0317
+
+@ 1
+
+EA 2 ENAC_REPOSITION_T
+	60
+
+@ @@%= 120 85
+	
+BEB PX -120
+	9000 1.5 0 0
+	CenterH + 240 BEAMFLAG_HS 15 0xff
+
+@ @@%[ 120 45
+BOSSATTACK
+
+@ @@>%<% 120 120 30 6
+
+BEB PX -120
+	9000 2.5 0 0
+	TotalH + 240 BEAMFLAG_HS 60 0xff
+
+@ @@>%< 240 3 2
+
+SD [tw] CenterW
+B RAND % tw 0
+	true RANDR 1500 + 9000 RAND % 90 /f 45.0
+	4 5 8 0 0xff
+
+
+///////
+# 0x0321
+
+@ 1
+
+EA 5 ENAC_OVERPLAYER_CXYT
+	60 CenterBossX CenterBossY 240
+SD [_0] 0
+SD [_1] 1
+SD [_2] 2
+SD [_3] 3
+
+
+@ @@> 120
+
+SDf [tcenx] CenterX
+SDf [tceny] CenterH *f 3.0 /f 5.0
+ST _0 PX PY
+RAMA false
+	PX PY tcenx tceny 0 [tangle]
+ST _1 COSA tangle *f 40.0 +f tcenx SINA tangle *f 40.0 +f tceny
+SD [tangle] tangle + 9000
+SDf [txoff] COSA tangle *f 40.0
+SDf [tyoff] SINA tangle *f 40.0
+ST _2 tcenx +f txoff tceny +f tyoff
+ST _3 tcenx -f txoff tceny -f tyoff
+
+@ 120
+
+BEB ENX ENY
+	0 1.5 0 4
+	0 BEAMFLAG_HS + BEAMFLAG_NOGRAZE 0xffff 0xff
+BEPIN BEI _0 _1 0
+BEB ENX ENY
+	0 1.5 0 4
+	0 BEAMFLAG_HS + BEAMFLAG_NOGRAZE 0xffff 0xff
+BEPIN BEI _2 _3 0
+
+
+///////
+# 0x0325
+
+@ 1
+
+EA 2 ENAC_REPOSITION_T
+	60
+
+///////
+# 0x0333
+
+@ 1
+
+EA 2 ENAC_REPOSITION_T
+	60
+
+/////////
+# 0x0337
+
+@ 1
+
+EA 4 ENAC_CHASETO_CXY
+	60 CenterX CenterY
+
+////////
+# 0x0341
+
+@ 1
+
+EA 5 ENAC_OVERPLAYER_CXYT
+	60 CenterBossX CenterBossY 60
+
+///////
+# 0x0349
+
+@ 1
+
+EA 2 ENAC_REPOSITION_T
+	60
+
+///////
+# 0x0353
+
+@ 1
+
+EA 2 ENAC_REPOSITION_T
+	60
+
+///////
+# 0x0357
+
+@ 1
+
+EA 5 ENAC_OVERPLAYER_CXYT
+	60 CenterBossX CenterBossY 120
+SD [_0] 0
+
+///////
+# 0x0361
+
+@ 1
+
+EA 4 ENAC_CHASETO_CXY
+	60 CenterX CenterY
