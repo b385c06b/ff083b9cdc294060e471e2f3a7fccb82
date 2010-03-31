@@ -1,5 +1,5 @@
-#include "Data.h"
-#include "BResource.h"
+#include "../Header/Data.h"
+#include "../Header/BResource.h"
 
 bool Data::GetTableFile(BYTE type)
 {

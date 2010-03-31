@@ -111,11 +111,13 @@ void hgeSprite::Render(float x, float y)
 	/************************************************************************/
 	/* This condition is added by h5nc (h5nc@yahoo.com.cn)                  */
 	/************************************************************************/
-	if (hge->System_Is2DMode())
+	
+	if (hge->System_GetState(HGE_2DMODE))
 	{
 		RenderEx(x, y, 0);
 		return;
 	}
+	
 	float tempx1, tempy1, tempx2, tempy2;
 
 	tempx1 = x-hotX;
@@ -139,7 +141,7 @@ void hgeSprite::RenderEx(float x, float y, float rot, float hscale, float vscale
 
 	if(vscale==0) vscale=hscale;
 
-	if (hge->System_Is2DMode())
+	if (hge->System_GetState(HGE_2DMODE))
 	{
 		hscale *= scale3d;
 		vscale *= scale3d;
@@ -370,34 +372,39 @@ void hgeSprite::SetColor(DWORD col0, DWORD col1, DWORD col2, DWORD col3)
 /************************************************************************/
 /* This function is modified by h5nc (h5nc@yahoo.com.cn)                */
 /************************************************************************/
-void hgeSprite::SetZ(float z, int i)
+bool hgeSprite::SetZ(float z, int i, hge3DPoint * ptfar)
 {
-	if(i == -1 || hge->System_Is2DMode())
+	if(i == -1 || hge->System_GetState(HGE_2DMODE))
 	{
-		SetZ(z, z, z, z);
+		if (ptfar == NULL)
+		{
+			return false;
+		}
+		return SetZ(z, z, z, z, ptfar);
 	}
 	else
 	{
 		quad.v[i].z = z;
 	}
+	return true;
 }
 
 /************************************************************************/
 /* This function is added by h5nc (h5nc@yahoo.com.cn)                   */
 /************************************************************************/
-void hgeSprite::SetZ(float z0, float z1, float z2, float z3)
+bool hgeSprite::SetZ(float z0, float z1, float z2, float z3, hge3DPoint *ptfar)
 {
 	quad.v[0].z = z0;
 	quad.v[1].z = z1;
 	quad.v[2].z = z2;
 	quad.v[3].z = z3;
 
-	if (hge->System_Is2DMode())
+	if (ptfar)
 	{
 		for (int i=0; i<4; i++)
 		{
 			//use z0
-			float zscale = hge->System_Transform3DPoint(quad.v[i].x, quad.v[i].y, quad.v[0].z);
+			float zscale = hge->System_Transform3DPoint(quad.v[i].x, quad.v[i].y, quad.v[0].z, ptfar);
 			if (i == 0)
 			{
 				scale3d = zscale;
@@ -405,4 +412,5 @@ void hgeSprite::SetZ(float z0, float z1, float z2, float z3)
 			quad.v[i].z = 0;
 		}
 	}
+	return true;
 }

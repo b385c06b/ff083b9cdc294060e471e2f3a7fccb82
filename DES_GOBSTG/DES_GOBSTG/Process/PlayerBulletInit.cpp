@@ -1,5 +1,5 @@
-#include "PlayerBullet.h"
-#include "BResource.h"
+#include "../Header/PlayerBullet.h"
+#include "../Header/BResource.h"
 
 #define _PBTEX_PLAYERBEGIN		10
 

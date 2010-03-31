@@ -133,32 +133,32 @@ void hgeParticleSystem::Update(float fDeltaTime)
 			if(nParticlesAlive>=MAX_PARTICLES) break;
 
 			par->fAge = 0.0f;
-			par->fTerminalAge = hge->Random_Float(info.fParticleLifeMin, info.fParticleLifeMax);
+			par->fTerminalAge = hge->Random_Float(info.fParticleLifeMin, info.fParticleLifeMax, true);
 
-			par->vecLocation = vecPrevLocation+(vecLocation-vecPrevLocation)*hge->Random_Float(0.0f, 1.0f);
-			par->vecLocation.x += hge->Random_Float(-2.0f, 2.0f);
-			par->vecLocation.y += hge->Random_Float(-2.0f, 2.0f);
+			par->vecLocation = vecPrevLocation+(vecLocation-vecPrevLocation)*hge->Random_Float(0.0f, 1.0f, true);
+			par->vecLocation.x += hge->Random_Float(-2.0f, 2.0f, true);
+			par->vecLocation.y += hge->Random_Float(-2.0f, 2.0f, true);
 
-			ang=info.fDirection-M_PI_2+hge->Random_Float(0,info.fSpread)-info.fSpread/2.0f;
+			ang=info.fDirection-M_PI_2+hge->Random_Float(0,info.fSpread, true)-info.fSpread/2.0f;
 			if(info.bRelative) ang += (vecPrevLocation-vecLocation).Angle()+M_PI_2;
 			par->vecVelocity.x = cosf(ang);
 			par->vecVelocity.y = sinf(ang);
-			par->vecVelocity *= hge->Random_Float(info.fSpeedMin, info.fSpeedMax);
+			par->vecVelocity *= hge->Random_Float(info.fSpeedMin, info.fSpeedMax, true);
 
-			par->fGravity = hge->Random_Float(info.fGravityMin, info.fGravityMax);
-			par->fRadialAccel = hge->Random_Float(info.fRadialAccelMin, info.fRadialAccelMax);
-			par->fTangentialAccel = hge->Random_Float(info.fTangentialAccelMin, info.fTangentialAccelMax);
+			par->fGravity = hge->Random_Float(info.fGravityMin, info.fGravityMax, true);
+			par->fRadialAccel = hge->Random_Float(info.fRadialAccelMin, info.fRadialAccelMax, true);
+			par->fTangentialAccel = hge->Random_Float(info.fTangentialAccelMin, info.fTangentialAccelMax, true);
 
-			par->fSize = hge->Random_Float(info.fSizeStart, info.fSizeStart+(info.fSizeEnd-info.fSizeStart)*info.fSizeVar);
+			par->fSize = hge->Random_Float(info.fSizeStart, info.fSizeStart+(info.fSizeEnd-info.fSizeStart)*info.fSizeVar, true);
 			par->fSizeDelta = (info.fSizeEnd-par->fSize) / par->fTerminalAge;
 
-			par->fSpin = hge->Random_Float(info.fSpinStart, info.fSpinStart+(info.fSpinEnd-info.fSpinStart)*info.fSpinVar);
+			par->fSpin = hge->Random_Float(info.fSpinStart, info.fSpinStart+(info.fSpinEnd-info.fSpinStart)*info.fSpinVar, true);
 			par->fSpinDelta = (info.fSpinEnd-par->fSpin) / par->fTerminalAge;
 
-			par->colColor.r = hge->Random_Float(info.colColorStart.r, info.colColorStart.r+(info.colColorEnd.r-info.colColorStart.r)*info.fColorVar);
-			par->colColor.g = hge->Random_Float(info.colColorStart.g, info.colColorStart.g+(info.colColorEnd.g-info.colColorStart.g)*info.fColorVar);
-			par->colColor.b = hge->Random_Float(info.colColorStart.b, info.colColorStart.b+(info.colColorEnd.b-info.colColorStart.b)*info.fColorVar);
-			par->colColor.a = hge->Random_Float(info.colColorStart.a, info.colColorStart.a+(info.colColorEnd.a-info.colColorStart.a)*info.fAlphaVar);
+			par->colColor.r = hge->Random_Float(info.colColorStart.r, info.colColorStart.r+(info.colColorEnd.r-info.colColorStart.r)*info.fColorVar, true);
+			par->colColor.g = hge->Random_Float(info.colColorStart.g, info.colColorStart.g+(info.colColorEnd.g-info.colColorStart.g)*info.fColorVar, true);
+			par->colColor.b = hge->Random_Float(info.colColorStart.b, info.colColorStart.b+(info.colColorEnd.b-info.colColorStart.b)*info.fColorVar, true);
+			par->colColor.a = hge->Random_Float(info.colColorStart.a, info.colColorStart.a+(info.colColorEnd.a-info.colColorStart.a)*info.fAlphaVar, true);
 
 			par->colColorDelta.r = (info.colColorEnd.r-par->colColor.r) / par->fTerminalAge;
 			par->colColorDelta.g = (info.colColorEnd.g-par->colColor.g) / par->fTerminalAge;

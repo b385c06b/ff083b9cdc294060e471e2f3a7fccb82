@@ -1,7 +1,7 @@
-#include "Scripter.h"
-#include "BResource.h"
-#include "Data.h"
-#include "Main.h"
+#include "../Header/Scripter.h"
+#include "../Header/BResource.h"
+#include "../Header/Data.h"
+#include "../Header/Main.h"
 
 Scripter scr;
 

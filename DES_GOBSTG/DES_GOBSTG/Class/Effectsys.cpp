@@ -1,7 +1,7 @@
-#include "Effectsys.h"
-#include "Main.h"
-#include "Export.h"
-#include "Player.h"
+#include "../Header/Effectsys.h"
+#include "../Header/Main.h"
+#include "../Header/Export.h"
+#include "../Header/Player.h"
 
 Effectsys effsys[EFFECTSYSMAX];
 hgeEffectSystem Effectsys::efftype[EFFECTSYSTYPEMAX];

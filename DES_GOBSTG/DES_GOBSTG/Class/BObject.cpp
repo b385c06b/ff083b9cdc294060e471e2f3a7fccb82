@@ -1,4 +1,4 @@
-#include "BObject.h"
+#include "../Header/BObject.h"
 
 BObject::BObject()
 {

@@ -1,25 +1,32 @@
-#include "hgeEffectSystem.h"
+#include "../../include/hgeEffectSystem.h"
 #include <stdio.h>
 
 HGE * hgeEffectSystem::hge = NULL;
 
-void hgeEffectSystem::_EffectSystemInit()
+void hgeEffectSystem::InitEffectSystem()
 {
-	ZeroMemory(this, sizeof(hgeEffectSystem));
-	hge = hgeCreate(HGE_VERSION);
+	FreeList();
+	if (!hge)
+	{
+		hge = hgeCreate(HGE_VERSION);
+	}
 
 	nAge = HGEEFFECT_AGE_STOP;
 	texnum = -1;
 }
 
-hgeEffectSystem::hgeEffectSystem()
+void hgeEffectSystem::Release()
 {
-	_EffectSystemInit();
+	if (hge)
+	{
+		hge->Release();
+		hge = NULL;
+	}
 }
 
-hgeEffectSystem::hgeEffectSystem(const hgeEffectSystem &eff)
+void hgeEffectSystem::InitEffectSystem(const hgeEffectSystem &eff)
 {
-	_EffectSystemInit();
+	InitEffectSystem();
 
 	memcpy(&ebi, &(eff.ebi), sizeof(hgeEffectBasicInfo));
 
@@ -42,16 +49,33 @@ hgeEffectSystem::hgeEffectSystem(const hgeEffectSystem &eff)
 	}
 }
 
+void hgeEffectSystem::InitEffectSystem(const char * filename, HTEXTURE tex, HTEXTURE * texset)
+{
+	InitEffectSystem();
+	texnum = Load(filename, tex, texset);
+}
+
+hgeEffectSystem::hgeEffectSystem()
+{
+	ZeroMemory(this, sizeof(hgeEffectSystem));
+	InitEffectSystem();
+}
+
+hgeEffectSystem::hgeEffectSystem(const hgeEffectSystem &eff)
+{
+	ZeroMemory(this, sizeof(hgeEffectSystem));
+	InitEffectSystem(eff);
+}
+
 hgeEffectSystem::hgeEffectSystem(const char * filename, HTEXTURE tex, HTEXTURE * texset)
 {
-	_EffectSystemInit();
-	texnum = Load(filename, tex, texset);
+	ZeroMemory(this, sizeof(hgeEffectSystem));
+	InitEffectSystem(filename, tex, texset);
 }
 
 hgeEffectSystem::~hgeEffectSystem()
 {
 	FreeList();
-	hge->Release();
 }
 
 int hgeEffectSystem::Load(const char * filename, HTEXTURE tex /* = 0 */, HTEXTURE * texset /* = 0 */)
@@ -148,7 +172,19 @@ void hgeEffectSystem::FreeList()
 	while(emitterItem)
 	{
 		if(emitterItem->emitter.sprite)
+		{
 			delete emitterItem->emitter.sprite;
+			emitterItem->emitter.sprite = NULL;
+		}
+		if (emitterItem->emitter.nObj)
+		{
+			if (emitterItem->emitter.obj)
+			{
+				free(emitterItem->emitter.obj);
+				emitterItem->emitter.obj = NULL;
+			}
+			emitterItem->emitter.nObj = 0;
+		}
 		CAffectorList * affectorItem = emitterItem->emitter.eaiList, *affectorNextItem;
 
 		while(affectorItem)
@@ -166,7 +202,7 @@ void hgeEffectSystem::FreeList()
 	eiList = NULL;
 }
 
-void hgeEffectSystem::Render()
+void hgeEffectSystem::Render(hge3DPoint *ptfar, DWORD colormask)
 {
 	CEmitterList * emitterItem = eiList;
 
@@ -175,9 +211,13 @@ void hgeEffectSystem::Render()
 		hgeEffectObject * obj = emitterItem->emitter.obj;
 		for(int i=0; i<emitterItem->emitter.nEffectObjectsAlive; i++)
 		{
-			emitterItem->emitter.sprite->SetColor(*(DWORD *)&(obj->color));
-			emitterItem->emitter.sprite->SetZ(obj->z, obj->z + obj->zStretch, obj->z + obj->zStretch, obj->z);
-			emitterItem->emitter.sprite->RenderEx(obj->x, obj->y, obj->fHeadDirection, obj->fScaleX, obj->fScaleY);
+			hgeSprite * _sprite = emitterItem->emitter.sprite;
+			if (_sprite)
+			{
+				_sprite->SetColor((*(DWORD *)&(obj->color))&colormask);
+				_sprite->SetZ(obj->z, obj->z + obj->zStretch, obj->z + obj->zStretch, obj->z, ptfar);
+				_sprite->RenderEx(obj->x, obj->y, obj->fHeadDirection, obj->fScaleX, obj->fScaleY);
+			}
 			obj++;
 		}
 		emitterItem = emitterItem->next;
@@ -289,21 +329,21 @@ void hgeEffectSystem::Update()
 			emitter->fEmissionResidue += emitter->eei.fEmitNum;
 			while(emitter->fEmissionResidue >= 1.0f)
 			{
-				if(emitter->nEffectObjectsAlive >= MAX_EFFECTS)
+				if(emitter->nEffectObjectsAlive >= emitter->nObj)
 					break;
 				hgeEffectObject * _obj = obj + emitter->nEffectObjectsAlive;
 				ZeroMemory(_obj, sizeof(hgeEffectObject));
 				//
 				_obj->fScaleX = 1.0f;
 				_obj->fScaleY = 1.0f;
-				_obj->nLifeTime = hge->Random_Int(emitter->eei.nLfieTimeMin, emitter->eei.nLifeTimeMax);
+				_obj->nLifeTime = hge->Random_Int(emitter->eei.nLfieTimeMin, emitter->eei.nLifeTimeMax, true);
 				float _x, _y, _z;
 				if(emitter->eei.fThetaStep)
 				{
 					float _r = (emitter->eei.fRadius - emitter->eei.fRadiusInner) / 2.0f;
 					float _arc = emitter->eei.fThetaStart + (emitter->eei.fThetaStep) * (emitter->nAge);
-					_x = hge->Random_Float(-_r, _r);
-					_y = hge->Random_Float(-_r, _r);
+					_x = hge->Random_Float(-_r, _r, true);
+					_y = hge->Random_Float(-_r, _r, true);
 					_r += emitter->eei.fRadiusInner;
 					_x += _r * cosf(_arc);
 					_y += _r * sinf(_arc);
@@ -312,15 +352,15 @@ void hgeEffectSystem::Update()
 				{
 					if(emitter->eei.fRadiusInner)
 					{
-						float _r = hge->Random_Float(emitter->eei.fRadiusInner, emitter->eei.fRadius);
-						float _arc = hge->Random_Float(0, M_PI * 2);
+						float _r = hge->Random_Float(emitter->eei.fRadiusInner, emitter->eei.fRadius, true);
+						float _arc = hge->Random_Float(0, M_PI * 2, true);
 						_x = _r * cosf(_arc);
 						_y = _r * sinf(_arc);
 					}
 					else
 					{
-						_x = hge->Random_Float(-emitter->eei.fRadius, emitter->eei.fRadius);
-						_y = hge->Random_Float(-emitter->eei.fRadius, emitter->eei.fRadius);
+						_x = hge->Random_Float(-emitter->eei.fRadius, emitter->eei.fRadius, true);
+						_y = hge->Random_Float(-emitter->eei.fRadius, emitter->eei.fRadius, true);
 					}
 				}
 				_z = 0;
@@ -472,7 +512,7 @@ void hgeEffectSystem::UpdateValue(float * value, float * bufferValue, hgeEffectA
 		updateBuffer = true;
 		if(eai->bUseStartValue)
 		{
-			*value = hge->Random_Float(eai->fStartValueMin, eai->fStartValueMax);
+			*value = hge->Random_Float(eai->fStartValueMin, eai->fStartValueMax, true);
 		}
 	}
 
@@ -485,7 +525,7 @@ void hgeEffectSystem::UpdateValue(float * value, float * bufferValue, hgeEffectA
 	{
 		if(updateBuffer)
 		{
-			*bufferValue = hge->Random_Float(eai->fEndValueMin, eai->fEndValueMax);
+			*bufferValue = hge->Random_Float(eai->fEndValueMin, eai->fEndValueMax, true);
 		}
 		if(eai->nAffectorEndTime > nAge)
 		{
@@ -500,7 +540,7 @@ void hgeEffectSystem::UpdateValue(float * value, float * bufferValue, hgeEffectA
 	{
 		if (updateBuffer)
 		{
-			*bufferValue = hge->Random_Float(eai->fIncrementValueMin, eai->fIncrementValueMax);
+			*bufferValue = hge->Random_Float(eai->fIncrementValueMin, eai->fIncrementValueMax, true);
 		}
 		*value += (eai->fIncrementScale) * (*bufferValue) + eai->fAcceleration * (nAge - eai->nAffectorStartTime);
 	}
@@ -530,10 +570,10 @@ void hgeEffectSystem::UpdateColorValue(float * value, float * bufferValue, hgeEf
 			DWORD scolmin = *(DWORD *)(&eai->fStartValueMin);
 			DWORD scolmax = *(DWORD *)(&eai->fStartValueMax);
 
-			_a = hge->Random_Int(GETA(scolmin), GETA(scolmax));
-			_r = hge->Random_Int(GETR(scolmin), GETR(scolmax));
-			_g = hge->Random_Int(GETG(scolmin), GETG(scolmax));
-			_b = hge->Random_Int(GETB(scolmin), GETB(scolmax));
+			_a = hge->Random_Int(GETA(scolmin), GETA(scolmax), true);
+			_r = hge->Random_Int(GETR(scolmin), GETR(scolmax), true);
+			_g = hge->Random_Int(GETG(scolmin), GETG(scolmax), true);
+			_b = hge->Random_Int(GETB(scolmin), GETB(scolmax), true);
 		}
 	}
 
@@ -547,10 +587,10 @@ void hgeEffectSystem::UpdateColorValue(float * value, float * bufferValue, hgeEf
 		{
 			DWORD ecolmin = *(DWORD *)(&eai->fEndValueMin);
 			DWORD ecolmax = *(DWORD *)(&eai->fEndValueMax);
-			_buffera = hge->Random_Int(GETA(ecolmin), GETA(ecolmax));
-			_bufferr = hge->Random_Int(GETR(ecolmin), GETR(ecolmax));
-			_bufferg = hge->Random_Int(GETG(ecolmin), GETG(ecolmax));
-			_bufferb = hge->Random_Int(GETB(ecolmin), GETB(ecolmax));
+			_buffera = hge->Random_Int(GETA(ecolmin), GETA(ecolmax), true);
+			_bufferr = hge->Random_Int(GETR(ecolmin), GETR(ecolmax), true);
+			_bufferg = hge->Random_Int(GETG(ecolmin), GETG(ecolmax), true);
+			_bufferb = hge->Random_Int(GETB(ecolmin), GETB(ecolmax), true);
 		}		
 		if(eai->nAffectorEndTime > nAge)
 		{
@@ -575,10 +615,10 @@ void hgeEffectSystem::UpdateColorValue(float * value, float * bufferValue, hgeEf
 			DWORD acolmin = *(DWORD *)(&eai->fIncrementValueMin);
 			DWORD acolmax = *(DWORD *)(&eai->fIncrementValueMax);
 
-			_buffera = hge->Random_Int(GETA(acolmin), GETA(acolmax));
-			_bufferr = hge->Random_Int(GETR(acolmin), GETR(acolmax));
-			_bufferg = hge->Random_Int(GETG(acolmin), GETG(acolmax));
-			_bufferb = hge->Random_Int(GETB(acolmin), GETB(acolmax));
+			_buffera = hge->Random_Int(GETA(acolmin), GETA(acolmax), true);
+			_bufferr = hge->Random_Int(GETR(acolmin), GETR(acolmax), true);
+			_bufferg = hge->Random_Int(GETG(acolmin), GETG(acolmax), true);
+			_bufferb = hge->Random_Int(GETB(acolmin), GETB(acolmax), true);
 		}
 		DWORD * accelcol = (DWORD *)&(eai->fAcceleration);
 		int _age = nAge - eai->nAffectorStartTime;
@@ -697,6 +737,13 @@ bool hgeEffectSystem::AddEmitter(hgeEffectEmitter * emitter)
 	emitter->sprite->SetBlendMode(emitter->eei.blend);
 	emitter->sprite->SetHotSpot(emitter->eei.fHotX, emitter->eei.fHotY);
 
+	emitter->nObj = emitter->eei.fEmitNum * emitter->eei.nLifeTimeMax + 1;
+	if (emitter->nObj > MAX_EFFECTS || emitter->nObj <= 1)
+	{
+		emitter->nObj = MAX_EFFECTS;
+	}
+	emitter->obj = (hgeEffectObject *)malloc(sizeof(hgeEffectObject) * emitter->nObj);
+
 	emitterItem->next = eiList;
 	eiList = emitterItem;
 
@@ -726,7 +773,19 @@ bool hgeEffectSystem::DeleteEmitter(BYTE emitterID)
 		}
 
 		if(emitterItem->emitter.sprite)
+		{
 			delete emitterItem->emitter.sprite;
+			emitterItem->emitter.sprite = NULL;
+		}
+		if (emitterItem->emitter.nObj)
+		{
+			if (emitterItem->emitter.obj)
+			{
+				free(emitterItem->emitter.obj);
+				emitterItem->emitter.obj = NULL;
+			}
+			emitterItem->emitter.nObj = 0;
+		}
 		CAffectorList * affectorItem = emitterItem->emitter.eaiList, *affectorNextItem;
 
 		while(affectorItem)
@@ -972,9 +1031,13 @@ int hgeEffectSystem::GetAffectorAge(BYTE emitterID, BYTE affectorID)
 	return 0;
 }
 
-int hgeEffectSystem::GetEffectObjectAlive(BYTE emitterID)
+int hgeEffectSystem::GetEffectObjectAlive(BYTE emitterID, int * nobj)
 {
 	int nAlive = 0;
+	if (nobj)
+	{
+		*nobj = 0;
+	}
 
 	CEmitterList * emitterItem = eiList;
 
@@ -982,10 +1045,18 @@ int hgeEffectSystem::GetEffectObjectAlive(BYTE emitterID)
 	{
 		if(!emitterID)
 		{
+			if (nobj)
+			{
+				*nobj += emitterItem->emitter.nObj;
+			}
 			nAlive += emitterItem->emitter.nEffectObjectsAlive;
 		}
 		else if(emitterItem->emitter.ID == emitterID)
 		{
+			if (nobj)
+			{
+				*nobj = emitterItem->emitter.nObj;
+			}
 			return emitterItem->emitter.nEffectObjectsAlive;
 		}
 		emitterItem = emitterItem->next;

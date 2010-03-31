@@ -1,5 +1,5 @@
-#include "PushKey.h"
-#include "BResource.h"
+#include "../Header/PushKey.h"
+#include "../Header/BResource.h"
 
 pushkeyEvent PushKey::pushkeyevent[PUSHKEY_IDMAX];
 

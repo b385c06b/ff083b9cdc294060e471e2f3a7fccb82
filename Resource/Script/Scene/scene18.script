@@ -2,7 +2,7 @@ DES_TH_TOB_SCRIPTFILE 0x073
 
 SCENEFILE
 
-# $EnemyID_02	// ¥¢¥ê¥¹¡¤¥Þ©`¥¬¥È¥í¥¤¥É
+# $EnemyID_18	// ¥¢¥ê¥¹¡¤¥Þ©`¥¬¥È¥í¥¤¥É
 
 @ POST@
 
@@ -18,16 +18,16 @@ SD [blBegin] BGSI * $BGLayerSplit
 
 IF BGSI !
 {
-	CALL $MusicChangeWithDisplay $MusicEID_02
+	CALL $MusicChangeWithDisplay $MusicEID_18
 }
 
-BGVALEX 0 + blBegin SI_BG_02_1
+BGVALEX 0 + blBegin SI_BG_18_1
 	0 0 0 448 480
 	0 0 0 0
 	0.007 -9000 false false
 	0x00ffffff
 
-BGVALEX 1 + blBegin SI_BG_02_2
+BGVALEX 1 + blBegin SI_BG_18_2
 	-80 -40 0 628 628
 	0 0 0 0
 	0.7 -9000 true true

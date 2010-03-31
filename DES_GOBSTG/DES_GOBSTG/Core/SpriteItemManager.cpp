@@ -1,5 +1,5 @@
-#include "SpriteItemManager.h"
-#include "BResource.h"
+#include "../Header/SpriteItemManager.h"
+#include "../Header/BResource.h"
 
 HTEXTURE * SpriteItemManager::tex;
 int SpriteItemManager::digituiIndex = 0;

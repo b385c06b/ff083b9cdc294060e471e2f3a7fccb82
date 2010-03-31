@@ -1,5 +1,5 @@
-#include "Scripter.h"
-#include "processPrep.h"
+#include "../Header/Scripter.h"
+#include "../Header/processPrep.h"
 
 void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 {

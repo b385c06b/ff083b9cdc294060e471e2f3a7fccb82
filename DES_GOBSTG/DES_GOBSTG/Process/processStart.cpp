@@ -1,13 +1,13 @@
-#include "Process.h"
-#include "Scripter.h"
-#include "BGLayer.h"
-#include "Selector.h"
-#include "BGLayer.h"
-#include "InfoSelect.h"
-#include "Player.h"
-#include "SE.h"
-#include "BossInfo.h"
-#include "FrontDisplay.h"
+#include "../Header/Process.h"
+#include "../Header/Scripter.h"
+#include "../Header/BGLayer.h"
+#include "../Header/Selector.h"
+#include "../Header/BGLayer.h"
+#include "../Header/InfoSelect.h"
+#include "../Header/Player.h"
+#include "../Header/SE.h"
+#include "../Header/BossInfo.h"
+#include "../Header/FrontDisplay.h"
 
 int Process::processStart()
 {

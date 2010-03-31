@@ -1,216 +1,298 @@
 <?xml version="1.0" encoding="gb2312"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="9.00"
 	Name="Custom"
 	ProjectGUID="{81A7E638-AF60-4BE7-9439-827179617AC1}"
-	Keyword="MFCProj">
+	Keyword="MFCProj"
+	TargetFrameworkVersion="0"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="1"
-			CharacterSet="2">
+			CharacterSet="2"
+			>
 			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				OptimizeForWindowsApplication="TRUE"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;__DEBUG"
-				StringPooling="TRUE"
-				MinimalRebuild="FALSE"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
-				EnableFunctionLevelLinking="TRUE"
-				TreatWChar_tAsBuiltInType="FALSE"
-				UsePrecompiledHeader="0"
-				WarningLevel="1"
-				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="4"/>
+				Name="VCPreBuildEventTool"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCCustomBuildTool"
+			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies=""
-				LinkIncremental="0"
-				IgnoreDefaultLibraryNames=""
-				DelayLoadDLLs="hge_d.dll"
-				GenerateDebugInformation="TRUE"
-				SubSystem="2"
-				SupportUnloadOfDelayLoadedDLL="FALSE"
-				TargetMachine="0"/>
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="FALSE"/>
+				MkTypLibCompatible="false"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;__DEBUG"
+				StringPooling="true"
+				MinimalRebuild="false"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				EnableFunctionLevelLinking="true"
+				TreatWChar_tAsBuiltInType="false"
+				UsePrecompiledHeader="0"
+				WarningLevel="1"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="4"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG"
 				Culture="2052"
-				AdditionalIncludeDirectories="$(IntDir)"/>
+				AdditionalIncludeDirectories="$(IntDir)"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCLinkerTool"
+				AdditionalDependencies=""
+				LinkIncremental="0"
+				AdditionalLibraryDirectories="../lib/vc;../../lib/vc"
+				IgnoreDefaultLibraryNames=""
+				DelayLoadDLLs="hge_d.dll"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				SupportUnloadOfDelayLoadedDLL="false"
+				TargetMachine="0"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="1"
 			CharacterSet="2"
-			WholeProgramOptimization="TRUE">
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="false"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="0"
-				EnableIntrinsicFunctions="TRUE"
-				ImproveFloatingPointConsistency="TRUE"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				OmitFramePointers="TRUE"
-				EnableFiberSafeOptimizations="TRUE"
-				WholeProgramOptimization="TRUE"
-				OptimizeForWindowsApplication="TRUE"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;__DEBUG"
-				StringPooling="TRUE"
-				MinimalRebuild="FALSE"
+				StringPooling="true"
+				MinimalRebuild="false"
 				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="TRUE"
+				EnableFunctionLevelLinking="true"
 				EnableEnhancedInstructionSet="0"
-				TreatWChar_tAsBuiltInType="FALSE"
+				TreatWChar_tAsBuiltInType="false"
 				UsePrecompiledHeader="0"
 				WarningLevel="1"
-				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="0"/>
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="0"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="2052"
+				AdditionalIncludeDirectories="$(IntDir)"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="nafxcw.lib libcpmt.lib"
 				LinkIncremental="0"
+				AdditionalLibraryDirectories="../lib/vc;../../lib/vc"
 				IgnoreDefaultLibraryNames="nafxcw.lib libcpmt.lib"
 				DelayLoadDLLs="hge.dll"
-				GenerateDebugInformation="FALSE"
+				GenerateDebugInformation="false"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				TargetMachine="0"/>
+				TargetMachine="0"
+			/>
 			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="FALSE"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="2052"
-				AdditionalIncludeDirectories="$(IntDir)"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="FinalRelease|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="1"
 			CharacterSet="2"
-			WholeProgramOptimization="TRUE">
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="false"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="1"
-				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="0"
-				EnableIntrinsicFunctions="TRUE"
-				ImproveFloatingPointConsistency="TRUE"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="2"
-				OmitFramePointers="TRUE"
-				EnableFiberSafeOptimizations="TRUE"
-				WholeProgramOptimization="TRUE"
-				OptimizeForWindowsApplication="TRUE"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;__RELEASE"
-				StringPooling="TRUE"
-				MinimalRebuild="FALSE"
+				StringPooling="true"
+				MinimalRebuild="false"
 				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="TRUE"
+				EnableFunctionLevelLinking="true"
 				EnableEnhancedInstructionSet="0"
-				TreatWChar_tAsBuiltInType="FALSE"
+				TreatWChar_tAsBuiltInType="false"
 				UsePrecompiledHeader="0"
 				WarningLevel="1"
-				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="0"/>
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="0"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="2052"
+				AdditionalIncludeDirectories="$(IntDir)"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="nafxcw.lib libcpmt.lib"
 				LinkIncremental="0"
+				AdditionalLibraryDirectories="../lib/vc;../../lib/vc"
 				IgnoreDefaultLibraryNames="nafxcw.lib libcpmt.lib"
 				DelayLoadDLLs="hge.dll"
-				GenerateDebugInformation="FALSE"
+				GenerateDebugInformation="false"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				TargetMachine="0"/>
+				TargetMachine="0"
+			/>
 			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="FALSE"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="2052"
-				AdditionalIncludeDirectories="$(IntDir)"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -219,79 +301,102 @@
 		<Filter
 			Name="源文件"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			>
 			<File
-				RelativePath=".\Custom.cpp">
+				RelativePath=".\Custom.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\CustomDlg.cpp">
+				RelativePath=".\CustomDlg.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\Des_gobstg\Des_gobstg\Core\Export.cpp">
+				RelativePath="..\Des_gobstg\Des_gobstg\Core\Export.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\Des_gobstg\Des_gobstg\Core\InitDllLoader.cpp">
+				RelativePath="..\Des_gobstg\Des_gobstg\Core\InitDllLoader.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\stdafx.cpp">
+				RelativePath=".\stdafx.cpp"
+				>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"/>
+						UsePrecompiledHeader="1"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"/>
+						UsePrecompiledHeader="1"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="FinalRelease|Win32">
+					Name="FinalRelease|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"/>
+						UsePrecompiledHeader="1"
+					/>
 				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
 			Name="头文件"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
 			<File
-				RelativePath=".\Custom.h">
+				RelativePath=".\Custom.h"
+				>
 			</File>
 			<File
-				RelativePath=".\CustomDlg.h">
+				RelativePath=".\CustomDlg.h"
+				>
 			</File>
 			<File
-				RelativePath=".\Resource.h">
+				RelativePath=".\Resource.h"
+				>
 			</File>
 			<File
-				RelativePath=".\stdafx.h">
+				RelativePath=".\stdafx.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="资源文件"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			>
 			<File
-				RelativePath=".\res\Custom.ico">
+				RelativePath=".\res\Custom.ico"
+				>
 			</File>
 			<File
-				RelativePath=".\Custom.rc">
+				RelativePath=".\Custom.rc"
+				>
 			</File>
 			<File
-				RelativePath=".\res\Custom.rc2">
+				RelativePath=".\res\Custom.rc2"
+				>
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\res\Custom.manifest">
+			RelativePath=".\res\Custom.manifest"
+			>
 		</File>
 	</Files>
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="Custom.rc"/>
+			Value="Custom.rc"
+		/>
 	</Globals>
 </VisualStudioProject>

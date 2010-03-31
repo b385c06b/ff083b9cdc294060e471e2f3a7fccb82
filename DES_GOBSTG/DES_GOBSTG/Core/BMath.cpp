@@ -1,4 +1,4 @@
-#include "BMath.h"
+#include "../Header/BMath.h"
 
 #ifdef BUSE_MATHTABLE
 

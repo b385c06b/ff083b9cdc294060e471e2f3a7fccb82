@@ -1,9 +1,9 @@
-#include "PlayerGhost.h"
-#include "Player.h"
-#include "Main.h"
-#include "Process.h"
-#include "SpriteItemManager.h"
-#include "BResource.h"
+#include "../Header/PlayerGhost.h"
+#include "../Header/Player.h"
+#include "../Header/Main.h"
+#include "../Header/Process.h"
+#include "../Header/SpriteItemManager.h"
+#include "../Header/BResource.h"
 
 #define _PLAYERGHOST_ADJUSTTIME	0x10
 #define _PLAYERGHOST_LASTINDEX	1

@@ -3,7 +3,7 @@ DES_TH_TOB_SCRIPTFILE 0x073
 EVENTFILE
 
 // //////////
-# $Event_Bullet_0329
+# $Event_Bullet_0130
 
 @ POST@
 
@@ -14,7 +14,7 @@ BC 40 tangle 0
 	2 RAND % 4 + 8 8 0
 
 ///////
-# $Event_Bullet_0209
+# $Event_Bullet_0240
 
 @ POST@
 

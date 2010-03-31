@@ -8,18 +8,15 @@ CONTROLFILE
 @ 1
 
 // SetFlag
-SD [i] 7
+SD [i] 22
 LOOP [i]
 {
 	SETFLAG $FLAG_PlayerUseable_01 + i true
 }
-SD [i] 9
+SD [i] 24
 LOOP [i]
 {
-	SD [tstage] i / 3 + 1
-	SD [tdiffi] tstage * 0x100000
-	DATAGET tdiffi + StagePractice + tstage TryTime 0 [ttried]
-	SETFLAG $FLAG_StageTried_01 + i ttried
+	SETFLAG $FLAG_StageTried_01 + i true
 }
 
 // Music
@@ -53,22 +50,13 @@ SD [i] 8
 LOOP [i]
 {
 	SD [j] 7 - i
-	SD [tspell] j - 2
-	IF j * tspell !
-	{
-		SD [tselflag] SEL_NONACTIVE + SEL_GRAY
-	}
-	ELSE
-	{
-		SD [tselflag] SEL_NULL
-	}
 	SELBUILD j SI_Title_Start + j
 		560 0 1 0 8
 		560 32 * j + 100
 		-4 -4
 		-8 0
 		8 0
-		tselflag
+		SEL_NULL
 }
 SELSET 8 SEL true 0 0 0 0
 

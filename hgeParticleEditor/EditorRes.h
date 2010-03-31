@@ -1,9 +1,9 @@
 #ifndef _EDITORRES_H
 #define _EDITORRES_H
 
-#include "MainDependency.h"
-#include "Const.h"
-#include "hgeEffectSystem.h"
+#include "../DES_GOBSTG/DES_GOBSTG/Header/MainDependency.h"
+#include "../DES_GOBSTG/DES_GOBSTG/Header/Const.h"
+#include "../include/hgeEffectSystem.h"
 
 #define UIITEMMAX			0x40
 #define UIITEM_ITEMBEGIN	0x10

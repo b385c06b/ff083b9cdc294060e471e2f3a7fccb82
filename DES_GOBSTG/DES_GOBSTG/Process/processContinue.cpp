@@ -1,10 +1,10 @@
-#include "Process.h"
-#include "Bullet.h"
-#include "Player.h"
-#include "Scripter.h"
-#include "BGLayer.h"
-#include "Selector.h"
-#include "Replay.h"
+#include "../Header/Process.h"
+#include "../Header/Bullet.h"
+#include "../Header/Player.h"
+#include "../Header/Scripter.h"
+#include "../Header/BGLayer.h"
+#include "../Header/Selector.h"
+#include "../Header/Replay.h"
 
 int Process::processContinue()
 {

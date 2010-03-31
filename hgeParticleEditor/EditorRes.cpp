@@ -1,7 +1,7 @@
 #include "EditorRes.h"
-#include "Export.h"
-#include "BResource.h"
-#include "Data.h"
+#include "../DES_GOBSTG/DES_GOBSTG/Header/Export.h"
+#include "../DES_GOBSTG/DES_GOBSTG/Header/BResource.h"
+#include "../DES_GOBSTG/DES_GOBSTG/Header/Data.h"
 
 EditorRes eres;
 

@@ -1,10 +1,10 @@
-#include "Player.h"
-#include "PlayerBullet.h"
-#include "SE.h"
-#include "Enemy.h"
-#include "Chat.h"
-#include "Process.h"
-#include "BResource.h"
+#include "../Header/Player.h"
+#include "../Header/PlayerBullet.h"
+#include "../Header/SE.h"
+#include "../Header/Enemy.h"
+#include "../Header/Chat.h"
+#include "../Header/Process.h"
+#include "../Header/BResource.h"
 
 void Player::_Shoot()
 {

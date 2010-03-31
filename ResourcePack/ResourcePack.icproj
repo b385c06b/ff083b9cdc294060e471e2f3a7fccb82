@@ -1,227 +1,38 @@
 <?xml version="1.0" encoding="gb2312"?>
-<VisualStudioProject 
+<VisualStudioProject
 	ProjectType="Intel C++ Project"
-	Version="10.0"
+	Version="11.1"
 	Name="ResourcePack"
 	ProjectGUID="{ECA1AAA9-A878-44B7-9F2C-60BDA230E8A7}"
 	VCNestedProjectGUID="{CC6B7C65-9F18-4357-9789-720008D179D0}"
-	VCNestedProjectCRC32="1144407420"
-	VCNestedProjectFileName="ResourcePack.vcproj"
-	Keyword="MFCProj">
+	VCNestedProjectFileName="ResourcePack.vcproj">
 	<Configurations>
-		<Configuration 
+		<Configuration
 			Name="Debug|Win32">
-			<Tool 
-				Name="GeneralTool"
-				UseOfMFC="1"
-				CharacterSet="2"/>
-			<Tool 
+			<Tool
 				Name="CppCmplrTool"
-				Optimization="0"
-				OptimizeForWindowsApplication="1"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;__DEBUG"
-				StringPooling="1"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
-				EnableFunctionLevelLinking="1"
-				UsePrecompiledHeader="0"
-				Detect64BitPortabilityProblems="1"
-				DebugInformationFormat="4"/>
-			<Tool 
-				Name="LinkerTool"
-				DelayImpLib="DelayImp.lib"
-				AdditionalDependencies="nafxcwd.lib"
-				IgnoreDefaultLibraryNames=""
-				DelayLoadDLLs="hge_d.dll"
-				GenerateDebugInformation="1"
-				SubSystem="2"/>
-			<Tool 
-				Name="LibrarianTool"/>
-			<Tool 
-				Name="ResCmplrTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="2052"
-				AdditionalIncludeDirectories="$(IntDir)"/>
-			<Tool 
-				Name="MidlCmplrTool"
-				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="0"/>
-			<Tool 
-				Name="BscMakeTool"/>
-			<Tool 
-				Name="PreBuildEventTool"/>
-			<Tool 
-				Name="PreLinkEventTool"/>
-			<Tool 
-				Name="PostBuildEventTool"/>
-			<Tool 
-				Name="CustomTool"/>
-			<Tool 
-				Name="CustomNodeTool"/>
+				OptimizeForWindowsApplication="true"
+				DisableSpecificDiagnostics="1786"/>
 		</Configuration>
-		<Configuration 
+		<Configuration
 			Name="Release|Win32">
-			<Tool 
-				Name="GeneralTool"
-				UseOfMFC="1"
-				CharacterSet="2"
-				WholeProgramOptimization="1"/>
-			<Tool 
+			<Tool
 				Name="CppCmplrTool"
 				Optimization="1000"
-				GlobalOptimizations="1"
-				EnableIntrinsicFunctions="1"
+				GlobalOptimizations="true"
+				OptimizeForWindowsApplication="true"
 				ImproveFloatingPointConsistency="1"
-				FavorSizeOrSpeed="1"
-				OmitFramePointers="1"
-				EnableFiberSafeOptimizations="1"
-				OptimizeForWindowsApplication="1"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;__DEBUG;__UNPACK"
-				StringPooling="1"
-				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="1"
-				UsePrecompiledHeader="0"
-				DebugInformationFormat="0"/>
-			<Tool 
-				Name="LinkerTool"
-				DelayImpLib="DelayImp.lib"
-				AdditionalDependencies=""
-				IgnoreDefaultLibraryNames=""
-				DelayLoadDLLs="hge.dll"
-				GenerateDebugInformation="0"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				AdditionalOptions=""/>
-			<Tool 
-				Name="LibrarianTool"/>
-			<Tool 
-				Name="ResCmplrTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="2052"
-				AdditionalIncludeDirectories="$(IntDir)"/>
-			<Tool 
-				Name="MidlCmplrTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="0"/>
-			<Tool 
-				Name="BscMakeTool"/>
-			<Tool 
-				Name="PreBuildEventTool"/>
-			<Tool 
-				Name="PreLinkEventTool"/>
-			<Tool 
-				Name="PostBuildEventTool"/>
-			<Tool 
-				Name="CustomTool"/>
-			<Tool 
-				Name="CustomNodeTool"/>
+				DisableSpecificDiagnostics="1786"/>
 		</Configuration>
-		<Configuration 
+		<Configuration
 			Name="FinalRelease|Win32">
-			<Tool 
-				Name="GeneralTool"
-				UseOfMFC="1"
-				CharacterSet="2"
-				WholeProgramOptimization="1"/>
-			<Tool 
+			<Tool
 				Name="CppCmplrTool"
-				Optimization="1"
-				GlobalOptimizations="1"
-				EnableIntrinsicFunctions="1"
+				GlobalOptimizations="true"
+				OptimizeForWindowsApplication="true"
 				ImproveFloatingPointConsistency="1"
-				FavorSizeOrSpeed="2"
-				OmitFramePointers="1"
-				EnableFiberSafeOptimizations="1"
-				OptimizeForWindowsApplication="1"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;__RELEASE;__UNPACK"
-				StringPooling="1"
-				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="1"
-				UsePrecompiledHeader="0"
-				DebugInformationFormat="0"/>
-			<Tool 
-				Name="LinkerTool"
-				DelayImpLib="DelayImp.lib"
-				AdditionalDependencies=""
-				IgnoreDefaultLibraryNames=""
-				DelayLoadDLLs="hge.dll"
-				GenerateDebugInformation="0"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				AdditionalOptions=""/>
-			<Tool 
-				Name="LibrarianTool"/>
-			<Tool 
-				Name="ResCmplrTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="2052"
-				AdditionalIncludeDirectories="$(IntDir)"/>
-			<Tool 
-				Name="MidlCmplrTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="0"/>
-			<Tool 
-				Name="BscMakeTool"/>
-			<Tool 
-				Name="PreBuildEventTool"/>
-			<Tool 
-				Name="PreLinkEventTool"/>
-			<Tool 
-				Name="PostBuildEventTool"/>
-			<Tool 
-				Name="CustomTool"/>
-			<Tool 
-				Name="CustomNodeTool"/>
+				DisableSpecificDiagnostics="1786"/>
 		</Configuration>
 	</Configurations>
-	<Files>
-		<File 
-			RelativePath="..\Des_gobstg\Des_gobstg\Core\Export.cpp"/>
-		<File 
-			RelativePath="..\Des_gobstg\Des_gobstg\Core\InitDllLoader.cpp"/>
-		<File 
-			RelativePath=".\ResourcePack.cpp"/>
-		<File 
-			RelativePath=".\ResourcePackDlg.cpp"/>
-		<File 
-			RelativePath=".\stdafx.cpp">
-			<FileConfiguration 
-				Name="Debug|Win32">
-				<Tool 
-					Name="CppCmplrTool"
-					UsePrecompiledHeader="1"/>
-			</FileConfiguration>
-			<FileConfiguration 
-				Name="Release|Win32">
-				<Tool 
-					Name="CppCmplrTool"
-					UsePrecompiledHeader="1"/>
-			</FileConfiguration>
-			<FileConfiguration 
-				Name="FinalRelease|Win32">
-				<Tool 
-					Name="CppCmplrTool"
-					UsePrecompiledHeader="1"/>
-			</FileConfiguration>
-		</File>
-		<File 
-			RelativePath=".\resource.h"/>
-		<File 
-			RelativePath=".\ResourcePack.h"/>
-		<File 
-			RelativePath=".\ResourcePackDlg.h"/>
-		<File 
-			RelativePath=".\stdafx.h"/>
-		<File 
-			RelativePath=".\res\ResourcePack.ico"/>
-		<File 
-			RelativePath=".\ResourcePack.rc"/>
-		<File 
-			RelativePath=".\res\ResourcePack.rc2"/>
-		<File 
-			RelativePath=".\res\ResourcePack.manifest"/>
-	</Files>
+	<Files/>
 </VisualStudioProject>
-

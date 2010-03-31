@@ -105,7 +105,7 @@ ELSEIF D ptsec < 0
 		}
 		ELSE
 		{
-			ISELBUILD 0 "Nothing."
+			ISELBUILD 0 "蒙になし。"
 				90 140 INFO_RED
 				SEL_NONACTIVE
 			ISELSET 0 0 true 0 0 0 0

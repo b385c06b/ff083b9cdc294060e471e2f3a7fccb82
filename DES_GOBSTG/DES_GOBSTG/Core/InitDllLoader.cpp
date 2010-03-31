@@ -1,4 +1,4 @@
-#include "MainDependency.h"
+#include "../Header/MainDependency.h"
 
 #pragma init_seg(lib)
 

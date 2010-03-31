@@ -2,7 +2,7 @@ DES_TH_TOB_SCRIPTFILE 0x073
 
 SCENEFILE
 
-# $PlayerBombID_02	// ÏF”Í°§ƒß¿Ì…≥
+# $EnemyID_29	// ÏF”Í°§ƒß¿Ì…≥
 
 @ POST@
 
@@ -16,14 +16,18 @@ CALL $SceneOff QUIT@
 
 SD [blBegin] BGSI * $BGLayerSplit
 
+IF BGSI !
+{
+	CALL $MusicChangeWithDisplay $MusicEID_29
+}
 
-BGVALEX 1 + blBegin SI_PLBG_02_2
+BGVALEX 1 + blBegin SI_BG_29_2
 	0 0 0 448 480
 	0 0 0 0
 	0.009 -9000 false false
 	0x00ffffff
 
-BGVALUE 0 + blBegin SI_PLBG_02_1
+BGVALUE 0 + blBegin SI_BG_29_1
 	CenterX CenterY CenterW - 64 CenterH - 32
 	0x00ffffff
 

@@ -8,69 +8,356 @@ FUNCTIONFILE
 @ 0
 
 CHATON 0xff
-	0xff $EnemyID_02 CS_RNN
-	$EnemyID_02 CS_RNN "Why can't you guys be quiet?"
-	$EnemyID_02 CS_RNN "All changed after the moon gettingweird."
-	$EnemyID_02 CS_RNN "Anyway, you can do nothing here."
-	$EnemyID_02 CS_RNN "Hey, listen please!"
+	0xff $EnemyID_10 CS_RNN
+	$EnemyID_10 CS_RNN "ようこそ竹林に。ここのガイドさんを務めているてゐです。"
+	$EnemyID_10 CS_RNN "ですが残念のことに、この先は別料金となりますので、こちらにもう一度チケットを…。"
+	$EnemyID_10 CS_RNN "あれ？ちょっと困りますよ。ってか勝手に入るな！"
+	$EnemyID_10 CS_RNN "もう、せっかく少しだけ幸せをわけること考えたのに！"
 CHATOFF
 
 @ 1
 
 CHATON 0xff
-	$PlayerID_02 $EnemyID_02 CS_RNN
-	$EnemyID_02 CS_RNN "Are both of you two Marisa?"
-	$PlayerID_02 CS_LNN "Not true cause she is faker."
-	$PlayerID_06 CS_LNN "Nothing true cause she is bogus."
-	$PlayerID_02 CS_LNN "Don't mimic me!"
-	$EnemyID_02 CS_RNN "… What happened?"
-	$PlayerID_02 CS_LNN "I'm not going to explain that, so use your imagination."
-	$EnemyID_02 CS_RNN "How can I imagine! Is it somethingcaused by the weird moon?"
-	$PlayerID_06 CS_LNN "Nothing did I know."
-CHATOFF
-
-@ 2
-
-CHATON 0xff
-	$PlayerID_04 $EnemyID_02 CS_LNN
-	$PlayerID_04 CS_LNN "So you and another Marisa are comefrom a different world."
-	$PlayerID_05 CS_LNN "You are right. We will prevent thelaunch of Lunar Cannon."
-	$EnemyID_02 CS_RNN "Got it."
-	$PlayerID_04 CS_LNN "Well, how is Marisa?"
-	$EnemyID_02 CS_RNN "Why why why to ask me about her?"
-	$PlayerID_04 CS_LNN "So cute you are."
-	$EnemyID_02 CS_RNN "Stop! I will accuse you!"
-	$PlayerID_05 CS_LNN "Should we call her TSUNDERE?"
-CHATOFF
-
-@ 3
-
-CHATON 0xff
-	$PlayerID_06 $EnemyID_02 CS_RNN
-	$EnemyID_02 CS_RNN "Is it you, Marisa?"
-	$PlayerID_06 CS_LNN "Nothing wrong."
-	$EnemyID_02 CS_RNN "Why you sound so weird?"
-	$PlayerID_06 CS_LNN "Nothing but your illusion."
-	$EnemyID_02 CS_RNN "Wait, wait please!"
-	$PlayerID_06 CS_LNN "Nothing can stop me."
-
+	$PlayerID_09 $EnemyID_10 CS_RNN
+	$EnemyID_10 CS_RNN "みんな兎耳を塞いで～。プリズムリバー楽団通りますよ。"
+	$PlayerID_09 CS_LNN "なんか失礼なこと言ってない？"
+	$EnemyID_10 CS_RNN "とんでもないです。これは深い意味があります。"
+	$PlayerID_12 CS_LNN "兎は耳が敏感すぎますので、コンサートに向いてませんと思います。"
+	$PlayerID_09 CS_LNN "そうか。でもなんだかこの兎妙に顔歪んでな…。"
+	$EnemyID_10 CS_RNN "うぜぇからさっさと消えろてめぇら。"
+	$PlayerID_09 CS_LNN "ひっ！なんだいまのは！"
 CHATOFF
 
 @ 4
 
 CHATON 0xff
-	$PlayerID_02 $EnemyID_02 CS_RNN
-	$EnemyID_02 CS_RNN "Is it you again, Marisa?"
-	$PlayerID_02 CS_LNN "I think we haven’t met for quite a long time."
-	$EnemyID_02 CS_RNN "You mean that it wasn't you?"
-	$PlayerID_02 CS_LNN "What are you talking about?"
-	$EnemyID_02 CS_RNN "… Just an imagination?"
-	$PlayerID_02 CS_LNN "What?"
+	$PlayerID_15 $EnemyID_10 CS_LNN
+	$PlayerID_15 CS_LNN "ここで何をしている？帰るぞてゐ。"
+	$EnemyID_10 CS_RNN "あらあら、まずいな。うどんげまでばれちゃって…。"
+	$PlayerID_15 CS_LNN "つべこべ言わずに。そしてうどんげ言うな。ちゃんと『鈴仙さま』と呼べ。"
+	$EnemyID_10 CS_RNN "そんなのやだ。だっててるよちゃんもうどんげうどんげ言うし。"
+	$PlayerID_15 CS_LNN "てるよちゃんって、せめて『かぐやちゃん』と呼べ。いや、姫様は姫様だ！"
+	$EnemyID_10 CS_RNN "ふっふっふ、いま『かぐやちゃん』いっちゃったな。"
+	$PlayerID_15 CS_LNN "あんたって本当腹黒！"
 CHATOFF
 
 @ @@[ 0
 
 IF CHATI - 0xff !
+{
+	SETTIME 0
+	SETSCENE GETSCENE + 4
+}
+
+// /////////
+# $Chat_T22
+
+
+@ 1
+
+CHATON 0xff
+	$PlayerID_10 $EnemyID_11 CS_RFN
+	$EnemyID_11 CS_RNN "動物園になりそうです～。"
+	$PlayerID_10 CS_LFN "河童が言うな！"
+	$PlayerID_15 CS_LNN "そうだな。どこの動物園にでも、河童が見えそうもないな。"
+	$EnemyID_11 CS_RNN "怪鳥も化け兎も見えそうもないな。"
+	$PlayerID_15 CS_LNN "あんたケンカ売ってる？"
+CHATOFF
+
+@ 2
+
+CHATON 0xff
+	$PlayerID_08 $EnemyID_11 CS_RNN
+	$EnemyID_11 CS_RNN "人が来る！"
+	$PlayerID_08 CS_LNN "わーい。河童みっけ！生まれて初めて見たよ。"
+	$EnemyID_11 CS_RNN "なんだ、⑨か。"
+	$PlayerID_17 CS_LNN "私もいるよ。"
+	$EnemyID_11 CS_RNN "げっ！逃げなきゃ！"
+	$PlayerID_17 CS_LNN "逃がさん。チルノ、氷かけろ。"
+	$PlayerID_08 CS_LNN "ふい？いま『チルノ』を呼んでくれたか。うれしいな！"
+	$PlayerID_17 CS_LNN "いいから早くかけろ。逃がしたら承知しないぞ。"
+CHATOFF
+
+@ 3
+
+CHATON 0xff
+	$PlayerID_04 $EnemyID_11 CS_LNN
+	$PlayerID_04 CS_LNN "なんか不思議な生き物だな。"
+	$EnemyID_11 CS_RNN "怖い！なんだかこの二人怖すぎます！"
+	$PlayerID_18 CS_LNN "死神に剣士。道理で逃げたいわけだな。でも大丈夫、無駄な殺生はしないから。"
+	$PlayerID_04 CS_LNN "珍味動物は保護すべきです。"
+	$EnemyID_11 CS_RNN "ますます怖くなってきた！"
+CHATOFF
+
+@ 4
+
+CHATON 0xff
+	$PlayerID_12 $EnemyID_11 CS_LNN
+	$PlayerID_12 CS_LNN "河童が実在するなんて思っていませんでした。"
+	$EnemyID_11 CS_RNN "ちゃんとそのへんもいっぱいいるよ。"
+	$PlayerID_12 CS_LNN "ここは河童集結地なのでしょうか。気づいていませんでした。"
+	$EnemyID_11 CS_RNN "そんな大げさじゃないよ。ただの出産しに…。"
+	$PlayerID_12 CS_LNN "いやらしい。"
+	$EnemyID_11 CS_RNN "えっ！そそそそんな！"
+CHATOFF
+
+@ @@[ 0
+
+SD [nochat] NOW@ !
+SD [nochat] TIME > 60 * nochat
+IF CHATI - 0xff ! * NOW@ + nochat
+{
+	SETTIME 0
+	SETSCENE GETSCENE + 4
+}
+
+// //////////
+# $Chat_T23
+
+@ 1
+
+CHATON 0xff
+	$PlayerID_03 $EnemyID_14 CS_RNN
+	$EnemyID_14 CS_RNN "あぁ～帰りたい。"
+	$PlayerID_03 CS_LNN "だったら邪魔するな、さっさと帰れ。"
+	$PlayerID_19 CS_LNN "さっきの白兎といい今の制服兎といい、やっぱり耳の長い生き物は理解しがたい。"
+	$EnemyID_14 CS_RNN "バンパイアに言われたくないよ。帰るつもりだがあんたらを撃ち殺すのは姫様直々の命令だから。"
+	$PlayerID_03 CS_LNN "殺すつもりだったのか。なら話は早い。お嬢様、武器使う許可を。"
+	$PlayerID_19 CS_LNN "いつも勝手に使ったじゃない！"
+	$PlayerID_03 CS_LNN "それはすみませんでした。つい。"
+	$EnemyID_14 CS_RNN "ついって人殺すな！"
+CHATOFF
+
+@ 2
+
+CHATON 0xff
+	$PlayerID_22 $EnemyID_14 CS_RNN
+	$EnemyID_14 CS_RNN "犯人がやってくるのは想像外だった。"
+	$PlayerID_22 CS_LNN "異端殺しに犯人呼ばわりされる筋合いはない。"
+	$PlayerID_19 CS_LNN "あいつもまた使われているから、理論するのも時間の無駄使いだ。"
+	$EnemyID_14 CS_RNN "もともと姫様直々の命令を受けこの場であんたらを撃ち殺すから、何なりと言っても。"
+	$PlayerID_19 CS_LNN "哀れな一族だな。"
+	$EnemyID_14 CS_RNN "姫様の御恩を受けていないあんたたちの方が可哀そう。"
+CHATOFF
+
+@ 3
+
+CHATON 0xff
+	$PlayerID_16 $EnemyID_14 CS_LFN
+	$PlayerID_16 CS_LFN "気をつけて。あのこは人狂わす目を持っているから。"
+	$PlayerID_21 CS_LNN "直視しなければいいんだな。わかったゼ。"
+	$EnemyID_14 CS_RNN "異世界人よ、ここはあんたが踏んでいい場所じゃない。早いうちに帰れ。"
+	$PlayerID_21 CS_LNN "お前に用はない。司令を呼べ。"
+	$EnemyID_14 CS_RNN "司令？姫様のことか。あの方はここにおらん。私がその司令の代理人だ。"
+	$PlayerID_21 CS_LNN "そうか。全然威圧感ない司令だな。よい、天月砲の技術情報をくれ。"
+	$EnemyID_14 CS_RNN "技術情報などない、先代月の民の残りものだ。"
+	$PlayerID_21 CS_LNN "残念、じゃ帰ろうゼ。"
+	$PlayerID_16 CS_LFN "えっ？いまのであきらめるわけ？"
+	$PlayerID_21 CS_LNN "うそに決まってるじゃない。天月砲いっただきだゼ！"
+CHATOFF
+
+@ 4
+
+CHATON 0xff
+	$PlayerID_13 $EnemyID_14 CS_LFN
+	$PlayerID_13 CS_LFN "またいたのか。"
+	$EnemyID_14 CS_RNN "それはこっちのセリフよ！いい加減帰れ、遊び場じゃないから。"
+	$PlayerID_13 CS_LFN "わたしだって姫様の役に立ちたいです～。"
+	$EnemyID_14 CS_RNN "単に遊んでるしか見えないが。"
+	$PlayerID_13 CS_LFN "うどんげひど～い。"
+	$EnemyID_14 CS_RNN "だから『鈴仙さま』と呼んでくれよ！"
+	$PlayerID_13 CS_LFN "や～だ。それより天月砲は？"
+	$EnemyID_14 CS_RNN "知ってどうする？"
+	$PlayerID_13 CS_LFN "ひ?み?つ～。"
+CHATOFF
+
+@ @@[ 0
+
+SD [nochat] NOW@ !
+SD [nochat] TIME > 60 * nochat
+IF CHATI - 0xff ! * NOW@ + nochat
+{
+	SETTIME 0
+	SETSCENE GETSCENE + 4
+}
+
+// ///////
+# $Chat_T24
+
+@ 0
+
+CHATON 0xff
+	0xff $EnemyID_12 CS_RNF
+	$EnemyID_12 CS_RNF "春ってやっぱり気持ちいいな。"
+	$EnemyID_12 CS_RNF "毎日花の香りに包まれて、心まで洗浄してたように。"
+	$EnemyID_12 CS_RNF "ところであなたたちも花見に来てくれましたか。ならこちらへ、ご案内させていただきます。"
+	$EnemyID_12 CS_RNF "ちょ、ちょっと待って！土足は禁止です、育ちかけの花を乱暴しないでください。"
+CHATOFF
+
+@ 1
+
+CHATON 0xff
+	$PlayerID_05 $EnemyID_12 CS_RNF
+	$EnemyID_12 CS_RNF "あら、天狗の記者じゃないか。ちょうどいいこと。博麗神社のこと聞いてる？"
+	$PlayerID_05 CS_LNN "もちろん、なんと宇宙人に占領されたらしいよ。"
+	$EnemyID_12 CS_RNF "いったいどんな噂になったのよ。"
+	$PlayerID_22 CS_LNN "どんどん事実から離れているような気がする。"
+	$EnemyID_12 CS_RNF "えぇ！ゆかりんいたのか。気づかなかった。"
+	$PlayerID_22 CS_LNN "そんなことどうでもいい。お賽銭箱盗まれるぐらいのことで大げさに言うな。"
+	$EnemyID_12 CS_RNF "そそそ、それは命にかかる一大事だな、霊夢に。"
+	$PlayerID_22 CS_LNN "いや、今のウソ。あいつ賽銭箱を抱いて寝るキャラだから。"
+	$PlayerID_05 CS_LNN "やけに信じられそうなウソだな。"
+CHATOFF
+
+@ 4
+
+CHATON 0xff
+	$PlayerID_07 $EnemyID_12 CS_LNF
+	$PlayerID_07 CS_LNN "花と言えば毒だな。"
+	$EnemyID_12 CS_RNF "そんなの偏見にすぎます！花と言えば香りではないか！"
+	$PlayerID_07 CS_LNN "毒はまた薬。花の香りが人間を愉しめるのは神経に花の毒がにじんだから。"
+	$EnemyID_12 CS_RNF "一定程度の香りは毒に変わりません！"
+	$PlayerID_07 CS_LNN "あんたはこれほどの花がもつもの、すでに毒されても変なことではない。"
+	$EnemyID_12 CS_RNF "免疫と適応性がつよいから、平気ですよ。"
+	$PlayerID_07 CS_LNN "ほら、人間じゃないのに免疫とか適応性とかいうし、やっぱ脳まで毒されたな。"
+CHATOFF
+
+@ @@[ 0
+
+IF CHATI - 0xff !
+{
+	SETTIME 0
+	SETSCENE GETSCENE + 4
+}
+
+// ///////
+# $Chat_T25
+
+@ 1
+
+CHATON 0xff
+	$PlayerID_05 $EnemyID_13 CS_RNN
+	$EnemyID_13 CS_RNN "さっきの話だけど。博麗神社っていったいどうなったのか。"
+	$PlayerID_05 CS_LNN "ですから、宇宙人に…。"
+	$PlayerID_22 CS_LNN "うそつけジャーナリストは黙れ。"
+	$EnemyID_13 CS_RNN "新聞評価減っているよ。"
+	$PlayerID_05 CS_LNN "ほぼ事実だからいいんじゃん。"
+	$PlayerID_22 CS_LNN "宇宙人ってどこでもいないわ。"
+	$EnemyID_13 CS_RNN "じゃ未来人か、超能力人か。"
+	$PlayerID_22 CS_LNN "異世界人だ。"
+	$EnemyID_13 CS_RNN "最もうそっぽいだ！"
+CHATOFF
+
+@ 2
+
+CHATON 0xff
+	$PlayerID_02 $EnemyID_13 CS_RNN
+	$EnemyID_13 CS_RNN "まったく同じ顔の二人じゃないか。"
+	$PlayerID_02 CS_LNN "本物は私だぜ。"
+	$PlayerID_21 CS_LNN "俺の方が本物だゼ。"
+	$EnemyID_13 CS_RNN "どうなっているの？魔法にかけられた。"
+	$PlayerID_02 CS_LNN "いや、私たちとも魔法使いだからぜ。"
+	$PlayerID_21 CS_LNN "魔法とは無関係だゼ。"
+	$EnemyID_13 CS_RNN "あぁもうイライラする！"
+CHATOFF
+
+@ 3
+
+CHATON 0xff
+	$PlayerID_15 $EnemyID_13 CS_LNN
+	$PlayerID_15 CS_LNN "で、どこまで連れて行くつもり？ここは怖い花ばかりのでいやだね…。"
+	$PlayerID_20 CS_LNN "この山を越えればすぐ目の前だよ。"
+	$EnemyID_13 CS_RNN "あれ？霊夢…だよね。なんだか雰囲気違うんだけど。"
+	$PlayerID_15 CS_LNN "よ、メディスンじゃないか。"
+	$EnemyID_13 CS_RNN "う、うん。それ、霊夢だよな…。"
+	$PlayerID_20 CS_LNN "それってひどいな。レイムとはいえ霊夢じゃないけど。解釈には時間かかりそうだからパス。"
+	$EnemyID_13 CS_RNN "もしかして博麗神社の事件と何か因縁あり？"
+	$PlayerID_15 CS_LNN "そんなことどうでもいい。もう一息だから付き合うよ。"
+CHATOFF
+
+@ 4
+
+CHATON 0xff
+	$PlayerID_14 $EnemyID_13 CS_LNN
+	$PlayerID_14 CS_LNN "まだいたのか。"
+	$EnemyID_13 CS_RNN "こっちのセリフよ！"
+	$PlayerID_14 CS_LNN "もう一度勝負しようか。毒なんて外道なものを使わないでくれる？"
+	$EnemyID_13 CS_RNN "いいじゃない。ならそっちも花など殺風景なおもちゃを武道会場に持ち込まないでくれるよね。"
+	$PlayerID_14 CS_LNN "あったまきた！"
+	$EnemyID_13 CS_RNN "あたまないくせに！"
+CHATOFF
+
+@ @@[ 0
+
+SD [nochat] NOW@ !
+SD [nochat] TIME > 60 * nochat
+IF CHATI - 0xff ! * NOW@ + nochat
+{
+	SETTIME 0
+	SETSCENE GETSCENE + 4
+}
+
+// ////////
+# $Chat_T26
+
+@ 1
+
+CHATON 0xff
+	$PlayerID_20 $EnemyID_18 CS_RNN
+	$EnemyID_18 CS_RNN "霊夢ではないか。どうしたの？うわさで結構大変な目にあったようですが。"
+	$PlayerID_20 CS_LNN "霊夢じゃなくレイムだ。"
+	$PlayerID_17 CS_LNN "うむ、よく区別しろ。ほら微妙に違うんじゃないか、立ち絵とか。"
+	$EnemyID_18 CS_RNN "さすが閻魔様。主観視点の次元は違いますね。"
+	$PlayerID_17 CS_LNN "大したことはない。"
+	$EnemyID_18 CS_RNN "別に褒めてないから！それよりレイム、いったいあの娘とどんな関係？"
+	$PlayerID_20 CS_LNN "霊夢か、魔理沙か？あの娘って意味わからん。"
+	$EnemyID_18 CS_RNN "ななななんでま、魔理沙が出てくるのよ！"
+CHATOFF
+
+@ 2
+
+CHATON 0xff
+	$PlayerID_06 $EnemyID_18 CS_RNN
+	$EnemyID_18 CS_RNN "あんたたちくっつけて珍しいな。"
+	$PlayerID_06 CS_LNN "非常用食材なら、常に見回りに用意しています。"
+	$PlayerID_13 CS_LFN "悲惨だ。私は幸せを配ってきたのに！アリスアリス～私を助けて～。"
+	$EnemyID_18 CS_RNN "そ、そんな潤んだ目で見ないでください！ドキドキしちゃいそうではありませんか。"
+	$PlayerID_13 CS_LFN "そっちも危険そうだな。なんで私はこんな目に…。"
+	$PlayerID_06 CS_LNN "非常用食材を手を出さないでくれます？"
+CHATOFF
+
+@ 3
+
+CHATON 0xff
+	$PlayerID_11 $EnemyID_18 CS_LNN
+	$PlayerID_11 CS_LNN "ねぇさん。アリスに聞いてみようか。"
+	$PlayerID_12 CS_LNN "なにも出てくれないと思いますけど、一応。"
+	$EnemyID_18 CS_RNN "なによ人を見てこそこそっと。私は別に誰かを思って…。"
+	$PlayerID_11 CS_LNN "諦めましたよねぇさん。恋バカに近づかないでいこうか。"
+	$PlayerID_12 CS_LNN "同意です。霊夢さんからの救援霊書によってこの山を越えればすぐ目の前です。さ、急ぎましょう。"
+	$EnemyID_18 CS_RNN "ま、待って。霊夢どうされましたか？うわさで結構大変しそうだったので…。"
+	$PlayerID_11 CS_LNN "魔理沙は平気よ。心配ご無用～。"
+	$EnemyID_18 CS_RNN "ななななんでま、魔理沙が出てくるのよ！"
+CHATOFF
+
+@ 4
+
+CHATON 0xff
+	$PlayerID_21 $EnemyID_18 CS_LNN
+	$PlayerID_21 CS_LNN "だからしつこいなあんたは。"
+	$EnemyID_18 CS_RNN "なな、なにいうんです？ごくふつうな質問ではありませんか。"
+	$PlayerID_21 CS_LNN "用事あるんだからいちいち付き合わないゼ。"
+	$EnemyID_18 CS_RNN "その用事も言えないでしょうか。私って信用できませんから？"
+	$PlayerID_21 CS_LNN "信用するゼ、愛してるから今のうち勘弁してくれ。"
+	$EnemyID_18 CS_RNN "…は、鼻血が…。"
+	$PlayerID_21 CS_LNN "もううるさい！どけ！"
+CHATOFF
+
+@ @@[ 0
+
+SD [nochat] NOW@ !
+SD [nochat] TIME > 60 * nochat
+IF CHATI - 0xff ! * NOW@ + nochat
 {
 	SETTIME 0
 	SETSCENE GETSCENE + 4

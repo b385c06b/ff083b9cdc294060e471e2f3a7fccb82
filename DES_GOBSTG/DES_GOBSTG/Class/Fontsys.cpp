@@ -1,7 +1,7 @@
-#include "Fontsys.h"
-#include "Main.h"
-#include "Scripter.h"
-#include "Data.h"
+#include "../Header/Fontsys.h"
+#include "../Header/Main.h"
+#include "../Header/Scripter.h"
+#include "../Header/Data.h"
 
 char Fontsys::text[FONTSYSMAX][M_STRMAX];
 HD3DFONT Fontsys::usingfont[FONTSYSMAX];
@@ -161,7 +161,7 @@ void Fontsys::SignUp(BYTE ID, const char * _text, HD3DFONT _font)
 	}
 	usingfont[ID] = _font;
 
-	tex = hge->Gfx_RenderTextToTarget(tar[ID], _font, text[ID], 0, 0, FONTSYS_TARGETWIDTH, FONTSYS_TARGETHEIGHT);
+	hge->Gfx_RenderTextToTarget(&tex, tar[ID], _font, text[ID], 0, 0, FONTSYS_TARGETWIDTH, FONTSYS_TARGETHEIGHT);
 
 	float h = lines[ID] * M_FONTHEIGHT;
 

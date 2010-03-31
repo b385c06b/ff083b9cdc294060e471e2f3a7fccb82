@@ -1,6 +1,6 @@
-#include "BResource.h"
-#include "data.h"
-#include "ConstResource.h"
+#include "../Header/BResource.h"
+#include "../Header/data.h"
+#include "../Header/ConstResource.h"
 
 BResource res;
 

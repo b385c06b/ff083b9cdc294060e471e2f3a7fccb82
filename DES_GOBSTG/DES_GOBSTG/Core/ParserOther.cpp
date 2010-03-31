@@ -1,5 +1,5 @@
-#include "Scripter.h"
-#include "processPrep.h"
+#include "../Header/Scripter.h"
+#include "../Header/processPrep.h"
 
 bool Scripter::Copy(vector<Script>::iterator * p, BYTE num, BYTE dstart)
 {

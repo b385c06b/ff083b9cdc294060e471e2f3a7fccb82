@@ -84,7 +84,7 @@ void CALL HGE_Impl::Gfx_SetClipping(int x, int y, int w, int h)
 }
 
 /************************************************************************/
-/* This function is added by h5nc (h5nc@yahoo.com.cn)                   */
+/* These functions are added by h5nc (h5nc@yahoo.com.cn)                */
 /************************************************************************/
 void CALL HGE_Impl::Gfx_SetTransform(float x, float y, float dx, float dy, float rot, float hscale, float vscale)
 {
@@ -109,6 +109,13 @@ void CALL HGE_Impl::Gfx_SetTransform(float x, float y, float dx, float dy, float
 void CALL HGE_Impl::Gfx_SetTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX * pMatrix)
 {
 	pD3DDevice->SetTransform(State, pMatrix);
+}
+
+D3DMATRIX CALL HGE_Impl::Gfx_GetTransform(D3DTRANSFORMSTATETYPE State)
+{
+	D3DMATRIX mat;
+	pD3DDevice->GetTransform(State, &mat);
+	return mat;
 }
 
 bool CALL HGE_Impl::Gfx_BeginScene(HTARGET targ)
@@ -714,6 +721,7 @@ bool HGE_Impl::_GfxInit()
 	d3dppW.BackBufferFormat = Mode.Format;
 	d3dppW.BackBufferCount  = 1;
 	d3dppW.MultiSampleType  = D3DMULTISAMPLE_NONE;
+	d3dppW.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 	d3dppW.hDeviceWindow    = hwnd;
 	d3dppW.Windowed         = TRUE;
 
@@ -920,7 +928,7 @@ void HGE_Impl::_GfxDone()
 		//-2nd
 		pD3DDevice->SetIndices(NULL);
 		pIB->Release();
-		pIB=0;
+		pIB = NULL;
 	}
 	if(pVB)
 	{
@@ -928,7 +936,7 @@ void HGE_Impl::_GfxDone()
 		//+2nd
 		pD3DDevice->SetStreamSource( 0, pVB, 0, sizeof(hgeVertex) );
 		pVB->Release();
-		pVB=0;
+		pVB = NULL;
 	}
 	if(pD3DDevice) { pD3DDevice->Release(); pD3DDevice=0; }
 	if(pD3D) { pD3D->Release(); pD3D=0; }
@@ -969,12 +977,14 @@ bool HGE_Impl::_GfxRestore()
 	{
 		pD3DDevice->SetIndices(NULL);
 		pIB->Release();
+		pIB = NULL;
 	}
 	if(pVB)
 	{
 		//+2nd
 		pD3DDevice->SetStreamSource( 0, pVB, 0, sizeof(hgeVertex) );
 		pVB->Release();
+		pVB = NULL;
 	}
 
 	pD3DDevice->Reset(d3dpp);
@@ -993,7 +1003,9 @@ bool HGE_Impl::_GfxRestore()
 		if (listIterator->font) ((ID3DXFont *)(listIterator->font))->OnResetDevice();
 		listIterator = listIterator->next;
 	}
-    // end
+	// end
+
+	if(procGfxRestoreFunc) return procGfxRestoreFunc();
 
 	return true;
 }
@@ -1015,7 +1027,7 @@ bool HGE_Impl::_init_lost()
 	{
 		if(target->pTex)
 			D3DXCreateTexture(pD3DDevice, target->width, target->height, 1, D3DUSAGE_RENDERTARGET,
-						 d3dpp->BackBufferFormat, D3DPOOL_DEFAULT, &target->pTex);
+			/*d3dpp->BackBufferFormat*/D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &target->pTex);
 		if(target->pDepth)
 			pD3DDevice->CreateDepthStencilSurface(target->width, target->height,
 						   D3DFMT_D16, D3DMULTISAMPLE_NONE, 0, TRUE, &target->pDepth, NULL);

@@ -165,11 +165,12 @@ struct CAffectorList{
 };
 
 struct hgeEffectEmitter{
-	hgeEffectObject			obj[MAX_EFFECTS];
+	hgeEffectObject			* obj;
 	CAffectorList *			eaiList;
 	hgeEffectEmitterInfo	eei;
 	int						nEffectObjectsAlive;
 	int						nAge;
+	int						nObj;
 	float					fEmissionResidue;
 	hgeSprite *				sprite;
 	BYTE					ID;
@@ -192,7 +193,7 @@ public:
 	bool Save(const char * filename, int _texnum = -1);
 
 	void FreeList();
-	void Render();
+	void Render(hge3DPoint *ptfar=NULL, DWORD colormask=0xffffffff);
 	void MoveTo(float x, float y, float z = 0, bool bForce = false);
 	void Fire();
 	void Stop(bool bKill = false);
@@ -216,10 +217,15 @@ public:
 
 	int GetEmitterAge(BYTE emitterID);
 	int GetAffectorAge(BYTE emitterID, BYTE affectorID);
-	int GetEffectObjectAlive(BYTE emitterID = 0);
+	int GetEffectObjectAlive(BYTE emitterID = 0, int * nobj=NULL);
 
-private:
-	void _EffectSystemInit();
+public:
+	void InitEffectSystem();
+	void InitEffectSystem(const char * filename, HTEXTURE tex = 0, HTEXTURE * texset = 0);
+	void InitEffectSystem(const hgeEffectSystem & eff);
+
+public:
+	static void Release();
 
 public:
 	hgeEffectBasicInfo	ebi;

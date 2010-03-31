@@ -1,7 +1,7 @@
-#include "BGLayer.h"
-#include "Main.h"
-#include "SpriteItemManager.h"
-#include "BResource.h"
+#include "../Header/BGLayer.h"
+#include "../Header/Main.h"
+#include "../Header/SpriteItemManager.h"
+#include "../Header/BResource.h"
 
 BGLayer * ubg[UBGLAYERMAX];
 BGLayerSet BGLayer::set[BGLAYERSETMAX];
@@ -175,6 +175,7 @@ void BGLayer::moveSet(bool _move, bool _rotate)
 
 void BGLayer::rectSet(float _x, float _y, float z, float w, float h, int rotx, int roty, int rotz)
 {
+	/*
 	if (hge->System_Is2DMode())
 	{
 		x = _x + width / 2;
@@ -183,6 +184,7 @@ void BGLayer::rectSet(float _x, float _y, float z, float w, float h, int rotx, i
 		vscale = h / th;
 		return;
 	}
+	*/
 
 	float wx = w, wy = 0, wz = 0;
 	float hx = 0, hy = h, hz = 0;
@@ -222,22 +224,26 @@ void BGLayer::rectSet(float _x, float _y, float z, float w, float h, int rotx, i
 
 void BGLayer::parallelogram(float paral)
 {
+	/*
 	if (hge->System_Is2DMode())
 	{
 		return;
 	}
+	*/
 	sprite->quad.v[2].x += paral;
 	sprite->quad.v[3].x += paral;
 }
 
 void BGLayer::vertexSet(float x0, float y0, float z0, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3)
 {
+	/*
 	if (hge->System_Is2DMode())
 	{
 		hscale = (x1-x0) / width;
 		vscale = (y2-y1) / height;
 		return;
 	}
+	*/
 	sprite->quad.v[0].x = x0;	sprite->quad.v[0].y = y0;	sprite->quad.v[0].z = z0;
 	sprite->quad.v[1].x = x1;	sprite->quad.v[1].y = y1;	sprite->quad.v[1].z = z1;
 	sprite->quad.v[2].x = x2;	sprite->quad.v[2].y = y2;	sprite->quad.v[2].z = z2;
@@ -254,14 +260,16 @@ void BGLayer::SetFlag(BYTE _flag, BYTE maxtime)
 
 void BGLayer::Render()
 {
+	/*
 	if (hge->System_Is2DMode())
 	{
 		sprite->RenderEx(x, y, rotate?ARC(angle-9000):0, hscale, vscale);
 	}
 	else
 	{
+	*/
 		hge->Gfx_RenderQuad(&(sprite->quad));
-	}
+	//}
 }
 
 void BGLayer::action()
@@ -298,6 +306,7 @@ void BGLayer::action()
 		float xt = speed * costa;
 		float yt = speed * sinta;
 
+		/*
 		if (hge->System_Is2DMode())
 		{
 			x += xt;
@@ -305,17 +314,18 @@ void BGLayer::action()
 		}
 		else
 		{
+		*/
 			sprite->quad.v[0].x += xt;	sprite->quad.v[0].y += yt;
 			sprite->quad.v[1].x += xt;	sprite->quad.v[1].y += yt;
 			sprite->quad.v[2].x += xt;	sprite->quad.v[2].y += yt;
 			sprite->quad.v[3].x += xt;	sprite->quad.v[3].y += yt;
-		}
+//		}
 
 	}
 	else
 	{
-		if (!hge->System_Is2DMode())
-		{
+//		if (!hge->System_Is2DMode())
+//		{
 			//rotate the layer for XY-plane
 			float x = ((sprite->quad.v[0].x + sprite->quad.v[2].x) / 2);
 			float y = ((sprite->quad.v[0].y + sprite->quad.v[2].y) / 2);
@@ -331,7 +341,7 @@ void BGLayer::action()
 
 			sprite->quad.v[3].x  = (-width/2)*costa - (height/2)*sinta + x;
 			sprite->quad.v[3].y  = (-width/2)*sinta + (height/2)*costa + y;	
-		}
+//		}
 		if(angle > 0)
 			angle += (int)(speed*100);
 		else

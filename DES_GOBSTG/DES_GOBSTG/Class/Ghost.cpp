@@ -1,13 +1,13 @@
-#include "Ghost.h"
-#include "Player.h"
-#include "Enemy.h"
-#include "Item.h"
-#include "SE.h"
-#include "Bullet.h"
-#include "Scripter.h"
-#include "Chat.h"
-#include "BossInfo.h"
-#include "Main.h"
+#include "../Header/Ghost.h"
+#include "../Header/Player.h"
+#include "../Header/Enemy.h"
+#include "../Header/Item.h"
+#include "../Header/SE.h"
+#include "../Header/Bullet.h"
+#include "../Header/Scripter.h"
+#include "../Header/Chat.h"
+#include "../Header/BossInfo.h"
+#include "../Header/Main.h"
 
 Ghost gh[GHOSTMAX];
 

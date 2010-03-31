@@ -1,8 +1,8 @@
 #ifndef _EDITORUI_H
 #define _EDITORUI_H
 
-#include "MainDependency.h"
-#include "hgeEffectSystem.h"
+#include "../DES_GOBSTG/DES_GOBSTG/Header/MainDependency.h"
+#include "../include/hgeEffectSystem.h"
 
 #define UIEDITMODE_EB	1
 #define UIEDITMODE_EE	2

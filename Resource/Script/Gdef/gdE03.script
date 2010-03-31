@@ -22,7 +22,7 @@ LOOP [i]
 }
 
 ////////
-# 0x8320
+# 0x8324
 
 @ @@%> 240 90
 
@@ -38,12 +38,11 @@ B GHX GHY
 A 0
 
 //////
-# 0x8340
+# 0x8360
 
 @ @@>% 60 3
 
 B GHX GHY
 	true GHANGLE 0.2
 	16 0 8 0 0xff
-BUDECANCEL BUI
 BUDECANCEL BUI

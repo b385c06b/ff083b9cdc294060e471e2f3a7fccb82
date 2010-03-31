@@ -1,12 +1,12 @@
-#include "Process.h"
-#include "Scripter.h"
-#include "Selector.h"
-#include "Player.h"
-#include "InfoSelect.h"
-#include "SE.h"
-#include "BGLayer.h"
-#include "BossInfo.h"
-#include "FrontDisplay.h"
+#include "../Header/Process.h"
+#include "../Header/Scripter.h"
+#include "../Header/Selector.h"
+#include "../Header/Player.h"
+#include "../Header/InfoSelect.h"
+#include "../Header/SE.h"
+#include "../Header/BGLayer.h"
+#include "../Header/BossInfo.h"
+#include "../Header/FrontDisplay.h"
 
 int Process::processPause()
 {

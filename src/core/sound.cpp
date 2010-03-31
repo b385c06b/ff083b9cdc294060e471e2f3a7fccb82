@@ -247,7 +247,7 @@ int CALL HGE_Impl::Music_GetChannelVolume(HMUSIC music, int channel)
 */
 HSTREAM CALL HGE_Impl::Stream_Load(const char *filename, DWORD size, bool bLoad)
 {
-	void *data;
+	void *data=NULL;
 	DWORD _size;
 	HSTREAM hs;
 	CStreamList *stmItem;
@@ -273,7 +273,7 @@ HSTREAM CALL HGE_Impl::Stream_Load(const char *filename, DWORD size, bool bLoad)
 		if(!hs)
 		{
 			_PostError("Can't load stream");
-			if(!size) Resource_Free(data);
+			if(!size && data) Resource_Free(data);
 			return 0;
 		}
 		if(!size && bLoad)

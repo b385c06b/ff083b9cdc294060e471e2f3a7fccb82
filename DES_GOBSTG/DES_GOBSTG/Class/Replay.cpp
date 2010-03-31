@@ -1,8 +1,8 @@
-#include "Replay.h"
-#include "Process.h"
-#include "Player.h"
-#include "Data.h"
-#include "BResource.h"
+#include "../Header/Replay.h"
+#include "../Header/Process.h"
+#include "../Header/Player.h"
+#include "../Header/Data.h"
+#include "../Header/BResource.h"
 
 Replay rpy;
 

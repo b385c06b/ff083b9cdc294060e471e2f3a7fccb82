@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "Export.h"
-#include "ConstResource.h"
+#include "../DES_GOBSTG/DES_GOBSTG/Header/Export.h"
+#include "../DES_GOBSTG/DES_GOBSTG/Header/ConstResource.h"
 
 // CCustomDlg ¶Ô»°¿ò
 class CCustomDlg : public CDialog

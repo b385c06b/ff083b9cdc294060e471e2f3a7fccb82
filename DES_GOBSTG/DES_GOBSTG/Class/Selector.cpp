@@ -1,9 +1,9 @@
-#include "Selector.h"
-#include "SE.h"
-#include "Main.h"
-#include "Process.h"
-#include "SpriteItemManager.h"
-#include "PushKey.h"
+#include "../Header/Selector.h"
+#include "../Header/SE.h"
+#include "../Header/Main.h"
+#include "../Header/Process.h"
+#include "../Header/SpriteItemManager.h"
+#include "../Header/PushKey.h"
 
 list<Selector> sel;
 

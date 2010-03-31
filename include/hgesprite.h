@@ -46,11 +46,11 @@ public:
 	/* This function is added by h5nc (h5nc@yahoo.com.cn)                   */
 	/************************************************************************/
 	void		SetColor(DWORD col0, DWORD col1, DWORD col2, DWORD col3);
-	void		SetZ(float z, int i = -1);
+	bool		SetZ(float z, int i = -1, hge3DPoint * ptfar=NULL);
 	/************************************************************************/
 	/* This function is added by h5nc (h5nc@yahoo.com.cn)                   */
 	/************************************************************************/
-	void		SetZ(float z0, float z1, float z2, float z3);
+	bool		SetZ(float z0, float z1, float z2, float z3, hge3DPoint *ptfar=NULL);
 	void		SetBlendMode(int blend) { quad.blend=blend; }
 	void		SetHotSpot(float x, float y) { hotX=x; hotY=y; }
 	void		SetFlip(bool bX, bool bY, bool bHotSpot = false);

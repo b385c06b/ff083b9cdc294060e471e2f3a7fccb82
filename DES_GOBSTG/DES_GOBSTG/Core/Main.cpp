@@ -1,9 +1,9 @@
 #include "vld.h"
 
-#include "Process.h"
-#include "Fontsys.h"
+#include "../Header/Process.h"
+#include "../Header/Fontsys.h"
 
-#include "Main.h"
+#include "../Header/Main.h"
 
 char strdesc[STRINGDESCMAX][M_STRMAX*2];
 

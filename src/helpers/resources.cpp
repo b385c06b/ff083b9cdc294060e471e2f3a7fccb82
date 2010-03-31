@@ -848,7 +848,7 @@ DWORD RFont::Get(hgeResourceManager *rm)
 	{
 		fnt = new hgeFont(filename, mipmap);
 		fnt->SetColor(color);
-		fnt->SetZ(z);
+//		fnt->SetZ(z);
 		fnt->SetBlendMode(blend);
 		fnt->SetScale(scale);
 		fnt->SetProportion(proportion);

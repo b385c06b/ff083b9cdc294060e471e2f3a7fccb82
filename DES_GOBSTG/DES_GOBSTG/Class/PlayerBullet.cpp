@@ -1,12 +1,12 @@
-#include "PlayerBullet.h"
-#include "Player.h"
-#include "Enemy.h"
-#include "Ghost.h"
-#include "SE.h"
-#include "Main.h"
-#include "SpriteItemManager.h"
-#include "FrontDisplayName.h"
-#include "BResource.h"
+#include "../Header/PlayerBullet.h"
+#include "../Header/Player.h"
+#include "../Header/Enemy.h"
+#include "../Header/Ghost.h"
+#include "../Header/SE.h"
+#include "../Header/Main.h"
+#include "../Header/SpriteItemManager.h"
+#include "../Header/FrontDisplayName.h"
+#include "../Header/BResource.h"
 
 VectorList<PlayerBullet>pb;
 

@@ -35,9 +35,12 @@ void hgeFont::_FontInit()
 	fSpacing=1.0f;
 	hTexture=0;
 
-	fZ=0.5f;
-	nBlend=BLEND_COLORMUL | BLEND_ALPHABLEND | BLEND_NOZWRITE;
-	col0 = col1 = col2 = col3 =0xFFFFFFFF;
+	fZ=0;
+	nBlend=BLEND_DEFAULT;
+	for (int i=0; i<4; i++)
+	{
+		col[i] = 0xFFFFFFFF;
+	}
 
 	ZeroMemory( &letters, sizeof(letters) );
 	ZeroMemory( &pre, sizeof(letters) );
@@ -163,8 +166,6 @@ hgeFont::hgeFont(const char *szFont, bool bMipmap)
 /************************************************************************/
 hgeFont::hgeFont(const hgeFont &fnt)
 {
-	int i;
-
 	hge=hgeCreate(HGE_VERSION);
 
 	hTexture=fnt.hTexture;
@@ -173,14 +174,14 @@ hgeFont::hgeFont(const hgeFont &fnt)
 	fRot=fnt.fRot;
 	fTracking=fnt.fTracking;
 	fSpacing=fnt.fSpacing;
-	col0=fnt.col0;
-	col1=fnt.col1;
-	col2=fnt.col2;
-	col3=fnt.col3;
+	for (int i=0; i<4; i++)
+	{
+		col[i] = fnt.col[i];
+	}
 	fZ=fnt.fZ;
 	nBlend=fnt.nBlend;
 
-	for(i=0; i<256; i++)
+	for(int i=0; i<256; i++)
 	{
 		if(fnt.letters[i]) letters[i]=new hgeSprite(*fnt.letters[i]);
 		else letters[i]=0;
@@ -194,8 +195,6 @@ hgeFont::hgeFont(const hgeFont &fnt)
 /************************************************************************/
 hgeFont& hgeFont::operator= (const hgeFont &fnt)
 {
-	int i;
-	
 	if(this!=&fnt)
 	{
 		hTexture=fnt.hTexture;
@@ -204,14 +203,14 @@ hgeFont& hgeFont::operator= (const hgeFont &fnt)
 		fRot=fnt.fRot;
 		fTracking=fnt.fTracking;
 		fSpacing=fnt.fSpacing;
-		col0=fnt.col0;
-		col1=fnt.col1;
-		col2=fnt.col2;
-		col3=fnt.col3;
+		for (int i=0; i<4; i++)
+		{
+			col[i] = fnt.col[i];
+		}
 		fZ=fnt.fZ;
 		nBlend=fnt.nBlend;
 
-		for(i=0; i<256; i++)
+		for(int i=0; i<256; i++)
 		{
 			if(letters[i]) delete letters[i];
 			if(fnt.letters[i]) letters[i]=new hgeSprite(*fnt.letters[i]);
@@ -271,6 +270,31 @@ void hgeFont::ChangeSprite(BYTE chr, HTEXTURE tex, float tex_x, float tex_y, flo
 /************************************************************************/
 /* This function is modified by h5nc (h5nc@yahoo.com.cn)                */
 /************************************************************************/
+void hgeFont::RenderEx(float x, float y, int align, const char *string, float scale/* =1.0f */, float properation/* =1.0f */, float rotation/* =0 */, float tracking/* =0 */, float spacing/* =1.0f */)
+{
+	float _scale = fScale;
+	float _properation = fProportion;
+	float _rotation = fRot;
+	float _tracking = fTracking;
+	float _spacing = fSpacing;
+
+	SetScale(scale);
+	SetProportion(properation);
+	SetRotation(rotation);
+	SetTracking(tracking);
+	SetSpacing(spacing);
+
+	Render(x, y, align, string);
+
+	SetScale(_scale);
+	SetProportion(_properation);
+	SetRotation(_rotation);
+	SetTracking(_tracking);
+	SetSpacing(_spacing);
+}
+/************************************************************************/
+/* This function is modified by h5nc (h5nc@yahoo.com.cn)                */
+/************************************************************************/
 void hgeFont::Render(float x, float y, int align, const char *string)
 {
 	int i;
@@ -296,7 +320,7 @@ void hgeFont::Render(float x, float y, int align, const char *string)
 			if(letters[i])
 			{
 				fx += pre[i]*fScale*fProportion;
-				letters[i]->SetColor(col0, col1, col2, col3);
+				letters[i]->SetColor(col[0], col[1], col[2], col[3]);
 				letters[i]->RenderEx(fx, y, fRot, fScale*fProportion, fScale);
 				fx += (letters[i]->GetWidth()+post[i]+fTracking)*fScale*fProportion;
 			}
@@ -435,18 +459,7 @@ float hgeFont::GetStringWidth(const char *string, bool bMultiline) const
 /************************************************************************/
 DWORD hgeFont::GetColor(int i)
 {
-	switch(i)
-	{
-	case 0:
-		return col0;
-	case 1:
-		return col1;
-	case 2:
-		return col2;
-	case 3:
-		return col3;
-	}
-	return 0;
+	return col[i];
 }
 
 /************************************************************************/
@@ -459,12 +472,24 @@ void hgeFont::SetColor(DWORD col)
 	for(int i=0;i<256;i++) if(letters[i]) letters[i]->SetColor(col);
 }
 */
-void hgeFont::SetColor(DWORD _col0, DWORD _col1, DWORD _col2, DWORD _col3)
+void hgeFont::SetColor(DWORD _col, int i /*=-1*/)
 {
-	col0 = _col0;
-	col1 = _col1;
-	col2 = _col2;
-	col3 = _col3;
+	if (i < 0)
+	{
+		SetColor(_col, _col, _col, _col);
+	}
+	else
+	{
+		col[i] = _col;
+	}
+}
+
+void hgeFont::SetColor(DWORD col0, DWORD col1, DWORD col2, DWORD col3)
+{
+	col[0] = col0;
+	col[1] = col1;
+	col[2] = col2;
+	col[3] = col3;
 	/*
 	for(int i=0;i<256;i++) 
 		if(letters[i]) 
@@ -480,10 +505,10 @@ void hgeFont::SetColor(DWORD _col0, DWORD _col1, DWORD _col2, DWORD _col3)
 /************************************************************************/
 /* This function is modified by h5nc (h5nc@yahoo.com.cn)                */
 /************************************************************************/
-void hgeFont::SetZ(float z)
+void hgeFont::SetZ(float z, hge3DPoint *ptfar)
 {
 	fZ=z;
-	for(int i=0;i<256;i++) if(letters[i]) letters[i]->SetZ(z, z, z, z);
+	for(int i=0;i<256;i++) if(letters[i]) letters[i]->SetZ(z, z, z, z, ptfar);
 }
 
 /************************************************************************/

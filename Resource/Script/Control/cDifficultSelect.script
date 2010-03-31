@@ -34,23 +34,48 @@ SD [hAdd] 192
 
 IF MODE !
 {
-	BGVALUE 1 SI_BattleTable
-		TotalCenterX 280 620 380
-		0x00000000
-		
-	SD [i] 3
-	LOOP [i]
+	SD [bIsExtra] GETSCENE < 1200 !
+	SD [offset] bIsExtra * 30
+	
+	IF bIsExtra !
 	{
-		SD [j] 2 - i
-		SELBUILD j SI_Battle_01 + j
-			TotalCenterX TotalCenterY 1 0 8
-			lStart  j * vAdd + tStart
-			-8 0
-			-12 0
-			12 0
-			SEL_NULL
+		BGVALUE 1 SI_BattleTable
+			TotalCenterX 280 620 380
+			0x00000000
+			
+		SD [i] 3
+		LOOP [i]
+		{
+			SD [j] 2 - i
+			SELBUILD j SI_Battle_01 + j
+				TotalCenterX TotalCenterY 1 0 8
+				lStart  j * vAdd + tStart
+				-8 0
+				-12 0
+				12 0
+				SEL_NULL
+		}
+		SELSET 3 DIFFI true 0 0 0 0
 	}
-	SELSET 3 DIFFI true 0 0 0 0
+	ELSE
+	{
+		SD [i] 6
+		LOOP [i]
+		{
+			SD [j] 5 - i
+			SD [flagConst] $FLAG_StageTried_19 + j
+			SD [selFlagSet] SEL_NONACTIVE + SEL_GRAY
+			SELBUILD j SI_Battle_12 + j
+				TotalCenterX TotalCenterY 1 0 8
+				lStart j * 45 + 125
+				-8 0
+				-12 0
+				12 0
+				GETFLAG flagConst ! * selFlagSet
+		}
+	
+		SELSET 6 0 true 0 0 0 0
+	}
 }
 ELSEIF MODE - MODE_STAGE !
 {
@@ -60,10 +85,18 @@ ELSEIF MODE - MODE_STAGE !
 	BGVALUE BGMASK SI_Null
 		TotalCenterX 280 600 420
 		0xA0000000
-	SD [i] 9
+	SD [i] 18
 	LOOP [i]
 	{
-		SD [j] 8 - i
+		SD [j] 17 - i
+		IF j > 8
+		{
+			SD [vNextline] vNextlineAdd
+		}
+		ELSE
+		{
+			SD [vNextline] 0
+		}
 		IF j < 5
 		{
 			SD [siAdd] j
@@ -72,31 +105,39 @@ ELSEIF MODE - MODE_STAGE !
 		{
 			SD [siAdd] j - 1
 		}
-		ELSE
+		ELSEIF j < 12
 		{
 			SD [siAdd] j + 3 / 2
+		}
+		ELSEIF j < 17
+		{
+			SD [siAdd] j + 5 / 2
+		}
+		ELSE
+		{
+			SD [siAdd] 10
 		}
 		SD [flagConst] $FLAG_StageTried_01 + j
 		SD [selFlagSet] SEL_NONACTIVE + SEL_GRAY
 		SELBUILD j SI_Battle_01 + siAdd
 			TotalCenterX TotalCenterY 1 0 8
-			j / 3 % 3 * hAdd + lStart j % 3 * vAdd + tStart
+			j / 3 % 3 * hAdd + lStart j % 3 * vAdd + tStart + vNextline
 			-8 0
 			-12 0
 			12 0
 			GETFLAG flagConst ! * selFlagSet
 	}
-	SELSET 9 0 true 0 0 0 0
+	SELSET 18 0 true 0 0 0 0
 	SETPUSHEVENT PUSHID_UIUSE
 		KS_LEFT KS_RIGHT -1 -1
 		PUSH_FIRST PUSH_ROLLTO
 }
 ELSEIF D ptspmode
 {
-	SD [i] 3
+	SD [i] 35
 	LOOP [i]
 	{
-		SD [j] 2 - i
+		SD [j] 34 - i
 		SD [tnamecard] j + SI_NameCard_01
 		SELBUILD j tnamecard
 			TotalCenterX TotalCenterY 0.8 0 8
@@ -119,14 +160,14 @@ ELSEIF D ptspmode
 	{
 		SD [tosel] 0
 	}
-	SELSET 3 tosel true 7 57.5 45 0
+	SELSET 35 tosel true 7 57.5 45 0
 }
 ELSE
 {
-	SD [i] 5
+	SD [i] 17
 	LOOP [i]
 	{
-		SD [j] 4 - i
+		SD [j] 16 - i
 		SELBUILD j SI_Battle_01 + j
 			TotalCenterX TotalCenterY 1 0 8
 			lStart j * 45 + 125
@@ -137,11 +178,11 @@ ELSE
 	}
 	SD [tosel] GETSCENE
 	SD [tosel] SNOBATTLE tosel
-	IF tosel > 4
+	IF tosel > 16
 	{
 		SD [tosel] 0
 	}
-	SELSET 5 tosel true 7 57.5 45 0
+	SELSET 17 tosel true 7 57.5 45 0
 }
 
 // BackFade
@@ -187,7 +228,7 @@ IF SELCOMPLETE + tsec
 		}
 		ELSE
 		{
-			SETDIFFI SEL + 4
+			SETDIFFI SEL + 3
 			SETSCENE SEL * 100 + GETSCENE
 		}
 	}
@@ -250,22 +291,22 @@ ELSEIF MODE - MODE_STAGE !
 		SD [tosel] SEL - 3
 		IF tosel < 0
 		{
-			SD [tosel] 6 + SEL
+			SD [tosel] 15 + SEL
 		}
 		SD [reset] true
 	}
 	ELSEIF CHECKKEY KS_RIGHT KEY_DOWN
 	{
 		SD [tosel] SEL + 3
-		IF tosel > 8
+		IF tosel > 17
 		{
-			SD [tosel] SEL - 6
+			SD [tosel] SEL - 15
 		}
 		SD [reset] true
 	}
 	IF reset
 	{
 		SE SE_SYSTEM_SELECT CenterX
-		SELSET 9 tosel true 0 0 0 0
+		SELSET 18 tosel true 0 0 0 0
 	}
 }

@@ -1,5 +1,5 @@
-#include "Player.h"
-#include "Scripter.h"
+#include "../Header/Player.h"
+#include "../Header/Scripter.h"
 
 void Player::_Bomb()
 {

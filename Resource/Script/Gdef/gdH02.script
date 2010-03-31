@@ -4,65 +4,31 @@ EDEFFILE
 
 // ///////////////////////////////////////// //
 
-////////
-# 0x8206
+// //////
+# 0x8222
 
-@ @@%= 160 90
+@ @@%= 240 120
 
-GHSET GHANGLE GHSPEED *f -1.0 GHAC
-GHSAIM GHAIMX GHANGLE
+GHSET GHANGLE GHSPEED GHAC - 60
 
-@ @@>%<% 120 160 45 8
+@ @@% 240
 
-SD [tmod] GH@ % 160 / 5 * 2 + 1
-SD [i] tmod
+GHSET GHANGLE GHSPEED GHAC + 60
+
+@ @@>% 90 4
+
+SD [toffset] GH@ * 100 + GHANGLE
+SD [i] 4
 LOOP [i]
 {
-	SD [tadd] i * 800
 	B GHX GHY
-		true tmod - 1 * -500 + tadd +f GHAIMY 2.0
-		1 GHAIMX 8 0 0xff
-}
+		true i * 1500 + toffset i *f 0.2 +f 1.0
+		5 i % 2 + 3 8 0 0xff
 
-///////
-# 0x8210
-
-@ @@> 0
-
-A 8
-	TIMERRANGE 75 90 SPEEDSETADD 15
-	TIMEREQUAL 90 FADEOUT
-B RANDR 5 +f GHX RANDR 5 +f GHY
-	true RAND 0.5
-	RAND % 2 + 2 0 16 0 0xff
-A 0
-
-///////
-# 0x8214
-
-@ 20
-
-GHSET GHANGLE 0.0 GHAC
-
-@ @@% 150
-
-GHSAIM GHAIMX GHAMAP 0
-
-@ @@>%<% 120 150 45 8
-
-SD [tmod] GH@ % 150 / 8 * 2
-SD [i] tmod + 1
-SD [toffset] GHX > CenterX * 60 - 430
-LOOP [i]
-{
-	SD [tadd] i * 800
-	B GHX GHY
-		true tmod * toffset + tadd +f GHAIMY tmod *f 0.2 +f 1.6
-		1 GHAIMX 8 0 0xff
 }
 
 ////////
-# 0x8218
+# 0x8234
 
 @ @@%<% 60 20 3
 
@@ -71,7 +37,7 @@ B GHX GHY
 	1 2 8 0 0xff
 
 ///////
-# 0x8226
+# 0x8242
 
 @ @@>% 60 8
 

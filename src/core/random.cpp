@@ -11,6 +11,7 @@
 
 
 unsigned int g_seed=0;
+unsigned int g_seed_self=0;
 
 /************************************************************************/
 /* This function is modified by h5nc (h5nc@yahoo.com.cn)                */
@@ -20,6 +21,7 @@ int CALL HGE_Impl::Random_Seed(int seed)
 	if (!seed)
 	{
 		g_seed=timeGetTime();
+		g_seed_self=g_seed;
 	}
 	else
 	{
@@ -28,15 +30,25 @@ int CALL HGE_Impl::Random_Seed(int seed)
 	return g_seed;
 }
 
-int CALL HGE_Impl::Random_Int(int min, int max)
+int CALL HGE_Impl::Random_Int(int min, int max, bool bSelf)
 {
-	g_seed=214013*g_seed+2531011;
-	return min+(g_seed ^ g_seed>>15)%(max-min+1);
+	unsigned int * usingseed = bSelf ? (&g_seed_self) : (&g_seed);
+	*usingseed=214013*(*usingseed)+2531011;
+	if (max-min+1 == 0)
+	{
+		return min;
+	}
+	return min+((*usingseed) ^ (*usingseed)>>15)%(max-min+1);
 }
 
-float CALL HGE_Impl::Random_Float(float min, float max)
+float CALL HGE_Impl::Random_Float(float min, float max, bool bSelf)
 {
-	g_seed=214013*g_seed+2531011;
+	unsigned int * usingseed = bSelf ? (&g_seed_self) : (&g_seed);
+	*usingseed=214013*(*usingseed)+2531011;
 	//return min+g_seed*(1.0f/4294967295.0f)*(max-min);
-	return min+(g_seed>>16)*(1.0f/65535.0f)*(max-min);
+	if (max == min)
+	{
+		return min;
+	}
+	return min+(((*usingseed)>>16)*(max-min))*(1.0f/65535.0f);
 }

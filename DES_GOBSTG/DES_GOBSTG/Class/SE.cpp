@@ -1,5 +1,5 @@
-#include "SE.h"
-#include "BResource.h"
+#include "../Header/SE.h"
+#include "../Header/BResource.h"
 #include "../../../src/core/BASS/bass.h"
 
 seStruct SE::se[SEMAX];

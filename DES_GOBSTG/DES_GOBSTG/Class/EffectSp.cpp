@@ -1,8 +1,8 @@
-#include "EffectSp.h"
-#include "Player.h"
-#include "Enemy.h"
-#include "SpriteItemManager.h"
-#include "FrontDisplayName.h"
+#include "../Header/EffectSp.h"
+#include "../Header/Player.h"
+#include "../Header/Enemy.h"
+#include "../Header/SpriteItemManager.h"
+#include "../Header/FrontDisplayName.h"
 
 BYTE EffectSp::evtype;
 

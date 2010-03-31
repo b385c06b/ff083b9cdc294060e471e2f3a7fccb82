@@ -61,7 +61,7 @@ LOOP [i]
 }
 
 // ////////// //
-# 0x0108
+# 0x0112
 
 @ 1
 
@@ -80,14 +80,14 @@ SD [i] 4
 SD [rangle] RAND
 LOOP [i]
 {
-	GB 0x8108 0xff 0xff
+	GB 0x8112 0xff 0xff
 		ENX ENY i * 9000 + rangle 0.6
 		0 10 240
 	GHSAIM EN@ % 180 0
 }
 
 // ////////// //
-# 0x0112
+# 0x0116
 
 @ 1
 
@@ -120,7 +120,7 @@ BC 12 tangle toffset * -3
 	2 tflag + 11 8 0
 
 // //////////// //
-# 0x0116
+# 0x0124
 
 @ 1
 
@@ -139,8 +139,33 @@ IF EN@ - 180 !
 }
 LOOP [i]
 {
-	GB 0x8116 0xff 0xff
+	GB 0x8124 0xff 0xff
 		ENX ENY i * 6000 + tangle 2.0
 		0 10 240
 	GHSAIM RAND EN@ % 360 > 0
 }
+
+// ////////// //
+# 0x0128
+
+@ 1
+
+EA 5 ENAC_OVERPLAYER_CXYT
+	60 CenterBossX CenterBossY 78
+
+@ @@% 180
+
+A 9
+	TIMERRANGE 60 90 SPEEDSETADD 3
+	TIMEREQUAL 60 ANGLESETAMAP 0
+
+BC 13 RAND 120
+	PX PY 0
+	11 4 32 0
+A 0
+
+@ @@>% 120 78
+
+BC 16 ENAMAP 0 0
+	ENX ENY 2.0
+	2 5 8 0

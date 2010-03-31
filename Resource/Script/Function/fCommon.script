@@ -117,29 +117,31 @@ ELSE
 
 SD [uopp1] D 2
 SD [uopp2] D 3
-SD [union_1] D 4
-SD [union_2] D 5
-SD [opp1] D 6
-SD [opp2] D 7
+SD [union1_1] D 4
+SD [union1_2] D 5
+SD [union2_1] D 6
+SD [union2_2] D 7
+SD [opp] D 8
 
 SD [pret] NOW@
 SD pret 0
 
 SD [haveopp1] HAVEPLAYER uopp1
-SD [haveunion1_1] HAVEPLAYER union_1
+SD [haveunion1_1] HAVEPLAYER union1_1
+SD [haveunion2_1] HAVEPLAYER union2_1
 IF HAVEPLAYER uopp2 * haveopp1
 {
 	SD pret 1
 }
-ELSEIF HAVEPLAYER union_2 * haveunion1_1
+ELSEIF HAVEPLAYER union1_2 * haveunion1_1
 {
 	SD pret 2
 }
-ELSEIF HAVEPLAYER opp1
+ELSEIF HAVEPLAYER union2_2 * haveunion2_1
 {
 	SD pret 3
 }
-ELSEIF HAVEPLAYER opp2
+ELSEIF HAVEPLAYER opp
 {
 	SD pret 4
 }
@@ -180,6 +182,18 @@ IF stage > 3
 {
 	BGVALUE 3 SI_Battle_06
 		352 165 132 22
+		0xffffffff
+}
+IF stage > 4
+{
+	BGVALUE 4 DIFFI / 2 + SI_Battle_07
+		96 DIFFI / 2 * 67 + 290 132 22
+		0xffffffff
+}
+IF stage > 5
+{
+	BGVALUE 5 DIFFI > 0 + SI_Battle_09
+		224 DIFFI > 0 * 67 + 268 132 22
 		0xffffffff
 }
 
@@ -267,19 +281,19 @@ SD [ttar] D 6
 SD [ptanglesave] D 7
 
 BL 5 tbaseangle 17 2
-	tbasex tbasey tbaseangle 0 tspeed 0
+	tbasex tbasey tbaseangle tspeed
 	42 0 24 0
 SD [i] 2
 LOOP [i]
 {
 	BL 5 SIGN i * 12500 + tbaseangle 17 0
-		tbasex tbasey tbaseangle 0 tspeed 0
+		tbasex tbasey tbaseangle tspeed
 		42 0 24 0
 	BL 4 SIGN i * 13500 + tbaseangle 16 -3
-		tbasex tbasey tbaseangle 0 tspeed 0
+		tbasex tbasey tbaseangle tspeed
 		42 0 24 0
 	BL 2 SIGN i * 14500 + tbaseangle 15 -5
-		tbasex tbasey tbaseangle 0 tspeed 0
+		tbasex tbasey tbaseangle tspeed
 		42 0 24 0
 }
 B tbasex tbasey

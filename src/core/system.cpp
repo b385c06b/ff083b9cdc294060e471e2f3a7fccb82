@@ -121,10 +121,10 @@ bool CALL HGE_Impl::System_Initiate()
 	rectW.bottom=rectW.top+height;
 	styleW=WS_POPUP|WS_CAPTION|WS_SYSMENU|WS_MINIMIZEBOX|WS_VISIBLE; //WS_OVERLAPPED | WS_SYSMENU | WS_MINIMIZEBOX;
 
-	rectFS.left=(GetSystemMetrics(SM_CXFULLSCREEN)-width)/4;
-	rectFS.top=(GetSystemMetrics(SM_CYFULLSCREEN)-height)/4;
-	rectFS.right=rectFS.left+width;
-	rectFS.bottom=rectFS.top+height;
+	rectFS.left=(GetSystemMetrics(SM_CXFULLSCREEN)-nScreenWidth)/2;
+	rectFS.top=(GetSystemMetrics(SM_CYFULLSCREEN)-nScreenHeight)/2;
+	rectFS.right=rectFS.left+nScreenWidth;
+	rectFS.bottom=rectFS.top+nScreenHeight;
 	styleFS=WS_POPUP|WS_VISIBLE; //WS_POPUP
 
 	if(hwndParent)
@@ -164,19 +164,22 @@ bool CALL HGE_Impl::System_Initiate()
 	/* These lines are added by h5nc (h5nc@yahoo.com.cn)                    */
 	/************************************************************************/
 	// begin
-	haveJoy = true;
+	for (int i=0; i<DIJOY_MAXDEVICE; i++)
+	{
+		haveJoy[i] = true;
+	}
 	
-	ZeroMemory(&joyState, sizeof(DIJOYSTATE));
-	ZeroMemory(&lastJoyState, sizeof(DIJOYSTATE));
+	ZeroMemory(joyState, sizeof(DIJOYSTATE)*DIJOY_MAXDEVICE);
+	ZeroMemory(lastJoyState, sizeof(DIJOYSTATE)*DIJOY_MAXDEVICE);
 
-	switch(_DIInit())
+	int diinitret = _DIInit();
+	switch(diinitret)
 	{
 	case ERROR_NOKEYBOARD:
 	case ERROR_NOKEYBOARD | ERROR_NOJOYSTICK:
 		System_Shutdown();
 		return false;
 	case ERROR_NOJOYSTICK:
-		haveJoy = false;
 		break;
 	}
 	if(!_GfxInit()) { System_Shutdown(); return false; }
@@ -307,7 +310,6 @@ bool CALL HGE_Impl::System_Start()
 					DI_retv = _DIUpdate();
 					if(DI_retv & ERROR_NOJOYSTICK)
 					{
-						haveJoy = false;
 						if(DI_retv & ERROR_NOKEYBOARD)
 						{
 							break;
@@ -323,10 +325,6 @@ bool CALL HGE_Impl::System_Start()
 			else if(nFrameSkip < 2 || !(nFrameCounter % nFrameSkip))
 			{
 				DI_retv = _DIUpdate();
-				if(DI_retv & ERROR_NOJOYSTICK)
-				{
-					haveJoy = false;
-				}
 				if(procFrameFunc())
 				{
 					_ClearQueue();
@@ -363,8 +361,8 @@ bool CALL HGE_Impl::System_Start()
    
 			if (Timer_GetCurrentSystemTime() - lastTime >= TimeInterval)
 		    {
-				if (GetThreadPriority(GetCurrentThread()) > THREAD_PRIORITY_NORMAL)
-					SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
+//				if (GetThreadPriority(GetCurrentThread()) > THREAD_PRIORITY_NORMAL)
+//					SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
 		    }
 		    else
 		    {
@@ -430,52 +428,19 @@ bool CALL HGE_Impl::System_Start()
 /* These functions are added by h5nc (h5nc@yahoo.com.cn)                */
 /************************************************************************/
 // begin
-bool CALL HGE_Impl::System_Set2DMode(float x, float y, float z)
+float CALL HGE_Impl::System_Transform3DPoint(float &x, float &y, float &z, hge3DPoint *ptfar)
 {
-	if (z == 0.0f)
-	{
-		return false;
-	}
-	b2DMode = true;
-	ptfar.x = x;
-	ptfar.y = y;
-	ptfar.z = z;
-	return true;
-}
-
-bool CALL HGE_Impl::System_Set3DMode()
-{
-	b2DMode = false;
-	return true;
-}
-
-hge3DPoint * CALL HGE_Impl::System_GetFarPoint()
-{
-	if (!b2DMode)
-	{
-		return NULL;
-	}
-	return &ptfar;
-}
-
-bool CALL HGE_Impl::System_Is2DMode()
-{
-	return b2DMode;
-}
-// end
-
-float CALL HGE_Impl::System_Transform3DPoint(float &x, float &y, float &z)
-{
-	if (!b2DMode || ptfar.z == 0.0f)
+	if (!ptfar || ptfar->z == 0.0f)
 	{
 		return 1.0f;
 	}
-	float scale = (ptfar.z - z) / ptfar.z;
-	x = (x - ptfar.x) * scale + ptfar.x;
-	y = (y - ptfar.y) * scale + ptfar.y;
+	float scale = (ptfar->z - z) / ptfar->z;
+	x = (x - ptfar->x) * scale + ptfar->x;
+	y = (y - ptfar->y) * scale + ptfar->y;
 	z = 0;
 	return scale;
 }
+// end
 
 void CALL HGE_Impl::System_SetStateBool(hgeBoolState state, bool value)
 {
@@ -486,10 +451,7 @@ void CALL HGE_Impl::System_SetStateBool(hgeBoolState state, bool value)
 								{
 									if(d3dppW.BackBufferFormat==D3DFMT_UNKNOWN || d3dppFS.BackBufferFormat==D3DFMT_UNKNOWN) break;
 
-									/************************************************************************/
-									/* Theis cakk is added by h5nc (h5nc@yahoo.com.cn)                      */
-									/************************************************************************/
-									if(procFocusLostFunc) procFocusLostFunc();
+//									if(procFocusLostFunc) procFocusLostFunc();
 
 									if(bWindowed) GetWindowRect(hwnd, &rectW);
 									bWindowed=value;
@@ -502,7 +464,7 @@ void CALL HGE_Impl::System_SetStateBool(hgeBoolState state, bool value)
 									_GfxRestore();
 									_AdjustWindow();
 
-									if(procFocusGainFunc) procFocusGainFunc();
+//									if(procFocusGainFunc) procFocusGainFunc();
 								}
 								else bWindowed=value;
 								break;
@@ -542,6 +504,8 @@ void CALL HGE_Impl::System_SetStateBool(hgeBoolState state, bool value)
 		case HGE_HIDEMOUSE:		bHideMouse=value; break;
 
 		case HGE_DONTSUSPEND:	bDontSuspend=value; break;
+			
+		case HGE_2DMODE:		b2DMode=value; break;
 
 			/************************************************************************/
 			/* HGE_SHOWSPLASH case is deleted by h5nc (h5nc@yahoo.com.cn)           */
@@ -618,10 +582,10 @@ void CALL HGE_Impl::System_SetStateInt(hgeIntState state, int value)
 //											d3dppFS.FullScreen_PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 											d3dppFS.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 										}
-										if(procFocusLostFunc) procFocusLostFunc();
+//										if(procFocusLostFunc) procFocusLostFunc();
 										_GfxRestore();
 										_DIRelease();
-										if(procFocusGainFunc) procFocusGainFunc();
+//										if(procFocusGainFunc) procFocusGainFunc();
 										_DIInit();
 									}
 								}
@@ -684,6 +648,7 @@ bool CALL HGE_Impl::System_GetStateBool(hgeBoolState state)
 		case HGE_USESOUND:		return bUseSound;
 		case HGE_DONTSUSPEND:	return bDontSuspend;
 		case HGE_HIDEMOUSE:		return bHideMouse;
+		case HGE_2DMODE:		return b2DMode;
 
 			/************************************************************************/
 			/* HGE_SHOWSPLASH case is deleted by h5nc (h5nc@yahoo.com.cn)           */
@@ -833,8 +798,8 @@ HGE_Impl::HGE_Impl()
 	pCurTarget=0;
 	pScreenSurf=0;
 	pScreenDepth=0;
-	pVB=0;
-	pIB=0;
+	pVB=NULL;
+	pIB=NULL;
 	VertArray=0;
 	textures=0;
 
@@ -862,7 +827,7 @@ HGE_Impl::HGE_Impl()
 	/************************************************************************/
 	/* This parameter is added by h5nc (h5nc@yahoo.com.cn)                  */
 	/************************************************************************/
-	b2DMode = false;
+	b2DMode = true;
 	
 	procFrameFunc=0;
 	procRenderFunc=0;

@@ -8,16 +8,6 @@ CONTROLFILE
 // CalledRepaint
 @ INIT@
 
-IF GETSCENE < 1200 !
-{
-	SETCHARA 0 0 0
-	SETTIME 0
-	STARTPREP
-	SETSTATE STATE_START
-	EXECUTE CT_STAGE POST@ CT_SCENE
-	RETURN PGO
-}
-
 SD [ptfirst] RESERVEBEGIN
 SD [ptsecond] RESERVEBEGIN + 1
 SD [ptthird] RESERVEBEGIN + 2
@@ -25,7 +15,7 @@ SD [ptiselfirstID] RESERVEBEGIN + 3
 
 // BGMask
 BGVALUE BGMASK SI_Null
-	508 157 264 180
+	508 267 264 400
 	0xA0000000
 
 IF D ptfirst + 1
@@ -36,10 +26,10 @@ IF D ptfirst + 1
 SELCLEAR
 ISELCLEAR
 
-SD [i] 7
+SD [i] 22
 LOOP [i]
 {
-	SD [j] 6 - i
+	SD [j] 21 - i
 	IF D ptfirst - j !
 	{
 		SD [unuseable] 1
@@ -79,10 +69,10 @@ SD [yplus] 20
 
 SD [tflag] SEL_NONACTIVE + SEL_GRAY
 
-SD [i] 7
+SD [i] 22
 LOOP [i]
 {
-	SD [j] 6 - i
+	SD [j] 21 - i
 	SD [flagConst] $FLAG_PlayerUseable_01 + j
 	SD [unuseable] GETFLAG flagConst ! * tflag
 	ISELBUILD nowisel PLAYERNAME j
@@ -157,6 +147,10 @@ SD [ptconfirm] RESERVEBEGIN + 4
 
 SETCHARA D ptfirst D ptsecond D ptthird
 
+BGVALUE 13 SI_PlayerComment_01 + SEL
+	480 370 200 200
+	0xffffffff
+BGBLEND 13 BLEND_ALPHAADD
 
 // SelectedI
 IF D ptfirst + 1
@@ -190,6 +184,7 @@ IF D ptthird + 1
 	BGOFF 8
 	BGOFF 9
 	BGOFF 16
+	BGOFF 13
 	
 	// Confirm
 	SELCONFIRM TotalCenterX TotalCenterY true [bConfirm]

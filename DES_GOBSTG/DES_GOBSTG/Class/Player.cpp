@@ -1,17 +1,17 @@
-#include "Player.h"
+#include "../Header/Player.h"
 
-#include "Process.h"
-#include "BGLayer.h"
-#include "SE.h"
+#include "../Header/Process.h"
+#include "../Header/BGLayer.h"
+#include "../Header/SE.h"
 
-#include "PlayerBullet.h"
-#include "Item.h"
-#include "Ghost.h"
-#include "Bullet.h"
-#include "Chat.h"
-#include "BossInfo.h"
-#include "InfoQuad.h"
-#include "BResource.h"
+#include "../Header/PlayerBullet.h"
+#include "../Header/Item.h"
+#include "../Header/Ghost.h"
+#include "../Header/Bullet.h"
+#include "../Header/Chat.h"
+#include "../Header/BossInfo.h"
+#include "../Header/InfoQuad.h"
+#include "../Header/BResource.h"
 
 Player Player::p;
 

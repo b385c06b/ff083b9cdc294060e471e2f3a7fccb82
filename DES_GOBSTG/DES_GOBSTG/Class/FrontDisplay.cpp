@@ -1,10 +1,10 @@
-#include "FrontDisplay.h"
-#include "SpriteItemManager.h"
-#include "BResource.h"
-#include "FrontDisplayName.h"
-#include "processPrep.h"
-#include "BossInfo.h"
-#include "Fontsys.h"
+#include "../Header/FrontDisplay.h"
+#include "../Header/SpriteItemManager.h"
+#include "../Header/BResource.h"
+#include "../Header/FrontDisplayName.h"
+#include "../Header/processPrep.h"
+#include "../Header/BossInfo.h"
+#include "../Header/Fontsys.h"
 
 FrontDisplay fdisp;
 

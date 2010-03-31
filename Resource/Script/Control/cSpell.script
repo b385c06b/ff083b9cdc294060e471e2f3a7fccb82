@@ -22,19 +22,19 @@ BGVALUE 11 SI_TopContent_Spell
 
 // Mask
 BGVALUE BGMASK SI_Null
-	290 180 380 140
+	260 180 320 140
 	0xA0000000
 
 ISELBUILD 0
-	"Spell Card Practice (Battle)"
+	"¥¹¥Ú¥ë¥«©`¥É¾šÁ•£¨¥Ð¥È¥ë„e£©"
 	120 130 INFO_GREEN
 	SEL_NULL
 ISELBUILD 1
-	"Spell Card Practice (Charactor)"
+	"¥¹¥Ú¥ë¥«©`¥É¾šÁ•£¨¥­¥ã¥é„e£©"
 	120 170 INFO_GREEN
 	SEL_NULL
 ISELBUILD 2
-	"Stage Practice"
+	"¥¹¥Æ©`¥¸¾šÁ•"
 	120 210 INFO_GREEN
 	SEL_NULL
 

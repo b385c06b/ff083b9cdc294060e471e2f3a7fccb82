@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "DataPrinter.h"
+#include "../DES_GOBSTG/DES_GOBSTG/Header/DataPrinter.h"
 #include "Resource.h"
 #include "afxwin.h"
 

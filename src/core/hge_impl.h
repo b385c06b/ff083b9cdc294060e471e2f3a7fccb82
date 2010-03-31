@@ -90,13 +90,10 @@ public:
 	virtual bool		CALL	System_Initiate();
 	virtual void		CALL	System_Shutdown();
 	virtual bool		CALL	System_Start();
-	virtual bool			CALL	System_Set2DMode(hge3DPoint ptfar){return System_Set2DMode(ptfar.x, ptfar.y, ptfar.z);};
-	virtual bool			CALL	System_Set2DMode(float x, float y, float z);
-	virtual bool			CALL	System_Set3DMode();
-	virtual hge3DPoint *	CALL	System_GetFarPoint();
-	virtual bool			CALL	System_Is2DMode();
-	virtual float			CALL	System_Transform3DPoint(hge3DPoint * pt){return pt->scale = System_Transform3DPoint(pt->x, pt->y, pt->z);};
-	virtual float			CALL	System_Transform3DPoint(float &x, float &y, float &z);
+
+	virtual float		CALL	System_Transform3DPoint(hge3DPoint * pt, hge3DPoint *ptfar=NULL){return pt->scale = System_Transform3DPoint(pt->x, pt->y, pt->z, ptfar);};
+	virtual float		CALL	System_Transform3DPoint(float &x, float &y, float &z, hge3DPoint *ptfar=NULL);
+
 	virtual void		CALL	System_SetStateBool  (hgeBoolState   state, bool        value);
 	virtual void		CALL	System_SetStateFunc  (hgeFuncState   state, hgeCallback value);
 	virtual void		CALL	System_SetStateHwnd  (hgeHwndState   state, HWND        value);
@@ -139,8 +136,8 @@ public:
 	virtual	char*		CALL	Ini_GetString(const char *section, const char *name, const char *def_val);
 
 	virtual int			CALL	Random_Seed(int seed=0);
-	virtual int			CALL	Random_Int(int min, int max);
-	virtual float		CALL	Random_Float(float min, float max);
+	virtual int			CALL	Random_Int(int min, int max, bool bSelf=false);
+	virtual float		CALL	Random_Float(float min, float max, bool bSelf=false);
 
 	virtual float		CALL	Timer_GetTime();
 	virtual float		CALL	Timer_GetDelta();
@@ -204,14 +201,14 @@ public:
 	virtual LPDIRECTINPUT8 CALL Input_GetDevice();
 	virtual bool		CALL	Input_GetDIKey(int key, BYTE stateType = DIKEY_PRESSED);
 	virtual bool		CALL	Input_SetDIKey(int key, bool set = true);
-	virtual bool		CALL	Input_GetDIJoy(int joy, BYTE stateType = DIKEY_PRESSED);
-	virtual bool		CALL	Input_HaveJoy();
+	virtual bool		CALL	Input_GetDIJoy(int joy, BYTE stateType = DIKEY_PRESSED, int joydevice=0);
+	virtual bool		CALL	Input_HaveJoy(int joydevice=0);
 	//end
 
 	virtual bool		CALL	Gfx_BeginScene(HTARGET target=0);
 	virtual void		CALL	Gfx_EndScene();
 	virtual void		CALL	Gfx_Clear(DWORD color);
-	virtual void		CALL	Gfx_RenderLine(float x1, float y1, float x2, float y2, DWORD color=0xFFFFFFFF, float z=0.5f);
+	virtual void		CALL	Gfx_RenderLine(float x1, float y1, float x2, float y2, DWORD color=0xFFFFFFFF, float z=0);
 	virtual void		CALL	Gfx_RenderTriple(const hgeTriple *triple);
 	virtual void		CALL	Gfx_RenderQuad(const hgeQuad *quad);
 	virtual hgeVertex*	CALL	Gfx_StartBatch(int prim_type, HTEXTURE tex, int blend, int *max_prim);
@@ -219,6 +216,7 @@ public:
 	virtual void		CALL	Gfx_SetClipping(int x=0, int y=0, int w=0, int h=0);
 	virtual void		CALL	Gfx_SetTransform(float x=0, float y=0, float dx=0, float dy=0, float rot=0, float hscale=0, float vscale=0); 
 	virtual void		CALL	Gfx_SetTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX * pMatrix);
+	virtual D3DMATRIX	CALL	Gfx_GetTransform(D3DTRANSFORMSTATETYPE State);
 
 	virtual HTARGET		CALL	Target_Create(int width, int height, bool zbuffer);
 	virtual void		CALL	Target_Free(HTARGET target);
@@ -239,8 +237,8 @@ public:
 	// begin
 	virtual HD3DFONT    CALL	Font_Load(const char * fontStyle, int height);
 	virtual void		CALL	Font_Free(HD3DFONT font);
-	virtual void		CALL	Gfx_RenderText(HD3DFONT font, const char * text, float x, float y, float w, float h, DWORD color = 0xffffffff);
-	virtual HTEXTURE	CALL	Gfx_RenderTextToTarget(HTARGET tar, HD3DFONT font, const char * text, float x, float y, float w, float h, DWORD color = 0xffffffff);
+	virtual int			CALL	Gfx_RenderText(HD3DFONT font, const char * text, float x, float y, float w, float h, DWORD color = 0xffffffff);
+	virtual int			CALL	Gfx_RenderTextToTarget(HTEXTURE * tex, HTARGET tar, HD3DFONT font, const char * text, float x, float y, float w, float h, DWORD color = 0xffffffff);
     // end
 	//////// Implementation ////////
 
@@ -258,12 +256,6 @@ public:
 	char				szIniString[256];
 
 
-	/************************************************************************/
-	/* These members are added by h5nc (h5nc@yahoo.com.cn)                  */
-	/************************************************************************/
-	// begin
-	bool				b2DMode;
-	hge3DPoint			ptfar;
 	// end
 
 	// System States
@@ -295,6 +287,11 @@ public:
 	int					nHGEFPS;
 	bool				bHideMouse;
 	bool				bDontSuspend;
+	/************************************************************************/
+	/* These members are added by h5nc (h5nc@yahoo.com.cn)                  */
+	/************************************************************************/
+	// begin
+	bool				b2DMode;
 	/************************************************************************/
 	/* These members are added by h5nc (h5nc@yahoo.com.cn)                  */
 	/************************************************************************/
@@ -385,15 +382,16 @@ public:
 	BYTE				lastKeyState[256];
 	LPDIRECTINPUT8		lpDInput;
 	LPDIRECTINPUTDEVICE8 lpDIKDevice;
-	GUID				joyGuid; 
-	LPDIRECTINPUTDEVICE8 lpDIJDevice;
-	DIJOYSTATE          joyState;
-	DIJOYSTATE          lastJoyState;
-	bool				haveJoy;
+	LPDIRECTINPUTDEVICE8 lpDIJDevice[DIJOY_MAXDEVICE];
+	DIJOYSTATE          joyState[DIJOY_MAXDEVICE];
+	DIJOYSTATE          lastJoyState[DIJOY_MAXDEVICE];
+	bool				haveJoy[DIJOY_MAXDEVICE];
+	static GUID			joyGuid[DIJOY_MAXDEVICE];
 
 	int					_DIInit();
 	void				_DIRelease();
 	int					_DIUpdate();
+	static BOOL CALLBACK _EnumJoysticksCallback (const DIDEVICEINSTANCE * pdidInstance, VOID* pContext);
 	// end
 
 

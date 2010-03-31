@@ -86,7 +86,7 @@ LOOP [i]
 }
 
 ////////////
-# 0x0212
+# 0x0216
 
 @ 1
 
@@ -101,12 +101,12 @@ BC 16 RAND 8
 
 @ @@% 180
 
-GB 0x8212 0xff 0xff
+GB 0x8216 0xff 0xff
 	ENX ENY RAND % 3000 + 3000 2.5
 	0 8 240
 
 ////////////
-# 0x0216
+# 0x0220
 
 @ 1
 
@@ -115,7 +115,7 @@ EA 2 ENAC_REPOSITION_T
 	
 @ 180
 
-GB 0x8216 0xff 0xff
+GB 0x8220 0xff 0xff
 	ENX ENY 9000 4.5
 	0 8 0xffff
 
@@ -126,7 +126,7 @@ B ENX ENY
 	17 7 16 0 0xff
 
 ////////////
-# 0x0220
+# 0x0224
 
 @ 1
 
@@ -138,7 +138,7 @@ EA 5 ENAC_OVERPLAYER_CXYT
 SD [i] 2
 LOOP [i]
 {
-	GB 0x8220 0xff 0xff
+	GB 0x8224 0xff 0xff
 		ENX ENY 9000 0.0
 		0 8 0xffff
 	GHSAIM i 0
@@ -151,7 +151,7 @@ BC 32 RAND 8
 	2 6 8 0
 	
 ////////////
-# 0x0224
+# 0x0232
 
 @ 1
 
@@ -185,3 +185,108 @@ A 0
 BC 40 RAND 8
 	ENX ENY 2.5
 	3 6 8 0
+
+/////////
+# 0x0236
+
+@ 1
+
+EA 2 ENAC_REPOSITION_T
+	60
+
+@ @@>% 540 2
+
+SD [tmod] EN@ % 4 > 0
+SD [tmod] SIGN tmod
+B ENX ENY
+	true EN@ * 500 + SEED * tmod 2.2
+	4 2 8 0 0xff
+
+@ @@% 240
+
+SD [i] 2
+LOOP [i]
+{
+	GB 0x8236 0xff 0xff
+		ENX ENY 9000 0.0
+		0 8 160
+	GHSAIM i 0
+}
+
+@ @@>%= 240 240 160
+
+EFFSETUP 0 120
+	ENX ENY + 40 60
+SE $SE_PlayerBomb_04b ENX
+
+@ @@%= 240 200
+
+SD [_0] 1
+
+@ @@%= 240 201
+
+SD [_0] 0
+
+/////////
+# 0x0240
+
+@ 1
+
+EA 2 ENAC_REPOSITION_T
+	60
+SD [_0] 0
+
+@ @@% 240
+
+SD [tmod] EN@ % 480 *f 0.8
+EA 4 ENAC_CHASETO_CXY
+	60 RANDR 60 + tmod + 128 CenterBossY
+SD [_1] ENAMAP 0
+
+@ @@>%= 240 240 145
+
+EFFSETUP 0 120
+	ENX ENY + 40 60
+SE $SE_PlayerBomb_04b ENX
+SD [_0] 1
+
+@ @@>%= 240 240 146
+
+SD [_0] 0
+
+@ @@>%[] 240 240 145 180
+
+BOSSATTACK
+
+@ @@>%= 240 240 180
+
+EA 4 ENAC_CHASETO_CXY
+	4 CenterW -f ENX CenterBossY
+SD [_0] 2
+
+@ @@>%= 240 240 181
+
+SD [_0] 0
+BC 60 RAND 0
+	ENX ENY 0.8
+	8 3 16 0
+
+@ @@>%<% 240 240 120 3
+
+A 26
+	VALEQUAL [_0] 1 TYPESET 60
+	VALEQUAL [_0] 1 SPEEDSET 0
+	VALEQUAL [_0] 1 CALLEVENT $Event_Bullet_0240 POST@
+	VALEQUAL [_0] 2 TYPESET 8
+	VALEQUAL [_0] 2 SPEEDSET 250
+SD [tangle] _1
+SD [tmod] EN@ % 480 < 240
+SD [tmod] SIGN tmod
+IF EN@ % 240 > 45
+{
+	SD [tangle] EN@ % 240 - 44 * 450 * tmod + tangle
+}
+B ENX ENY
+	true tangle 1.5
+	8 1 8 0 0xff
+A 0

@@ -58,9 +58,9 @@ void CALL HGE_Impl::Font_Free(HD3DFONT font)
 {
 	ID3DXFont * pFont = (ID3DXFont * )font;
 	CFontList * listIterator = fontList;
-	CFontList * listPrevIterator = 0;
+	CFontList * listPrevIterator = NULL;
 
-	while (listIterator != 0)
+	while (listIterator != NULL)
 	{
 		if (listIterator->font == font)
 		{
@@ -79,28 +79,36 @@ void CALL HGE_Impl::Font_Free(HD3DFONT font)
 		listPrevIterator = listIterator;
 		listIterator = listIterator->next;
 	}
-	if (pFont != 0)
+	if (pFont != NULL)
 	{
 		pFont->Release();
 	}
 }
 
-HTEXTURE CALL HGE_Impl::Gfx_RenderTextToTarget(HTARGET tar, HD3DFONT font, const char * text, float x, float y, float w, float h, DWORD color /* = 0xffffffff */)
+int CALL HGE_Impl::Gfx_RenderTextToTarget(HTEXTURE * tex, HTARGET tar, HD3DFONT font, const char * text, float x, float y, float w, float h, DWORD color /* = 0xffffffff */)
 {
 	Gfx_BeginScene(tar);
 	Gfx_Clear(0x00000000);
-	Gfx_RenderText(font, text, x, y, w, h, color);
+	int height = Gfx_RenderText(font, text, x, y, w, h, color);
 	Gfx_EndScene();
 
-	return Target_GetTexture(tar);
+	if (tex)
+	{
+		*tex = Target_GetTexture(tar);
+	}
+	return height;
 }
 
-void CALL HGE_Impl::Gfx_RenderText(HD3DFONT font, const char * text, float x, float y, float w, float h, DWORD color)
+int CALL HGE_Impl::Gfx_RenderText(HD3DFONT font, const char * text, float x, float y, float w, float h, DWORD color)
 {
 	/*
 	if(shadow)
 		Gfx_RenderText(font, text, x+1, y+1, w, h, 0xff000000, false);
 		*/
+	if (font == NULL)
+	{
+		return 0;
+	}
 	RECT rect;
 	rect.left = (LONG)x;
 	rect.top = (LONG)y;
@@ -108,7 +116,11 @@ void CALL HGE_Impl::Gfx_RenderText(HD3DFONT font, const char * text, float x, fl
 	rect.bottom = (LONG)(y + h);
 
 	ID3DXFont * pFont = (ID3DXFont * )font;
-	pFont->DrawText(NULL, text, -1, &rect, DT_NOCLIP, color);
+	if (pFont)
+	{
+		return pFont->DrawText(NULL, text, -1, &rect, DT_NOCLIP, color);
+	}
+	return 0;
 }
 /*
 //add by Thor/h5nc
@@ -265,7 +277,7 @@ void CALL HGE_Impl::Font_Print(HD3DFONT font, float x, float y, float w, float h
 */
 void HGE_Impl::_FontDone()
 {
-	while (fontList != 0)
+	while (fontList != NULL)
 	{
 		CFontList * temp = fontList;
 		fontList = temp->next;

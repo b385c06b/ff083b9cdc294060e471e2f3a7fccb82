@@ -5,7 +5,7 @@ EDEFFILE
 // ///////////////////////////////////////// //
 
 ////////
-# 0x8212
+# 0x8216
 
 @ @@% 45
 
@@ -22,7 +22,7 @@ B GHX GHY
 A 0
 
 ///////
-# 0x8216
+# 0x8220
 
 @ 30
 
@@ -41,7 +41,7 @@ LOOP [i]
 }
 
 //////
-# 0x8220
+# 0x8224
 
 @ @@< 120
 
@@ -57,3 +57,22 @@ LOOP [i]
 		SIGN i * GH@ * 78 + SEED + toffset 2.5 0 8
 		120 BEAMFLAG_NONE 0xff 0xff
 }
+
+///////
+# 0x8236
+
+@ @@< 70
+
+GHCHASE GHAIMX * 220 + 114 140 70 - GH@
+
+@ @@> 90
+
+SD [toffset] GH@ - 90 * 4
+A 14
+	TIMEREQUAL 24 SPEEDSET 0
+	VALEQUAL [_0] 1 SPEEDSET toffset + 250
+	VALEQUAL [_0] 1 ANGLESETAMAP GH@ % 3 * 2500 - 2500
+B GHX GHY
+	true toffset * 440 + SEED toffset /f 100.0 +f 1.5
+	3 2 8 0 0xff
+A 0

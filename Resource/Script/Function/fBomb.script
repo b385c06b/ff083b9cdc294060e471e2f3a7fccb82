@@ -7,7 +7,7 @@ FUNCTIONFILE
 // ²©û¡¤ë‘‰ô 240
 @ 1
 
-BGSETUP $LayerBomb $PlayerBombID_01 true 208
+BGSETUP $LayerBomb $EnemyID_35 true 208
 
 SD [i] 6
 LOOP [i]
@@ -48,7 +48,7 @@ LOOP [i]
 // ìFÓê¡¤Ä§ÀíÉ³ 180
 @ 1
 
-BGSETUP $LayerBomb $PlayerBombID_02 true 148
+BGSETUP $LayerBomb $EnemyID_34 true 148
 
 EFFSETUP $EffectSet_BombBegin 81
 	PX PY 180
@@ -73,7 +73,7 @@ LOOP [i]
 
 @ 1
 
-BGSETUP $LayerBomb $PlayerBombID_03 true 188
+BGSETUP $LayerBomb $EnemyID_27 true 188
 
 EFFSETUP $EffectSet_BombBegin 82
 	PX PY 220
@@ -82,11 +82,338 @@ STOPACTION STOPFLAG_ENEMYSET 220
 
 //
 # $Event_PlayerBomb_04
+// »êÆÇ¡¤Ñý‰ô 120
+
+@ 1
+
+BGSETUP $LayerBomb $EnemyID_21 true 88
+
+EFFSETUP $EffectSet_BombBegin 83
+	PX PY 120
+ST $Target_BombBegin PX PY
+
+@ @@> 0
+
+SETFRAMESKIP 2
+EFFMOVETO $EffectSet_BombBegin PX PY 0
+DISABLEALLKEY
+
+@ @@] 60
+
+SD [yOffset] NOW@ * 8
+SETPPOS TX $Target_BombBegin TY $Target_BombBegin + yOffset
+IZEZONE IZE_FADEOUT PX PY 1 80 0xff
+
+@ @@>] 80 96
+
+SETPPOS TX $Target_BombBegin NOW@ - 80 * -12 + CenterH
+IZEZONE IZE_FADEOUT PX PY - 60 1 180 0xff
+DAMAGEZONE PX PY - 60 180 10
+
+@ 96
+
+SE $SE_PlayerBomb_04b PX
+
+@ @@> 112
+
+ST $Target_BombBegin + 1 PX PY
+CHASEAIM $Target_BombBegin + 1 $Target_BombBegin 120 - NOW@
+SD [tindex] $Target_BombBegin + 1
+SETPPOS TX tindex TY tindex
+
+@ 120
+
+SETFRAMESKIP 0
+SETPPOS TX $Target_BombBegin TY $Target_BombBegin
+
+//
+# $Event_PlayerBomb_05
+// ÉäÃüÍè¡¤ÎÄ 120
+@ 1
+
+BGSETUP $LayerBomb $EnemyID_15 true 88
+
+ST $Target_BombBegin PX PY
+EFFSETUP $EffectSet_BombBegin 84
+	PX PY 120
+
+@ @@> 0
+
+IF NOW@ < 75
+{
+	SD [r] NOW@ * 2
+}
+ELSE
+{
+	SD [r] 150
+}
+IZEZONE IZE_EVENT TX $Target_BombBegin TY $Target_BombBegin 1 r $PlayerID_05
+
+//
+# $Event_PlayerBomb_06
+// Î÷ÐÐËÂ¡¤ÓÄ¡©×Ó 60
+
+@ 1
+
+BGSETUP $LayerBomb $EnemyID_26 true 48
+
+EFFSETUP $EffectSet_BombBegin 85
+	PX PY 60
+IZEZONE IZE_FADEOUT PX PY 60 240 0xff
+
+//
+# $Event_PlayerBomb_07
+// ¥á¥Ç¥£¥¹¥ó¡¤¥á¥é¥ó¥³¥ê©` 120
+
+@ 1
+
+BGSETUP $LayerBomb $EnemyID_13 true 88
+
+EFFSETUP $EffectSet_BombBegin 86
+	PX PY 120
+
+@ @@> 0
+
+EFFMOVETO $EffectSet_BombBegin PX PY 0
+DAMAGEZONE PX PY 112 0.5
+
+//
+# $Event_PlayerBomb_08
+// ¥Á¥ë¥Î 240
+
+@ 1
+
+BGSETUP $LayerBomb $EnemyID_01 true 208
+
+ST $Target_BombBegin PX PY
+EFFSETUP $EffectSet_BombBegin 87
+	PX PY 240
+
+@ @@] 40
+
+IZEZONE IZE_EVENT TX $Target_BombBegin TY $Target_BombBegin 40 120 $PlayerID_08
+
+@ @@> 40
+
+IZEZONE IZE_EVENT TX $Target_BombBegin TY $Target_BombBegin 1 96 $PlayerID_08
+
+//
+# $Event_PlayerBomb_09
+// ¥ê¥ê¥«¡¤¥×¥ê¥º¥à¥ê¥Ð©` 200
+
+@ 1
+
+BGSETUP $LayerBomb $EnemyID_03 true 168
+
+EFFSETUP $EffectSet_BombBegin 88
+	PX PY 200
+
+@ @@> 0
+
+EFFMOVETO $EffectSet_BombBegin PX PY 0
+BONUSFLAG PLBONUS_GRAZE
+
+//
+# $Event_PlayerBomb_10
+// ¥ß¥¹¥Æ¥£¥¢¡¤¥í©`¥ì¥é¥¤ 120
+
+@ 1
+
+BGSETUP $LayerBomb $EnemyID_05 true 88
+
+EFFSETUP $EffectSet_BombBegin 89
+	PX PY 200
+
+@ @@> 0
+
+EFFMOVETO $EffectSet_BombBegin PX PY 0
+SHOOTPB NOW@ % 2 + 160
+
+IZEZONE IZE_FADEOUT PX PY 1 60 0xff
+	
+//
+# $Event_PlayerBomb_11
+// ¥á¥ë¥é¥ó¡¤¥×¥ê¥º¥à¥ê¥Ð©` 200
+
+@ 1
+
+BGSETUP $LayerBomb $EnemyID_06 true 168
+
+EFFSETUP $EffectSet_BombBegin 90
+	PX PY 200
+
+@ @@> 0
+
+EFFMOVETO $EffectSet_BombBegin PX PY 0
+BONUSFLAG PLBONUS_SHOOT
+
+//
+# $Event_PlayerBomb_12
+// ¥ë¥Ê¥µ¡¤¥×¥ê¥º¥à¥ê¥Ð©` 200
+
+@ 1
+
+BGSETUP $LayerBomb $EnemyID_08 true 168
+
+EFFSETUP $EffectSet_BombBegin 91
+	PX PY 200
+
+@ @@> 0
+
+EFFMOVETO $EffectSet_BombBegin PX PY 0
+BONUSFLAG PLBONUS_TIME
+
+//
+# $Event_PlayerBomb_13
+// Òòá¦¡¤¤Æ¤ð 240
+
+@ 1
+
+BGSETUP $LayerBomb $EnemyID_10 true 208
+
+EFFSETUP $EffectSet_BombBegin 92
+	PX PY 200
+	
+@ @@> 0
+
+EFFMOVETO $EffectSet_BombBegin PX PY 0
+IZEZONE IZE_EVENT PX PY 1 96 $PlayerID_13
+
+//
+# $Event_PlayerBomb_14
+// ïLÒŠ¡¤ÓÄÏã 290
+
+@ 1
+
+BGSETUP $LayerBomb $EnemyID_12 true 258
+
+SDf [yOffset] PY -f 160.0
+IF yOffset <f 0.0
+{
+	SDf [yOffset] 0.0
+}
+ST $Target_BombBegin PX yOffset
+IZEZONE IZE_FADEOUT PX yOffset 16 128 0xff
+
+@ 16
+EFFSETUP $EffectSet_BombBegin 93
+	TX $Target_BombBegin TY $Target_BombBegin 200
+SD RESERVEBEGIN 40
+
+@ @@[ 8
+
+SD [nowr] D RESERVEBEGIN
+EFFMOVETO $EffectSet_BombBegin TX $Target_BombBegin TY $Target_BombBegin nowr - 40 * -2
+
+SDf [nowr] nowr * 35
+IZEZONE IZE_EVENT TX $Target_BombBegin TY $Target_BombBegin 1 SQRT nowr $PlayerID_14
+
+@ 290
+
+SD [i] D RESERVEBEGIN / 10
+SDf [nowr] D RESERVEBEGIN * 35
+SDf [nowr] SQRT nowr
+LOOP [i]
+{
+	SDf [factor] RANDR 30 + 70 /f 100.0
+	SD [tangle] RAND
+	SDf [xOffset] COSA tangle *f nowr *f factor
+	SDf [yOffset] SINA tangle *f nowr *f factor
+	ITEMBUILD ITEM_POINT TX $Target_BombBegin +f xOffset TY $Target_BombBegin +f yOffset
+		false 9000 ITEM_STARTSPEED
+}
+
+//
+# $Event_PlayerBomb_15
+// âÏÉ¡¤ƒž•ÒÈAÔº¡¤¥¤¥Ê¥Ð 240
+
+@ 1
+
+BGSETUP $LayerBomb $EnemyID_14 true 208
+
+EFFSETUP $EffectSet_BombBegin 94
+	PX PY 0
+
+@ @@> 0
+
+EFFMOVETO $EffectSet_BombBegin PX PY 0
+SHOOTPB NOW@ % 4 + 162
+
+IZEZONE IZE_FADEOUT PX PY 1 60 0xff
+
+//
+# $Event_PlayerBomb_16
+// ¥¢¥ê¥¹¡¤¥Þ©`¥¬¥È¥í¥¤¥É 210
+
+@ 1
+
+BGSETUP $LayerBomb $EnemyID_18 true 178
+
+EFFSETUP $EffectSet_BombBegin 95
+	PX PY 0
+IZEZONE IZE_FADEOUT PX PY 210 480 0xff
+
+@ @@> 0
+
+EFFMOVETO $EffectSet_BombBegin PX PY 0
+
+@ @@% 3
+
+IF RANDR 8 - 0
+{
+	SHOOTPB 166
+}
+ELSE
+{
+	SHOOTPB 167
+}
+
+//
+# $Event_PlayerBomb_17
+// ËÄ¼¾Ó³Šª¡¤¥ä¥Þ¥¶¥Ê¥É¥¥ 200
+
+@ 1
+
+BGSETUP $LayerBomb $EnemyID_20 true 168
+
+EFFSETUP $EffectSet_BombBegin 96
+	PX PY 0
+IZEZONE IZE_EVENT PX PY 200 480 $PlayerID_17
+
+//
+# $Event_PlayerBomb_18
+// Ð¡Ò°‰V¡¤Ð¡î® 240
+
+@ 1
+
+BGSETUP $LayerBomb $EnemyID_22 true 208
+
+EFFSETUP $EffectSet_BombBegin 97
+	PX PY 0
+ST $Target_BombBegin PSPEED PSLOWSPEED
+SETPSPEED PSPEED *f 1.5
+SETPSLOWSPEED PSLOWSPEED *f 0.5
+
+@ @@> 0
+
+EFFMOVETO $EffectSet_BombBegin PX PY 0
+
+@ @@] 96
+
+IZEZONE IZE_FADEOUT PX PY 1 60 0xff
+
+@ 240
+
+SETPSPEED TX $Target_BombBegin
+SETPSLOWSPEED TY $Target_BombBegin
+
+//
+# $Event_PlayerBomb_19
 // ¥ì¥ß¥ê¥¢¡¤¥¹¥«©`¥ì¥Ã¥È 250
 
 @ 1
 
-BGSETUP $LayerBomb $PlayerBombID_04 true 218
+BGSETUP $LayerBomb $EnemyID_25 true 218
 
 EFFSETUP $EffectSet_BombBegin 98
 	PX PY 0
@@ -111,12 +438,12 @@ LOOP [i]
 }
 
 //
-# $Event_PlayerBomb_05
+# $Event_PlayerBomb_20
 // ²©û¡¤ë‘‰ô 240
 
 @ 1
 
-BGSETUP $LayerBomb $PlayerBombID_05 true 208
+BGSETUP $LayerBomb $EnemyID_35 true 208
 
 EFFSETUP $EffectSet_BombBegin 99
 	PX PY 0
@@ -126,17 +453,15 @@ EFFSETUP $EffectSet_BombBegin 99
 EFFMOVETO $EffectSet_BombBegin PX PY 0
 
 //
-# $Event_PlayerBomb_06
+# $Event_PlayerBomb_21
 // ìFÓê¡¤Ä§ÀíÉ³ 180
 
 @ 1
 
-BGSETUP $LayerBomb $PlayerBombID_06 true 148
+BGSETUP $LayerBomb $EnemyID_34 true 148
 
 EFFSETUP $EffectSet_BombBegin 100
 	PX PY 0
-
-SETPPOWER 0
 
 @ @@> 0
 
@@ -148,7 +473,7 @@ DAMAGEZONE CenterX CenterY IZEOVERZONE 0.65
 
 
 //
-# $Event_PlayerBomb_07
+# $Event_PlayerBomb_22
 // °Ëë…¡¤×Ï 30
 
 @ 1

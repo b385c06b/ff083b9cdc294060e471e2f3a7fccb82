@@ -1,7 +1,7 @@
-#include "Data.h"
-#include "BResource.h"
-#include "Export.h"
-#include "ConstResource.h"
+#include "../Header/Data.h"
+#include "../Header/BResource.h"
+#include "../Header/Export.h"
+#include "../Header/ConstResource.h"
 
 Data data;
 

@@ -1,11 +1,11 @@
-#include "Beam.h"
-#include "Bullet.h"
-#include "Player.h"
-#include "SE.h"
-#include "Chat.h"
-#include "BossInfo.h"
-#include "Item.h"
-#include "Main.h"
+#include "../Header/Beam.h"
+#include "../Header/Bullet.h"
+#include "../Header/Player.h"
+#include "../Header/SE.h"
+#include "../Header/Chat.h"
+#include "../Header/BossInfo.h"
+#include "../Header/Item.h"
+#include "../Header/Main.h"
 
 VectorList<Beam> be;
 

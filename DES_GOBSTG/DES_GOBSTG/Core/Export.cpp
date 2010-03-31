@@ -1,5 +1,5 @@
-#include "Export.h"
-#include "ConstResource.h"
+#include "../Header/Export.h"
+#include "../Header/ConstResource.h"
 
 char Export::resourcefilename[M_PATHMAX];
 char Export::resbinname[M_PATHMAX];
@@ -70,10 +70,10 @@ void Export::clientSetMatrix(float _worldx, float _worldy, float _worldz)
 	D3DXMatrixTranslation(&matWorld, _worldx, _worldy, _worldz);	
 	hge->Gfx_SetTransform( D3DTS_WORLD, &matWorld );
 
-	if (hge->System_Is2DMode())
-	{
-		return;
-	}
+//	if (hge->System_Is2DMode())
+//	{
+//		return;
+//	}
 	/*
 	D3DXMATRIX matView;
 	D3DXVECTOR3 vEyePt( M_ACTIVECLIENT_CENTER_X, M_ACTIVECLIENT_CENTER_Y, M_ACTIVECLIENT_HEIGHT/2);
@@ -119,12 +119,14 @@ bool Export::clientSet2DMode(float x/* =M_ACTIVECLIENT_CENTER_X */, float y/* =M
 	ptfar.x = x;
 	ptfar.y = y;
 	ptfar.z = z;
-	return hge->System_Set2DMode(ptfar);
+	return true;
+//	return hge->System_Set2DMode(ptfar);
 }
 
 bool Export::clientSet3DMode()
 {
-	return hge->System_Set3DMode();
+	return true;
+//	return hge->System_Set3DMode();
 }
 
 bool Export::SetIni(bool extuse)

@@ -1,12 +1,12 @@
-#include "Process.h"
-#include "Scripter.h"
-#include "Player.h"
-#include "InfoSelect.h"
-#include "Selector.h"
-#include "Data.h"
-#include "DataConnector.h"
-#include "SE.h"
-#include "BResource.h"
+#include "../Header/Process.h"
+#include "../Header/Scripter.h"
+#include "../Header/Player.h"
+#include "../Header/InfoSelect.h"
+#include "../Header/Selector.h"
+#include "../Header/Data.h"
+#include "../Header/DataConnector.h"
+#include "../Header/SE.h"
+#include "../Header/BResource.h"
 
 int Process::processPlayerSelect()
 {

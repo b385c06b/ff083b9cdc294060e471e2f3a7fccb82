@@ -110,7 +110,7 @@ typedef unsigned __int64	QWORD;
 /* This define is added by h5nc (h5nc@yahoo.com.cn)                     */
 /************************************************************************/
 // Texture Offset
-#define HGE_TEXTUREOFFSET	0.5f
+#define HGE_TEXTUREOFFSET	0.0f
 
 /*
 ** HGE Handle types
@@ -186,7 +186,7 @@ enum hgeBoolState
 	HGE_DONTSUSPEND		= 0x0105,	// bool		focus lost:suspend?	(default: false)
 	HGE_HIDEMOUSE		= 0x0106,	// bool		hide system cursor?	(default: true)
 	
-	HGE_SHOWSPLASH		= 0x0107,	// bool		hide system cursor?	(default: true)
+	HGE_2DMODE			= 0x0107,	// bool		2d mode? (default: true)
 	
 	HGEBOOLSTATE_FORCE_DWORD = 0x7FFFFFFF
 };
@@ -411,6 +411,8 @@ struct hge3DPoint
 #define JOY_RIGHT		0x50
 #define JOY_UP			0x60
 #define JOY_DOWN		0x70
+
+#define DIJOY_MAXDEVICE	4
 // end
 
 /*
@@ -551,12 +553,8 @@ public:
 	/* These functions are added by h5nc (h5nc@yahoo.com.cn)                */
 	/************************************************************************/
 	// begin
-	virtual bool			CALL	System_Set2DMode(hge3DPoint ptfar) = 0;
-	virtual bool			CALL	System_Set3DMode() = 0;
-	virtual hge3DPoint *	CALL	System_GetFarPoint() = 0;
-	virtual bool			CALL	System_Is2DMode() = 0;
-	virtual float			CALL	System_Transform3DPoint(hge3DPoint * pt) = 0;
-	virtual float			CALL	System_Transform3DPoint(float &x, float &y, float &z) = 0;
+	virtual float			CALL	System_Transform3DPoint(hge3DPoint * pt, hge3DPoint *ptfar=NULL) = 0;
+	virtual float			CALL	System_Transform3DPoint(float &x, float &y, float &z, hge3DPoint *ptfar=NULL) = 0;
 	// end
 
 private:
@@ -629,8 +627,8 @@ public:
 	/* This function is modified by h5nc (h5nc@yahoo.com.cn)                */
 	/************************************************************************/
 	virtual int			CALL	Random_Seed(int seed=0) = 0;
-	virtual int			CALL	Random_Int(int min, int max) = 0;
-	virtual float		CALL	Random_Float(float min, float max) = 0;
+	virtual int			CALL	Random_Int(int min, int max, bool bSelf=false) = 0;
+	virtual float		CALL	Random_Float(float min, float max, bool bSelf=false) = 0;
 
 	virtual float		CALL	Timer_GetTime() = 0;
 	virtual float		CALL	Timer_GetDelta() = 0;
@@ -719,14 +717,14 @@ public:
 	virtual LPDIRECTINPUT8 CALL Input_GetDevice() = 0;
 	virtual bool		CALL	Input_GetDIKey(int key, BYTE stateType = DIKEY_PRESSED) = 0;
 	virtual bool		CALL	Input_SetDIKey(int key, bool set = true) = 0;
-	virtual bool		CALL	Input_GetDIJoy(int joy, BYTE stateType = DIKEY_PRESSED) = 0;
-	virtual bool		CALL	Input_HaveJoy() = 0;
+	virtual bool		CALL	Input_GetDIJoy(int joy, BYTE stateType = DIKEY_PRESSED, int joydevice=0) = 0;
+	virtual bool		CALL	Input_HaveJoy(int joydevice=0) = 0;
 	// end
 
 	virtual bool		CALL	Gfx_BeginScene(HTARGET target=0) = 0;
 	virtual void		CALL	Gfx_EndScene() = 0;
 	virtual void		CALL	Gfx_Clear(DWORD color) = 0;
-	virtual void		CALL	Gfx_RenderLine(float x1, float y1, float x2, float y2, DWORD color=0xFFFFFFFF, float z=0.5f) = 0;
+	virtual void		CALL	Gfx_RenderLine(float x1, float y1, float x2, float y2, DWORD color=0xFFFFFFFF, float z=0) = 0;
 	virtual void		CALL	Gfx_RenderTriple(const hgeTriple *triple) = 0;
 	virtual void		CALL	Gfx_RenderQuad(const hgeQuad *quad) = 0;
 	virtual hgeVertex*	CALL	Gfx_StartBatch(int prim_type, HTEXTURE tex, int blend, int *max_prim) = 0;
@@ -734,9 +732,10 @@ public:
 	virtual void		CALL	Gfx_SetClipping(int x=0, int y=0, int w=0, int h=0) = 0;
 	virtual void		CALL	Gfx_SetTransform(float x=0, float y=0, float dx=0, float dy=0, float rot=0, float hscale=0, float vscale=0) = 0;
 	/************************************************************************/
-	/* This function is added by h5nc (h5nc@yahoo.com.cn)                   */
+	/* These functions are added by h5nc (h5nc@yahoo.com.cn)                */
 	/************************************************************************/
 	virtual void		CALL	Gfx_SetTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX * pMatrix) = 0;
+	virtual D3DMATRIX	CALL	Gfx_GetTransform(D3DTRANSFORMSTATETYPE State) = 0;
 
 	virtual HTARGET		CALL	Target_Create(int width, int height, bool zbuffer) = 0;
 	virtual void		CALL	Target_Free(HTARGET target) = 0;
@@ -757,8 +756,8 @@ public:
 	// begin
 	virtual HD3DFONT    CALL	Font_Load(const char * fontStyle,int height) = 0;
 	virtual void		CALL	Font_Free(HD3DFONT font) = 0;
-	virtual void		CALL	Gfx_RenderText(HD3DFONT font, const char * text, float x, float y, float w, float h, DWORD color = 0xffffffff) = 0;
-	virtual HTEXTURE	CALL	Gfx_RenderTextToTarget(HTARGET tar, HD3DFONT font, const char * text, float x, float y, float w, float h, DWORD color = 0xffffffff) = 0;
+	virtual int			CALL	Gfx_RenderText(HD3DFONT font, const char * text, float x, float y, float w, float h, DWORD color = 0xffffffff) = 0;
+	virtual int			CALL	Gfx_RenderTextToTarget(HTEXTURE * tex, HTARGET tar, HD3DFONT font, const char * text, float x, float y, float w, float h, DWORD color = 0xffffffff) = 0;
 	// end
 
 };

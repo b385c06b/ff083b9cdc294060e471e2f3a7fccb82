@@ -2,8 +2,15 @@ DES_TH_TOB_SCRIPTFILE 0x073
 
 SCENEFILE
 
-# $PlayerBombID_06	// ÏF”Í°§ƒß¿Ì…≥`
+# $EnemyID_34	// ÏF”Í°§ƒß¿Ì…≥`
 
 @ @@[ 0
 
-EXECUTE CT_SCENE $PlayerBombID_02 NOW@
+EXECUTE CT_SCENE $EnemyID_29 NOW@
+
+@ 1
+
+IF BGSI !
+{
+	CALL $MusicChangeWithDisplay $MusicEID_34
+}

@@ -18,6 +18,8 @@
 #include <dinput.h>
 #include <objbase.h>
 
+GUID HGE_Impl::joyGuid[DIJOY_MAXDEVICE];
+
 char *KeyNames[] =
 {
  "?",
@@ -197,22 +199,22 @@ bool CALL HGE_Impl::Input_SetDIKey(int key, bool set)
 	return true;
 }
 
-bool CALL HGE_Impl::Input_GetDIJoy(int joy, BYTE stateType)
+bool CALL HGE_Impl::Input_GetDIJoy(int joy, BYTE stateType /* = DIKEY_PRESSED */, int joydevice/* =0 */)
 {
 	if(joy >=0 && joy < 32)
 	{
 		switch(stateType)
 		{
 		case DIKEY_PRESSED:
-			if(joyState.rgbButtons[joy])
+			if(joyState[joydevice].rgbButtons[joy])
 				return true;
 			break;
 		case DIKEY_DOWN:
-			if(joyState.rgbButtons[joy] && !lastJoyState.rgbButtons[joy])
+			if(joyState[joydevice].rgbButtons[joy] && !lastJoyState[joydevice].rgbButtons[joy])
 				return true;
 			break;
 		case DIKEY_UP:
-			if(!joyState.rgbButtons[joy] && lastJoyState.rgbButtons[joy])
+			if(!joyState[joydevice].rgbButtons[joy] && lastJoyState[joydevice].rgbButtons[joy])
 				return true;
 			break;
 		default:
@@ -227,15 +229,15 @@ bool CALL HGE_Impl::Input_GetDIJoy(int joy, BYTE stateType)
 			switch(stateType)
 			{
 			case DIKEY_PRESSED:
-				if(joyState.lX < 0)
+				if(joyState[joydevice].lX < 0)
 					return true;
 				break;
 			case DIKEY_DOWN:
-				if(joyState.lX < 0 && !(lastJoyState.lX < 0))
+				if(joyState[joydevice].lX < 0 && !(lastJoyState[joydevice].lX < 0))
 					return true;
 				break;
 			case DIKEY_UP:
-				if(!(joyState.lX < 0) && lastJoyState.lX < 0)
+				if(!(joyState[joydevice].lX < 0) && lastJoyState[joydevice].lX < 0)
 					return true;
 				break;
 			default:
@@ -246,15 +248,15 @@ bool CALL HGE_Impl::Input_GetDIJoy(int joy, BYTE stateType)
 			switch(stateType)
 			{
 			case DIKEY_PRESSED:
-				if(joyState.lX > 0)
+				if(joyState[joydevice].lX > 0)
 					return true;
 				break;
 			case DIKEY_DOWN:
-				if(joyState.lX > 0 && !(lastJoyState.lX > 0))
+				if(joyState[joydevice].lX > 0 && !(lastJoyState[joydevice].lX > 0))
 					return true;
 				break;
 			case DIKEY_UP:
-				if(!(joyState.lX > 0) && lastJoyState.lX > 0)
+				if(!(joyState[joydevice].lX > 0) && lastJoyState[joydevice].lX > 0)
 					return true;
 				break;
 			default:
@@ -265,15 +267,15 @@ bool CALL HGE_Impl::Input_GetDIJoy(int joy, BYTE stateType)
 			switch(stateType)
 			{
 			case DIKEY_PRESSED:
-				if(joyState.lY < 0)
+				if(joyState[joydevice].lY < 0)
 					return true;
 				break;
 			case DIKEY_DOWN:
-				if(joyState.lY < 0 && !(lastJoyState.lY < 0))
+				if(joyState[joydevice].lY < 0 && !(lastJoyState[joydevice].lY < 0))
 					return true;
 				break;
 			case DIKEY_UP:
-				if(!(joyState.lY < 0) && lastJoyState.lY < 0)
+				if(!(joyState[joydevice].lY < 0) && lastJoyState[joydevice].lY < 0)
 					return true;
 				break;
 			default:
@@ -284,15 +286,15 @@ bool CALL HGE_Impl::Input_GetDIJoy(int joy, BYTE stateType)
 			switch(stateType)
 			{
 			case DIKEY_PRESSED:
-				if(joyState.lY > 0)
+				if(joyState[joydevice].lY > 0)
 					return true;
 				break;
 			case DIKEY_DOWN:
-				if(joyState.lY > 0 && !(lastJoyState.lY > 0))
+				if(joyState[joydevice].lY > 0 && !(lastJoyState[joydevice].lY > 0))
 					return true;
 				break;
 			case DIKEY_UP:
-				if(!(joyState.lY > 0) && lastJoyState.lY > 0)
+				if(!(joyState[joydevice].lY > 0) && lastJoyState[joydevice].lY > 0)
 					return true;
 				break;
 			default:
@@ -429,11 +431,22 @@ void HGE_Impl::_ClearQueue()
 /* These functions are added by h5nc (h5nc@yahoo.com.cn)                */
 /************************************************************************/
 // begin
-BOOL CALLBACK EnumJoysticksCallback (const DIDEVICEINSTANCE * pdidInstance, VOID* pContext)
+BOOL CALLBACK HGE_Impl::_EnumJoysticksCallback (const DIDEVICEINSTANCE * pdidInstance, VOID* pContext)
 {
- 	*(GUID*)pContext = pdidInstance->guidInstance; 
+	int count = *(int*)pContext;
+	if (count < DIJOY_MAXDEVICE)
+	{
+		joyGuid[count] = pdidInstance->guidInstance;
+		count++;
+		*(int *)pContext = count;
+	}
+	if (count >= DIJOY_MAXDEVICE)
+	{
+		*(int *)pContext = 0;
+		return DIENUM_STOP;
+	}
 
-	return (DIENUM_STOP);
+	return (DIENUM_CONTINUE);
 }
 
 LPDIRECTINPUT8 CALL HGE_Impl::Input_GetDevice()
@@ -444,114 +457,144 @@ LPDIRECTINPUT8 CALL HGE_Impl::Input_GetDevice()
 int HGE_Impl::_DIInit()
 {
 	lpDIKDevice = NULL;
-	lpDIJDevice = NULL;
 
 	bool keyable = true;
-	bool joyable = true;
 
 	if (FAILED (DirectInput8Create (hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**) &lpDInput, NULL)))
 	{
 		keyable = false;
-//		return ERROR_NOKEYBOARD;
 	}
 
-	if (keyable && FAILED(lpDInput->CreateDevice(GUID_SysKeyboard, &lpDIKDevice, NULL)))
+	if (keyable && FAILED (lpDInput->CreateDevice(GUID_SysKeyboard, &lpDIKDevice, NULL)))
 	{
 		keyable = false;
-//		return ERROR_NOKEYBOARD;
 	}
 	if (keyable && FAILED (lpDIKDevice->SetDataFormat(&c_dfDIKeyboard)))
 	{
 		keyable = false;
-//		return ERROR_NOKEYBOARD;
 	}
 	if (keyable && FAILED (lpDIKDevice->SetCooperativeLevel (hwnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND)))
 	{
 		keyable = false;
-//		return ERROR_NOKEYBOARD;
 	}
-	if(keyable && FAILED(lpDIKDevice->Acquire ()))
+	if(keyable && FAILED (lpDIKDevice->Acquire ()))
 	{
 		keyable = false;
-//		return ERROR_NOKEYBOARD;
 	}
 
-	if (FAILED (lpDInput->EnumDevices (DI8DEVCLASS_GAMECTRL, EnumJoysticksCallback, &joyGuid, DIEDFL_ATTACHEDONLY)))
+	bool nojoy = true;
+	int enumcount = 0;
+	for (int i=0; i<DIJOY_MAXDEVICE; i++)
 	{
-		joyable = false;
-//		return ERROR_NOJOYSTICK;
+		haveJoy[i] = true;
+		lpDIJDevice[i] = NULL;
 	}
-	if (joyable && FAILED (lpDInput->CreateDevice(joyGuid, &lpDIJDevice, NULL)))
+	if (FAILED (lpDInput->EnumDevices (DI8DEVCLASS_GAMECTRL, _EnumJoysticksCallback, &enumcount, DIEDFL_ATTACHEDONLY)))
 	{
-		joyable = false;
-//		return ERROR_NOJOYSTICK;
-	}
-	if (joyable && FAILED (lpDIJDevice->SetDataFormat(&c_dfDIJoystick)))
-	{
-		joyable = false;
-//		return ERROR_NOJOYSTICK;
-	}
-	if (joyable && FAILED (lpDIJDevice->SetCooperativeLevel (hwnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND)))
-	{
-		joyable = false;
-//		return ERROR_NOJOYSTICK;
-	}
-
-	if(joyable)
-	{
-		DIPROPRANGE joyRange;
-
-		joyRange.lMin = -24;
-		joyRange.lMax = 24;
-
-		joyRange.diph.dwSize       = sizeof(DIPROPRANGE); 
-		joyRange.diph.dwHeaderSize = sizeof(DIPROPHEADER); 
-		joyRange.diph.dwObj        = DIJOFS_X;
-		joyRange.diph.dwHow        = DIPH_BYOFFSET;
-
-		lpDIJDevice->SetProperty(DIPROP_RANGE, &joyRange.diph);
-
-		joyRange.lMin = -24;
-		joyRange.lMax = 24;
-
-		joyRange.diph.dwSize       = sizeof(DIPROPRANGE); 
-		joyRange.diph.dwHeaderSize = sizeof(DIPROPHEADER); 
-		joyRange.diph.dwObj        = DIJOFS_Y;
-		joyRange.diph.dwHow        = DIPH_BYOFFSET;
-
-		lpDIJDevice->SetProperty(DIPROP_RANGE,&joyRange.diph);
-
-		DIPROPDWORD deadZone;
-
-		deadZone.diph.dwSize       = sizeof(deadZone);
-		deadZone.diph.dwHeaderSize = sizeof(deadZone.diph);
-		deadZone.diph.dwObj        = DIJOFS_X;
-		deadZone.diph.dwHow        = DIPH_BYOFFSET;
-		deadZone.dwData            = 1000;
-
-		lpDIJDevice->SetProperty(DIPROP_DEADZONE, &deadZone.diph);
-
-		deadZone.diph.dwSize       = sizeof(deadZone);
-		deadZone.diph.dwHeaderSize = sizeof(deadZone.diph);
-		deadZone.diph.dwObj        = DIJOFS_Y;
-		deadZone.diph.dwHow        = DIPH_BYOFFSET;
-		deadZone.dwData            = 1000;
-
-		lpDIJDevice->SetProperty(DIPROP_DEADZONE,&deadZone.diph);
-
-		if (FAILED (lpDIJDevice->Acquire()))
+		for (int i=0; i<DIJOY_MAXDEVICE; i++)
 		{
-			joyable = false;
-//			return ERROR_NOJOYSTICK;
+			haveJoy[i] = false;
+		}
+	}
+	for (int i=0; i<DIJOY_MAXDEVICE; i++)
+	{
+		if (haveJoy[i] && FAILED (lpDInput->CreateDevice(joyGuid[i], &lpDIJDevice[i], NULL)))
+		{
+			haveJoy[i] = false;
+		}
+		if (haveJoy[i] && FAILED (lpDIJDevice[i]->SetDataFormat(&c_dfDIJoystick)))
+		{
+			haveJoy[i] = false;
+		}
+		if (haveJoy[i] && FAILED (lpDIJDevice[i]->SetCooperativeLevel (hwnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND)))
+		{
+			haveJoy[i] = false;
+		}
+
+		if (haveJoy[i])
+		{
+			DIPROPRANGE joyRange;
+
+			joyRange.lMin = -24;
+			joyRange.lMax = 24;
+
+			joyRange.diph.dwSize       = sizeof(DIPROPRANGE); 
+			joyRange.diph.dwHeaderSize = sizeof(DIPROPHEADER); 
+			joyRange.diph.dwObj        = DIJOFS_X;
+			joyRange.diph.dwHow        = DIPH_BYOFFSET;
+
+			lpDIJDevice[i]->SetProperty(DIPROP_RANGE, &joyRange.diph);
+
+			joyRange.lMin = -24;
+			joyRange.lMax = 24;
+
+			joyRange.diph.dwSize       = sizeof(DIPROPRANGE); 
+			joyRange.diph.dwHeaderSize = sizeof(DIPROPHEADER); 
+			joyRange.diph.dwObj        = DIJOFS_Y;
+			joyRange.diph.dwHow        = DIPH_BYOFFSET;
+
+			lpDIJDevice[i]->SetProperty(DIPROP_RANGE,&joyRange.diph);
+
+			DIPROPDWORD deadZone;
+
+			deadZone.diph.dwSize       = sizeof(deadZone);
+			deadZone.diph.dwHeaderSize = sizeof(deadZone.diph);
+			deadZone.diph.dwObj        = DIJOFS_X;
+			deadZone.diph.dwHow        = DIPH_BYOFFSET;
+			deadZone.dwData            = 1000;
+
+			lpDIJDevice[i]->SetProperty(DIPROP_DEADZONE, &deadZone.diph);
+
+			deadZone.diph.dwSize       = sizeof(deadZone);
+			deadZone.diph.dwHeaderSize = sizeof(deadZone.diph);
+			deadZone.diph.dwObj        = DIJOFS_Y;
+			deadZone.diph.dwHow        = DIPH_BYOFFSET;
+			deadZone.dwData            = 1000;
+
+			lpDIJDevice[i]->SetProperty(DIPROP_DEADZONE,&deadZone.diph);
+
+			if (FAILED (lpDIJDevice[i]->Acquire()))
+			{
+				haveJoy[i] = false;
+			}
+		}
+		if (haveJoy[i])
+		{
+			nojoy = false;
+		}
+
+	}
+
+	for (int i=0; i<DIJOY_MAXDEVICE; i++)
+	{
+		for (int j=i; j<DIJOY_MAXDEVICE; j++)
+		{
+			if (haveJoy[j] && !haveJoy[i])
+			{
+				LPDIRECTINPUTDEVICE8 _lpDIJDevice;
+				_lpDIJDevice = lpDIJDevice[i];
+				lpDIJDevice[i] = lpDIJDevice[j];
+				lpDIJDevice[j] = _lpDIJDevice;
+
+				GUID _joyGuid;
+				_joyGuid = joyGuid[i];
+				joyGuid[i] = joyGuid[j];
+				joyGuid[j] = _joyGuid;
+
+				haveJoy[i] = !haveJoy[i];
+				haveJoy[j] = !haveJoy[j];
+
+				break;
+			}
 		}
 	}
 
-	return (joyable?0:ERROR_NOJOYSTICK) | (keyable?0:ERROR_NOKEYBOARD);
+	return ((!nojoy)?0:ERROR_NOJOYSTICK) | (keyable?0:ERROR_NOKEYBOARD);
 }
 
-bool HGE_Impl::Input_HaveJoy()
+bool HGE_Impl::Input_HaveJoy(int joydevice)
 {
-	return haveJoy;
+	return haveJoy[joydevice];
 }
 
 void HGE_Impl::_DIRelease()
@@ -562,18 +605,20 @@ void HGE_Impl::_DIRelease()
 		lpDIKDevice->Release();
 		lpDIKDevice = NULL;
 	}
-	if(lpDIJDevice != NULL)
+	for (int i=0; i<DIJOY_MAXDEVICE; i++)
 	{
-		lpDIJDevice->Unacquire();
-		lpDIJDevice->Release();
-		lpDIJDevice = NULL;
+		if(lpDIJDevice[i] != NULL)
+		{
+			lpDIJDevice[i]->Unacquire();
+			lpDIJDevice[i]->Release();
+			lpDIJDevice[i] = NULL;
+		}
 	}
 }
 
 int HGE_Impl::_DIUpdate()
 {
 	bool keyable = true;
-	bool joyable = true;
 
 	memcpy(lastKeyState, keyState, sizeof(keyState));
 
@@ -598,52 +643,57 @@ int HGE_Impl::_DIUpdate()
 				_DIInit();
 				if(FAILED(lpDIKDevice->Acquire()))
 					keyable = false;
-//					return ERROR_NOKEYBOARD;
 			}
 			if(keyable && FAILED(lpDIKDevice->GetDeviceState(256, keyState)))
 				keyable = false;
-//				return ERROR_NOKEYBOARD;
 		}
 		if(hwnd != GetActiveWindow())
 			ZeroMemory(&keyState, sizeof(keyState));
 	}
 
-	lastJoyState = joyState;
-
-	if(haveJoy)
+	bool nojoy = true;
+	for (int i=0; i<DIJOY_MAXDEVICE; i++)
 	{
-		if(lpDIJDevice == NULL)
+		lastJoyState[i] = joyState[i];
+		if(haveJoy[i])
 		{
-			_DIRelease();
-			_DIInit();
-			if(lpDIJDevice == NULL)
-			{
-				joyable = false;
-//				return ERROR_NOJOYSTICK;
-			}
-		}
-		if(joyable && FAILED(lpDIJDevice->Poll()))
-		{
-			if(FAILED(lpDIJDevice->Acquire()))
+			if(lpDIJDevice[i] == NULL)
 			{
 				_DIRelease();
 				_DIInit();
-				if(FAILED(lpDIKDevice->Acquire()))
+				if(lpDIJDevice[i] == NULL)
 				{
-					joyable = false;
-//					return ERROR_NOJOYSTICK;
+					haveJoy[i] = false;
 				}
 			}
+			if(haveJoy[i] && FAILED(lpDIJDevice[i]->Poll()))
+			{
+				if(FAILED(lpDIJDevice[i]->Acquire()))
+				{
+					_DIRelease();
+					_DIInit();
+					if(FAILED(lpDIJDevice[i]->Acquire()))
+					{
+						haveJoy[i] = false;
+					}
+				}
+			}
+			if(haveJoy[i] && FAILED(lpDIJDevice[i]->GetDeviceState(sizeof(DIJOYSTATE), &joyState[i])))
+			{
+				haveJoy[i] = false;
+			}
 		}
-		if(joyable && FAILED(lpDIJDevice->GetDeviceState(sizeof(DIJOYSTATE), &joyState)))
+		else
 		{
-			joyable = false;
-			return ERROR_NOJOYSTICK;
+			haveJoy[i] = false;
+		}
+
+		if (haveJoy[i])
+		{
+			nojoy = false;
 		}
 	}
-	else
-		joyable = false;
 
-	return (joyable?0:ERROR_NOJOYSTICK) | (keyable?0:ERROR_NOKEYBOARD);
+	return ((!nojoy)?0:ERROR_NOJOYSTICK) | (keyable?0:ERROR_NOKEYBOARD);
 }
 // end

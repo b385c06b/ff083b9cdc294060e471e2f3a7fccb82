@@ -1,189 +1,38 @@
 <?xml version="1.0" encoding="gb2312"?>
-<VisualStudioProject 
+<VisualStudioProject
 	ProjectType="Intel C++ Project"
-	Version="10.0"
+	Version="11.1"
 	Name="hgeParticleEditor"
 	ProjectGUID="{5AEB2D47-89F2-47BB-A9D6-6708204001F0}"
 	VCNestedProjectGUID="{FDA21157-179D-444D-877B-DC7A20668803}"
-	VCNestedProjectCRC32="3839711315"
-	VCNestedProjectFileName="hgeParticleEditor.vcproj"
-	Keyword="Win32Proj">
+	VCNestedProjectFileName="hgeParticleEditor.vcproj">
 	<Configurations>
-		<Configuration 
+		<Configuration
 			Name="Debug|Win32">
-			<Tool 
-				Name="GeneralTool"
-				CharacterSet="2"/>
-			<Tool 
+			<Tool
 				Name="CppCmplrTool"
-				Optimization="0"
-				OptimizeForWindowsApplication="1"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;__DEBUG"
-				StringPooling="1"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
-				EnableFunctionLevelLinking="1"
-				UsePrecompiledHeader="0"
-				DebugInformationFormat="4"/>
-			<Tool 
-				Name="LinkerTool"
-				DelayImpLib="DelayImp.lib"
-				AdditionalDependencies=""
-				OutputFile="$(OutDir)/EffectEditor.exe"
-				IgnoreDefaultLibraryNames=""
-				DelayLoadDLLs="hge_d.dll"
-				GenerateDebugInformation="1"
-				SubSystem="2"
-				AdditionalOptions="/NODEFAULTLIB:LIBCMT.LIB"/>
-			<Tool 
-				Name="LibrarianTool"/>
-			<Tool 
-				Name="ResCmplrTool"/>
-			<Tool 
-				Name="MidlCmplrTool"/>
-			<Tool 
-				Name="BscMakeTool"/>
-			<Tool 
-				Name="PreBuildEventTool"/>
-			<Tool 
-				Name="PreLinkEventTool"/>
-			<Tool 
-				Name="PostBuildEventTool"/>
-			<Tool 
-				Name="CustomTool"/>
-			<Tool 
-				Name="CustomNodeTool"/>
+				OptimizeForWindowsApplication="true"
+				DisableSpecificDiagnostics="1786"/>
 		</Configuration>
-		<Configuration 
+		<Configuration
 			Name="Release|Win32">
-			<Tool 
-				Name="GeneralTool"
-				CharacterSet="2"
-				WholeProgramOptimization="1"
-				PGOPhase="0"/>
-			<Tool 
+			<Tool
 				Name="CppCmplrTool"
 				Optimization="1000"
-				GlobalOptimizations="1"
-				EnableIntrinsicFunctions="1"
+				GlobalOptimizations="true"
+				OptimizeForWindowsApplication="true"
 				ImproveFloatingPointConsistency="1"
-				FavorSizeOrSpeed="1"
-				OmitFramePointers="1"
-				EnableFiberSafeOptimizations="1"
-				OptimizeForProcessor="3"
-				OptimizeForWindowsApplication="1"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__DEBUG"
-				StringPooling="1"
-				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="1"
-				UsePrecompiledHeader="0"
-				DebugInformationFormat="0"/>
-			<Tool 
-				Name="LinkerTool"
-				DelayImpLib="DelayImp.lib"
-				OutputFile="$(OutDir)/EffectEditor.exe"
-				DelayLoadDLLs="hge.dll"
-				GenerateDebugInformation="0"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				AdditionalOptions=""/>
-			<Tool 
-				Name="LibrarianTool"/>
-			<Tool 
-				Name="ResCmplrTool"/>
-			<Tool 
-				Name="MidlCmplrTool"/>
-			<Tool 
-				Name="BscMakeTool"/>
-			<Tool 
-				Name="PreBuildEventTool"/>
-			<Tool 
-				Name="PreLinkEventTool"/>
-			<Tool 
-				Name="PostBuildEventTool"/>
-			<Tool 
-				Name="CustomTool"/>
-			<Tool 
-				Name="CustomNodeTool"/>
+				DisableSpecificDiagnostics="1786"/>
 		</Configuration>
-		<Configuration 
+		<Configuration
 			Name="FinalRelease|Win32">
-			<Tool 
-				Name="GeneralTool"
-				CharacterSet="2"
-				WholeProgramOptimization="1"
-				PGOPhase="0"/>
-			<Tool 
+			<Tool
 				Name="CppCmplrTool"
-				Optimization="1"
-				GlobalOptimizations="1"
-				EnableIntrinsicFunctions="1"
+				GlobalOptimizations="true"
+				OptimizeForWindowsApplication="true"
 				ImproveFloatingPointConsistency="1"
-				FavorSizeOrSpeed="2"
-				OmitFramePointers="1"
-				EnableFiberSafeOptimizations="1"
-				OptimizeForProcessor="3"
-				OptimizeForWindowsApplication="1"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__RELEASE"
-				StringPooling="1"
-				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="1"
-				UsePrecompiledHeader="0"
-				DebugInformationFormat="0"/>
-			<Tool 
-				Name="LinkerTool"
-				DelayImpLib="DelayImp.lib"
-				OutputFile="$(OutDir)/EffectEditor.exe"
-				DelayLoadDLLs="hge.dll"
-				GenerateDebugInformation="0"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				AdditionalOptions=""/>
-			<Tool 
-				Name="LibrarianTool"/>
-			<Tool 
-				Name="ResCmplrTool"/>
-			<Tool 
-				Name="MidlCmplrTool"/>
-			<Tool 
-				Name="BscMakeTool"/>
-			<Tool 
-				Name="PreBuildEventTool"/>
-			<Tool 
-				Name="PreLinkEventTool"/>
-			<Tool 
-				Name="PostBuildEventTool"/>
-			<Tool 
-				Name="CustomTool"/>
-			<Tool 
-				Name="CustomNodeTool"/>
+				DisableSpecificDiagnostics="1786"/>
 		</Configuration>
 	</Configurations>
-	<Files>
-		<File 
-			RelativePath="..\Des_gobstg\Des_gobstg\Core\BResource.cpp"/>
-		<File 
-			RelativePath="..\Des_gobstg\Des_gobstg\Core\Data.cpp"/>
-		<File 
-			RelativePath="..\Des_gobstg\Des_gobstg\Core\DataMap.cpp"/>
-		<File 
-			RelativePath="..\Des_gobstg\Des_gobstg\Core\DataTable.cpp"/>
-		<File 
-			RelativePath=".\EditorRes.cpp"/>
-		<File 
-			RelativePath=".\EditorUI.cpp"/>
-		<File 
-			RelativePath="..\Des_gobstg\Des_gobstg\Core\Export.cpp"/>
-		<File 
-			RelativePath=".\hgeParticleEditor.cpp"/>
-		<File 
-			RelativePath="..\Des_gobstg\Des_gobstg\Core\InitDllLoader.cpp"/>
-		<File 
-			RelativePath=".\EditorRes.h"/>
-		<File 
-			RelativePath=".\EditorUI.h"/>
-	</Files>
+	<Files/>
 </VisualStudioProject>
-
