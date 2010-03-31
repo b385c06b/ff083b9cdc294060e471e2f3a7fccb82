@@ -1,9 +1,0 @@
-DES_TH_TOB_SCRIPTFILE 0x073
-
-SCENEFILE
-
-# $EnemyID_08	// ¥ë¥Ê¥µ¡¤¥×¥ê¥º¥à¥ê¥Ð©`
-
-@ @@[ 0
-
-EXECUTE CT_SCENE $EnemyID_03 NOW@
