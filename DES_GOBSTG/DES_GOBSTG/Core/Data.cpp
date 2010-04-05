@@ -3,7 +3,7 @@
 #include "../Header/Export.h"
 #include "../Header/ConstResource.h"
 
-Data data;
+Data Data::data;
 
 Data::Data()
 {
@@ -186,7 +186,7 @@ void Data::raSetIndi(int sno, WORD _indi)
 
 int Data::getSpellNumber(int sno)
 {
-	for (vector<spellData>::iterator i=res.spelldata.begin(); i!=res.spelldata.end(); i++)
+	for (vector<spellData>::iterator i=BResource::res.spelldata.begin(); i!=BResource::res.spelldata.end(); i++)
 	{
 		if (i->sno == sno)
 		{
@@ -198,7 +198,7 @@ int Data::getSpellNumber(int sno)
 
 int Data::getSpellUser(int sno)
 {
-	for (vector<spellData>::iterator i=res.spelldata.begin(); i!=res.spelldata.end(); i++)
+	for (vector<spellData>::iterator i=BResource::res.spelldata.begin(); i!=BResource::res.spelldata.end(); i++)
 	{
 		if (i->sno == sno)
 		{
@@ -211,7 +211,7 @@ int Data::getSpellUser(int sno)
 char * Data::getSpellName(int sno)
 {
 	strcpy(buf, DATA_DEFAULTSTR_WIDE);
-	for(vector<spellData>::iterator i=res.spelldata.begin(); i!=res.spelldata.end(); i++)
+	for(vector<spellData>::iterator i=BResource::res.spelldata.begin(); i!=BResource::res.spelldata.end(); i++)
 	{
 		if(i->sno == sno)
 		{
@@ -225,7 +225,7 @@ char * Data::getSpellName(int sno)
 char * Data::getSpellUserName(int sno)
 {
 	strcpy(buf, DATA_DEFAULTSTR_WIDE);
-	for(vector<spellData>::iterator i=res.spelldata.begin(); i!=res.spelldata.end(); i++)
+	for(vector<spellData>::iterator i=BResource::res.spelldata.begin(); i!=BResource::res.spelldata.end(); i++)
 	{
 		if(i->sno == sno)
 		{
@@ -239,7 +239,7 @@ char * Data::getSpellUserName(int sno)
 char * Data::getSpellUserEName(int sno)
 {
 	strcpy(buf, DATA_DEFAULTSTR_WIDE);
-	for(vector<spellData>::iterator i=res.spelldata.begin(); i!=res.spelldata.end(); i++)
+	for(vector<spellData>::iterator i=BResource::res.spelldata.begin(); i!=BResource::res.spelldata.end(); i++)
 	{
 		if(i->sno == sno)
 		{
@@ -256,7 +256,7 @@ char * Data::getEnemyName(int type)
 	{
 		return NULL;
 	}
-	return res.enemydata[type].name;
+	return BResource::res.enemydata[type].name;
 }
 
 char * Data::getEnemyEName(int type)
@@ -265,7 +265,7 @@ char * Data::getEnemyEName(int type)
 	{
 		return NULL;
 	}
-	return res.enemydata[type].ename;
+	return BResource::res.enemydata[type].ename;
 }
 
 char * Data::getPlayerName(int type)
@@ -274,7 +274,7 @@ char * Data::getPlayerName(int type)
 	{
 		return NULL;
 	}
-	return res.playerdata[type].name;
+	return BResource::res.playerdata[type].name;
 }
 
 void Data::MoveDown(DWORD sec, BYTE i)
@@ -1151,7 +1151,7 @@ BYTE Data::getStage(int sno)
 
 BYTE Data::getBattle(int sno)
 {
-	for (vector<spellData>::iterator it = res.spelldata.begin(); it!= res.spelldata.end(); it++)
+	for (vector<spellData>::iterator it = BResource::res.spelldata.begin(); it!= BResource::res.spelldata.end(); it++)
 	{
 		if (it->sno == sno)
 		{

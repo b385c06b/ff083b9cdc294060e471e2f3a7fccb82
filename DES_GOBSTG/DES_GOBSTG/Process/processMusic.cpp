@@ -7,8 +7,8 @@
 
 int Process::processMusic()
 {
-	time++;
-	if(time == 1)
+	gametime++;
+	if(gametime == 1)
 	{
 		scr.SetIntValue(SCR_RESERVEBEGIN, 0);
 		scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);
@@ -18,7 +18,7 @@ int Process::processMusic()
 		int i = 0;
 		while(true)
 		{
-			if(!strlen(res.musdata[i].musicfilename))
+			if(!strlen(BResource::res.musdata[i].musicfilename))
 			{
 				scr.SetIntValue(SCR_RESERVEBEGIN+2, i);
 				break;
@@ -28,12 +28,12 @@ int Process::processMusic()
 
 		InfoSelect::select = 0;
 	}
-	scr.controlExecute(STATE_MUSIC, time);
+	scr.controlExecute(STATE_MUSIC, gametime);
 
 	if(hge->Input_GetDIKey(KS_SPECIAL, DIKEY_DOWN))
 	{
 		SE::push(SE_SYSTEM_CANCEL);
-		time = 0;
+		gametime = 0;
 		state = STATE_TITLE;
 		return PTURN;
 	}
@@ -88,7 +88,7 @@ int Process::processMusic()
 			strcpy(_ifs[i].info, "No.");
 			_ifs[i].linki("|10305", i + 1);
 			strcat(_ifs[i].info, "|008");	
-			strcat(_ifs[i].info, res.musdata[i].musicname);
+			strcat(_ifs[i].info, BResource::res.musdata[i].musicname);
 
 			_ifs[i].valueSet(i, _ifs[i].info, 70, i*22+100, INFO_GREEN);
 			infoselect.push_back(_ifs[i]);
@@ -103,7 +103,7 @@ int Process::processMusic()
 
 		for(int i=0;i<4;i++)
 		{
-			InfoSelect::Build(i+tmaxmusic, res.musdata[0].explain[i], 70+i*15, 350+i*25, INFO_RED, SEL_NONACTIVE|SEL_STAY);
+			InfoSelect::Build(i+tmaxmusic, BResource::res.musdata[0].explain[i], 70+i*15, 350+i*25, INFO_RED, SEL_NONACTIVE|SEL_STAY);
 		}
 
 		InfoSelect::SetPageNum(10, 67, 22, tiselfirstID);
@@ -142,7 +142,7 @@ int Process::processMusic()
 			float _tx =  70+i*15;
 			float _ty = 350+i*25;
 			InfoSelect * _tifs = InfoSelect::GetPointer(i+tmaxmusic);
-			_tifs->valueSet(i+tmaxmusic, res.musdata[tmusicsel].explain[i], _tx, _ty, INFO_RED, SEL_NONACTIVE|SEL_STAY);
+			_tifs->valueSet(i+tmaxmusic, BResource::res.musdata[tmusicsel].explain[i], _tx, _ty, INFO_RED, SEL_NONACTIVE|SEL_STAY);
 		}
 	}
 

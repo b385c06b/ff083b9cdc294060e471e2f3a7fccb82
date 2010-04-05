@@ -205,7 +205,7 @@ void Process::frameEnd()
 		{
 			if(bossinfo.action())
 			{
-				time = 0;
+				gametime = 0;
 				if(!spellmode)
 				{
 					scene = BossInfo::turntoscene;

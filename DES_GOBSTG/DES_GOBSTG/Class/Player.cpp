@@ -90,7 +90,7 @@ void Player::initFrameIndex()
 		{
 			_ID = ID;
 		}
-		playerData * pdata = &(res.playerdata[_ID]);
+		playerData * pdata = &(BResource::res.playerdata[_ID]);
 		int tfi = pdata->startFrame;
 		frameindex[i][PLAYER_FRAME_STAND] = tfi;
 
@@ -145,7 +145,7 @@ void Player::initFrameIndex()
 BYTE Player::getFrameIndex(BYTE frameenum)
 {
 	flipx = false;
-	playerData * pdata = &(res.playerdata[nowID]);
+	playerData * pdata = &(BResource::res.playerdata[nowID]);
 	if ((frameenum == PLAYER_FRAME_RIGHTPRE || frameenum == PLAYER_FRAME_RIGHT) && (!pdata->rightPreFrame) ||
 		(frameenum == PLAYER_FRAME_LEFTPRE || frameenum == PLAYER_FRAME_LEFT) && (!pdata->leftPreFrame))
 	{
@@ -172,8 +172,8 @@ void Player::setFrame(BYTE frameenum)
 
 void Player::setIndexFrame(BYTE index)
 {
-	playerData * pdata = &(res.playerdata[nowID]);
-	HTEXTURE nowtex = mp.tex[res.playerdata[nowID].tex];
+	playerData * pdata = &(BResource::res.playerdata[nowID]);
+	HTEXTURE nowtex = mp.tex[BResource::res.playerdata[nowID].tex];
 	sprite->SetTexture(nowtex);
 	float tw = pdata->usetexw / (pdata->tex_nCol);
 	float th = pdata->usetexh / (pdata->tex_nRow);
@@ -199,7 +199,7 @@ void Player::updateFrame(BYTE frameenum, int usetimer /* = -1*/)
 	{
 		return;
 	}
-	playerData * pdata = &(res.playerdata[nowID]);
+	playerData * pdata = &(BResource::res.playerdata[nowID]);
 	frameoffset++;
 	BYTE tbyte;
 	switch (nowstate)
@@ -447,7 +447,7 @@ void Player::ClearSet()
 
 void Player::UpdatePlayerData()
 {
-	playerData * pdata = &(res.playerdata[nowID]);
+	playerData * pdata = &(BResource::res.playerdata[nowID]);
 	r = pdata->collision_r;
 	speed = pdata->fastspeed;
 	slowspeed = pdata->slowspeed;
@@ -493,7 +493,7 @@ void Player::valueSet(WORD _ID, WORD _ID_sub_1, WORD _ID_sub_2, BYTE _nLife, boo
 	}
 
 	if(!sprite)
-		sprite = new hgeSprite(mp.tex[res.playerdata[ID].tex], 0, 0, 0, 0);
+		sprite = new hgeSprite(mp.tex[BResource::res.playerdata[ID].tex], 0, 0, 0, 0);
 	setFrame(PLAYER_FRAME_STAND);
 
 	effGraze.valueSet(EFF_PL_GRAZE, *this);

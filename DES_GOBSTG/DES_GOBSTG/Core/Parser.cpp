@@ -143,7 +143,7 @@ bool Scripter::Parse(int varcount)
 			case SCR_SETTIME:
 				if(rv = Copy(&i, 1))
 				{
-					time = CAST(d[0]);
+					gametime = CAST(d[0]);
 				}
 				break;
 			case SCR_SETDIFFI:
@@ -1373,7 +1373,7 @@ chatout:
 				if (rv = Copy(&i, 4))
 				{
 					int _tdi = CAST(d[3]);
-					CINT(d[_tdi].value) = data.iRead(DATA_BINFILE, UCAST(d[0]), UCAST(d[1]), CAST(d[2]));
+					CINT(d[_tdi].value) = Data::data.iRead(DATA_BINFILE, UCAST(d[0]), UCAST(d[1]), CAST(d[2]));
 					d[_tdi].bfloat = false;
 				}
 				break;
@@ -1381,26 +1381,26 @@ chatout:
 				if (rv = Copy(&i, 4))
 				{
 					int _tdi = CAST(d[4]);
-					CFLOAT(d[_tdi].value) = data.fRead(DATA_BINFILE, UCAST(d[0]), UCAST(d[1]), CAST(d[2]));
+					CFLOAT(d[_tdi].value) = Data::data.fRead(DATA_BINFILE, UCAST(d[0]), UCAST(d[1]), CAST(d[2]));
 					d[_tdi].bfloat = true;
 				}
 				break;
 			case SCR_DATASET:
 				if (rv = Copy(&i, 3))
 				{
-					data.iWrite(DATA_BINFILE, UCAST(d[0]), UCAST(d[1]), CAST(d[2]));
+					Data::data.iWrite(DATA_BINFILE, UCAST(d[0]), UCAST(d[1]), CAST(d[2]));
 				}
 				break;
 			case SCR_DATASETf:
 				if (rv = Copy(&i, 3))
 				{
-					data.fWrite(DATA_BINFILE, UCAST(d[0]), UCAST(d[1]), CAST(d[2]));
+					Data::data.fWrite(DATA_BINFILE, UCAST(d[0]), UCAST(d[1]), CAST(d[2]));
 				}
 				break;
 			case SCR_SETFLAG:
 				if (rv = Copy(&i, 2))
 				{
-					data.iWrite(DATA_BINFILE, DATAS_FLAG, UCAST(d[0]), CAST(d[1]));
+					Data::data.iWrite(DATA_BINFILE, DATAS_FLAG, UCAST(d[0]), CAST(d[1]));
 				}
 				break;
 

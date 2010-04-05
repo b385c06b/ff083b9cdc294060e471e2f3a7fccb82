@@ -96,7 +96,9 @@ void Item::Release()
 	for(int i=0;i<ITEMSPRITEMAX;i++)
 	{
 		if(spItem[i])
-			SpriteItemManager::FreeSprite(spItem[i]);
+		{
+			SpriteItemManager::FreeSprite(&spItem[i]);
+		}
 	}
 	mi.clear();
 	infofont.clear();
@@ -168,7 +170,7 @@ void Item::action()
 	if(!bDrained && !(Player::p.flag & PLAYER_COLLAPSE || Player::p.flag & PLAYER_SHOT))
 	{
 		float rdrain = (Player::p.bSlow) ? 64 : 48;
-		if (checkCollisionSquare(Player::p, rdrain))
+		if (checkCollisionSquare(Player::p.x, Player::p.y, rdrain))
 		{
 			bDrained = true;
 			bFast = false;
@@ -224,7 +226,7 @@ void Item::action()
 			y += speed;
 	}
 
-	if (checkCollisionSquare(Player::p, _ITEM_GETR)
+	if (checkCollisionSquare(Player::p.x, Player::p.y, _ITEM_GETR)
 		&& !(Player::p.flag & PLAYER_COLLAPSE)
 		&& !((ID == ITEM_SMALLFAITH || ID == ITEM_FAITH) && timer <= _ITEM_DRAINDELAY))
 	{

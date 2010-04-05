@@ -10,11 +10,11 @@ bool SE::Initial()
 	char buffer[M_STRMAX];
 	for(int i = 0;i < SEMAX;i++)
 	{
-		strcpy(buffer, res.resdata.sefilename[i]);
+		strcpy(buffer, BResource::res.resdata.sefilename[i]);
 		if(!strlen(buffer))
 		{
 			if(i < SE_FREEBEGIN)
-				strcpy(buffer, res.resdata.sefilename[SE_DEFAULT]);
+				strcpy(buffer, BResource::res.resdata.sefilename[SE_DEFAULT]);
 			else
 				continue;
 		}

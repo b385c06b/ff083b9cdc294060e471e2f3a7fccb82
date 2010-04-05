@@ -5,14 +5,14 @@
 
 int Process::processTitle()
 {
-	time++;
-	if(time == 1)
+	gametime++;
+	if(gametime == 1)
 	{
 		reload();
 		Selector::select = titleselect;
 	}
 	retvalue = PGO;
-	scr.controlExecute(STATE_TITLE, time);
+	scr.controlExecute(STATE_TITLE, gametime);
 	titleselect = Selector::select;
 	return retvalue;
 }

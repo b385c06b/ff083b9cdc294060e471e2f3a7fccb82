@@ -46,7 +46,7 @@ void Scripter::FillCustomConstDesc()
 {	
 	if(binmode)
 		return;
-	data.GetTableFile(DATA_CUSTOMCONSTFILE);
+	Data::data.GetTableFile(DATA_CUSTOMCONSTFILE);
 }
 
 bool Scripter::SetValue(int index, void * value, bool bfloat)
@@ -263,16 +263,16 @@ bool Scripter::LoadAll()
 		}
 
 		bincontent = (BYTE *)malloc(SCRIPT_DATAMAX);
-		data.Init(DATA_SCRIPTFILE);
+		Data::data.Init(DATA_SCRIPTFILE);
 
 		BYTE * _content;
 		DWORD _size;
-		hge->Resource_AttachPack(data.scriptfilename, data.password);
-		_content = hge->Resource_Load(data.scrbinname, &_size);
+		hge->Resource_AttachPack(Data::data.scriptfilename, Data::data.password);
+		_content = hge->Resource_Load(Data::data.scrbinname, &_size);
 
 		if(_content)
 		{
-			if(data.CheckMemHeader(_content, _size, DATA_SCRIPTFILE))
+			if(Data::data.CheckMemHeader(_content, _size, DATA_SCRIPTFILE))
 			{
 				memcpy(bincontent, _content, _size);
 				binoffset = _size;
@@ -280,7 +280,7 @@ bool Scripter::LoadAll()
 		}
 		else
 		{
-			BYTE * _header = data.CreateMemHeader(DATA_SCRIPTFILE);
+			BYTE * _header = Data::data.CreateMemHeader(DATA_SCRIPTFILE);
 			memcpy(bincontent, _header, M_BINHEADER_OFFSET);
 			binoffset = M_BINHEADER_OFFSET;
 			free(_header);
@@ -289,13 +289,13 @@ bool Scripter::LoadAll()
 
 		for (int i=0; i<M_SCRIPTFOLDERMAX; i++)
 		{
-			if (strlen(res.resdata.scriptfoldername[i]))
+			if (strlen(BResource::res.resdata.scriptfoldername[i]))
 			{
-				SetCurrentDirectory(hge->Resource_MakePath(res.resdata.scriptfoldername[i]));
+				SetCurrentDirectory(hge->Resource_MakePath(BResource::res.resdata.scriptfoldername[i]));
 				char enumfile[M_PATHMAX];
-				strcpy(enumfile, res.resdata.scriptfoldername[i]);
+				strcpy(enumfile, BResource::res.resdata.scriptfoldername[i]);
 				strcat(enumfile, "*.");
-				strcat(enumfile, res.resdata.scriptextensionname7);
+				strcat(enumfile, BResource::res.resdata.scriptextensionname7);
 
 				char * buffer;
 				buffer = hge->Resource_EnumFiles(enumfile);
@@ -321,10 +321,10 @@ bool Scripter::LoadAll()
 
 		hgeMemoryFile memfile;
 		memfile.data = bincontent;
-		memfile.filename = data.scrbinname;
+		memfile.filename = Data::data.scrbinname;
 		memfile.size = binoffset;
 
-		hge->Resource_CreatePack(data.scriptfilename, data.password, &memfile, NULL);
+		hge->Resource_CreatePack(Data::data.scriptfilename, Data::data.password, &memfile, NULL);
 
 		free(bincontent);
 		bincontent = NULL;
@@ -334,19 +334,19 @@ bool Scripter::LoadAll()
 	{
 		binoffset = M_BINHEADER_OFFSET;
 		
-		hge->Resource_AttachPack(data.scriptfilename, data.password);
-		bincontent = hge->Resource_Load(data.scrbinname, &binsize);
+		hge->Resource_AttachPack(Data::data.scriptfilename, Data::data.password);
+		bincontent = hge->Resource_Load(Data::data.scrbinname, &binsize);
 		if(bincontent)
 		{
-			if(!data.CheckMemHeader(bincontent, binsize, DATA_SCRIPTFILE))
+			if(!Data::data.CheckMemHeader(bincontent, binsize, DATA_SCRIPTFILE))
 			{
-				data.Init(DATA_SCRIPTFILE);
-				hge->Resource_AttachPack(data.scriptfilename, data.password);
-				bincontent = hge->Resource_Load(data.scrbinname, &binsize);
+				Data::data.Init(DATA_SCRIPTFILE);
+				hge->Resource_AttachPack(Data::data.scriptfilename, Data::data.password);
+				bincontent = hge->Resource_Load(Data::data.scrbinname, &binsize);
 			}
 		}
 
-		if(!LoadScript(data.scriptfilename))
+		if(!LoadScript(Data::data.scriptfilename))
 		{
 #ifdef __DEBUG
 			HGELOG("%s\nFailed loading Script Bin File.\n", HGELOG_ERRSTR);
@@ -750,9 +750,9 @@ Token Scripter::GetToken()
 		ret.value = 0;
 		for(int j=0; j<SCR_CUSTOMCONSTMAX; j++)
 		{
-			if(!strcmp(&buffer[1], res.customconstdata[j].name))
+			if(!strcmp(&buffer[1], BResource::res.customconstdata[j].name))
 			{
-				ret.value = res.customconstdata[j].value;
+				ret.value = BResource::res.customconstdata[j].value;
 				break;
 			}
 		}
@@ -764,7 +764,7 @@ Token Scripter::GetToken()
 		bool bIsSIItem = false;
 		for (int j=0; j<SPRITEITEMMAX; j++)
 		{
-			if (!strcmp(&buffer[3], &(res.spritedata[j].spritename[3])))
+			if (!strcmp(&buffer[3], &(BResource::res.spritedata[j].spritename[3])))
 			{
 				ret.value = j;
 				bIsSIItem = true;

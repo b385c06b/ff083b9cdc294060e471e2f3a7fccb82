@@ -11,27 +11,29 @@
 			Name="Debug|Win32">
 			<Tool
 				Name="CppCmplrTool"
-				OptimizeForWindowsApplication="true"
-				DisableSpecificDiagnostics="1786"/>
+				OptimizeForWindowsApplication="true"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32">
 			<Tool
-				Name="CppCmplrTool"
-				Optimization="1000"
-				GlobalOptimizations="true"
-				OptimizeForWindowsApplication="true"
-				ImproveFloatingPointConsistency="1"
-				DisableSpecificDiagnostics="1786"/>
-		</Configuration>
-		<Configuration
-			Name="FinalRelease|Win32">
+				Name="GeneralTool"
+				InterproceduralOptimization="true"/>
 			<Tool
 				Name="CppCmplrTool"
 				GlobalOptimizations="true"
 				OptimizeForWindowsApplication="true"
-				ImproveFloatingPointConsistency="1"
-				DisableSpecificDiagnostics="1786"/>
+				ImproveFloatingPointConsistency="1"/>
+		</Configuration>
+		<Configuration
+			Name="FinalRelease|Win32">
+			<Tool
+				Name="GeneralTool"
+				InterproceduralOptimization="true"/>
+			<Tool
+				Name="CppCmplrTool"
+				GlobalOptimizations="true"
+				OptimizeForWindowsApplication="true"
+				ImproveFloatingPointConsistency="1"/>
 		</Configuration>
 	</Configurations>
 	<Files/>

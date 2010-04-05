@@ -69,7 +69,7 @@ exit:
 		rpy.partFill(0xff);
 		fgpause.exist = false;
 //		musicChange(0);
-		time = 0;
+		gametime = 0;
 		state = STATE_OVER;
 		return PTURN;
 	}

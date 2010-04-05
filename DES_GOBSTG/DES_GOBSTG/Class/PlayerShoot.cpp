@@ -11,7 +11,7 @@ void Player::_Shoot()
 	playershootData * item;
 	for (int i=0; i<PLAYERSHOOTTYPEMAX; i++)
 	{
-		item = &(res.playershootdata[i]);
+		item = &(BResource::res.playershootdata[i]);
 		if (item->timeMod)
 		{
 			if (item->userID == nowID && item->timeMod && (item->timeMod == 1 || !(shoottimer % item->timeMod)))

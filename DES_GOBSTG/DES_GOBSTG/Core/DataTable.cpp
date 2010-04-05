@@ -34,9 +34,9 @@ bool Data::GetTableFile(BYTE type)
 	switch (type)
 	{
 	case DATA_CUSTOMCONSTFILE:
-		res.ReleaseCustomConst();
-		res.customconstdata = (customconstData *)malloc(RSIZE_CUSTOMCONST);
-		ZeroMemory(res.customconstdata, RSIZE_CUSTOMCONST);
+		BResource::res.ReleaseCustomConst();
+		BResource::res.customconstdata = (customconstData *)malloc(RSIZE_CUSTOMCONST);
+		ZeroMemory(BResource::res.customconstdata, RSIZE_CUSTOMCONST);
 		fscanf(file, "%s%s%s", 
 			buffer, buffer, buffer);
 		while (!feof(file))
@@ -46,7 +46,7 @@ bool Data::GetTableFile(BYTE type)
 			{
 				break;
 			}
-			customconstData * item = &(res.customconstdata[tindex]);
+			customconstData * item = &(BResource::res.customconstdata[tindex]);
 			fscanf(file, "%s%d", 
 				item->name, 
 				&(item->value));
@@ -57,7 +57,7 @@ bool Data::GetTableFile(BYTE type)
 		}
 		break;
 	case DATA_SPELLDEFINEFILE:
-		res.spelldata.clear();
+		BResource::res.spelldata.clear();
 		fscanf(file, "%s%s%s%s%s%s%s%s%s%s", 
 			buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer);
 		while (!feof(file))
@@ -84,7 +84,7 @@ bool Data::GetTableFile(BYTE type)
 			_item.userID = tint[2];
 			_item.spellflag = tint[3];
 			_item.battleID = tint[4];
-			res.spelldata.push_back(_item);
+			BResource::res.spelldata.push_back(_item);
 			if (feof(file))
 			{
 				break;
@@ -92,13 +92,13 @@ bool Data::GetTableFile(BYTE type)
 		}
 		break;
 	case DATA_MUSICDEFINEFILE:
-		ZeroMemory(res.musdata, RSIZE_MUSIC);
+		ZeroMemory(BResource::res.musdata, RSIZE_MUSIC);
 		fscanf(file, "%s%s%s%s%s%s%s%s%s%s", 
 			buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer);
 		while (!feof(file))
 		{
 			fscanf(file, "%d", &tindex);
-			musicData * item = &(res.musdata[tindex]);
+			musicData * item = &(BResource::res.musdata[tindex]);
 			if (feof(file))
 			{
 				break;
@@ -120,13 +120,13 @@ bool Data::GetTableFile(BYTE type)
 		}
 		break;
 	case DATA_BULLETDEFINEFILE:
-		ZeroMemory(res.bulletdata, RSIZE_BULLET);
+		ZeroMemory(BResource::res.bulletdata, RSIZE_BULLET);
 		fscanf(file, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s", 
 			buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer);
 		while (!feof(file))
 		{
 			fscanf(file, "%d", &tindex);
-			bulletData * item = &(res.bulletdata[tindex]);
+			bulletData * item = &(BResource::res.bulletdata[tindex]);
 			if (feof(file))
 			{
 				break;
@@ -162,13 +162,13 @@ bool Data::GetTableFile(BYTE type)
 		}
 		break;
 	case DATA_ENEMYDEFINEFILE:
-		ZeroMemory(res.enemydata, RSIZE_ENEMY);
+		ZeroMemory(BResource::res.enemydata, RSIZE_ENEMY);
 		fscanf(file, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s", 
 			buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer);
 		while (!feof(file))
 		{
 			fscanf(file, "%d", &tindex);
-			enemyData * item = &(res.enemydata[tindex]);
+			enemyData * item = &(BResource::res.enemydata[tindex]);
 			if (feof(file))
 			{
 				break;
@@ -216,13 +216,13 @@ bool Data::GetTableFile(BYTE type)
 		}
 		break;
 	case DATA_PLAYERDEFINEFILE:
-		ZeroMemory(res.playerdata, RSIZE_PLAYER);
+		ZeroMemory(BResource::res.playerdata, RSIZE_PLAYER);
 		fscanf(file, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s", 
 			buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer);
 		while (!feof(file))
 		{
 			fscanf(file, "%d", &tindex);
-			playerData * item = &(res.playerdata[tindex]);
+			playerData * item = &(BResource::res.playerdata[tindex]);
 			if (feof(file))
 			{
 				break;
@@ -269,7 +269,7 @@ bool Data::GetTableFile(BYTE type)
 		}
 		break;
 	case DATA_SPRITEDEFINEFILE:
-		ZeroMemory(res.spritedata, RSIZE_SPRITE);
+		ZeroMemory(BResource::res.spritedata, RSIZE_SPRITE);
 		fscanf(file, "%s%s%s%s%s%s%s", 
 			buffer, buffer, buffer, buffer, buffer, buffer, buffer);
 		while (!feof(file))
@@ -279,7 +279,7 @@ bool Data::GetTableFile(BYTE type)
 			{
 				break;
 			}
-			spriteData * item = &(res.spritedata[tindex]);
+			spriteData * item = &(BResource::res.spritedata[tindex]);
 			fscanf(file, "%s%d%d%d%d%d", 
 				item->spritename, 
 				&(tint[0]), 
@@ -296,7 +296,7 @@ bool Data::GetTableFile(BYTE type)
 		break;
 
 	case DATA_PLAYERBULLETDEFINE:
-		ZeroMemory(res.playerbulletdata, RSIZE_PLAYERBULLET);
+		ZeroMemory(BResource::res.playerbulletdata, RSIZE_PLAYERBULLET);
 		fscanf(file, "%s%s%s%s%s%s", 
 			buffer, buffer, buffer, buffer, buffer, buffer);
 		while (!feof(file))
@@ -306,7 +306,7 @@ bool Data::GetTableFile(BYTE type)
 			{
 				break;
 			}
-			playerbulletData * item = &(res.playerbulletdata[tindex]);
+			playerbulletData * item = &(BResource::res.playerbulletdata[tindex]);
 			fscanf(file, "%d%f%f%f%f", 
 				&(tint[0]), 
 				&(item->x), 
@@ -321,7 +321,7 @@ bool Data::GetTableFile(BYTE type)
 		}
 		break;
 	case DATA_PLAYERSHOOTDEFINE:
-		ZeroMemory(res.playershootdata, RSIZE_PLAYERSHOOT);
+		ZeroMemory(BResource::res.playershootdata, RSIZE_PLAYERSHOOT);
 		fscanf(file, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s", 
 			buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer);
 		while (!feof(file))
@@ -331,7 +331,7 @@ bool Data::GetTableFile(BYTE type)
 			{
 				break;
 			}
-			playershootData * item = &(res.playershootdata[tindex]);
+			playershootData * item = &(BResource::res.playershootdata[tindex]);
 			fscanf(file, "%d%d%d%x%f%d%d%d%f%f%f%f%f%d", 
 				&(tint[0]), 
 				&(tint[1]), 
@@ -360,7 +360,7 @@ bool Data::GetTableFile(BYTE type)
 		}
 		break;
 	case DATA_PLAYERGHOSTDEFINE:
-		ZeroMemory(res.playerghostdata, RSIZE_PLAYERGHOST);
+		ZeroMemory(BResource::res.playerghostdata, RSIZE_PLAYERGHOST);
 		fscanf(file, "%s%s%s%s%s%s%s%s%s%s", 
 			buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer, buffer);
 		while (!feof(file))
@@ -370,7 +370,7 @@ bool Data::GetTableFile(BYTE type)
 			{
 				break;
 			}
-			playerghostData * item = &(res.playerghostdata[tindex]);
+			playerghostData * item = &(BResource::res.playerghostdata[tindex]);
 			fscanf(file, "%d%f%f%f%x%d%f%d%d", 
 				&(item->siID), 
 				&(item->xadj), 

@@ -134,7 +134,7 @@ void Enemy::valueSet(WORD _ID, float _x, float _y, int _angle, float _speed, BYT
 	vscale	=	1.0f;
 	alpha	=	0xff;
 	diffuse	=	0xffffff;
-	faceindex = res.enemydata[type].faceIndex;
+	faceindex = BResource::res.enemydata[type].faceIndex;
 
 	if (type >= ENEMY_BOSSTYPEBEGIN)
 	{
@@ -160,7 +160,7 @@ void Enemy::valueSet(WORD _ID, float _x, float _y, int _angle, float _speed, BYT
 		sprite = new hgeSprite(texmain, 0, 0, 32, 32);
 	if(type >= ENEMY_BOSSTYPEBEGIN)
 	{
-		sprite->SetTexture(mp.tex[res.enemydata[type].tex]);
+		sprite->SetTexture(mp.tex[BResource::res.enemydata[type].tex]);
 	}
 	else
 	{
@@ -192,7 +192,7 @@ void Enemy::matchAction()
 		//¿¿½üÖ÷½Ç
 		if(timer < para[0])
 		{
-			angle = aMainAngle(Player::p);
+			angle = aMainAngle(Player::p.x, Player::p.y);
 			speed *= para[1]/1000.0f;
 		}
 		else
@@ -279,7 +279,7 @@ void Enemy::matchAction()
 		else if(timer < para[2])
 		{
 			speed += 0.06f;
-			angle = aMainAngle(Player::p);
+			angle = aMainAngle(Player::p.x, Player::p.y);
 		}
 		break;
 
@@ -370,7 +370,7 @@ void Enemy::updateFrame(BYTE frameenum, int usetimer /* = -1*/)
 	{
 		return;
 	}
-	enemyData * pdata = &(res.enemydata[type]);
+	enemyData * pdata = &(BResource::res.enemydata[type]);
 	frameoffset++;
 	BYTE tbyte;
 	switch (nowstate)
@@ -529,7 +529,7 @@ void Enemy::updateFrameAsMove()
 
 void Enemy::bossAction()
 {
-	enemyData * pdata = &(res.enemydata[type]);
+	enemyData * pdata = &(BResource::res.enemydata[type]);
 	if(timer < ENEMY_BOSSINFITIMER)
 		defrate = 1.0f;
 	else if(timer == ENEMY_BOSSINFITIMER)
@@ -609,7 +609,7 @@ void Enemy::bossAction()
 
 void Enemy::initFrameIndex()
 {
-	enemyData * pdata = &(res.enemydata[type]);
+	enemyData * pdata = &(BResource::res.enemydata[type]);
 	int tfi = pdata->startFrame;
 	frameindex[ENEMY_FRAME_STAND] = tfi;
 
@@ -671,7 +671,7 @@ void Enemy::initFrameIndex()
 BYTE Enemy::getFrameIndex(BYTE frameenum)
 {
 	flipx = false;
-	enemyData * pdata = &(res.enemydata[type]);
+	enemyData * pdata = &(BResource::res.enemydata[type]);
 	if ((frameenum == ENEMY_FRAME_RIGHTPRE || frameenum == ENEMY_FRAME_RIGHT) && (!pdata->rightPreFrame) ||
 		(frameenum == ENEMY_FRAME_LEFTPRE || frameenum == ENEMY_FRAME_LEFT) && (!pdata->leftPreFrame))
 	{
@@ -689,7 +689,7 @@ void Enemy::setFrame(BYTE frameenum)
 
 void Enemy::setIndexFrame(BYTE index)
 {
-	enemyData * pdata = &(res.enemydata[type]);
+	enemyData * pdata = &(BResource::res.enemydata[type]);
 	float tw = pdata->usetexw / (pdata->tex_nCol);
 	float th = pdata->usetexh / (pdata->tex_nRow);
 	float ltx = tw * (index % (pdata->tex_nCol));
@@ -700,8 +700,8 @@ void Enemy::setIndexFrame(BYTE index)
 
 void Enemy::GetCollisionRect(float * w, float * h)
 {
-	*w = res.enemydata[type].collision_w;
-	*h = res.enemydata[type].collision_h;
+	*w = BResource::res.enemydata[type].collision_w;
+	*h = BResource::res.enemydata[type].collision_h;
 }
 
 void Enemy::CostLife(float power)
@@ -905,7 +905,7 @@ void Enemy::action()
 		GetCollisionRect(&tw, &th);
 		if (!Player::p.bInfi && !Player::p.bBomb && !Player::p.bBorder)
 		{
-			if (checkCollisionSquare(Player::p, tw, th))
+			if (checkCollisionSquare(Player::p.x, Player::p.y, tw, th))
 			{
 				Player::p.DoShot();
 			}

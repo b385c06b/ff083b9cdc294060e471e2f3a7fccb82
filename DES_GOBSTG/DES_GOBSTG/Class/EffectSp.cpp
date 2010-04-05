@@ -43,7 +43,9 @@ void EffectSp::valueSet(BYTE _type, float _x, float _y, int _angle, float _speed
 	headangle = 0;
 
 	if(sprite)
-		SpriteItemManager::FreeSprite(sprite);
+	{
+		SpriteItemManager::FreeSprite(&sprite);
+	}
 
 	colorSet(0xffffff);
 

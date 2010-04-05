@@ -5,7 +5,7 @@
 
 extern HGE * hge;
 
-extern int time;
+extern int gametime;
 
 extern Target tar[TARGETMAX];
 

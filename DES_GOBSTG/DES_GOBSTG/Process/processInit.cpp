@@ -13,8 +13,8 @@ rebuild:
 		}
 		DeleteFile(CONFIG_STR_FILENAME);
 
-		hge->	Ini_SetInt(data.translateSection(data.sLinkType(DATAS_HEADER)), data.translateName(data.nLinkType(DATAN_GAMEVERSION)), GAME_VERSION);
-		hge->	Ini_SetString(data.translateSection(data.sLinkType(DATAS_HEADER)), data.translateName(data.nLinkType(DATAN_SIGNATURE)), GAME_SIGNATURE);
+		hge->	Ini_SetInt(Data::data.translateSection(Data::data.sLinkType(DATAS_HEADER)), Data::data.translateName(Data::data.nLinkType(DATAN_GAMEVERSION)), GAME_VERSION);
+		hge->	Ini_SetString(Data::data.translateSection(Data::data.sLinkType(DATAS_HEADER)), Data::data.translateName(Data::data.nLinkType(DATAN_SIGNATURE)), GAME_SIGNATURE);
 
 		hge->	Ini_SetString(RESCONFIGS_RESOURCE, RESCONFIGN_RESOURCEFILE, RESCONFIGDEFAULT_RESOURCEFILE);
 		hge->	Ini_SetString(RESCONFIGS_RESOURCE, RESCONFIGN_RESBINNAME, RESCONFIGDEFAULT_RESBINNAME);
@@ -95,7 +95,7 @@ rebuild:
 
 	//
 
-	if(hge->Ini_GetInt(data.translateSection(data.sLinkType(DATAS_HEADER)), data.translateName(data.nLinkType(DATAN_GAMEVERSION)), -1) != GAME_VERSION)
+	if(hge->Ini_GetInt(Data::data.translateSection(Data::data.sLinkType(DATAS_HEADER)), Data::data.translateName(Data::data.nLinkType(DATAN_GAMEVERSION)), -1) != GAME_VERSION)
 		goto rebuild;
 	for (int i=0; i<13; i++)
 	{
@@ -147,9 +147,9 @@ rebuild:
 
 int Process::processInit()
 {
-	time++;
+	gametime++;
 
-	if (time == 1)
+	if (gametime == 1)
 	{
 		return processPreInitial();
 	}
@@ -163,11 +163,11 @@ int Process::processInit()
 
 	bool binmode = Export::GetResourceFile();
 
-	data.GetIni();
+	Data::data.GetIni();
 
 	if(binmode)
 	{
-		data.binmode = true;
+		Data::data.binmode = true;
 		scr.binmode = true;
 #ifdef __RELEASE
 //		hge->System_SetState(HGE_LOGFILE, "");
@@ -175,7 +175,7 @@ int Process::processInit()
 	}
 	else
 	{
-		if(!res.Fill())
+		if(!BResource::res.Fill())
 		{
 #ifdef __DEBUG
 			HGELOG("Error in Filling Resource Data.");
@@ -188,7 +188,7 @@ int Process::processInit()
 			errorcode = PROC_ERROR_SCRIPT;
 			return PQUIT;
 		}
-		if(!res.Pack(strdesc, res.customconstdata))
+		if(!BResource::res.Pack(strdesc, BResource::res.customconstdata))
 		{
 #ifdef __DEBUG
 			HGELOG("Error in Packing Resource Data.");
@@ -196,13 +196,13 @@ int Process::processInit()
 			errorcode = PROC_ERROR_TRANSLATE;
 			return PQUIT;
 		}
-		if(!res.SetDataFile())
+		if(!BResource::res.SetDataFile())
 		{
 			errorcode = PROC_ERROR_DATA;
 			return PQUIT;
 		}
 	}
-	if(!res.Gain(strdesc, binmode?res.customconstdata:NULL))
+	if(!BResource::res.Gain(strdesc, binmode?BResource::res.customconstdata:NULL))
 	{
 #ifdef __DEBUG
 		HGELOG("Error in Gaining Resource Data.");
@@ -215,7 +215,7 @@ int Process::processInit()
 		errorcode = PROC_ERROR_SCRIPT;
 		return PQUIT;
 	}
-	if(!data.SetFile(Export::resourcefilename, DATA_RESOURCEFILE))
+	if(!Data::data.SetFile(Export::resourcefilename, DATA_RESOURCEFILE))
 	{
 #ifdef __DEBUG
 		HGELOG("Error in Setting Resource File");
@@ -224,7 +224,7 @@ int Process::processInit()
 		return PQUIT;
 	}
 
-	if(!res.LoadPackage())
+	if(!BResource::res.LoadPackage())
 	{
 		errorcode = PROC_ERROR_PACKAGE;
 		return PQUIT;
@@ -246,10 +246,10 @@ int Process::processInit()
 			hge->Texture_Free(tex[i]);
 		tex[i] = NULL;
 
-		strcpy(tnbuffer, res.resdata.texfilename[i]);
+		strcpy(tnbuffer, BResource::res.resdata.texfilename[i]);
 		if(!strlen(tnbuffer))
 		{
-			strcpy(tnbuffer, res.resdata.texfilename[TEX_WHITE]);
+			strcpy(tnbuffer, BResource::res.resdata.texfilename[TEX_WHITE]);
 		}
 
 		tex[i] = hge->Texture_Load(tnbuffer);
@@ -267,24 +267,24 @@ int Process::processInit()
 #endif
 	}
 
-	tex[TEX_WORD] = hge->Texture_Load(res.resdata.texfilename[TEX_WORD]);
+	tex[TEX_WORD] = hge->Texture_Load(BResource::res.resdata.texfilename[TEX_WORD]);
 #ifdef __DEBUG
 	if(tex[TEX_WORD] == NULL)
 	{
-		HGELOG("%s\nFailed in loading Texture File %s.(To be assigned to Index %d).", HGELOG_ERRSTR, res.resdata.texfilename[TEX_WORD], TEX_WORD);
+		HGELOG("%s\nFailed in loading Texture File %s.(To be assigned to Index %d).", HGELOG_ERRSTR, BResource::res.resdata.texfilename[TEX_WORD], TEX_WORD);
 		errorcode = PROC_ERROR_TEXTURE;
 		return PQUIT;
 	}
 	else
 	{
-		HGELOG("Succeeded in loading Texture File %s.(Assigned to Index %d).", res.resdata.texfilename[TEX_WORD], TEX_WORD);
+		HGELOG("Succeeded in loading Texture File %s.(Assigned to Index %d).", BResource::res.resdata.texfilename[TEX_WORD], TEX_WORD);
 	}
 #endif
 
 	SpriteItemManager::Init(tex);
 
 	Fontsys::Init();
-	if(!Effectsys::Init(tex, res.resdata.effectsysfoldername, res.resdata.effectsysfilename))
+	if(!Effectsys::Init(tex, BResource::res.resdata.effectsysfoldername, BResource::res.resdata.effectsysfilename))
 	{
 #ifdef __DEBUG
 		HGELOG("%s\nFailed in Initializing Effectsys.", HGELOG_ERRSTR);
@@ -324,7 +324,7 @@ int Process::processInit()
 	playing = false;
 	playtimeStart = 0;
 
-	time = 0;
+	gametime = 0;
 	state = STATE_TITLE;
 	return PTURN;
 }

@@ -46,9 +46,10 @@ public:
 	playershootData playershootdata[PLAYERSHOOTTYPEMAX];
 	playerghostData playerghostdata[PLAYERGHOSTTYPEMAX];
 	customconstData * customconstdata;
+
+	static BResource res;
 };
 
-extern BResource res;
 extern HGE * hge;
 
 #endif

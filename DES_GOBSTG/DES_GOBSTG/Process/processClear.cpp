@@ -13,7 +13,7 @@
 int Process::processClear()
 {
 	processStart();
-	if(time == 1)
+	if(gametime == 1)
 	{
 		frameskip = M_DEFAULT_FRAMESKIP;
 
@@ -51,12 +51,12 @@ int Process::processClear()
 		fdisp.SetState(FDISP_NEXTSTAGE, _PCLEAR_FDISP_TIME);
 	}
 
-	if (time == _PCLEAR_FDIPS_CANCELTIME)
+	if (gametime == _PCLEAR_FDIPS_CANCELTIME)
 	{
 //		musicChange(0, true);
 	}
 
-	if(time > _PCLEAR_FDISP_TIME /*&& !replaymode*/ || time > _PCLEAR_FDIPS_CANCELTIME && hge->Input_GetDIKey(KS_FIRE, DIKEY_DOWN))
+	if(gametime > _PCLEAR_FDISP_TIME /*&& !replaymode*/ || gametime > _PCLEAR_FDIPS_CANCELTIME && hge->Input_GetDIKey(KS_FIRE, DIKEY_DOWN))
 	{
 		fdisp.SetState(FDISP_NEXTSTAGE, 0);
 		fgpause.exist = false;
@@ -79,7 +79,7 @@ int Process::processClear()
 			}
 			else
 			{
-				tpart = data.getStage(scene) - 1;
+				tpart = Data::data.getStage(scene) - 1;
 			}
 		}
 
@@ -88,7 +88,7 @@ int Process::processClear()
 			seed = timeGetTime();
 			rpy.partFill(tpart);
 		}
-		time = 0;
+		gametime = 0;
 		if (!replaymode)
 		{
 			if (practicemode)

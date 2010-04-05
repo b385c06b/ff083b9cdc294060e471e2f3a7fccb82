@@ -210,7 +210,7 @@ void Ghost::action()
 
 		if(Player::p.bBorder)
 		{
-			if (checkCollisionSquare(Player::p, GHOST_COLLISIONR))
+			if (checkCollisionSquare(Player::p.x, Player::p.y, GHOST_COLLISIONR))
 			{
 				Player::p.DoShot();
 			}

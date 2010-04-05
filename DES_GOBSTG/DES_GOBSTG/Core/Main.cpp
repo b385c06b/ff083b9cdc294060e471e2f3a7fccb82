@@ -11,7 +11,7 @@ Target tar[TARGETMAX];
 
 HGE *hge = NULL;
 
-int time = 0;
+int gametime = 0;
 
 DWORD strdescIndex = 0;
 
@@ -61,7 +61,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	if(hge->System_Initiate())
 	{
-		time = 0;
+		gametime = 0;
 		mp.state = STATE_INIT;
 		hge->System_Start();
 	}

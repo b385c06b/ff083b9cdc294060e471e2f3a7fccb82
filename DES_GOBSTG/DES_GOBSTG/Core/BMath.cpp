@@ -9050,5 +9050,61 @@ void srandt(int seed)
 int randt()
 {
 	g_myseed=214013*g_myseed+2531011;
-	return (g_myseed ^ g_myseed>>15)%(36000);
+	return (g_myseed ^ g_myseed>>15)%(RAND_MAX);
+}
+
+int randts(int * seed)
+{
+	(*seed) = 214013*(*seed)+2531011;
+	return ((*seed) ^ (*seed)>>15)%(RAND_MAX);
+}
+
+int randt(int imin, int imax, int *seed)
+{
+	int iret;
+	if (!seed)
+	{
+		iret = randt();
+	}
+	else
+	{
+		iret = randts(seed);
+	}
+	imax++;
+	if (imax - imin >= RAND_MAX)
+	{
+		iret = ((long)iret) * (imax-imin) / RAND_MAX + imin;
+	}
+	else if (imax != imin)
+	{
+		iret = iret % (imax-imin) + imin;
+	}
+	else
+	{
+		iret = imin;
+	}
+	return iret;
+}
+
+float randtf(float fmin, float fmax, int *seed)
+{
+	int irand;
+	if (!seed)
+	{
+		irand = randt();
+	}
+	else
+	{
+		irand = randts(seed);
+	}
+	float fret = irand / (float)(RAND_MAX);
+	if (fmax != fmin)
+	{
+		fret = irand * (double)(fmax-fmin) / RAND_MAX + fmin;
+	}
+	else
+	{
+		fret = fmin;
+	}
+	return fret;
 }

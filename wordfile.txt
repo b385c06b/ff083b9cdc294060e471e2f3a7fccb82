@@ -2,14 +2,15 @@
 /L13"Lua" Line Comment = -- Block Comment On = --[[ Block Comment Off = ]] String Chars = "' File Extensions = LUA
 /Delimiters = ~!@%^&*()-+=|\/{}[]:;"'<> ,	.?
 /Function String = "%[a-zA-Z]*)"
-/Open Brace Strings =  "function","if","elseif","for","{"
-/Close Brace Strings = "end","}"
-/Open Fold Strings = "function","if","elseif","for","{"
-/Close Fold Strings = "end","}"
-/Indent Strings = "function","if","elseif","for","{"
-/Unindent Strings = "end","}"
+/Open Brace Strings =  "function","if","{","then","elseif","else","while","do","repeat"
+/Close Brace Strings = "end","}","elseif","else","until"
+/Open Fold Strings = "function","if","{","elseif","else","while","do","repeat"
+/Close Fold Strings = "end","}","elseif","else","until"
+/Indent Strings = "function","if","{","then","else","while","do","repeat"
+/Unindent Strings = "end","}","elseif","else","until"
 /C1 "key words"
 and
+break
 do
 else elseif end
 for function
@@ -90,6 +91,35 @@ unescape
 /C8
 ** LuaFn_
 DBClose DBExec DBOpen DBRow
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /L20"DES_GOBSTG" Line Comment = // Block Comment On = /* Block Comment Off = */ Escape Char = \ String Chars = "' File Extensions = SCRIPT

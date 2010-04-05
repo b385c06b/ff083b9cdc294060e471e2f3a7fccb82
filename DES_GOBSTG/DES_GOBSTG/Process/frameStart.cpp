@@ -9,7 +9,7 @@ void Process::frameStart()
 	{
 		if (!(stopflag & FRAME_STOPFLAG_ENEMYSET))
 		{
-			time++;
+			gametime++;
 		}
 	}
 	if(!replaymode)
@@ -55,9 +55,9 @@ void Process::frameStart()
 				hge->Input_SetDIKey(KS_SLOW);
 		}
 	}
-	if(time == 1)
+	if(gametime == 1)
 	{
-		if(data.getSpellNumber(scene) > 0)
+		if(Data::data.getSpellNumber(scene) > 0)
 		{
 			DataConnector::Meet();
 		}

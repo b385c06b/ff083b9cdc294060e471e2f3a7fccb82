@@ -171,13 +171,13 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 			case SCR_GHAMAP:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				idesc[i] = gh[Ghost::index].aMainAngle(Player::p, _tdi);
+				idesc[i] = gh[Ghost::index].aMainAngle(Player::p.x, Player::p.y, _tdi);
 				d[i].bfloat = false;
 				break;
 			case SCR_GHRMAP:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				idesc[i] = gh[Ghost::index].rMainAngle(Player::p, _tdi);
+				idesc[i] = gh[Ghost::index].rMainAngle(Player::p.x, Player::p.y, _tdi);
 				d[i].bfloat = false;
 				break;
 			case SCR_GHAIMX:
@@ -231,13 +231,13 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 			case SCR_ENAMAP:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				idesc[i] = en[Enemy::index].aMainAngle(Player::p, _tdi);
+				idesc[i] = en[Enemy::index].aMainAngle(Player::p.x, Player::p.y, _tdi);
 				d[i].bfloat = false;
 				break;
 			case SCR_ENRMAP:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				idesc[i] = en[Enemy::index].rMainAngle(Player::p, _tdi);
+				idesc[i] = en[Enemy::index].rMainAngle(Player::p.x, Player::p.y, _tdi);
 				d[i].bfloat = false;
 				break;
 			case SCR_ENAIMX:
@@ -363,7 +363,7 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 				d[i].bfloat = true;
 				break;
 			case SCR_TIME:
-				idesc[i] = time;
+				idesc[i] = gametime;
 				d[i].bfloat = false;
 				break;
 			case SCR_NOWNAME:
@@ -381,25 +381,25 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 				break;
 			case SCR_SNOSTAGE:
 				_tdi = CINT(Value(&(*p), i, 0));
-				idesc[i] = data.getStage(_tdi);
+				idesc[i] = Data::data.getStage(_tdi);
 				d[i].bfloat = false;
 				break;
 			case SCR_SNODIFFI:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				idesc[i] = data.getDiffi(_tdi);
+				idesc[i] = Data::data.getDiffi(_tdi);
 				d[i].bfloat = false;
 				break;
 			case SCR_SNOBATTLE:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				idesc[i] = data.getBattle(_tdi);
+				idesc[i] = Data::data.getBattle(_tdi);
 				d[i].bfloat = false;
 				break;
 			case SCR_SNOUSER:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				idesc[i] = data.getSpellUser(_tdi);
+				idesc[i] = Data::data.getSpellUser(_tdi);
 				d[i].bfloat = false;
 				break;
 			case SCR_CHARA:
@@ -486,38 +486,38 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 			case SCR_GETFLAG:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				idesc[i] = data.iRead(DATA_BINFILE, DATAS_FLAG, _tdi, 0);
+				idesc[i] = Data::data.iRead(DATA_BINFILE, DATAS_FLAG, _tdi, 0);
 				d[i].bfloat = false;
 				break;
 
 			case SCR_PLAYERNAME:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				CUINT(&idesc[i]) = (DWORD)data.getPlayerName(_tdi);
+				CUINT(&idesc[i]) = (DWORD)Data::data.getPlayerName(_tdi);
 				d[i].bfloat = true;/*Specialized for Handle*/
 				break;
 			case SCR_ENEMYNAME:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				CUINT(&idesc[i]) = (DWORD)data.getEnemyName(_tdi);
+				CUINT(&idesc[i]) = (DWORD)Data::data.getEnemyName(_tdi);
 				d[i].bfloat = true;/*Specialized for Handle*/
 				break;
 			case SCR_SPELLNAME:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				CUINT(&idesc[i]) = (DWORD)data.getSpellName(_tdi);
+				CUINT(&idesc[i]) = (DWORD)Data::data.getSpellName(_tdi);
 				d[i].bfloat = true;/*Specialized for Handle*/
 				break;
 			case SCR_SPELLUSERNAME:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				CUINT(&idesc[i]) = (DWORD)data.getSpellUserName(_tdi);
+				CUINT(&idesc[i]) = (DWORD)Data::data.getSpellUserName(_tdi);
 				d[i].bfloat = true;/*Specialized for Handle*/
 				break;
 			case SCR_SPELLUSERENAME:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				CUINT(&idesc[i]) = (DWORD)data.getSpellUserEName(_tdi);
+				CUINT(&idesc[i]) = (DWORD)Data::data.getSpellUserEName(_tdi);
 				d[i].bfloat = true;/*Specialized for Handle*/
 				break;
 			}

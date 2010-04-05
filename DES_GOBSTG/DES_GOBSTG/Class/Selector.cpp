@@ -64,7 +64,9 @@ void Selector::valueSet(BYTE _ID, int siID, float cenx, float ceny, float _hscal
 	flag	=	SEL_NONE;
 
 	if(sprite)
-		SpriteItemManager::FreeSprite(sprite);
+	{
+		SpriteItemManager::FreeSprite(&sprite);
+	}
 	sprite = SpriteItemManager::CreateSprite(siID);
 
 	alpha = 0xff;
@@ -456,10 +458,10 @@ void Selector::action()
 		switch (tindex)
 		{
 		case SELINFO_NONE:
-			alpha = ROLL(time, 0x3f) + 0x80;
+			alpha = ROLL(gametime, 0x3f) + 0x80;
 			break;
 		case SELINFO_OVER:
-			alpha = ROLL(time, 0x3f) / 0x10 + 0xf0;
+			alpha = ROLL(gametime, 0x3f) / 0x10 + 0xf0;
 			break;
 		case SELINFO_ENTER:
 			alpha = 0xff;

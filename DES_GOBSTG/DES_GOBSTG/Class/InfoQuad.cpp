@@ -1,5 +1,4 @@
-#include "../Header/InfoQuad.h"
-#include "../Header/Player.h"
+#include "../header/InfoQuad.h"
 
 HTEXTURE InfoQuad::tex;
 
@@ -9,6 +8,11 @@ InfoQuad::InfoQuad()
 
 InfoQuad::~InfoQuad()
 {
+}
+
+void InfoQuad::Init(HTEXTURE _tex)
+{
+	tex = _tex;
 }
 
 void InfoQuad::valueSet(

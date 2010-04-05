@@ -117,7 +117,7 @@ void Process::startPrep(bool callinit)
 		rpy.Load(rpyfilename, true);
 		BYTE part = 0;
 		if(scene < S1200)
-			part = data.getStage(scene) - 1;
+			part = Data::data.getStage(scene) - 1;
 		/*
 		else
 			part = RPYPARTMAX - 1;
@@ -149,7 +149,7 @@ void Process::startPrep(bool callinit)
 	//set
 
 	startscene = scene;
-	nowdifflv = data.getDiffi(scene);
+	nowdifflv = Data::data.getDiffi(scene);
 	if(!practicemode)
 	{
 		Player::p.valueSet(mainchara, subchara_1, subchara_2);
@@ -189,7 +189,7 @@ void Process::startPrep(bool callinit)
 	{
 		BYTE part = 0;
 		if(scene < S1200)
-			part = data.getStage(scene) - 1;
+			part = Data::data.getStage(scene) - 1;
 		if (part)
 		{
 			Player::p.nScore = rpy.partinfo[part].nowscore;
@@ -213,7 +213,7 @@ void Process::startPrep(bool callinit)
 	stoptimer = 0;
 
 	framecounter = 0;
-	time = 0;
+	gametime = 0;
 	alltime = 0;
 
 	if (callinit)

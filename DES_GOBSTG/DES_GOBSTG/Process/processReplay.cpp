@@ -12,30 +12,30 @@
 
 int Process::processReplay()
 {
-	time++;
+	gametime++;
 
 	static Replay _rpy[RPYENUMMAX];
 	static char _rpyfilename[RPYENUMMAX][M_PATHMAX];
 
-	if(time == 1)
+	if(gametime == 1)
 	{
 		PushKey::SetPushEvent(PUSHKEY_ID_UIUSE, KS_LEFT, KS_RIGHT);
 		scr.SetIntValue(SCR_RESERVEBEGIN, 0);
 		scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);
 		scr.SetIntValue(SCR_RESERVEBEGIN+2, 0);
 
-		SetCurrentDirectory(hge->Resource_MakePath(res.resdata.replayfoldername));
+		SetCurrentDirectory(hge->Resource_MakePath(BResource::res.resdata.replayfoldername));
 		char * buffer;
 		char enumfile[M_STRMAX];
-		strcpy(enumfile, res.resdata.replayfoldername);
+		strcpy(enumfile, BResource::res.resdata.replayfoldername);
 		strcat(enumfile, "*.");
-		strcat(enumfile, res.resdata.replayextensionname7);
+		strcat(enumfile, BResource::res.resdata.replayextensionname7);
 		buffer = hge->Resource_EnumFiles(enumfile);
 
 		int tnrpys = 0;
 		while(buffer != NULL && tnrpys < RPYENUMMAX)
 		{
-			if(strlen(buffer) < 4+RPYFILENAME_CONTENTMAX+1+strlen(res.resdata.replayextensionname7)+1)
+			if(strlen(buffer) < 4+RPYFILENAME_CONTENTMAX+1+strlen(BResource::res.resdata.replayextensionname7)+1)
 			{
 				strcpy(_rpyfilename[tnrpys], buffer);
 
@@ -52,7 +52,7 @@ int Process::processReplay()
 		InfoSelect::select = 0;
 	}
 
-	scr.controlExecute(STATE_REPLAY, time);
+	scr.controlExecute(STATE_REPLAY, gametime);
 
 	//-> pushtimer page depth index nrpys rpydifflv
 	int tdepth = scr.GetIntValue(SCR_RESERVEBEGIN);
@@ -68,7 +68,7 @@ int Process::processReplay()
 			Replay::Free(_rpyfilename[i]);
 		}
 		SetCurrentDirectory(hge->Resource_MakePath(""));
-		time = 0;
+		gametime = 0;
 		state = STATE_TITLE;
 		return PTURN;
 	}
@@ -97,7 +97,7 @@ int Process::processReplay()
 				if(_rpy[tindex].rpyinfo.modeflag & M_RPYMODE_SPELL)
 				{
 					strcat(_ifs[i].info, M_STAGESTR_PRE);
-					_ifs[i].linki("|21519", data.getSpellNumber(_rpy[tindex].rpyinfo.startscene));
+					_ifs[i].linki("|21519", Data::data.getSpellNumber(_rpy[tindex].rpyinfo.startscene));
 					_ifs[i].coltype = INFO_RED;
 				}
 				else
@@ -117,7 +117,7 @@ int Process::processReplay()
 					}
 					
 					strcat(_ifs[i].info, "-");
-					switch(data.getStage(_rpy[tindex].rpyinfo.startscene))
+					switch(Data::data.getStage(_rpy[tindex].rpyinfo.startscene))
 					{
 					case 1:
 						strcat(_ifs[i].info, M_LASTSTAGESTR_1);
@@ -292,14 +292,14 @@ int Process::processReplay()
 		else
 		{
 			strcpy(_ifs[0].info, M_STAGESTR_PRE);
-			_ifs[0].linki("|20206", data.getSpellNumber(_rpy[tindex].rpyinfo.startscene));
+			_ifs[0].linki("|20206", Data::data.getSpellNumber(_rpy[tindex].rpyinfo.startscene));
 
 			strcat(_ifs[0].info, "\n");
-			strcat(_ifs[0].info, data.getSpellName((int)(_rpy[tindex].rpyinfo.startscene)));
+			strcat(_ifs[0].info, Data::data.getSpellName((int)(_rpy[tindex].rpyinfo.startscene)));
 			_ifs[0].valueSet(0, _ifs[0].info, 160, 80, INFO_RED);
 			infoselect.push_back(_ifs[0]);
 
-			strcpy(_ifs[1].info, res.resdata.uistr.score);
+			strcpy(_ifs[1].info, BResource::res.resdata.uistr.score);
 			_ifs[1].linkl("|10216", _rpy[tindex].rpyinfo.score);
 
 			_ifs[1].valueSet(1, _ifs[1].info, 320, 75, INFO_RED, SEL_NONACTIVE);
@@ -308,19 +308,19 @@ int Process::processReplay()
 			InfoSelect::Setup(1, 0);
 		}
 
-		strcpy(_ifs[10].info, res.resdata.uistr.username);
+		strcpy(_ifs[10].info, BResource::res.resdata.uistr.username);
 		strcat(_ifs[10].info, "|008");
 		strcat(_ifs[10].info, _rpy[tindex].rpyinfo.username);
 
-		strcpy(_ifs[11].info, res.resdata.uistr.usingchara);
+		strcpy(_ifs[11].info, BResource::res.resdata.uistr.usingchara);
 
 		for (int i=0; i<M_PL_ONESETPLAYER;i ++)
 		{
 			strcpy(_ifs[12+i].info, "|006");
-			strcat(_ifs[12+i].info, data.getPlayerName(_rpy[tindex].rpyinfo.usingchara[i]));
+			strcat(_ifs[12+i].info, Data::data.getPlayerName(_rpy[tindex].rpyinfo.usingchara[i]));
 		}
 
-		strcpy(_ifs[15].info, res.resdata.uistr.date);
+		strcpy(_ifs[15].info, BResource::res.resdata.uistr.date);
 		_ifs[15].linki("|21014", _rpy[tindex].rpyinfo.year);
 		strcat(_ifs[15].info, "/");
 		_ifs[15].linki("|21517", _rpy[tindex].rpyinfo.month);
@@ -331,39 +331,39 @@ int Process::processReplay()
 		strcat(_ifs[15].info, ":");
 		_ifs[15].linki("|22426", _rpy[tindex].rpyinfo.minute);
 
-		strcpy(_ifs[16].info, res.resdata.uistr.faith);
+		strcpy(_ifs[16].info, BResource::res.resdata.uistr.faith);
 		_ifs[16].linki("|012", _rpy[tindex].rpyinfo.faith);
 
-		strcpy(_ifs[17].info, res.resdata.uistr.lost);
+		strcpy(_ifs[17].info, BResource::res.resdata.uistr.lost);
 		_ifs[17].linkf("|012", 0, _rpy[tindex].rpyinfo.lost);
 		strcat(_ifs[17].info, "%");		
 
-		strcpy(_ifs[18].info, res.resdata.uistr.misstime);
+		strcpy(_ifs[18].info, BResource::res.resdata.uistr.misstime);
 		_ifs[18].linki("|022", _rpy[tindex].rpyinfo.miss);
 
-		strcpy(_ifs[19].info, res.resdata.uistr.bordertime);
+		strcpy(_ifs[19].info, BResource::res.resdata.uistr.bordertime);
 		_ifs[19].linki("|022", _rpy[tindex].rpyinfo.border);
 
-		strcpy(_ifs[20].info, res.resdata.uistr.gettime);
+		strcpy(_ifs[20].info, BResource::res.resdata.uistr.gettime);
 		_ifs[20].linki("|022", _rpy[tindex].rpyinfo.get);
 
-		strcpy(_ifs[21].info, res.resdata.uistr.filename);
+		strcpy(_ifs[21].info, BResource::res.resdata.uistr.filename);
 		strcat(_ifs[21].info, "|010");
 		strcat(_ifs[21].info, _rpyfilename[tindex]);
 
-		strcpy(_ifs[22].info, res.resdata.uistr.modeflag);
+		strcpy(_ifs[22].info, BResource::res.resdata.uistr.modeflag);
 		strcat(_ifs[22].info, "|010");
 		if(_rpy[tindex].rpyinfo.modeflag & M_RPYMODE_SPELL)
 		{
-			strcat(_ifs[22].info, res.resdata.uistr.mode_spell);
+			strcat(_ifs[22].info, BResource::res.resdata.uistr.mode_spell);
 		}
 		else if(_rpy[tindex].rpyinfo.modeflag & M_RPYMODE_PRACTICE)
 		{
-			strcat(_ifs[22].info, res.resdata.uistr.mode_practice);
+			strcat(_ifs[22].info, BResource::res.resdata.uistr.mode_practice);
 		}
 		else
 		{
-			strcat(_ifs[22].info, res.resdata.uistr.mode_none);
+			strcat(_ifs[22].info, BResource::res.resdata.uistr.mode_none);
 		}
 
 		for(int i=10;i<23;i++)
@@ -385,7 +385,7 @@ int Process::processReplay()
 		}
 		else if (hge->Input_GetDIKey(DIK_D, DIKEY_DOWN))
 		{
-			DataPrinter::PrintReplayData(res.resdata.replayfoldername, _rpyfilename[tindex]);
+			DataPrinter::PrintReplayData(BResource::res.resdata.replayfoldername, _rpyfilename[tindex]);
 		}
 
 		if(InfoSelect::complete)

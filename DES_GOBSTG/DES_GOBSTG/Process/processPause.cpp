@@ -23,7 +23,7 @@ int Process::processPause()
 		{
 			if (replayend)
 			{
-				time = 0;
+				gametime = 0;
 			}
 		}
 		else if (Player::p.exist && Player::ncPause < 0xff)
@@ -40,7 +40,7 @@ int Process::processPause()
 		if(scr.GetIntValue(SCR_RESERVEBEGIN) == 0x10)
 		{
 			scr.SetIntValue(SCR_RESERVEBEGIN, 0xff);
-			if(replaymode && replayend || spellmode && !replaymode && time == 0)
+			if(replaymode && replayend || spellmode && !replaymode && gametime == 0)
 				state = STATE_TITLE;
 			else
 				state = STATE_START;
@@ -74,7 +74,7 @@ int Process::processPause()
 		state = scr.GetIntValue(SCR_RESERVEBEGIN) & 0xff;
 		if(state == STATE_START)
 		{
-			if(time == 0)
+			if(gametime == 0)
 			{
 				scene = startscene;
 				startPrep();
@@ -100,7 +100,7 @@ int Process::processPause()
 		}
 		else if(state == STATE_TITLE)
 		{
-			time = 0;
+			gametime = 0;
 			if(replaymode)
 			{
 				BGLayer::KillOtherLayer();
@@ -123,7 +123,7 @@ int Process::processPause()
 				bgmask.exist = false;
 				fdisp.SetState(FDISP_PANEL, 0);
 				BossInfo::empty();
-				if(spellmode && !replaymode && time == 0)
+				if(spellmode && !replaymode && gametime == 0)
 					state = STATE_CONTINUE;
 				else
 					state = STATE_DIFFICULT_SELECT;

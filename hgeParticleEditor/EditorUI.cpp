@@ -1374,7 +1374,7 @@ bool EditorUI::Delete()
 		strcat(buffer, " ?");
 		if(MessageBox(NULL, buffer, "", MB_OKCANCEL) == IDOK)
 		{
-			data.SetEffectSystemResourceName(ebnum, "");
+			Data::data.SetEffectSystemResourceName(ebnum, "");
 			DeleteFile(hge->Resource_MakePath(eres.fullfilename));
 			delete eres.eff[ebnum];
 			eres.eff[ebnum] = NULL;
@@ -1483,7 +1483,7 @@ bool EditorUI::Add()
 				char buffer[M_STRMAX];
 				char buff[M_STRITOAMAX];
 				sprintf(buffer, "EffectSystem_%03d.effect", i);
-				data.SetEffectSystemResourceName(i, buffer);
+				Data::data.SetEffectSystemResourceName(i, buffer);
 				eres.eff[i] = new hgeEffectSystem;
 				ZeroMemory(eres.eff[i], sizeof(hgeEffectSystem));
 				ebnum = i;

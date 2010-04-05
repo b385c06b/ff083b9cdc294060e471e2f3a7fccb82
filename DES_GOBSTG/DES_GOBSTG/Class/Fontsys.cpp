@@ -38,11 +38,11 @@ void Fontsys::HeatUp()
 	*/
 	for (int i=0; i<PLAYERTYPEMAX; i++)
 	{
-		SignUp(i%FONTSYSMAX, data.getPlayerName(i));
+		SignUp(i%FONTSYSMAX, Data::data.getPlayerName(i));
 	}
 	for (int i=0; i<ENEMYTYPEMAX; i++)
 	{
-		SignUp(i%FONTSYSMAX, data.getEnemyName(i));
+		SignUp(i%FONTSYSMAX, Data::data.getEnemyName(i));
 	}
 }
 

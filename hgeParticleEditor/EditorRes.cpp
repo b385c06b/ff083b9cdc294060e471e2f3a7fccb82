@@ -44,18 +44,18 @@ bool EditorRes::Load()
 		MessageBox(hge->System_GetState(HGE_HWND), "Failed in Loading Resource File.", "Error", MB_OK);
 		return false;
 	}
-	data.GetIni();
+	Data::data.GetIni();
 	Export::clientAdjustWindow();
-	res.Fill();
-	res.LoadPackage();
+	BResource::res.Fill();
+	BResource::res.LoadPackage();
 	font = new hgeFont("EditorFont\\font.fnt");
 //	res.SetDataFile();
 
 	for(int i=0; i<TEXMAX; i++)
 	{
-		if(strlen(res.resdata.texfilename[i]))
+		if(strlen(BResource::res.resdata.texfilename[i]))
 		{
-			tex[i] = hge->Texture_Load(res.resdata.texfilename[i]);
+			tex[i] = hge->Texture_Load(BResource::res.resdata.texfilename[i]);
 			if(!tex[i])
 				return false;
 		}
@@ -71,16 +71,16 @@ bool EditorRes::Load()
 	for(int i=0; i<EFFECTSYSTYPEMAX; i++)
 	{
 		char buffer[M_STRMAX];
-		if(strlen(res.resdata.effectsysfilename[i]))
+		if(strlen(BResource::res.resdata.effectsysfilename[i]))
 		{
 			eff[i] = new hgeEffectSystem;
-			strcpy(buffer, res.resdata.effectsysfoldername);
-			strcat(buffer, res.resdata.effectsysfilename[i]);
+			strcpy(buffer, BResource::res.resdata.effectsysfoldername);
+			strcat(buffer, BResource::res.resdata.effectsysfilename[i]);
 			texnum[i] = Export::effLoad(buffer, eff[i], tex);
 			if(texnum[i] < 0)
 			{
 				HGELOG("Failed in loading Effect System File %s.", buffer);
-				data.SetEffectSystemResourceName(i, "");
+				Data::data.SetEffectSystemResourceName(i, "");
 				delete eff[i];
 				eff[i] = NULL;
 			}
@@ -139,13 +139,13 @@ char * EditorRes::GetAffectorName(char type)
 
 char * EditorRes::GetFilename(int effi)
 {
-	data.GetEffectSystemResourceName(effi, filename);
+	Data::data.GetEffectSystemResourceName(effi, filename);
 	return filename;
 }
 
 char * EditorRes::GetFullFilename(int effi)
 {
-	strcpy(fullfilename, res.resdata.effectsysfoldername);
+	strcpy(fullfilename, BResource::res.resdata.effectsysfoldername);
 	strcat(fullfilename, GetFilename(effi));
 	return fullfilename;
 }

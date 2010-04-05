@@ -16,7 +16,7 @@ int Process::processStart()
 		replayend = true;
 		replaymode = false;
 		scene = S1;
-		time = 0;
+		gametime = 0;
 //		musicChange(0, true);
 		BGLayer::KillOtherLayer();
 		Selector::Clear();
@@ -31,9 +31,9 @@ int Process::processStart()
 	}
 	if(!Player::p.exist && !replaymode)
 	{
-		if(spellmode && time != 0)
+		if(spellmode && gametime != 0)
 		{
-			time = 0;
+			gametime = 0;
 			clearPrep(false);
 			Player::p.exist = false;
 			hge->Input_SetDIKey(KS_PAUSE);
@@ -61,16 +61,16 @@ int Process::processStart()
 
 	if(scene > S1 && state != STATE_CLEAR)
 	{
-		time = 0;
+		gametime = 0;
 		state = STATE_CLEAR;
 		return PTURN;
 	}
 
-	if(time != lasttime && state != STATE_CLEAR)
+	if(gametime != lasttime && state != STATE_CLEAR)
 	{
 		if (!(stopflag & FRAME_STOPFLAG_ENEMYSET))
 		{
-			scr.stageExecute(scene, time);
+			scr.stageExecute(scene, gametime);
 		}
 	}
 	return PGO;

@@ -345,9 +345,9 @@ public:
 	char * playerbulletdefinefilename;
 	char * playershootdefinefilename;
 	char * playerghostdefinefilename;
-};
 
-extern Data data;
+	static Data data;
+};
 extern HGE * hge;
 
 #endif

@@ -18,8 +18,9 @@ PlayerGhost::PlayerGhost()
 PlayerGhost::~PlayerGhost()
 {
 	if(sprite)
-		SpriteItemManager::FreeSprite(sprite);
-	sprite = NULL;
+	{
+		SpriteItemManager::FreeSprite(&sprite);
+	}
 }
 
 void PlayerGhost::ResetValue(bool move/* =false */)
@@ -49,7 +50,7 @@ void PlayerGhost::valueSet(WORD _ID, bool move)
 	yshake	=	0.0f;
 	lastchasing	=	false;
 
-	playerghostData * _pgd = &(res.playerghostdata[ID]);
+	playerghostData * _pgd = &(BResource::res.playerghostdata[ID]);
 	
 	speed	=	_pgd->speed;
 	flag	=	_pgd->flag;
@@ -158,7 +159,7 @@ void PlayerGhost::AntiShooter(float aimx, float aimy)
 		}
 	}
 	if((aimx != x || aimy != y) || timer < _PLAYERGHOST_ADJUSTTIME)
-		shootangle = aMainAngle(Player::p, 18000);
+		shootangle = aMainAngle(Player::p.x, Player::p.y, 18000);
 }
 
 void PlayerGhost::action()
@@ -172,7 +173,7 @@ void PlayerGhost::action()
 	bool chasing = false;
 	bool shooting = Player::p.flag & PLAYER_SHOOT;
 
-	playerghostData * _pgd = &(res.playerghostdata[ID]);
+	playerghostData * _pgd = &(BResource::res.playerghostdata[ID]);
 
 	if (flag & PGFLAG_TRACE)
 	{
@@ -237,7 +238,7 @@ void PlayerGhost::action()
 	{
 		if (flag & PGFLAG_STAY)
 		{
-			shootangle = aMainAngle(Player::p, 18000);
+			shootangle = aMainAngle(Player::p.x, Player::p.y, 18000);
 		}
 		else
 		{

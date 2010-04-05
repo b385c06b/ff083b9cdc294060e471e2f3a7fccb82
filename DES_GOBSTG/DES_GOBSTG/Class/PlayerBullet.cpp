@@ -52,7 +52,7 @@ PlayerBullet::~PlayerBullet()
 void PlayerBullet::Build(int shootdataID)
 {
 	PlayerBullet _pb;
-	playershootData * item = &(res.playershootdata[shootdataID]);
+	playershootData * item = &(BResource::res.playershootdata[shootdataID]);
 	_pb.valueSet(item->ID, item->arrange, item->xbias, item->ybias, 
 		item->scale, item->angle, item->speed, item->accelspeed, 
 		item->power, item->hitonfactor, item->flag, item->seID);
@@ -187,7 +187,7 @@ void PlayerBullet::Lock()
 		return;
 	}
 
-	int aimangle = aMainAngle(*_tobj);
+	int aimangle = aMainAngle(_tobj->x, _tobj->y);
 	bool clockwise = false;
 
 	if(locktimer >= _PBLOCK_LOCKTIMERMAX)
@@ -317,7 +317,7 @@ void PlayerBullet::DelayShoot()
 		}
 		if(timer < PB_FADEOUTTIME)
 		{
-			angle = aMainAngle(*_tobj);
+			angle = aMainAngle(_tobj->x, _tobj->y);
 			if (flag & PBFLAG_TURNWHILEDELAY)
 			{
 				if(arrange & 1)
@@ -329,7 +329,7 @@ void PlayerBullet::DelayShoot()
 		}
 		else if(timer == PB_FADEOUTTIME)
 		{
-			angle = aMainAngle(*_tobj);
+			angle = aMainAngle(_tobj->x, _tobj->y);
 			headangle = 0;
 			speed = oldspeed;
 		}

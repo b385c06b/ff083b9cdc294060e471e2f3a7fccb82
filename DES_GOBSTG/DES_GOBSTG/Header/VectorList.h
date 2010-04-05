@@ -15,6 +15,7 @@ public:
 	{
 		item = NULL;
 		valid = NULL;
+		init(0);
 	}
 	VectorList(DWORD count)
 	{
@@ -43,6 +44,17 @@ public:
 	}
 	void clear_item()
 	{
+		init(capacity);
+	}
+	void init(DWORD count)
+	{
+		clear();
+		capacity = count;
+		if (capacity > 0)
+		{
+			item = new _Ty[capacity];
+			valid = new bool[capacity];
+		}
 		if (valid)
 		{
 			ZeroMemory(valid, sizeof(bool) * capacity);
@@ -52,23 +64,38 @@ public:
 		size = 0;
 		zero = 0;
 		index = 0;
+		pushedindex = 0;
+//		clear_item();
 	}
-	void init(DWORD count)
+
+
+	_Ty * push()
 	{
-		clear();
-		if (count < 1)
+		if (!isInRange())
 		{
-			count = 1;
+			return NULL;
 		}
-		capacity = count;
-		item = new _Ty[capacity];
-		valid = new bool[capacity];
-		clear_item();
+		pop();
+		if (!size)
+		{
+			size++;
+		}
+		valid[index] = true;
+		return &item[index];
+	}
+	_Ty * push(const _Ty &_item)
+	{
+		if (!isInRange())
+		{
+			return NULL;
+		}
+		memcpy(push(), &_item, sizeof(_Ty));
+		return &item[index];
 	}
 
 	_Ty * push_back()
 	{
-		DWORD _index = index;
+		pushIndex();
 		toEnd();
 		if (size)
 		{
@@ -78,14 +105,15 @@ public:
 		if (size && ibegin == iend)
 		{
 			ibegin = toNext();
+			toEnd();
+			pop();
 		}
 		else
 		{
 			size++;
 		}
-		index = _index;
-		valid[iend] = true;
-		return &item[iend];
+		valid[index] = true;
+		return &item[index];
 	}
 	_Ty * push_back(const _Ty & _item)
 	{
@@ -94,7 +122,7 @@ public:
 	}
 	_Ty * push_front()
 	{
-		DWORD _index = index;
+		pushIndex();
 		toBegin();
 		if (size)
 		{
@@ -104,14 +132,14 @@ public:
 		if (size && ibegin == iend)
 		{
 			iend = toPrev();
+			pop();
 		}
 		else
 		{
 			size++;
 		}
-		index = _index;
-		valid[ibegin] = true;
-		return &item[ibegin];
+		valid[index] = true;
+		return &item[index];
 	}
 	_Ty * push_front(const _Ty & _item)
 	{
@@ -127,6 +155,7 @@ public:
 
 		DWORD _index = index;
 		valid[index] = false;
+		item[index].~_Ty();
 		if (index == ibegin)
 		{
 			size--;
@@ -339,6 +368,24 @@ public:
 	{
 		return iend;
 	}
+	DWORD getSize()
+	{
+		return size;
+	}
+	DWORD getCapacity()
+	{
+		return capacity;
+	}
+private:
+	void pushIndex()
+	{
+		pushedindex = index;
+	}
+public:
+	void popIndex()
+	{
+		index = pushedindex;
+	}
 
 	_Ty & operator*() const
 	{
@@ -360,6 +407,7 @@ public:
 	_Ty * item;
 	bool * valid;
 	DWORD index;
+	DWORD pushedindex;
 	DWORD ibegin;
 	DWORD zero;
 	DWORD iend;

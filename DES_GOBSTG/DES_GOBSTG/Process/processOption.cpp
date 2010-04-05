@@ -10,14 +10,14 @@
 
 int Process::processOption()
 {
-	time++;
-	if(time == 1)
+	gametime++;
+	if(gametime == 1)
 	{
 		scr.SetIntValue(SCR_RESERVEBEGIN, 0);
 		scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);
 		PushKey::SetPushEvent(PUSHKEY_ID_UIUSE, KS_LEFT, KS_RIGHT);
 	}
-	scr.controlExecute(STATE_OPTION, time);
+	scr.controlExecute(STATE_OPTION, gametime);
 	//-> pushtimer sel depth
 	int tsel = scr.GetIntValue(SCR_RESERVEBEGIN);
 	int tdepth = scr.GetIntValue(SCR_RESERVEBEGIN+1);
@@ -34,7 +34,7 @@ int Process::processOption()
 		{
 			SE::push(SE_SYSTEM_CANCEL);
 			Selector::Clear();
-			time = 0;
+			gametime = 0;
 			state = STATE_TITLE;
 			return PTURN;
 		}

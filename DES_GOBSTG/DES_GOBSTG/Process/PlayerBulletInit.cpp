@@ -12,7 +12,7 @@ void PlayerBullet::Init(HTEXTURE * _tex)
 	playerbulletData * item;
 	for (int i=0; i<PLAYERBULLETSPRITEMAX; i++)
 	{
-		item = &(res.playerbulletdata[i]);
+		item = &(BResource::res.playerbulletdata[i]);
 		spPlayerBullet[i] = new hgeSprite(tex[item->tex], item->x, item->y, item->w, item->h);
 	}
 }

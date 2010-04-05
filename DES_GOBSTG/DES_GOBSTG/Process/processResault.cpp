@@ -12,14 +12,14 @@
 
 int Process::processResult()
 {
-	time++;
-	if (time == 1)
+	gametime++;
+	if (gametime == 1)
 	{
 		scr.SetIntValue(SCR_RESERVEBEGIN, -2);
 		scr.SetIntValue(SCR_RESERVEBEGIN+1, -1);
 		scr.SetIntValue(SCR_RESERVEBEGIN+2, 0);
 	}
-	scr.controlExecute(STATE_RESULT, time);
+	scr.controlExecute(STATE_RESULT, gametime);
 	int tsec = scr.GetIntValue(SCR_RESERVEBEGIN);
 	int tdiff = scr.GetIntValue(SCR_RESERVEBEGIN+1);
 	int tsel = scr.GetIntValue(SCR_RESERVEBEGIN+2);
@@ -29,7 +29,7 @@ int Process::processResult()
 		SE::push(SE_SYSTEM_CANCEL);
 		if (tsec < 0)
 		{
-			time = 0;
+			gametime = 0;
 			state = STATE_TITLE;
 			return PTURN;
 		}
@@ -53,16 +53,16 @@ int Process::processResult()
 			DWORD sec;
 			for (int i=0; i<10; i++)
 			{
-				sec = data.sLinkType(DATAS_TOP);
-				sec = data.sLinkDiff(sec, tdiff);
-				sec = data.sLinkNum(sec, i+1);
+				sec = Data::data.sLinkType(DATAS_TOP);
+				sec = Data::data.sLinkDiff(sec, tdiff);
+				sec = Data::data.sLinkNum(sec, i+1);
 
 				strcpy(_ifs[i].info, "");
 				_ifs[i].linki("|10002", i+1);
 				strcat(_ifs[i].info, ". ");
-				strcat(_ifs[i].info, data.sRead(DATA_BINFILE, sec, data.nLinkType(DATAN_USERNAME), RESCONFIGDEFAULT_USERNAME));
-				_ifs[i].linkl("|11224", data.lRead(DATA_BINFILE, sec, data.nLinkType(DATAN_SCORE), 0));
-				BYTE tlaststage = data.iRead(DATA_BINFILE, sec, data.nLinkType(DATAN_LASTSTAGE), 0);
+				strcat(_ifs[i].info, Data::data.sRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_USERNAME), RESCONFIGDEFAULT_USERNAME));
+				_ifs[i].linkl("|11224", Data::data.lRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_SCORE), 0));
+				BYTE tlaststage = Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_LASTSTAGE), 0);
 				strcat(_ifs[i].info, "(");
 				switch(tlaststage)
 				{
@@ -89,27 +89,27 @@ int Process::processResult()
 					break;
 				}
 				strcat(_ifs[i].info, ")");
-				_ifs[i].linki("|12933", data.iRead(DATA_BINFILE, sec, data.nLinkType(DATAN_TIME_YEAR), 0));
+				_ifs[i].linki("|12933", Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_TIME_YEAR), 0));
 				strcat(_ifs[i].info, "/");
-				_ifs[i].linki("|23436", data.iRead(DATA_BINFILE, sec, data.nLinkType(DATAN_TIME_MONTH), 0));
+				_ifs[i].linki("|23436", Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_TIME_MONTH), 0));
 				strcat(_ifs[i].info, "/");
-				_ifs[i].linki("|23739", data.iRead(DATA_BINFILE, sec, data.nLinkType(DATAN_TIME_DAY), 0));
+				_ifs[i].linki("|23739", Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_TIME_DAY), 0));
 //				_ifs[i].linkf("|24550", 2, data.fRead(DATA_BINFILE, sec, data.nLinkType(DATAN_LOST), 0));
 
 				strcat(_ifs[i].info, "\n¡¡");
-				strcat(_ifs[i].info, data.getPlayerName(data.iRead(DATA_BINFILE, sec, data.nLinkNum(data.nLinkType(DATAN_CHARA), 1), 0)));
+				strcat(_ifs[i].info, Data::data.getPlayerName(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkNum(Data::data.nLinkType(DATAN_CHARA), 1), 0)));
 				strcat(_ifs[i].info, "\n¡¡");
-				strcat(_ifs[i].info, data.getPlayerName(data.iRead(DATA_BINFILE, sec, data.nLinkNum(data.nLinkType(DATAN_CHARA), 2), 0)));
+				strcat(_ifs[i].info, Data::data.getPlayerName(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkNum(Data::data.nLinkType(DATAN_CHARA), 2), 0)));
 				strcat(_ifs[i].info, "\n¡¡");
-				strcat(_ifs[i].info, data.getPlayerName(data.iRead(DATA_BINFILE, sec, data.nLinkNum(data.nLinkType(DATAN_CHARA), 3), 0)));
+				strcat(_ifs[i].info, Data::data.getPlayerName(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkNum(Data::data.nLinkType(DATAN_CHARA), 3), 0)));
 
 				_ifs[i].valueSet(i, _ifs[i].info, 30, 210+80*i, INFO_GREEN);
 				infoselect.push_back(_ifs[i]);
 			}
 
 			char buff[M_STRITOAMAX];
-			sec = data.sLinkType(DATAS_TOTAL);
-			LONGLONG tltotalplaytime = data.lRead(DATA_BINFILE, sec, data.nLinkType(DATAN_TOTALPLAYTIME), 0) / 10000000;
+			sec = Data::data.sLinkType(DATAS_TOTAL);
+			LONGLONG tltotalplaytime = Data::data.lRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_TOTALPLAYTIME), 0) / 10000000;
 			int tplayhour = tltotalplaytime / 3600;
 			int tplayminute = (tltotalplaytime / 60) % 60;
 			int tplaysecond = tltotalplaytime % 60;
@@ -120,12 +120,12 @@ int Process::processResult()
 			strcat(_ifs[12].info, ":");
 			_ifs[12].linki("|20709", tplaysecond);
 
-			sec = data.sLinkDiff(sec, tdiff);
+			sec = Data::data.sLinkDiff(sec, tdiff);
 
-			int tplaytime = data.iRead(DATA_BINFILE, sec, data.nLinkType(DATAN_PLAYTIME), 0);
+			int tplaytime = Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_PLAYTIME), 0);
 			itoa(tplaytime, _ifs[10].info, 10);
 
-			int tcleartime = data.iRead(DATA_BINFILE, sec, data.nLinkType(DATAN_CLEARTIME), 0);
+			int tcleartime = Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_CLEARTIME), 0);
 			itoa(tcleartime, _ifs[11].info, 10);
 
 			for (int i=0; i<3; i++)
@@ -145,7 +145,7 @@ int Process::processResult()
 			InfoSelect::Clear();
 			tdiff = Selector::select;
 			int i = 0;
-			for (vector<spellData>::iterator it = res.spelldata.begin(); it!= res.spelldata.end(); it++)
+			for (vector<spellData>::iterator it = BResource::res.spelldata.begin(); it!= BResource::res.spelldata.end(); it++)
 			{
 				if ((it->spellflag) & BISF_NOTSPELL)
 				{
@@ -160,18 +160,18 @@ int Process::processResult()
 					int tnmeet = 0;
 					LONGLONG tmaxbonus = 0;
 
-					tnget = data.nGet(sno, true);
-					tnmeet = data.nMeet(sno, true);
-					tmaxbonus = data.nHighScore(sno, 0, true, false);
+					tnget = Data::data.nGet(sno, true);
+					tnmeet = Data::data.nMeet(sno, true);
+					tmaxbonus = Data::data.nHighScore(sno, 0, true, false);
 
 					strcpy(_ifs.info, M_STAGESTR_PRE);
-					_ifs.linki("|20206", data.getSpellNumber(sno));
+					_ifs.linki("|20206", Data::data.getSpellNumber(sno));
 					strcat(_ifs.info, "|008");
-					if(data.raGetIndi(sno))
+					if(Data::data.raGetIndi(sno))
 					{
-						strcat(_ifs.info, data.getSpellName(sno));
+						strcat(_ifs.info, Data::data.getSpellName(sno));
 						strcat(_ifs.info, "(");
-						switch (data.getDiffi(sno))
+						switch (Data::data.getDiffi(sno))
 						{
 						case M_DIFFI_EASY:
 							strcat(_ifs.info, M_DIFFISTR_EASY_S);

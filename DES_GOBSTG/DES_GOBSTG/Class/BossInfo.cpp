@@ -42,15 +42,15 @@ void BossInfo::empty()
 //bossinfo
 bool BossInfo::Fill(int _sno)
 {
-	for(vector<spellData>::iterator i=res.spelldata.begin(); i!=res.spelldata.end(); i++)
+	for(vector<spellData>::iterator i=BResource::res.spelldata.begin(); i!=BResource::res.spelldata.end(); i++)
 	{
 		if(i->sno == _sno)
 		{
 			sno = _sno;
 			spellflag = i->spellflag;
 			strcpy(spellname, i->spellname);
-			strcpy(enemyname, data.getEnemyName(i->userID));
-			strcpy(enemyename, data.getEnemyEName(i->userID));
+			strcpy(enemyname, Data::data.getEnemyName(i->userID));
+			strcpy(enemyename, Data::data.getEnemyEName(i->userID));
 			limit = i->timelimit;
 			remain = i->remain;
 			turntoscene = i->turntoscene;

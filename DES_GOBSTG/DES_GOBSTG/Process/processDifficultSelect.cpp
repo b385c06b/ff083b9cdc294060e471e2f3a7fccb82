@@ -15,8 +15,8 @@ int Process::processDifficultSelect()
 {
 	static int snolist[FONTSYSMAX];
 
-	time++;
-	if(time == 1)
+	gametime++;
+	if(gametime == 1)
 	{
 		scr.eventExecute(SCR_EVENT_ENTERSTATE, STATE_DIFFICULT_SELECT);
 		fdisp.SetState(FDISP_PANEL, 0);
@@ -28,7 +28,7 @@ int Process::processDifficultSelect()
 		scr.SetIntValue(SCR_RESERVEBEGIN+2, 0);
 	}
 	retvalue = PGO;
-	scr.controlExecute(STATE_DIFFICULT_SELECT, time);
+	scr.controlExecute(STATE_DIFFICULT_SELECT, gametime);
 
 	int tsec = scr.GetIntValue(SCR_RESERVEBEGIN);
 	int tsnolistindex = scr.GetIntValue(SCR_RESERVEBEGIN+1);
@@ -39,7 +39,7 @@ int Process::processDifficultSelect()
 		tsnolistindex = 0;
 		int tsel = Selector::select;
 		int i = 0;
-		for (vector<spellData>::iterator it = res.spelldata.begin(); it!= res.spelldata.end(); it++)
+		for (vector<spellData>::iterator it = BResource::res.spelldata.begin(); it!= BResource::res.spelldata.end(); it++)
 		{
 			if ((it->spellflag) & BISF_NOTSPELL)
 			{
@@ -57,18 +57,18 @@ int Process::processDifficultSelect()
 				snolist[tsnolistindex] = sno;
 				tsnolistindex++;
 
-				tnget = data.nGet(sno, true);
-				tnmeet = data.nMeet(sno, true);
-				tmaxbonus = data.nHighScore(sno, 0, true, false);
+				tnget = Data::data.nGet(sno, true);
+				tnmeet = Data::data.nMeet(sno, true);
+				tmaxbonus = Data::data.nHighScore(sno, 0, true, false);
 
 				strcpy(_ifs.info, M_STAGESTR_PRE);
-				_ifs.linki("|20206", data.getSpellNumber(sno));
+				_ifs.linki("|20206", Data::data.getSpellNumber(sno));
 				strcat(_ifs.info, "|008");
-				if(data.raGetIndi(sno))
+				if(Data::data.raGetIndi(sno))
 				{
-					strcat(_ifs.info, data.getSpellName(sno));
+					strcat(_ifs.info, Data::data.getSpellName(sno));
 					strcat(_ifs.info, "(");
-					switch (data.getDiffi(sno))
+					switch (Data::data.getDiffi(sno))
 					{
 					case M_DIFFI_EASY:
 						strcat(_ifs.info, M_DIFFISTR_EASY_S);

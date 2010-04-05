@@ -84,9 +84,9 @@ void Process::Realease()
 		if(playing)
 			DataConnector::addPlayTime();
 
-		if (!data.bin.empty())
+		if (!Data::data.bin.empty())
 		{
-			data.SaveBin();
+			Data::data.SaveBin();
 		}
 	}
 
@@ -163,16 +163,16 @@ void Process::musicChange(BYTE ID, bool force)
 	}
 	if(!hge->Channel_IsPlaying(channel) || musicID != ID-1 || force)
 	{
-		if (musicID < 0 || strcmp(res.musdata[ID-1].musicfilename, res.musdata[musicID].musicfilename))
+		if (musicID < 0 || strcmp(BResource::res.musdata[ID-1].musicfilename, BResource::res.musdata[musicID].musicfilename))
 		{
 			if(stream)
 				hge->Stream_Free(stream);
-			stream = hge->Stream_Load(res.musdata[ID-1].musicfilename, 0, false);
+			stream = hge->Stream_Load(BResource::res.musdata[ID-1].musicfilename, 0, false);
 		}
 		musicID = ID-1;
-		channelsyncinfo.startPos = res.musdata[musicID].startpos;
-		channelsyncinfo.introLength = res.musdata[musicID].introlength;
-		channelsyncinfo.allLength = res.musdata[musicID].alllength;
+		channelsyncinfo.startPos = BResource::res.musdata[musicID].startpos;
+		channelsyncinfo.introLength = BResource::res.musdata[musicID].introlength;
+		channelsyncinfo.allLength = BResource::res.musdata[musicID].alllength;
 		if (channel)
 		{
 			musicSlide(0, bgmvol);
@@ -193,7 +193,7 @@ void Process::SnapShot()
 	char snapshotfilename[M_PATHMAX];
 	strcpy(snapshotfilename, "");
 	sprintf(snapshotfilename, "%s%s_%04d_%02d_%02d_%02d_%02d_%02d_%04d.%s",
-		res.resdata.snapshotfoldername,
+		BResource::res.resdata.snapshotfoldername,
 		SNAPSHOT_PRIFIX,
 		systime.wYear, systime.wMonth, systime.wDay, systime.wHour, systime.wMinute, systime.wSecond, systime.wMilliseconds,
 		SNAPSHOT_EXTENSION);

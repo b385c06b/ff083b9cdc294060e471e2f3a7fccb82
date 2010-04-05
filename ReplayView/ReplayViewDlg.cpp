@@ -64,10 +64,10 @@ BOOL CReplayViewDlg::OnInitDialog()
 
 	Export::clientInitial(false, true);
 	SetWindowText(hge->System_GetState(HGE_TITLE));
-	data.GetIni();
+	Data::data.GetIni();
 	Export::GetResourceFile(true);
-	res.CopyData();
-	res.Gain();
+	BResource::res.CopyData();
+	BResource::res.Gain();
 	checkButton.SetCheck(BST_CHECKED);
 	
 	return TRUE;  // 除非设置了控件的焦点，否则返回 TRUE
