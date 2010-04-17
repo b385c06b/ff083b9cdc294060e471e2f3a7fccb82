@@ -275,6 +275,7 @@ public:
 	LONGLONG * AttachValue(DWORD section, DWORD name, LONGLONG def_val = 0);
 
 	void getFile(BYTE type);
+	FILE * checkTableFile(BYTE type);
 
 	BYTE * CreateMemHeader(BYTE type);
 	bool CheckMemHeader(const BYTE * memdata, DWORD size, BYTE type);
@@ -325,7 +326,7 @@ public:
 
 	int password;
 
-	char * filename;
+	char * nowfilename;
 	char * binfilename;
 	char * binname;
 	char * spellaccessfilename;

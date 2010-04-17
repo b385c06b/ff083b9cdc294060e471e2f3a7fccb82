@@ -32,6 +32,7 @@ public:
 	bool LoadPackage();
 
 	void ReleaseCustomConst();
+	void MallocCustomConst();
 
 public:
 

@@ -191,7 +191,7 @@ typedef struct tagTarget
 
 #define PLAYERTYPEMAX		0x20
 
-#define SPRITEITEMMAX		0x400
+#define SPRITEITEMMAX		0x1000
 
 #define TARGETMAX			0x40
 

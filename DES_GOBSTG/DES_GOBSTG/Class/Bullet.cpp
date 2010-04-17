@@ -6,6 +6,7 @@
 #include "../Header/Scripter.h"
 #include "../Header/Main.h"
 #include "../Header/BResource.h"
+#include "../Header/SpriteItemManager.h"
 
 #define _IZEZONEMAX			0x20
 
@@ -49,11 +50,14 @@ void Bullet::Init(HTEXTURE _tex)
 		for (j=0; j<tnum; j++)
 		{
 			index = i*BULLETCOLORMAX+j;
-			sp[index] = new hgeSprite(tex, tbd->tex_x + j*(tbd->tex_w), tbd->tex_y, tbd->tex_w, tbd->tex_h);
+//			sp[index] = new hgeSprite(tex, tbd->tex_x + j*(tbd->tex_w), tbd->tex_y, tbd->tex_w, tbd->tex_h);
+			sp[index] = SpriteItemManager::CreateSprite(tbd->siid+j);
 			sp[index]->SetBlendMode(tbd->blendtype);
 			if (BResource::res.bulletdata[i].collisiontype != BULLET_COLLISION_ELLIPSE && tbd->collisionSub)
 			{
-				sp[index]->SetHotSpot((tbd->tex_w)/2.0f, (tbd->tex_h)/2.0f+tbd->collisionSub);
+				float tex_w = SpriteItemManager::GetTexW(tbd->siid+j);
+				float tex_h = SpriteItemManager::GetTexH(tbd->siid+j);
+				sp[index]->SetHotSpot((tex_w)/2.0f, (tex_h)/2.0f+tbd->collisionSub);
 			}
 		}
 		for (; j<BULLETCOLORMAX; j++)
@@ -119,9 +123,7 @@ void Bullet::Release()
 	bu.clear();
 	for(int i=0;i<BULLETTYPECOLORMAX;i++)
 	{
-		if(sp[i])
-			delete sp[i];
-		sp[i] = NULL;
+		SpriteItemManager::FreeSprite(&sp[i]);
 	}
 }
 
@@ -643,10 +645,18 @@ bool Bullet::isInRect(float r, float aimx, float aimy)
 	case BULLET_COLLISION_ELLIPSE: 
 		float rotCos;
 		float rotSin;
-		if (!speed)
+		if (speed)
 		{
-			rotCos = xplus / speed;
-			rotSin = yplus / speed;
+			if (!xplus && !yplus)
+			{
+				rotCos = cost(angle);
+				rotSin = sint(angle);
+			}
+			else
+			{
+				rotCos = xplus / speed;
+				rotSin = yplus / speed;
+			}
 		}
 		else
 		{

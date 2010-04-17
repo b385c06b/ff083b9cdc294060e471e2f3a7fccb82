@@ -1,39 +1,39 @@
-73	h5nc	49																			
-Index	Tex	FaceIndex	Tex_nCol	Tex_nRow	Collision_W	Collision_H	StartFrame	StandFrame	StandShake	RightPreFrame	RightFrame	LeftPreFrame	LeftFrame	AttackPreFrame	AttackFrame	StorePreFrame	StoreFrame	UseTexW	UseTexH	Name	Ename
-0	4	-1	16	16	16	20	0	5	0	4	3	0	0	0	0	0	0	512	512	_	_
-1	4	-1	16	16	16	20	16	5	0	4	3	0	0	0	0	0	0	512	512	_	_
-20	96	0	4	4	24	28	0	4	1	3	1	3	1	0	0	0	0	256	256	チルノ	Cirno
-21	97	1	4	4	24	28	0	2	1	2	1	0	0	0	1	0	0	256	256	秋·穣子	Aki Minoriko
-22	98	2	3	2	24	28	0	1	1	1	1	0	0	2	1	0	0	144	160	リリカ·プリズムリバ	Lyrica Prismriver
-23	99	3	5	3	24	28	0	5	1	1	1	1	1	2	1	2	1	240	192	リグル·ナイトバグ	Wriggle Nightbug
-24	100	4	4	3	24	28	0	4	1	1	1	1	1	3	1	0	0	192	192	ミスティア·ローレライ	Mystia Lorelei
-25	101	5	4	2	24	28	0	1	1	2	1	0	0	1	1	0	0	192	160	メルラン·プリズムリバ	Marlin Prismriver
-26	102	6	4	3	24	28	0	4	1	3	1	0	0	2	2	0	0	256	240	上白沢·慧音	Keine Kamishirasawa
-27	103	7	5	1	24	28	0	1	1	1	1	0	0	1	1	0	0	240	80	ルナサ·プリズムリバ	Lunasa Prismriver
-28	104	8	4	4	24	28	0	3	1	1	8	0	0	0	0	0	0	256	256	鍵山·雛	Kagiyama Hina
-29	105	9	4	4	24	28	0	4	1	3	1	0	0	3	1	0	0	256	256	因幡·てゐ	Inaba Tei
-30	106	10	4	2	24	28	0	4	1	3	1	0	0	0	0	0	0	256	160	河城·にとり	Kawasiro Nitori
-31	107	11	4	4	24	28	0	4	1	3	1	0	0	2	1	0	0	256	256	風見·幽香	Kazami Yuka
-32	108	12	4	4	24	28	0	4	1	3	1	0	0	0	0	0	0	256	256	メディスン·メランコリ	Medicine Melancholy
-33	109	13	4	3	24	28	0	4	1	3	1	0	0	0	4	0	0	256	240	鈴仙·優曇華院·イナバ	Reisen Udongein Inaba
-34	110	14	4	4	24	28	0	4	1	3	1	0	0	3	1	0	0	256	256	射命丸·文	Syameimaru Aya
-35	111	15	4	3	24	28	0	4	1	3	1	0	0	2	2	0	0	256	240	上白沢·慧音	Keine Kamishirasawa
-36	112	16	4	4	24	28	0	4	1	3	1	0	0	3	1	0	4	256	256	八坂·神奈子	Yasaka Kanako
-37	113	17	5	2	24	28	0	1	1	4	1	0	0	2	1	0	0	240	128	アリス·マーガトロイド	Alice Margatroid
-38	114	18	4	4	24	28	0	4	1	3	1	0	0	3	1	0	4	256	256	洩矢·諏訪子	Moriya Suwako
-39	115	19	4	3	24	28	0	4	1	3	1	0	0	0	1	0	0	256	240	四季映姫·ヤマザナドゥ	Shikieiki Yamaxanadu
-40	116	20	5	4	24	28	0	4	1	3	1	3	1	2	1	4	1	240	256	魂魄·妖夢	Konpaku Youmu
-41	117	21	4	4	24	28	0	4	1	3	1	0	0	3	1	0	0	256	256	小野塚·小町	Onozuka Komachi
-42	118	22	4	3	24	28	3	1	1	3	1	0	0	3	1	0	0	256	240	八意·永琳	Eirin Yagokoro
-43	119	23	4	2	24	28	0	4	1	2	1	0	0	0	1	0	0	256	160	八雲·藍	Ran Yakumo
-44	120	24	4	2	24	28	0	1	1	1	1	0	0	0	4	0	1	256	160	レミリア·スカーレット	Remilia Scarlet
-45	121	25	4	2	24	28	0	1	1	2	1	0	0	0	0	0	0	192	160	西行寺·幽々子	Yuyuko Saigyouzi
-46	122	26	4	2	24	28	0	4	1	2	2	0	0	0	0	0	0	256	160	十六夜·咲夜	Izayoi Sakuya
-47	123	27	8	4	24	28	0	4	1	3	1	0	0	0	6	0	0	512	320	博麗·霊夢	Hakurei Reimu
-48	124	28	4	3	24	28	0	4	1	3	1	0	0	0	1	0	0	256	240	霧雨·魔理沙	Kirisame Marisa
-49	125	29	4	3	24	28	0	4	1	3	1	0	0	2	1	0	0	256	288	東風谷·早苗	Kotiya Sanae
-50	126	30	4	3	24	28	0	4	1	2	2	0	0	2	2	0	0	256	240	藤原·妹紅	Huziwara no Mokou
-51	127	31	3	3	24	28	2	1	1	1	2	0	0	0	3	0	0	240	240	蓬莱山·輝夜	Kaguya Houraisan
-52	125	32	6	5	24	28	20	1	1	2	1	2	1	0	2	0	0	480	480	八雲·紫	Yukari Yakumo
-53	129	33	4	3	24	28	0	4	1	3	1	0	0	0	1	0	0	256	240	霧雨·魔理沙	Kirisame Marisa
-54	123	34	8	4	24	28	16	4	1	3	1	0	0	0	6	0	0	512	320	博麗·霊夢	Hakurei Reimu
+73	h5nc	49																				
+Comment	Index	Tex	FaceIndex	Tex_nCol	Tex_nRow	Collision_W	Collision_H	StartFrame	StandFrame	StandShake	RightPreFrame	RightFrame	LeftPreFrame	LeftFrame	AttackPreFrame	AttackFrame	StorePreFrame	StoreFrame	UseTexW	UseTexH	Name	Ename
+-	0	4	-1	16	16	16	20	0	5	0	4	3	0	0	0	0	0	0	512	512	_	_
+-	1	4	-1	16	16	16	20	16	5	0	4	3	0	0	0	0	0	0	512	512	_	_
+-	20	96	0	4	4	24	28	0	4	1	3	1	3	1	0	0	0	0	256	256	チルノ	Cirno
+-	21	97	1	4	4	24	28	0	2	1	2	1	0	0	0	1	0	0	256	256	秋·穣子	Aki Minoriko
+-	22	98	2	3	2	24	28	0	1	1	1	1	0	0	2	1	0	0	144	160	リリカ·プリズムリバ	Lyrica Prismriver
+-	23	99	3	5	3	24	28	0	5	1	1	1	1	1	2	1	2	1	240	192	リグル·ナイトバグ	Wriggle Nightbug
+-	24	100	4	4	3	24	28	0	4	1	1	1	1	1	3	1	0	0	192	192	ミスティア·ローレライ	Mystia Lorelei
+-	25	101	5	4	2	24	28	0	1	1	2	1	0	0	1	1	0	0	192	160	メルラン·プリズムリバ	Marlin Prismriver
+-	26	102	6	4	3	24	28	0	4	1	3	1	0	0	2	2	0	0	256	240	上白沢·慧音	Keine Kamishirasawa
+-	27	103	7	5	1	24	28	0	1	1	1	1	0	0	1	1	0	0	240	80	ルナサ·プリズムリバ	Lunasa Prismriver
+-	28	104	8	4	4	24	28	0	3	1	1	8	0	0	0	0	0	0	256	256	鍵山·雛	Kagiyama Hina
+-	29	105	9	4	4	24	28	0	4	1	3	1	0	0	3	1	0	0	256	256	因幡·てゐ	Inaba Tei
+-	30	106	10	4	2	24	28	0	4	1	3	1	0	0	0	0	0	0	256	160	河城·にとり	Kawasiro Nitori
+-	31	107	11	4	4	24	28	0	4	1	3	1	0	0	2	1	0	0	256	256	風見·幽香	Kazami Yuka
+-	32	108	12	4	4	24	28	0	4	1	3	1	0	0	0	0	0	0	256	256	メディスン·メランコリ	Medicine Melancholy
+-	33	109	13	4	3	24	28	0	4	1	3	1	0	0	0	4	0	0	256	240	鈴仙·優曇華院·イナバ	Reisen Udongein Inaba
+-	34	110	14	4	4	24	28	0	4	1	3	1	0	0	3	1	0	0	256	256	射命丸·文	Syameimaru Aya
+-	35	111	15	4	3	24	28	0	4	1	3	1	0	0	2	2	0	0	256	240	上白沢·慧音	Keine Kamishirasawa
+-	36	112	16	4	4	24	28	0	4	1	3	1	0	0	3	1	0	4	256	256	八坂·神奈子	Yasaka Kanako
+-	37	113	17	5	2	24	28	0	1	1	4	1	0	0	2	1	0	0	240	128	アリス·マーガトロイド	Alice Margatroid
+-	38	114	18	4	4	24	28	0	4	1	3	1	0	0	3	1	0	4	256	256	洩矢·諏訪子	Moriya Suwako
+-	39	115	19	4	3	24	28	0	4	1	3	1	0	0	0	1	0	0	256	240	四季映姫·ヤマザナドゥ	Shikieiki Yamaxanadu
+-	40	116	20	5	4	24	28	0	4	1	3	1	3	1	2	1	4	1	240	256	魂魄·妖夢	Konpaku Youmu
+-	41	117	21	4	4	24	28	0	4	1	3	1	0	0	3	1	0	0	256	256	小野塚·小町	Onozuka Komachi
+-	42	118	22	4	3	24	28	3	1	1	3	1	0	0	3	1	0	0	256	240	八意·永琳	Eirin Yagokoro
+-	43	119	23	4	2	24	28	0	4	1	2	1	0	0	0	1	0	0	256	160	八雲·藍	Ran Yakumo
+-	44	120	24	4	2	24	28	0	1	1	1	1	0	0	0	4	0	1	256	160	レミリア·スカーレット	Remilia Scarlet
+-	45	121	25	4	2	24	28	0	1	1	2	1	0	0	0	0	0	0	192	160	西行寺·幽々子	Yuyuko Saigyouzi
+-	46	122	26	4	2	24	28	0	4	1	2	2	0	0	0	0	0	0	256	160	十六夜·咲夜	Izayoi Sakuya
+-	47	123	27	8	4	24	28	0	4	1	3	1	0	0	0	6	0	0	512	320	博麗·霊夢	Hakurei Reimu
+-	48	124	28	4	3	24	28	0	4	1	3	1	0	0	0	1	0	0	256	240	霧雨·魔理沙	Kirisame Marisa
+-	49	125	29	4	3	24	28	0	4	1	3	1	0	0	2	1	0	0	256	288	東風谷·早苗	Kotiya Sanae
+-	50	126	30	4	3	24	28	0	4	1	2	2	0	0	2	2	0	0	256	240	藤原·妹紅	Huziwara no Mokou
+-	51	127	31	3	3	24	28	2	1	1	1	2	0	0	0	3	0	0	240	240	蓬莱山·輝夜	Kaguya Houraisan
+-	52	125	32	6	5	24	28	20	1	1	2	1	2	1	0	2	0	0	480	480	八雲·紫	Yukari Yakumo
+-	53	129	33	4	3	24	28	0	4	1	3	1	0	0	0	1	0	0	256	240	霧雨·魔理沙	Kirisame Marisa
+-	54	123	34	8	4	24	28	16	4	1	3	1	0	0	0	6	0	0	512	320	博麗·霊夢	Hakurei Reimu

@@ -71,7 +71,7 @@
 				AdditionalOptions=""
 				ShowProgress="0"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
-				LinkIncremental="0"
+				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../lib/vc;../../lib/vc"
 				DelayLoadDLLs="hge_d.dll"
@@ -613,6 +613,10 @@
 				</File>
 				<File
 					RelativePath=".\Header\DataStruct.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Header\DataTable.h"
 					>
 				</File>
 				<File

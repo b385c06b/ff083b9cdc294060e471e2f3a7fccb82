@@ -124,10 +124,7 @@ struct resourceData
 struct bulletData 
 {
 	int nTurnAngle;
-	int tex_x;
-	int tex_y;
-	int tex_w;
-	int tex_h;
+	int siid;
 	float collisionMain;
 	float collisionSub;
 	BYTE nRoll;
@@ -197,7 +194,7 @@ struct spriteData
 	int tex_y;
 	int tex_w;
 	int tex_h;
-	BYTE tex;
+	int tex;
 };
 
 struct playerbulletData 

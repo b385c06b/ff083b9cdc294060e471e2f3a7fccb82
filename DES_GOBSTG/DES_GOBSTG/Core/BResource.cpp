@@ -24,6 +24,13 @@ void BResource::ReleaseCustomConst()
 	}
 }
 
+void BResource::MallocCustomConst()
+{
+	ReleaseCustomConst();
+	customconstdata = (customconstData *)malloc(RSIZE_CUSTOMCONST);
+}
+
+
 //Scripter::LoadAll
 bool BResource::Fill()
 {
