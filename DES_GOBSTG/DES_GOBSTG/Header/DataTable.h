@@ -20,7 +20,6 @@ public:
 	bool EnemyDefineFile();
 	bool PlayerDefineFile();
 	bool SpriteDefineFile();
-	bool PlayerBulletDefineFile();
 	bool PlayerShootDefineFile();
 	bool PlayerGhostDefineFile();
 

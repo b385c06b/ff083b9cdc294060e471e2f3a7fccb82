@@ -15,14 +15,14 @@ int Process::processResult()
 	gametime++;
 	if (gametime == 1)
 	{
-		scr.SetIntValue(SCR_RESERVEBEGIN, -2);
-		scr.SetIntValue(SCR_RESERVEBEGIN+1, -1);
-		scr.SetIntValue(SCR_RESERVEBEGIN+2, 0);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, -2);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, -1);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+2, 0);
 	}
-	scr.controlExecute(STATE_RESULT, gametime);
-	int tsec = scr.GetIntValue(SCR_RESERVEBEGIN);
-	int tdiff = scr.GetIntValue(SCR_RESERVEBEGIN+1);
-	int tsel = scr.GetIntValue(SCR_RESERVEBEGIN+2);
+	Scripter::scr.controlExecute(STATE_RESULT, gametime);
+	int tsec = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN);
+	int tdiff = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN+1);
+	int tsel = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN+2);
 
 	if(hge->Input_GetDIKey(KS_SPECIAL, DIKEY_DOWN))
 	{
@@ -104,7 +104,7 @@ int Process::processResult()
 				strcat(_ifs[i].info, Data::data.getPlayerName(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkNum(Data::data.nLinkType(DATAN_CHARA), 3), 0)));
 
 				_ifs[i].valueSet(i, _ifs[i].info, 30, 210+80*i, INFO_GREEN);
-				infoselect.push_back(_ifs[i]);
+				InfoSelect::infoselect.push_back(_ifs[i]);
 			}
 
 			char buff[M_STRITOAMAX];
@@ -131,7 +131,7 @@ int Process::processResult()
 			for (int i=0; i<3; i++)
 			{
 				_ifs[10+i].valueSet(10+i, _ifs[10+i].info, M_CLIENT_CENTER_X, 365+i*25, INFO_BLUE, SEL_NONACTIVE | SEL_STAY);
-				infoselect.push_back(_ifs[10+i]);
+				InfoSelect::infoselect.push_back(_ifs[10+i]);
 			}
 
 			InfoSelect::Setup(10, 0);
@@ -215,7 +215,7 @@ int Process::processResult()
 					_ifs.linkl("|14252", tmaxbonus);
 
 					_ifs.valueSet(i, _ifs.info, 80, i*40+160, _ifs.coltype, SEL_NULL);
-					infoselect.push_back(_ifs);
+					InfoSelect::infoselect.push_back(_ifs);
 
 					i++;
 				}
@@ -225,9 +225,9 @@ int Process::processResult()
 		}
 	}
 
-	scr.SetIntValue(SCR_RESERVEBEGIN, tsec);
-	scr.SetIntValue(SCR_RESERVEBEGIN+1, tdiff);
-	scr.SetIntValue(SCR_RESERVEBEGIN+2, tsel);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, tsec);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, tdiff);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+2, tsel);
 	
 	return PGO;
 }

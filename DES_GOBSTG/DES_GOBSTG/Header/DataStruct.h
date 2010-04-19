@@ -95,9 +95,14 @@ struct resourceData
 	char enemydefinefilename[M_PATHMAX];
 	char playerdefinefilename[M_PATHMAX];
 	char spritedefinefilename[M_PATHMAX];
-	char playerbulletdefinefilename[M_PATHMAX];
 	char playershootdefinefilename[M_PATHMAX];
 	char playerghostdefinefilename[M_PATHMAX];
+	char datadefinefilename[M_PATHMAX];
+	char packagedefinefilename[M_PATHMAX];
+	char texturedefinefilename[M_PATHMAX];
+	char effectdefinefilename[M_PATHMAX];
+	char sedefinefilename[M_PATHMAX];
+
 
 	//folder
 	char scriptfoldername[M_SCRIPTFOLDERMAX][M_PATHMAX];
@@ -143,13 +148,8 @@ struct enemyData
 	char ename[M_STRMAX];
 	float collision_w;
 	float collision_h;
-	float usetexw;
-	float usetexh;
-	BYTE tex;
+	int siid;
 	BYTE faceIndex;
-	BYTE tex_nCol;
-	BYTE tex_nRow;
-	BYTE startFrame;
 	BYTE standFrame;
 	BYTE rightPreFrame;
 	BYTE rightFrame;
@@ -168,18 +168,13 @@ struct playerData
 	float collision_r;
 	float fastspeed;
 	float slowspeed;
-	float usetexw;
-	float usetexh;
 	float graze_r;
 	int bombperpower;
+	int siid;
 	WORD borderlast;
 	WORD bomblast;
 	BYTE shotdelay;
-	BYTE tex;
 	BYTE faceIndex;
-	BYTE tex_nCol;
-	BYTE tex_nRow;
-	BYTE startFrame;
 	BYTE standFrame;
 	BYTE leftPreFrame;
 	BYTE leftFrame;
@@ -210,6 +205,7 @@ struct playershootData
 {
 	int angle;
 	int hitonfactor;
+	int siid;
 	float xbias;
 	float ybias;
 	float scale;
@@ -221,7 +217,6 @@ struct playershootData
 	BYTE seID;
 	BYTE timeMod;
 	BYTE arrange;
-	BYTE ID;
 };
 
 struct playerghostData 

@@ -1,0 +1,83 @@
+73	h5nc	55
+Comment	Index	SE
+#		Player
+-	0	SE/default.wav
+-	1	SE/Player/player_graze.wav
+-	2	SE/Player/player_shot.wav
+-	3	SE/Player/player_dead.wav
+-	4	SE/Player/player_explode.wav
+#		PlayerOther
+-	8	SE/default.wav
+-	9	SE/default.wav
+-	10	SE/Player/player_change.wav
+-	11	SE/Player/player_borderon.wav
+-	12	SE/Player/player_borderoff.wav
+#		Bullet
+-	16	SE/Bullet/bullet_change_1.wav
+-	17	SE/Bullet/bullet_change_1.wav
+-	18	SE/default.wav
+-	19	SE/default.wav
+#		Beam
+-	20	SE/Beam/beam_1.wav
+-	21	SE/Beam/beam_2.wav
+-	22	SE/default.wav
+-	23	SE/default.wav
+#		Boss
+-	28	SE/Boss/boss_up.wav
+-	29	SE/Boss/boss_dead.wav
+-	30	SE/Boss/boss_timeout.wav
+-	31	SE/default.wav
+-	32	SE/Boss/boss_kira.wav
+-	33	SE/Boss/boss_power_1.wav
+-	34	SE/Boss/boss_power_2.wav
+-	35	SE/Boss/boss_bonus.wav
+#		Enemy
+-	40	SE/Enemy/enemy_damage_1.wav
+-	41	SE/Enemy/enemy_damage_1.wav
+-	42	SE/Enemy/enemy_dead.wav
+#		Ghost
+-	44	SE/Ghost/ghost_dead.wav
+-	45	SE/Ghost/ghost_merge.wav
+-	46	SE/Ghost/ghost_half.wav
+#		Item
+-	50	SE/Item/item_get.wav
+-	51	SE/Item/item_extend.wav
+-	52	SE/Item/item_powerup.wav
+#		System
+-	54	SE/System/system_ok.wav
+-	55	SE/System/system_cancel.wav
+-	56	SE/System/system_select.wav
+-	57	SE/System/system_pause.wav
+#		Free
+-	60	SE/Player/player_shoot_01.wav
+-	61	SE/Player/player_shoot_02.wav
+#		PlayerBomb
+-	64	SE/Player/player_bomb_01.wav
+-	65	SE/Player/player_bomb_02.wav
+-	66	SE/Player/player_bomb_03.wav
+-	67	SE/Player/player_bomb_04.wav
+-	68	SE/Player/player_bomb_05.wav
+-	69	SE/Player/player_bomb_06.wav
+-	70	SE/Player/player_bomb_07.wav
+-	71	SE/Player/player_bomb_08.wav
+-	72	SE/Player/player_bomb_09.wav
+-	73	SE/Player/player_bomb_10.wav
+-	74	SE/Player/player_bomb_11.wav
+-	75	SE/Player/player_bomb_12.wav
+-	76	SE/Player/player_bomb_13.wav
+-	77	SE/Player/player_bomb_14.wav
+-	78	SE/Player/player_bomb_15.wav
+-	79	SE/Player/player_bomb_16.wav
+-	80	SE/Player/player_bomb_17.wav
+-	81	SE/Player/player_bomb_18.wav
+-	82	SE/Player/player_bomb_19.wav
+-	83	SE/Player/player_bomb_20.wav
+-	84	SE/Player/player_bomb_21.wav
+-	85	SE/Player/player_bomb_22.wav
+-	86	SE/Player/player_bomb_04b.wav
+#		Bullet
+-	90	SE/Bullet/bullet_1.wav
+-	91	SE/Bullet/bullet_2.wav
+#		StageTitle
+-	112	SE/Other/other_stagetitle_1.wav
+-	113	SE/Other/other_stagetitle_2.wav

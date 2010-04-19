@@ -7,8 +7,4 @@ extern HGE * hge;
 
 extern int gametime;
 
-extern Target tar[TARGETMAX];
-
-extern char strdesc[STRINGDESCMAX][M_STRMAX*2];
-
 #endif

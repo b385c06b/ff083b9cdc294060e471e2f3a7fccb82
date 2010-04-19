@@ -34,7 +34,7 @@ public:
 
 	bool isSpell();
 
-	static void empty();
+	static void Clear();
 	static bool Init();
 	static void Release();
 
@@ -61,8 +61,9 @@ public:
 
 	static BYTE flag;
 	static BYTE spellflag;
+
+	static BossInfo bossinfo;
 };
 
-extern BossInfo bossinfo;
 
 #endif

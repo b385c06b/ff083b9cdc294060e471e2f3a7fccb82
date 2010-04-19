@@ -245,8 +245,11 @@ public:
 	DWORD strdescIndex;
 
 	static bool stopEdefScript;
+
+	char Scripter::strdesc[STRINGDESCMAX][M_STRMAX*2];
+	static Scripter scr;
+
 };
 
-extern Scripter scr;
 
 #endif

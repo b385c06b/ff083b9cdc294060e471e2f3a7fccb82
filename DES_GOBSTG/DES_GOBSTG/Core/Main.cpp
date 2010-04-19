@@ -5,10 +5,6 @@
 
 #include "../Header/Main.h"
 
-char strdesc[STRINGDESCMAX][M_STRMAX*2];
-
-Target tar[TARGETMAX];
-
 HGE *hge = NULL;
 
 int gametime = 0;
@@ -22,7 +18,7 @@ bool RenderFunc()
 	hge->Gfx_BeginScene();
 	hge->Gfx_Clear(0x00000000);
 
-	mp.render();
+	Process::mp.render();
 	hge->Gfx_EndScene();
 	
 	return false;
@@ -34,10 +30,10 @@ bool FrameFunc()
 		return true;
 	if(hge->Input_GetDIKey(KS_CAPTURE_MP, DIKEY_DOWN))
 	{
-		mp.SnapShot();
+		Process::mp.SnapShot();
 	}
 
-	if(mp.frame() == PQUIT)
+	if(Process::mp.frame() == PQUIT)
 		return true;
 
 	return false;
@@ -62,12 +58,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	if(hge->System_Initiate())
 	{
 		gametime = 0;
-		mp.state = STATE_INIT;
+		Process::mp.state = STATE_INIT;
 		hge->System_Start();
 	}
 
 	//
-	mp.Realease();
+	Process::mp.Realease();
 
 //	hge->System_Shutdown();
 	hge->Release();

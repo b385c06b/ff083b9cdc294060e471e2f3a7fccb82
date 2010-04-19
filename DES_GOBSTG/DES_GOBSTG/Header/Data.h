@@ -20,9 +20,15 @@
 #define DATA_ENEMYDEFINEFILE	0x49
 #define DATA_PLAYERDEFINEFILE	0x4A
 #define DATA_SPRITEDEFINEFILE	0x4B
-#define DATA_PLAYERBULLETDEFINE	0x4C
+//#define DATA_PLAYERBULLETDEFINE	0x4C
 #define DATA_PLAYERSHOOTDEFINE	0x4D
 #define DATA_PLAYERGHOSTDEFINE	0x4E
+
+#define DATA_DATATABLEDEFINE	0x51
+#define DATA_PACKAGETABLEDEFINE	0x52
+#define DATA_TEXTURETABLEDEFINE	0x53
+#define DATA_EFFECTTABLEDEFINE	0x54
+#define DATA_SETABLEDEFINE		0x55
 
 #define DATA_BOTHHEADER			0x80
 #define DATA_RESOURCEFILE		0x81
@@ -150,14 +156,13 @@ enum{
 	RESDATAN_ENEMYDEFINEFILE,
 	RESDATAN_PLAYERDEFINEFILE,
 	RESDATAN_SPRITEDEFINEFILE,
-	RESDATAN_PLAYERBULLETDEFINEFILE,
 	RESDATAN_PLAYERSHOOTDEFINEFILE,
 	RESDATAN_PLAYERGHOSTDEFINEFILE,
-
-	RESDATAS_PACKAGE,
-	RESDATAS_TEXTURE,
-	RESDATAS_SE,
-	RESDATAS_EFFECTSYS,
+	RESDATAN_DATADEFINEFILE,
+	RESDATAN_PACKAGEDEFINEFILE,
+	RESDATAN_TEXTUREDEFINEFILE,
+	RESDATAN_EFFECTDEFINEFILE,
+	RESDATAN_SEDEFINEFILE,
 
 	RESDATAS_FOLDER,
 
@@ -343,9 +348,14 @@ public:
 	char * enemydefinefilename;
 	char * playerdefinefilename;
 	char * spritedefinefilename;
-	char * playerbulletdefinefilename;
 	char * playershootdefinefilename;
 	char * playerghostdefinefilename;
+
+	char * datadefinefilename;
+	char * packagedefinefilename;
+	char * texturedefinefilename;
+	char * effectdefinefilename;
+	char * sedefinefilename;
 
 	static Data data;
 };

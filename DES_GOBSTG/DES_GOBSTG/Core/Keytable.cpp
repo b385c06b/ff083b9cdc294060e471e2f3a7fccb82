@@ -442,8 +442,8 @@ scrKeyWord scrKeyTable[] =
 
 	{"ITEM_STARTSPEED",			ITEM_STARTSPEED},
 
-	{"BGMASK",					BGMASKINDEX},
-	{"FGPAUSE",					FGPAUSEINDEX},
+	{"BGMASK",					UBGID_BGMASK},
+	{"FGPAUSE",					UFGID_FGPAUSE},
 
 	{"BG_NONE",					BG_NONE},
 	{"BG_WHITEFLASH",			BG_WHITEFLASH},
@@ -615,19 +615,19 @@ scrKeyWord scrKeyTable[] =
 
 	{SCR_KEYSTATE_STR,			SCR_KEYSTATE},
 
-	{"KS_UP",					(DWORD)&(mp.keyUp)},
-	{"KS_DOWN",					(DWORD)&(mp.keyDown)},
-	{"KS_LEFT",					(DWORD)&(mp.keyLeft)},
-	{"KS_RIGHT",				(DWORD)&(mp.keyRight)},
-	{"KS_FIRE",					(DWORD)&(mp.keyFire)},
-	{"KS_SPECIAL",				(DWORD)&(mp.keySpecial)},
-	{"KS_SLOW",					(DWORD)&(mp.keySlow)},
-	{"KS_CHANGE",				(DWORD)&(mp.keyChange)},
-	{"KS_PAUSE",				(DWORD)&(mp.keyPause)},
-	{"KS_SKIP",					(DWORD)&(mp.keySkip)},
-	{"KS_ENTER",				(DWORD)&(mp.keyEnter)},
-	{"KS_ESCAPE",				(DWORD)&(mp.keyEscape)},
-	{"KS_CAPTURE",				(DWORD)&(mp.keyCapture)},
+	{"KS_UP",					(DWORD)&(Process::mp.keyUp)},
+	{"KS_DOWN",					(DWORD)&(Process::mp.keyDown)},
+	{"KS_LEFT",					(DWORD)&(Process::mp.keyLeft)},
+	{"KS_RIGHT",				(DWORD)&(Process::mp.keyRight)},
+	{"KS_FIRE",					(DWORD)&(Process::mp.keyFire)},
+	{"KS_SPECIAL",				(DWORD)&(Process::mp.keySpecial)},
+	{"KS_SLOW",					(DWORD)&(Process::mp.keySlow)},
+	{"KS_CHANGE",				(DWORD)&(Process::mp.keyChange)},
+	{"KS_PAUSE",				(DWORD)&(Process::mp.keyPause)},
+	{"KS_SKIP",					(DWORD)&(Process::mp.keySkip)},
+	{"KS_ENTER",				(DWORD)&(Process::mp.keyEnter)},
+	{"KS_ESCAPE",				(DWORD)&(Process::mp.keyEscape)},
+	{"KS_CAPTURE",				(DWORD)&(Process::mp.keyCapture)},
 
 	{SCR_NULL_STR,				SCR_NULL},
 };

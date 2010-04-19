@@ -63,8 +63,9 @@ public:
 	static bool plus;
 
 	static bool avoid;
+
+	static list<InfoSelect>infoselect;
 };
 
-extern list<InfoSelect>infoselect;
 
 #endif

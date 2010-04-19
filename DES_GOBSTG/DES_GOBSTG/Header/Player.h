@@ -61,13 +61,16 @@ class Player : public BObject
 {
 public:
 	Player();
-	virtual ~Player();
+	~Player();
+
+	static void Action();
+	static void AddLostStack();
 
 	void valueSet(WORD ID, WORD ID_sub_1, WORD ID_sub_2, BYTE nLife=PL_DEFAULTNPLAYER, bool bContinue = false);
 	void ClearSet();
 	void UpdatePlayerData();
 
-	virtual void action();
+	void action();
 
 	void RenderEffect();
 
@@ -100,6 +103,7 @@ public:
 
 	void bombAction();
 
+	static void RenderAll();
 	void Render();
 
 	LONGLONG getClearBonusPoint();
@@ -171,7 +175,6 @@ public:
 	DWORD	nLastGraze;
 	DWORD	nLastFaith;
 
-	float	lostStack;
 	DWORD	borderCounter;
 	DWORD	fastCounter;
 
@@ -224,6 +227,8 @@ public:
 	static	BYTE	ncCont;
 	static	BYTE	ncGet;
 	static	BYTE	ncPause;
+
+	static float	lostStack;
 
 };
 #endif

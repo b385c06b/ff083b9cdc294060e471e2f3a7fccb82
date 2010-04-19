@@ -2,8 +2,9 @@
 #define _ITEM_H
 
 #include "BObject.h"
+#include "Bullet.h"
 
-class Player;
+#define ITEMMAX				BULLETMAX
 
 #define ITEMINFOFONTMAX		0x40
 
@@ -37,6 +38,9 @@ public:
 	virtual ~Item();
 
 	static void Init();
+	static void ClearAll();
+	static void Action();
+	static void RenderAll();
 
 	static void Build(WORD type, float x, float y, bool bDrained = false, int angle = 9000, float speed = ITEM_STARTSPEED);
 
@@ -58,8 +62,7 @@ public:
 
 	static hgeSprite *spItem[ITEMSPRITEMAX];
 	static VectorList<infoFont>infofont;
+	static VectorList<Item> mi;
 };
-
-extern VectorList<Item>mi;
 
 #endif

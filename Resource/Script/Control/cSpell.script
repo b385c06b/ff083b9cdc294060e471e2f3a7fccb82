@@ -21,7 +21,7 @@ BGVALUE 11 SI_TopContent_Spell
 	0xffffffff
 
 // Mask
-BGVALUE BGMASK SI_Null
+BGVALUE BGMASK SI_White
 	260 180 320 140
 	0xA0000000
 

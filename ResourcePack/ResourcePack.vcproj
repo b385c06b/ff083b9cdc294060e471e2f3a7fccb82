@@ -71,7 +71,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="nafxcwd.lib"
-				LinkIncremental="0"
+				LinkIncremental="1"
 				AdditionalLibraryDirectories="../lib/vc;../../lib/vc"
 				IgnoreDefaultLibraryNames=""
 				DelayLoadDLLs="hge_d.dll"

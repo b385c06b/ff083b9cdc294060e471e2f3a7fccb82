@@ -11,22 +11,22 @@ int Process::processContinue()
 	if(Player::p.ncCont >= M_PL_CONTINUEMAX || practicemode)
 		goto exit;
 
-	if(!scr.GetIntValue(SCR_RESERVEBEGIN))
+	if(!Scripter::scr.GetIntValue(SCR_RESERVEBEGIN))
 	{
-		fgpause.exist = true;
-		fgpause.SetFlag(FG_PAUSEIN, FGMT_PAUSE);
-		scr.SetIntValue(SCR_RESERVEBEGIN+1, M_PL_CONTINUEMAX-Player::p.ncCont);
+		BGLayer::ubg[UFGID_FGPAUSE].exist = true;
+		BGLayer::ubg[UFGID_FGPAUSE].SetFlag(FG_PAUSEIN, FGMT_PAUSE);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, M_PL_CONTINUEMAX-Player::p.ncCont);
 
 		hge->Channel_Pause(channel);
 	}
 
-	scr.controlExecute(STATE_CONTINUE, SCRIPT_CON_INIT);
+	Scripter::scr.controlExecute(STATE_CONTINUE, SCRIPT_CON_INIT);
 	//60 sec
-	int tsec = scr.GetIntValue(SCR_RESERVEBEGIN);
+	int tsec = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN);
 
 	if(hge->Input_GetDIKey(KS_FIRE, DIKEY_DOWN))
 	{
-		fgpause.SetFlag(FG_PAUSEOUT, FGMT_PAUSE);
+		BGLayer::ubg[UFGID_FGPAUSE].SetFlag(FG_PAUSEOUT, FGMT_PAUSE);
 	}
 	else if(hge->Input_GetDIKey(KS_SPECIAL, DIKEY_DOWN))
 	{
@@ -35,7 +35,7 @@ int Process::processContinue()
 
 	if(tsec == 0x10)
 	{
-		fgpause.exist = false;
+		BGLayer::ubg[UFGID_FGPAUSE].exist = false;
 		if(!spellmode && scene < S1200)
 		{
 			Player::p.valueSet(mainchara, subchara_1, subchara_2, PL_DEFAULTNPLAYER, true);
@@ -66,15 +66,15 @@ int Process::processContinue()
 	else if(tsec == 0x11)
 	{
 exit:
-		rpy.partFill(0xff);
-		fgpause.exist = false;
+		Replay::rpy.partFill(0xff);
+		BGLayer::ubg[UFGID_FGPAUSE].exist = false;
 //		musicChange(0);
 		gametime = 0;
 		state = STATE_OVER;
 		return PTURN;
 	}
 
-	scr.SetIntValue(SCR_RESERVEBEGIN, tsec);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, tsec);
 
 	return PGO;
 }

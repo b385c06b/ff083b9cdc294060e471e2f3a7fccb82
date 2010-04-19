@@ -12,7 +12,7 @@ BGVALUE 11 SI_Title_Music
 	TotalCenterX 56 -1 -1
 	0xffffffff
 
-BGVALUE BGMASK SI_Null
+BGVALUE BGMASK SI_White
 	TotalCenterX 265 520 380
 	0xA0000000
 

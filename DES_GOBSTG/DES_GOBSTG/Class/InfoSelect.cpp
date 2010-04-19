@@ -5,7 +5,7 @@
 #include "../Header/Process.h"
 #include "../Header/PushKey.h"
 
-list<InfoSelect>infoselect;
+list<InfoSelect> InfoSelect::infoselect;
 
 int InfoSelect::nselect = 0;
 int InfoSelect::select = 0;

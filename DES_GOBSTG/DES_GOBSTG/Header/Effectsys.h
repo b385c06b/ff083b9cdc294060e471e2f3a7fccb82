@@ -5,6 +5,8 @@
 #include "Const.h"
 #include "BObject.h"
 
+#define EFFECTSYSMAX		0x100
+
 #define EFFSYS_AUTOFADEOUT_TIME	120
 
 class Effectsys : public BObject
@@ -14,7 +16,10 @@ public:
 	virtual ~Effectsys();
 
 	static bool Init(HTEXTURE * tex, const char * foldername, char name[][M_PATHMAX]);
+	static void Action();
+	static void ClearAll();
 
+	void Clear();
 	void valueSet(WORD ID, float x, float y, int lifetime = -1);
 	void valueSet(WORD ID, int lifetime, float x, float y, float z, BYTE tarID, int angle, float speed, float zSpeed);
 	void valueSet(WORD ID, int lifetime, float x, float y, BYTE tarID, int chasetimer, BYTE tarAim);
@@ -25,6 +30,7 @@ public:
 	void Stop(bool bKill = false);
 	void action();
 
+	static void RenderAll();
 	void Render();
 
 public:
@@ -38,8 +44,7 @@ public:
 	BYTE tarAim;
 
 	static hgeEffectSystem efftype[EFFECTSYSTYPEMAX];
+	static Effectsys effsys[EFFECTSYSMAX];
 };
-
-extern Effectsys effsys[EFFECTSYSMAX];
 
 #endif

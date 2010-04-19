@@ -7,12 +7,13 @@
 #include "../Header/SpriteItemManager.h"
 #include "../Header/FrontDisplayName.h"
 #include "../Header/BResource.h"
+#include "../Header/Process.h"
 
-VectorList<PlayerBullet>pb;
+VectorList<PlayerBullet> PlayerBullet::pb;
 
 int PlayerBullet::locked = PBLOCK_LOST;
 
-hgeSprite * PlayerBullet::spPlayerBullet[PLAYERBULLETSPRITEMAX];
+hgeSprite * PlayerBullet::sprite[PLAYERSHOOTTYPEMAX][PLAYERBULLETTYPE];
 HTEXTURE * PlayerBullet::tex;
 
 DWORD PlayerBullet::bcol0;
@@ -49,11 +50,60 @@ PlayerBullet::~PlayerBullet()
 {
 }
 
+void PlayerBullet::Init(HTEXTURE * _tex)
+{
+	tex = _tex;
+	Release();
+	pb.init(PLAYERBULLETMAX);
+
+	for (int i=0; i<PLAYERSHOOTTYPEMAX; i++)
+	{
+		for (int j=0; j<PLAYERBULLETTYPE; j++)
+		{
+			sprite[i][j] = SpriteItemManager::CreateSprite(BResource::res.playershootdata[i].siid+(((BResource::res.playershootdata[i].flag)&PBFLAG_ANIMATION)?j:0));
+		}
+	}
+}
+
+void PlayerBullet::Action()
+{
+	if (pb.getSize())
+	{
+		DWORD stopflag = Process::mp.GetStopFlag();
+		bool binstop = FRAME_STOPFLAGCHECK_(stopflag, FRAME_STOPFLAG_PLAYERBULLET);
+		if (!binstop)
+		{
+			DWORD i = 0;
+			DWORD size = pb.getSize();
+			for (pb.toBegin(); i<size; pb.toNext(), i++)
+			{
+				if (!pb.isValid())
+				{
+					continue;
+				}
+				if ((*pb).exist)
+				{
+					(*pb).action();
+				}
+				else
+				{
+					pb.pop();
+				}
+			}
+		}
+	}
+}
+
+void PlayerBullet::ClearAll()
+{
+	pb.clear_item();
+}
+
 void PlayerBullet::Build(int shootdataID)
 {
 	PlayerBullet _pb;
 	playershootData * item = &(BResource::res.playershootdata[shootdataID]);
-	_pb.valueSet(item->ID, item->arrange, item->xbias, item->ybias, 
+	_pb.valueSet(shootdataID, item->arrange, item->xbias, item->ybias, 
 		item->scale, item->angle, item->speed, item->accelspeed, 
 		item->power, item->hitonfactor, item->flag, item->seID);
 	pb.push_back(_pb);
@@ -81,6 +131,7 @@ void PlayerBullet::valueSet(WORD _ID, BYTE _arrange, float _xbias, float _ybias,
 	hscale	=	1.0f;
 	vscale	=	1.0f;
 	headangle =	0;
+	animation = 0;
 
 	diffuse	=	0xffffff;
 	alpha	=	0xC0;
@@ -110,8 +161,13 @@ void PlayerBullet::valueSet(WORD _ID, BYTE _arrange, float _xbias, float _ybias,
 
 	if (flag & PBFLAG_BEAM)
 	{
-		hscale = M_ACTIVECLIENT_HEIGHT / spPlayerBullet[ID]->GetWidth();
-		vscale = scale / spPlayerBullet[ID]->GetHeight();
+		hscale = M_ACTIVECLIENT_HEIGHT / SpriteItemManager::GetTexW(BResource::res.playershootdata[ID].siid);
+		vscale = scale / SpriteItemManager::GetTexH(BResource::res.playershootdata[ID].siid);
+		angle = -9000;
+		for (int i=0; i<PLAYERBULLETTYPE; i++)
+		{
+			sprite[ID][i]->SetBlendMode(BLEND_ALPHAADD);
+		}
 		angle = -9000;
 		alpha = 0x60;
 	}
@@ -141,19 +197,40 @@ void PlayerBullet::valueSet(WORD _ID, BYTE _arrange, float _xbias, float _ybias,
 
 void PlayerBullet::Release()
 {
-	for(int i=0;i<PLAYERBULLETSPRITEMAX;i++)
+	for(int i=0;i<PLAYERSHOOTTYPEMAX;i++)
 	{
-		if(spPlayerBullet[i])
-			delete spPlayerBullet[i];
-		spPlayerBullet[i] = NULL;
+		for (int j=0; j<PLAYERBULLETTYPE; j++)
+		{
+			SpriteItemManager::FreeSprite(&sprite[i][j]);
+		}
 	}
 	pb.clear();
 }
 
+void PlayerBullet::RenderAll()
+{
+	if (pb.getSize())
+	{
+		DWORD i = 0;
+		DWORD size = pb.getSize();
+		for (pb.toBegin(); i<size; pb.toNext(), i++)
+		{
+			if (pb.isValid())
+			{
+				(*pb).Render();
+			}
+
+		}
+	}
+}
+
 void PlayerBullet::Render()
 {
-	spPlayerBullet[ID]->SetColor((alpha<<24)|diffuse);
-	spPlayerBullet[ID]->RenderEx(x, y, ARC(angle+headangle), hscale, vscale);
+	if (sprite[ID][animation])
+	{
+		sprite[ID][animation]->SetColor((alpha<<24)|diffuse);
+		sprite[ID][animation]->RenderEx(x, y, ARC(angle+headangle), hscale, vscale);
+	}
 }
 
 bool PlayerBullet::GetLockAim(BObject ** obj)
@@ -164,11 +241,11 @@ bool PlayerBullet::GetLockAim(BObject ** obj)
 	}
 	if (locked < PBLOCK_GHOST)
 	{
-		*obj = &en[locked];
+		*obj = &Enemy::en[locked];
 	}
 	else
 	{
-		*obj = &gh[locked-PBLOCK_GHOST];
+		*obj = &Ghost::gh[locked-PBLOCK_GHOST];
 	}
 	return true;
 }
@@ -305,11 +382,11 @@ void PlayerBullet::DelayShoot()
 		BObject * _tobj;
 		if (locked < PBLOCK_GHOST)
 		{
-			_tobj = &en[locked];
+			_tobj = &Enemy::en[locked];
 		}
 		else
 		{
-			_tobj = &gh[locked-PBLOCK_GHOST];
+			_tobj = &Ghost::gh[locked-PBLOCK_GHOST];
 		}
 		if(timer == 1)
 		{
@@ -366,8 +443,8 @@ void PlayerBullet::action()
 				extramove = (Player::p.y-Player::p.lasty[_PBBEAM_LASTINDEX]) / 2.5f;
 			}
 			float _tx, _ty, _tw, _th;
-			spPlayerBullet[ID]->GetTextureRect(&_tx, &_ty, &_tw, &_th);
-			spPlayerBullet[ID]->SetTextureRect(_tx - (2.0f + extramove) / accelspeed, _ty, _tw, _th);
+			sprite[ID][animation]->GetTextureRect(&_tx, &_ty, &_tw, &_th);
+			sprite[ID][animation]->SetTextureRect(_tx - (2.0f + extramove) / accelspeed, _ty, _tw, _th);
 			timer = PB_FADEOUTTIME - 8;
 			fadeout = true;
 		}
@@ -432,7 +509,11 @@ void PlayerBullet::action()
 		{
 			if (timer % (PB_FADEOUTTIME / 3 + 1) == 1)
 			{
-				ID++;
+				animation++;
+				if (animation >= PLAYERBULLETTYPE)
+				{
+					animation = PLAYERBULLETTYPE-1;
+				}
 			}
 		}
 		if (flag & PBFLAG_REBOUND)
@@ -453,7 +534,7 @@ void PlayerBullet::action()
 			{
 				SE::push(SE_PLAYER_EXPLODE, x);
 			}
-			Enemy::DamageZoneBuild(x, y, spPlayerBullet[ID]->GetWidth(), power);
+			Enemy::DamageZoneBuild(x, y, sprite[ID][animation]->GetWidth(), power);
 		}
 		if (flag & PBFLAG_SCALEUP)
 		{

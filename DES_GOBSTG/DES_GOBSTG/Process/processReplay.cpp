@@ -20,9 +20,9 @@ int Process::processReplay()
 	if(gametime == 1)
 	{
 		PushKey::SetPushEvent(PUSHKEY_ID_UIUSE, KS_LEFT, KS_RIGHT);
-		scr.SetIntValue(SCR_RESERVEBEGIN, 0);
-		scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);
-		scr.SetIntValue(SCR_RESERVEBEGIN+2, 0);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, 0);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+2, 0);
 
 		SetCurrentDirectory(hge->Resource_MakePath(BResource::res.resdata.replayfoldername));
 		char * buffer;
@@ -47,18 +47,18 @@ int Process::processReplay()
 			if(!hge->Resource_EnumFiles())
 				break;
 		}
-		scr.SetIntValue(SCR_RESERVEBEGIN+3, tnrpys);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+3, tnrpys);
 
 		InfoSelect::select = 0;
 	}
 
-	scr.controlExecute(STATE_REPLAY, gametime);
+	Scripter::scr.controlExecute(STATE_REPLAY, gametime);
 
 	//-> pushtimer page depth index nrpys rpydifflv
-	int tdepth = scr.GetIntValue(SCR_RESERVEBEGIN);
-	int tindex = scr.GetIntValue(SCR_RESERVEBEGIN+1);
-	int trpydifflv = scr.GetIntValue(SCR_RESERVEBEGIN+2);
-	int tnrpys = scr.GetIntValue(SCR_RESERVEBEGIN+3);
+	int tdepth = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN);
+	int tindex = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN+1);
+	int trpydifflv = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN+2);
+	int tnrpys = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN+3);
 
 	if(hge->Input_GetDIKey(KS_SPECIAL, DIKEY_DOWN) && tdepth < 2)
 	{
@@ -170,7 +170,7 @@ int Process::processReplay()
 			_ifs[i].info[strlen(_ifs[i].info) - 4] = 0;
 
 			_ifs[i].valueSet(i, _ifs[i].info, 30, 120+i*22, _ifs[i].coltype);
-			infoselect.push_back(_ifs[i]);
+			InfoSelect::infoselect.push_back(_ifs[i]);
 		}
 
 		InfoSelect::Setup(i, InfoSelect::select);
@@ -285,7 +285,7 @@ int Process::processReplay()
 			for(int i=0;i<7;i++)
 			{
 				_ifs[i].valueSet(i, _ifs[i].info, 390, 120+22*i, _ifs[i].coltype, _ifs[i].flag);
-				infoselect.push_back(_ifs[i]);
+				InfoSelect::infoselect.push_back(_ifs[i]);
 			}
 			InfoSelect::Setup(7, 0);
 		}
@@ -297,13 +297,13 @@ int Process::processReplay()
 			strcat(_ifs[0].info, "\n");
 			strcat(_ifs[0].info, Data::data.getSpellName((int)(_rpy[tindex].rpyinfo.startscene)));
 			_ifs[0].valueSet(0, _ifs[0].info, 160, 80, INFO_RED);
-			infoselect.push_back(_ifs[0]);
+			InfoSelect::infoselect.push_back(_ifs[0]);
 
 			strcpy(_ifs[1].info, BResource::res.resdata.uistr.score);
 			_ifs[1].linkl("|10216", _rpy[tindex].rpyinfo.score);
 
 			_ifs[1].valueSet(1, _ifs[1].info, 320, 75, INFO_RED, SEL_NONACTIVE);
-			infoselect.push_back(_ifs[1]);
+			InfoSelect::infoselect.push_back(_ifs[1]);
 
 			InfoSelect::Setup(1, 0);
 		}
@@ -369,7 +369,7 @@ int Process::processReplay()
 		for(int i=10;i<23;i++)
 		{
 			_ifs[i].valueSet(i, _ifs[i].info, 40, 125+(i-10)*25, INFO_GREEN, SEL_NONACTIVE);
-			infoselect.push_back(_ifs[i]);
+			InfoSelect::infoselect.push_back(_ifs[i]);
 		}
 
 		tdepth = 3;
@@ -406,9 +406,9 @@ int Process::processReplay()
 		}
 	}
 
-	scr.SetIntValue(SCR_RESERVEBEGIN, tdepth);
-	scr.SetIntValue(SCR_RESERVEBEGIN+1, tindex);
-	scr.SetIntValue(SCR_RESERVEBEGIN+2, trpydifflv);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, tdepth);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, tindex);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+2, trpydifflv);
 
 	return PGO;
 }

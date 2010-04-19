@@ -10,8 +10,8 @@ int Process::processMusic()
 	gametime++;
 	if(gametime == 1)
 	{
-		scr.SetIntValue(SCR_RESERVEBEGIN, 0);
-		scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, 0);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);
 
 		PushKey::SetPushEvent(PUSHKEY_ID_UIUSE, KS_LEFT, KS_RIGHT);
 
@@ -20,7 +20,7 @@ int Process::processMusic()
 		{
 			if(!strlen(BResource::res.musdata[i].musicfilename))
 			{
-				scr.SetIntValue(SCR_RESERVEBEGIN+2, i);
+				Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+2, i);
 				break;
 			}
 			i++;
@@ -28,7 +28,7 @@ int Process::processMusic()
 
 		InfoSelect::select = 0;
 	}
-	scr.controlExecute(STATE_MUSIC, gametime);
+	Scripter::scr.controlExecute(STATE_MUSIC, gametime);
 
 	if(hge->Input_GetDIKey(KS_SPECIAL, DIKEY_DOWN))
 	{
@@ -38,9 +38,9 @@ int Process::processMusic()
 		return PTURN;
 	}
 	//sel maxnum
-	int tmusicsel = scr.GetIntValue(SCR_RESERVEBEGIN);
-	int tiselfirstID = scr.GetIntValue(SCR_RESERVEBEGIN+1);
-	int tmaxmusic = scr.GetIntValue(SCR_RESERVEBEGIN+2);
+	int tmusicsel = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN);
+	int tiselfirstID = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN+1);
+	int tmaxmusic = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN+2);
 
 	if(InfoSelect::complete)
 	{
@@ -80,7 +80,7 @@ int Process::processMusic()
 			musicChange(musicID+2, true);
 		}
 	}
-	if(!infoselect.size())
+	if(!InfoSelect::infoselect.size())
 	{
 		InfoSelect * _ifs = (InfoSelect *)malloc(tmaxmusic * sizeof(InfoSelect));
 		for(int i=0;i<tmaxmusic;i++)
@@ -91,7 +91,7 @@ int Process::processMusic()
 			strcat(_ifs[i].info, BResource::res.musdata[i].musicname);
 
 			_ifs[i].valueSet(i, _ifs[i].info, 70, i*22+100, INFO_GREEN);
-			infoselect.push_back(_ifs[i]);
+			InfoSelect::infoselect.push_back(_ifs[i]);
 		}
 		free(_ifs);
 
@@ -146,8 +146,8 @@ int Process::processMusic()
 		}
 	}
 
-	scr.SetIntValue(SCR_RESERVEBEGIN, tmusicsel);
-	scr.SetIntValue(SCR_RESERVEBEGIN+1, tiselfirstID);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, tmusicsel);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, tiselfirstID);
 
 	return PGO;
 }

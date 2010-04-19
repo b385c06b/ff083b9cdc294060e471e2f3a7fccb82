@@ -15,8 +15,8 @@ int Process::processPause()
 	{
 		hge->Channel_Pause(channel);
 
-		scr.d[SCR_RESERVEBEGIN].bfloat = false;
-		scr.SetIntValue(SCR_RESERVEBEGIN, 0x00);
+		Scripter::scr.d[SCR_RESERVEBEGIN].bfloat = false;
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, 0x00);
 		pauseinit = true;
 
 		if(replaymode)
@@ -31,29 +31,29 @@ int Process::processPause()
 			Player::ncPause++;
 		}
 	}
-	if(scr.GetIntValue(SCR_RESERVEBEGIN) < 0x100)
-		scr.controlExecute(STATE_PAUSE, SCRIPT_CON_INIT);
+	if(Scripter::scr.GetIntValue(SCR_RESERVEBEGIN) < 0x100)
+		Scripter::scr.controlExecute(STATE_PAUSE, SCRIPT_CON_INIT);
 
-	if(sel.size() && hge->Input_GetDIKey(KS_SPECIAL, DIKEY_UP))
+	if(Selector::sel.size() && hge->Input_GetDIKey(KS_SPECIAL, DIKEY_UP))
 	{
 		Selector::Clear();
-		if(scr.GetIntValue(SCR_RESERVEBEGIN) == 0x10)
+		if(Scripter::scr.GetIntValue(SCR_RESERVEBEGIN) == 0x10)
 		{
-			scr.SetIntValue(SCR_RESERVEBEGIN, 0xff);
+			Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, 0xff);
 			if(replaymode && replayend || spellmode && !replaymode && gametime == 0)
 				state = STATE_TITLE;
 			else
 				state = STATE_START;
 		}
 		else
-			scr.SetIntValue(SCR_RESERVEBEGIN, 0x01);
+			Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, 0x01);
 		SE::push(SE_SYSTEM_CANCEL);
 //		state = STATE_START;
 	}
 	if(hge->Input_GetDIKey(KS_PAUSE, DIKEY_DOWN))
 	{
 		Selector::Clear();
-		scr.SetIntValue(SCR_RESERVEBEGIN, 0xff);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, 0xff);
 		SE::push(SE_SYSTEM_CANCEL);
 		if(replaymode && replayend)
 			state = STATE_TITLE;
@@ -61,17 +61,17 @@ int Process::processPause()
 			state = STATE_START;
 	}
 
-	if(scr.GetIntValue(SCR_RESERVEBEGIN) == 0xff)
+	if(Scripter::scr.GetIntValue(SCR_RESERVEBEGIN) == 0xff)
 	{
-		fgpause.SetFlag(FG_PAUSEOUT, FGMT_PAUSE);
-		scr.SetIntValue(SCR_RESERVEBEGIN, 0x100|state);
+		BGLayer::ubg[UFGID_FGPAUSE].SetFlag(FG_PAUSEOUT, FGMT_PAUSE);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, 0x100|state);
 		state = STATE_PAUSE;
 	}
-	else if(scr.GetIntValue(SCR_RESERVEBEGIN) >= 0x100 && !fgpause.flag)
+	else if(Scripter::scr.GetIntValue(SCR_RESERVEBEGIN) >= 0x100 && !BGLayer::ubg[UFGID_FGPAUSE].flag)
 	{
-		fgpause.exist = false;
+		BGLayer::ubg[UFGID_FGPAUSE].exist = false;
 		pauseinit = false;
-		state = scr.GetIntValue(SCR_RESERVEBEGIN) & 0xff;
+		state = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN) & 0xff;
 		if(state == STATE_START)
 		{
 			if(gametime == 0)
@@ -106,10 +106,10 @@ int Process::processPause()
 				BGLayer::KillOtherLayer();
 				Selector::Clear();
 				InfoSelect::Clear();
-				bgmask.exist = false;
-				fdisp.SetState(FDISP_PANEL, 0);
+				BGLayer::ubg[UBGID_BGMASK].exist = false;
+				FrontDisplay::fdisp.SetState(FDISP_PANEL, FDISPSTATE_OFF);
 				Player::p.exist = false;
-				BossInfo::empty();
+				BossInfo::Clear();
 				getInput();
 				replaymode = false;
 				state = STATE_REPLAY;
@@ -120,9 +120,9 @@ int Process::processPause()
 				BGLayer::KillOtherLayer();
 				Selector::Clear();
 				InfoSelect::Clear();
-				bgmask.exist = false;
-				fdisp.SetState(FDISP_PANEL, 0);
-				BossInfo::empty();
+				BGLayer::ubg[UBGID_BGMASK].exist = false;
+				FrontDisplay::fdisp.SetState(FDISP_PANEL, FDISPSTATE_OFF);
+				BossInfo::Clear();
 				if(spellmode && !replaymode && gametime == 0)
 					state = STATE_CONTINUE;
 				else

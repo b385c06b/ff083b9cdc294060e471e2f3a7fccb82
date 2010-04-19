@@ -8,8 +8,10 @@
 #include "../Header/Chat.h"
 #include "../Header/BossInfo.h"
 #include "../Header/Main.h"
+#include "../Header/EffectSysIDDefine.h"
+#include "../Header/Process.h"
 
-Ghost gh[GHOSTMAX];
+Ghost Ghost::gh[GHOSTMAX];
 
 WORD Ghost::index;
 
@@ -50,6 +52,44 @@ bool Ghost::Build(WORD _gID, BYTE _tarID, BYTE _belong, float x, float y, int an
 	gh[index].tarID = _tarID;
 
 	return true;
+}
+
+void Ghost::Action()
+{
+	for(int i=0;i<GHOSTMAX;i++)
+	{
+		if(gh[i].exist)
+		{
+			Process::mp.objcount ++;
+
+			DWORD stopflag = Process::mp.GetStopFlag();
+			bool binstop = FRAME_STOPFLAGCHECK_(stopflag, FRAME_STOPFLAG_GHOST);
+			if (!binstop)
+			{
+				gh[i].action();
+			}
+			else
+			{
+				gh[i].actionInStop();
+			}
+		}
+	}
+}
+
+void Ghost::ClearAll()
+{
+	for (int i=0; i<GHOSTMAX; i++)
+	{
+		gh[i].Clear();
+	}
+	index = 0;
+}
+
+void Ghost::Clear()
+{
+	exist = false;
+	able = false;
+	timer = 0;
 }
 
 void Ghost::valueSet(WORD _ID, float _x, float _y, int _angle, float _speed, BYTE _type, float _life, int _ac)
@@ -100,14 +140,25 @@ void Ghost::CostLife(float power)
 	damage = true;
 	if (belong < ENEMYMAX)
 	{
-		en[belong].CostLife(power * PB_SHOOTGHOST_ENEMYCOST);
+		Enemy::en[belong].CostLife(power * PB_SHOOTGHOST_ENEMYCOST);
 	}
 }
 
 void Ghost::valueSet(WORD ID, BYTE _belong, int angle, float speed, BYTE type, float life, int ac)
 {
-	valueSet(ID, en[_belong].x, en[_belong].y,angle, speed, type, life, ac);
+	valueSet(ID, Enemy::en[_belong].x, Enemy::en[_belong].y,angle, speed, type, life, ac);
 	belong = _belong;
+}
+
+void Ghost::RenderAll()
+{
+	for(int i=0; i<GHOSTMAX; i++)
+	{
+		if (gh[i].exist)
+		{
+			gh[i].Render();
+		}
+	}
 }
 
 void Ghost::Render()
@@ -125,25 +176,25 @@ void Ghost::actionInStop()
 
 void Ghost::DoShot()
 {
-	if (pb.size)
+	if (PlayerBullet::pb.getSize())
 	{
 		DWORD i = 0;
-		DWORD size = pb.size;
-		for (pb.toBegin(); i<size; pb.toNext(), i++)
+		DWORD size = PlayerBullet::pb.getSize();
+		for (PlayerBullet::pb.toBegin(); i<size; PlayerBullet::pb.toNext(), i++)
 		{
-			if (pb.isValid() && (*pb).able)
+			if (PlayerBullet::pb.isValid() && (*PlayerBullet::pb).able)
 			{
-				if ((*pb).isInRange(x, y, 32))
+				if ((*PlayerBullet::pb).isInRange(x, y, 32))
 				{
-					CostLife((*pb).power);
+					CostLife((*PlayerBullet::pb).power);
 				}
 			}
 		}
 	}
-	if (Enemy::dmgz.size)
+	if (Enemy::dmgz.getSize())
 	{
 		DWORD i = 0;
-		DWORD size = Enemy::dmgz.size;
+		DWORD size = Enemy::dmgz.getSize();
 		for (Enemy::dmgz.toBegin(); i<size; Enemy::dmgz.toNext(), i++)
 		{
 			if (Enemy::dmgz.isValid())
@@ -193,7 +244,7 @@ void Ghost::action()
 			SE::push(SE_GHOST_MERGE, x);
 		}
 
-		if(Chat::chatting || BossInfo::flag >= BOSSINFO_COLLAPSE)
+		if(Chat::chatitem.chatting || BossInfo::flag >= BOSSINFO_COLLAPSE)
 		{
 			life = 0;
 			fadeout = true;
@@ -204,7 +255,7 @@ void Ghost::action()
 		{
 			WORD tindex = index;
 			index = ID;
-			scr.edefExecute(gID, timer);
+			Scripter::scr.edefExecute(gID, timer);
 			index = tindex;
 		}
 
@@ -219,14 +270,14 @@ void Ghost::action()
 
 		if(belong != 0xff)
 		{
-			if(en[belong].exist)
+			if(Enemy::en[belong].exist)
 			{
-				cenx = en[belong].x;
-				ceny = en[belong].y;
+				cenx = Enemy::en[belong].x;
+				ceny = Enemy::en[belong].y;
 			}
 			else
 			{
-				if(en[belong].life >= 0)
+				if(Enemy::en[belong].life >= 0)
 				{
 					life = 0;
 				}
@@ -239,7 +290,7 @@ void Ghost::action()
 		{
 			WORD tindex = index;
 			index = ID;
-			scr.edefExecute(gID, SCRIPT_CON_POST);
+			Scripter::scr.edefExecute(gID, SCRIPT_CON_POST);
 			index = tindex;
 
 			if (life < 0)
@@ -284,8 +335,7 @@ void Ghost::action()
 
 		if(tarID != 0xff)
 		{
-			tar[tarID].x = x;
-			tar[tarID].y = y;
+			Target::SetValue(tarID, x, y);
 		}
 
 		effghost.MoveTo(x, y);

@@ -2,12 +2,15 @@
 #include "../Header/Player.h"
 #include "../Header/Data.h"
 #include "../Header/DataConnector.h"
+#include "../Header/Replay.h"
 
 void Process::frameStart()
 {
 	if(!(Player::p.flag & PLAYER_SHOT))
 	{
-		if (!(stopflag & FRAME_STOPFLAG_ENEMYSET))
+		DWORD stopflag = GetStopFlag();
+		bool binstop = FRAME_STOPFLAGCHECK_(stopflag, FRAME_STOPFLAG_ENEMYSET);
+		if (!binstop)
 		{
 			gametime++;
 		}
@@ -17,16 +20,16 @@ void Process::frameStart()
 		playing = true;
 		if(!Player::p.ncCont)
 		{
-			replayIndex++;
-			replayframe[replayIndex].input = nowInput;
-			Export::rpySetBias(&(replayframe[replayIndex]));
+			Replay::rpy.replayIndex++;
+			Replay::rpy.replayframe[Replay::rpy.replayIndex].input = nowInput;
+			Export::rpySetBias(&(Replay::rpy.replayframe[Replay::rpy.replayIndex]));
 		}
 	}
 	else if(!Player::p.ncCont)
 	{
-		replayIndex++;
-		nowInput = replayframe[replayIndex].input;
-		replayFPS = Export::rpyGetReplayFPS(replayframe[replayIndex]);
+		Replay::rpy.replayIndex++;
+		nowInput = Replay::rpy.replayframe[Replay::rpy.replayIndex].input;
+		replayFPS = Export::rpyGetReplayFPS(Replay::rpy.replayframe[Replay::rpy.replayIndex]);
 
 		if(nowInput == 0xff)
 		{

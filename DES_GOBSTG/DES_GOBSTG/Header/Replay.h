@@ -20,8 +20,12 @@ public:
 public:
 	partInfo partinfo[RPYPARTMAX];
 	replayInfo rpyinfo;
+
+	replayFrame replayframe[M_SAVEINPUTMAX];
+	DWORD replayIndex;
+
+	static Replay rpy;
 };
 
-extern Replay rpy;
 
 #endif

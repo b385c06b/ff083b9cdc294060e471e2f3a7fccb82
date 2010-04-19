@@ -4,7 +4,7 @@
 #include "../Header/Data.h"
 #include "../Header/BResource.h"
 
-Replay rpy;
+Replay Replay::rpy;
 
 Replay::Replay()
 {
@@ -28,16 +28,16 @@ void Replay::Fill()
 	SYSTEMTIME systime;
 	GetLocalTime(&systime);
 
-	rpyinfo.modeflag = (mp.spellmode?M_RPYMODE_SPELL:0)|(mp.practicemode?M_RPYMODE_PRACTICE:0);
+	rpyinfo.modeflag = (Process::mp.spellmode?M_RPYMODE_SPELL:0)|(Process::mp.practicemode?M_RPYMODE_PRACTICE:0);
 
-	rpyinfo.usingchara[0] = mp.mainchara;
-	rpyinfo.usingchara[1] = mp.subchara_1;
-	rpyinfo.usingchara[2] = mp.subchara_2;
+	rpyinfo.usingchara[0] = Process::mp.mainchara;
+	rpyinfo.usingchara[1] = Process::mp.subchara_1;
+	rpyinfo.usingchara[2] = Process::mp.subchara_2;
 
-	rpyinfo.startscene = mp.startscene;
-	rpyinfo.endscene = mp.endscene;
+	rpyinfo.startscene = Process::mp.startscene;
+	rpyinfo.endscene = Process::mp.endscene;
 
-	rpyinfo.alltime = mp.alltime;
+	rpyinfo.alltime = Process::mp.alltime;
 	rpyinfo.year = systime.wYear;
 	rpyinfo.month = systime.wMonth;
 	rpyinfo.day = systime.wDay;
@@ -52,13 +52,13 @@ void Replay::Fill()
 	rpyinfo.pause = Player::p.ncPause;
 	rpyinfo.point = Player::p.nPoint;
 	rpyinfo.faith = Player::p.nFaith;
-	strcpy(rpyinfo.username, mp.username);
+	strcpy(rpyinfo.username, Process::mp.username);
 
-	rpyinfo.lost = Player::p.lostStack / mp.framecounter;
-	rpyinfo.borderrate = (float)Player::p.borderCounter / mp.alltime;
-	rpyinfo.fastrate = (float)Player::p.fastCounter / mp.alltime;
+	rpyinfo.lost = Player::lostStack / Process::mp.framecounter;
+	rpyinfo.borderrate = (float)Player::p.borderCounter / Process::mp.alltime;
+	rpyinfo.fastrate = (float)Player::p.fastCounter / Process::mp.alltime;
 
-	rpyinfo.difflv = mp.nowdifflv;
+	rpyinfo.difflv = Process::mp.nowdifflv;
 	if(rpyinfo.endscene == S1)
 		rpyinfo.laststage = 0xff;
 	else
@@ -76,8 +76,8 @@ void Replay::partFill(BYTE part)
 	if (part < RPYPARTMAX)
 	{
 		partinfo[part].offset = replayIndex + 1;
-		partinfo[part].scene = mp.scene;
-		partinfo[part].seed = mp.seed;
+		partinfo[part].scene = Process::mp.scene;
+		partinfo[part].seed = Process::mp.seed;
 		partinfo[part].nowplayer = Player::p.nLife;
 		partinfo[part].nowpower = Player::p.nPower;
 	}

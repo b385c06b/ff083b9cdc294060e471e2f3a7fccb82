@@ -29,7 +29,6 @@ Data::Data()
 	enemydefinefilename = NULL;
 	playerdefinefilename = NULL;
 	spritedefinefilename = NULL;
-	playerbulletdefinefilename = NULL;
 	playershootdefinefilename = NULL;
 	playerghostdefinefilename = NULL;
 
@@ -404,14 +403,26 @@ void Data::getFile(BYTE type)
 	case DATA_SPRITEDEFINEFILE:
 		nowfilename = spritedefinefilename;
 		break;
-	case DATA_PLAYERBULLETDEFINE:
-		nowfilename = playerbulletdefinefilename;
-		break;
 	case DATA_PLAYERSHOOTDEFINE:
 		nowfilename = playershootdefinefilename;
 		break;
 	case DATA_PLAYERGHOSTDEFINE:
 		nowfilename = playerghostdefinefilename;
+		break;
+	case DATA_DATATABLEDEFINE:
+		nowfilename = datadefinefilename;
+		break;
+	case DATA_PACKAGETABLEDEFINE:
+		nowfilename = packagedefinefilename;
+		break;
+	case DATA_TEXTURETABLEDEFINE:
+		nowfilename = texturedefinefilename;
+		break;
+	case DATA_EFFECTTABLEDEFINE:
+		nowfilename = effectdefinefilename;
+		break;
+	case DATA_SETABLEDEFINE:
+		nowfilename = sedefinefilename;
 		break;
 
 	case DATA_BINFILE:
@@ -588,6 +599,47 @@ failed:
 
 bool Data::GetAllTable()
 {
+	//data
+	if (!GetTableFile(DATA_DATATABLEDEFINE))
+	{
+#ifdef __DEBUG
+		HGELOG("%s\nFailed in loading DataDefineFile %s.", HGELOG_ERRSTR, datadefinefilename);
+#endif // __DEBUG
+		return false;
+	}
+	//package
+	if (!GetTableFile(DATA_PACKAGETABLEDEFINE))
+	{
+#ifdef __DEBUG
+		HGELOG("%s\nFailed in loading PackageDefineFile %s.", HGELOG_ERRSTR, packagedefinefilename);
+#endif // __DEBUG
+		return false;
+	}
+	//texture
+	if (!GetTableFile(DATA_TEXTURETABLEDEFINE))
+	{
+#ifdef __DEBUG
+		HGELOG("%s\nFailed in loading TextureDefineFile %s.", HGELOG_ERRSTR, texturedefinefilename);
+#endif // __DEBUG
+		return false;
+	}
+	//effect
+	if (!GetTableFile(DATA_EFFECTTABLEDEFINE))
+	{
+#ifdef __DEBUG
+		HGELOG("%s\nFailed in loading EffectDefineFile %s.", HGELOG_ERRSTR, effectdefinefilename);
+#endif // __DEBUG
+		return false;
+	}
+	//se
+	if (!GetTableFile(DATA_SETABLEDEFINE))
+	{
+#ifdef __DEBUG
+		HGELOG("%s\nFailed in loading SEDefineFile %s.", HGELOG_ERRSTR, sedefinefilename);
+#endif // __DEBUG
+		return false;
+	}
+
 	//sprite
 	if (!GetTableFile(DATA_SPRITEDEFINEFILE))
 	{
@@ -636,15 +688,6 @@ bool Data::GetAllTable()
 	{
 #ifdef __DEBUG
 		HGELOG("%s\nFailed in loading PlayerDefineFile %s.", HGELOG_ERRSTR, playerdefinefilename);
-#endif // __DEBUG
-		return false;
-	}
-
-	//playerbullet
-	if (!GetTableFile(DATA_PLAYERBULLETDEFINE))
-	{
-#ifdef __DEBUG
-		HGELOG("%s\nFailed in loading PlayerBulletDefineFile %s.", HGELOG_ERRSTR, playerbulletdefinefilename);
 #endif // __DEBUG
 		return false;
 	}
@@ -1032,32 +1075,48 @@ char * Data::sRead(BYTE type, DWORD section, DWORD name, const char * def_val)
 //
 bool Data::SetEffectSystemResourceName(int effi, const char * filename)
 {
-	if(effi < 0 || effi > EFFECTSYSTYPEMAX)
+	if(effi < 0 || effi >= EFFECTSYSTYPEMAX)
 		return false;
-	DWORD sec = sLinkType(RESDATAS_EFFECTSYS);
-	DWORD name = nLinkNum(nLinkType(RESDATAN_TYPE), effi+1);
-	if(!filename)
+	strcpy(BResource::res.resdata.effectsysfilename[effi], filename);
+	FILE * file = checkTableFile(DATA_EFFECTTABLEDEFINE);
+	if (file == NULL)
 	{
-		sWrite(DATA_RESOURCEFILE, sec, name, "");
+		return false;
 	}
-	else
+	char comment[2][M_STRMAX];
+	fscanf(file, "%s%s", comment[0], comment[1]);
+	fclose(file);
+	file = NULL;
+
+	getFile(DATA_EFFECTTABLEDEFINE);
+	file = fopen(nowfilename, "wb");
+	if (!file)
 	{
-		sWrite(DATA_RESOURCEFILE, sec, name, filename);
+		return false;
 	}
+	fprintf(file, "%x\t%s\t%x\r\n", GAME_VERSION, GAME_SIGNATURE, DATA_EFFECTTABLEDEFINE);
+	fprintf(file, "%s\t%s\r\n", comment[0], comment[1]);
+	for (int i=0; i<EFFECTSYSTYPEMAX; i++)
+	{
+		if (strlen(BResource::res.resdata.effectsysfilename[i]))
+		{
+			fprintf(file, "%d\t%s\r\n", i, BResource::res.resdata.effectsysfilename[i]);
+		}
+	}
+	fclose(file);
+
 	return true;
 }
 
 bool Data::GetEffectSystemResourceName(int effi, char * filename)
 {
-	if(!filename || effi < 0 || effi > EFFECTSYSTYPEMAX)
+	if(!filename || effi < 0 || effi >= EFFECTSYSTYPEMAX)
 		return false;
-	DWORD sec = sLinkType(RESDATAS_EFFECTSYS);
-	DWORD name = nLinkNum(nLinkType(RESDATAN_TYPE), effi+1);
-	char buffer[M_STRMAX];
-	strcpy(buffer, sRead(DATA_RESOURCEFILE, sec, name, ""));
-	if(!strlen(buffer))
+	if (!strlen(BResource::res.resdata.effectsysfilename[effi]))
+	{
 		return false;
-	strcpy(filename, buffer);
+	}
+	strcpy(filename, BResource::res.resdata.effectsysfilename[effi]);
 	return true;
 }
 

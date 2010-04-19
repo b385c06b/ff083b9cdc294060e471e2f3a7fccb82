@@ -26,6 +26,7 @@ public:
 
 	void Init();
 	void Release();
+	void ClearAll();
 
 	void Render();
 
@@ -54,12 +55,12 @@ public:
 
 	BYTE pushtimer;
 
-	static bool chatinit;
-	static bool chatting;
-	static BYTE timer;
-	static BYTE chati;
-};
+	bool chatinit;
+	bool chatting;
+	BYTE timer;
+	BYTE chati;
 
-extern Chat chat;
+	static Chat chatitem;
+};
 
 #endif

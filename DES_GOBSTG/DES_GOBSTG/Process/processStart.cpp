@@ -21,9 +21,9 @@ int Process::processStart()
 		BGLayer::KillOtherLayer();
 		Selector::Clear();
 		InfoSelect::Clear();
-		bgmask.exist = false;
-		fdisp.SetState(FDISP_PANEL, 0);
-		fdisp.SetState(FDISP_NEXTSTAGE, 0);
+		BGLayer::ubg[UBGID_BGMASK].exist = false;
+		FrontDisplay::fdisp.SetState(FDISP_PANEL, FDISPSTATE_OFF);
+		FrontDisplay::fdisp.SetState(FDISP_NEXTSTAGE, FDISPSTATE_OFF);
 		Player::p.exist = false;
 //		getInput();
 		state = STATE_REPLAY;
@@ -40,7 +40,7 @@ int Process::processStart()
 		}
 		else
 		{
-			scr.SetIntValue(SCR_RESERVEBEGIN, 0);
+			Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, 0);
 			state = STATE_CONTINUE;
 			return PTURN;
 		}
@@ -53,8 +53,8 @@ int Process::processStart()
 		saveInput = nowInput;
 		SE::push(SE_SYSTEM_PAUSE);
 
-		fgpause.exist = true;
-		fgpause.SetFlag(FG_PAUSEIN, FGMT_PAUSE);
+		BGLayer::ubg[UFGID_FGPAUSE].exist = true;
+		BGLayer::ubg[UFGID_FGPAUSE].SetFlag(FG_PAUSEIN, FGMT_PAUSE);
 
 		state = STATE_PAUSE;
 	}
@@ -68,9 +68,11 @@ int Process::processStart()
 
 	if(gametime != lasttime && state != STATE_CLEAR)
 	{
-		if (!(stopflag & FRAME_STOPFLAG_ENEMYSET))
+		DWORD stopflag = GetStopFlag();
+		bool binstop = FRAME_STOPFLAGCHECK_(stopflag, FRAME_STOPFLAG_ENEMYSET);
+		if (!binstop)
 		{
-			scr.stageExecute(scene, gametime);
+			Scripter::scr.stageExecute(scene, gametime);
 		}
 	}
 	return PGO;

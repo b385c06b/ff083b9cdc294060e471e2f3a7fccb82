@@ -3,6 +3,8 @@
 
 #include "BObject.h"
 
+#define EFFECTSPMAX			0x80
+
 #define	EFFECT_PLAYERCHANGE		0x01
 #define	EFFECT_PLAYERSHOT		0x02
 #define	EFFECT_PLAYERBORDER		0x03
@@ -17,6 +19,9 @@ class EffectSp : public BObject
 public:
 	EffectSp();
 	~EffectSp();
+
+	static void ClearAll();
+	void Clear();
 
 	void valueSet(BYTE type, float x, float y, int angle, float speed, bool onplayer = true, WORD ID = 0);
 	void colorSet(DWORD color);
@@ -34,8 +39,7 @@ public:
 	BYTE type;
 
 	static BYTE evtype;
+	static EffectSp es[EFFECTSPMAX];
 };
-
-extern EffectSp es[EFFECTSPMAX];
 
 #endif

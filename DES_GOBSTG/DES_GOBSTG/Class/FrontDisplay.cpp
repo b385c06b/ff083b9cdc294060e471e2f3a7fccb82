@@ -5,8 +5,9 @@
 #include "../Header/processPrep.h"
 #include "../Header/BossInfo.h"
 #include "../Header/Fontsys.h"
+#include "../Header/EffectSysIDDefine.h"
 
-FrontDisplay fdisp;
+FrontDisplay FrontDisplay::fdisp;
 
 FrontDisplay::FrontDisplay()
 {
@@ -165,9 +166,9 @@ void FrontDisplay::PanelDisplay()
 	}
 	if(info.asciifont)
 	{
-		if (mp.replaymode)
+		if (Process::mp.replaymode)
 		{
-			info.smalldigitfont->printf(385, 450, 0, "%.2f", mp.replayFPS);
+			info.smalldigitfont->printf(385, 450, 0, "%.2f", Process::mp.replayFPS);
 		}
 		info.asciifont->printf(
 #ifdef __DEBUG
@@ -175,7 +176,7 @@ void FrontDisplay::PanelDisplay()
 			410,
 			0,
 			"%d  %d\n%f\n%f\n%f",
-			mp.objcount,
+			Process::mp.objcount,
 			hge->System_GetState(HGE_FRAMECOUNTER),
 			hge->Timer_GetWorstFPS(35)/M_DEFAULT_RENDERSKIP,
 			hge->Timer_GetFPS()/M_DEFAULT_RENDERSKIP,
@@ -191,7 +192,7 @@ void FrontDisplay::PanelDisplay()
 #ifdef __DEBUG
 		if (Player::p.exist && info.smalldigitfont)
 		{
-			info.smalldigitfont->printf(8, 465, 0, "%d / %d", mp.scene, gametime);
+			info.smalldigitfont->printf(8, 465, 0, "%d / %d", Process::mp.scene, gametime);
 		}
 #endif // __DEBUG
 	}
@@ -214,8 +215,8 @@ void FrontDisplay::NextStageDisplay()
 void FrontDisplay::BossAction()
 {
 	BYTE flag = BossInfo::flag;
-	WORD timer = bossinfo.timer;
-	bool bSpell = bossinfo.isSpell();
+	WORD timer = BossInfo::bossinfo.timer;
+	bool bSpell = BossInfo::bossinfo.isSpell();
 	if(flag >= BOSSINFO_COLLAPSE)
 	{
 		infobody.effBossStore.Stop();
@@ -234,11 +235,11 @@ void FrontDisplay::BossAction()
 				col1 = 0xce7f0000;
 				col2 = 0xceff0000;
 
-				SpriteItemManager::ptFace(en[ENEMY_MAINBOSSINDEX].faceindex, info.cutin);
+				SpriteItemManager::ptFace(Enemy::en[ENEMY_MAINBOSSINDEX].faceindex, info.cutin);
 				info.cutin->SetColor(0x60ffffff);
 
 				infobody.effBossUp.Stop(true);
-				infobody.effBossUp.MoveTo(en[ENEMY_MAINBOSSINDEX].x, en[ENEMY_MAINBOSSINDEX].y, 0, true);
+				infobody.effBossUp.MoveTo(Enemy::en[ENEMY_MAINBOSSINDEX].x, Enemy::en[ENEMY_MAINBOSSINDEX].y, 0, true);
 				infobody.effBossUp.Fire();
 			}
 			else
@@ -252,15 +253,15 @@ void FrontDisplay::BossAction()
 				60, 34, col2,
 				60, 34, col2);
 		}
-		if((infobody.iqBossBlood.quad.v[1].x-60) / 320.0f < en[ENEMY_MAINBOSSINDEX].life / en[ENEMY_MAINBOSSINDEX].maxlife)
+		if((infobody.iqBossBlood.quad.v[1].x-60) / 320.0f < Enemy::en[ENEMY_MAINBOSSINDEX].life / Enemy::en[ENEMY_MAINBOSSINDEX].maxlife)
 		{
 			infobody.iqBossBlood.quad.v[1].x += 2;
 			infobody.iqBossBlood.quad.v[2].x += 2;
 		}
 		else
 		{
-			infobody.iqBossBlood.quad.v[1].x = en[ENEMY_MAINBOSSINDEX].life / en[ENEMY_MAINBOSSINDEX].maxlife * 320.0f + 60;
-			infobody.iqBossBlood.quad.v[2].x = en[ENEMY_MAINBOSSINDEX].life / en[ENEMY_MAINBOSSINDEX].maxlife * 320.0f + 60;
+			infobody.iqBossBlood.quad.v[1].x = Enemy::en[ENEMY_MAINBOSSINDEX].life / Enemy::en[ENEMY_MAINBOSSINDEX].maxlife * 320.0f + 60;
+			infobody.iqBossBlood.quad.v[2].x = Enemy::en[ENEMY_MAINBOSSINDEX].life / Enemy::en[ENEMY_MAINBOSSINDEX].maxlife * 320.0f + 60;
 		}
 		//
 		if(bSpell)
@@ -272,11 +273,11 @@ void FrontDisplay::BossAction()
 			_ty += (160 - timer) * sint(timer * 400);
 			infobody.effBossUp.MoveTo(_tx, _ty);
 			*/
-			infobody.effBossUp.MoveTo(en[ENEMY_MAINBOSSINDEX].x, en[ENEMY_MAINBOSSINDEX].y);
+			infobody.effBossUp.MoveTo(Enemy::en[ENEMY_MAINBOSSINDEX].x, Enemy::en[ENEMY_MAINBOSSINDEX].y);
 			infobody.effBossUp.action();
 			if(timer == 90)
 			{
-				SE::push(SE_BOSS_UP, en[ENEMY_MAINBOSSINDEX].x);
+				SE::push(SE_BOSS_UP, Enemy::en[ENEMY_MAINBOSSINDEX].x);
 				infobody.effBossUp.Stop();
 			}
 		}
@@ -290,16 +291,16 @@ void FrontDisplay::BossAction()
 	{
 		if (timer == 1)
 		{
-			SE::push(SE_BOSS_DEAD, en[ENEMY_MAINBOSSINDEX].x);
+			SE::push(SE_BOSS_DEAD, Enemy::en[ENEMY_MAINBOSSINDEX].x);
 			infobody.effBossCollapse.Stop(true);
-			infobody.effBossCollapse.MoveTo(en[ENEMY_MAINBOSSINDEX].x, en[ENEMY_MAINBOSSINDEX].y, 0, true);
+			infobody.effBossCollapse.MoveTo(Enemy::en[ENEMY_MAINBOSSINDEX].x, Enemy::en[ENEMY_MAINBOSSINDEX].y, 0, true);
 			infobody.effBossCollapse.Fire();
 			if (bSpell)
 			{
 //				bgmask.flag = BG_REDOUT;
-				bgmask.SetFlag(BG_REDOUT, BGMT_OUT);
+				BGLayer::ubg[UBGID_BGMASK].SetFlag(BG_REDOUT, BGMT_OUT);
 			}
-			mp.SetShake(1);
+			Process::mp.SetShake(1);
 		}
 		else if (timer == 75)
 		{
@@ -323,16 +324,16 @@ void FrontDisplay::BossAction()
 			if (bSpell)
 			{
 //				bgmask.flag = BG_WHITEFLASH;
-				bgmask.SetFlag(BG_WHITEFLASH, BGMT_FLASH);
+				BGLayer::ubg[UBGID_BGMASK].SetFlag(BG_WHITEFLASH, BGMT_FLASH);
 			}
 		}
 	}
 	else
 	{
-		if(en[ENEMY_MAINBOSSINDEX].life > 0)
+		if(Enemy::en[ENEMY_MAINBOSSINDEX].life > 0)
 		{
-			infobody.iqBossBlood.quad.v[1].x = en[ENEMY_MAINBOSSINDEX].life / en[ENEMY_MAINBOSSINDEX].maxlife * 320.0f + 60;
-			infobody.iqBossBlood.quad.v[2].x = en[ENEMY_MAINBOSSINDEX].life / en[ENEMY_MAINBOSSINDEX].maxlife * 320.0f + 60;
+			infobody.iqBossBlood.quad.v[1].x = Enemy::en[ENEMY_MAINBOSSINDEX].life / Enemy::en[ENEMY_MAINBOSSINDEX].maxlife * 320.0f + 60;
+			infobody.iqBossBlood.quad.v[2].x = Enemy::en[ENEMY_MAINBOSSINDEX].life / Enemy::en[ENEMY_MAINBOSSINDEX].maxlife * 320.0f + 60;
 		}
 		else
 		{
@@ -376,7 +377,7 @@ void FrontDisplay::BossAction()
 		if(timer == 1)
 		{
 			infobody.effBossItem.Stop(true);
-			infobody.effBossItem.MoveTo(en[ENEMY_MAINBOSSINDEX].x, en[ENEMY_MAINBOSSINDEX].y, 0, true);
+			infobody.effBossItem.MoveTo(Enemy::en[ENEMY_MAINBOSSINDEX].x, Enemy::en[ENEMY_MAINBOSSINDEX].y, 0, true);
 			infobody.effBossItem.Fire();
 		}
 		else if(timer == 90)
@@ -394,18 +395,18 @@ void FrontDisplay::BossMoveItemEffect(float x, float y)
 void FrontDisplay::BossInfoDisplay()
 {
 	BYTE flag = BossInfo::flag;
-	WORD timer = bossinfo.timer;
-	bool bSpell = bossinfo.isSpell();
+	WORD timer = BossInfo::bossinfo.timer;
+	bool bSpell = BossInfo::bossinfo.isSpell();
 	bool failed = BossInfo::failed;
-	DWORD bonus = bossinfo.bonus;
+	DWORD bonus = BossInfo::bossinfo.bonus;
 //	exist = false;
 	infobody.effBossStore.Render();
 	if(flag < BOSSINFO_COLLAPSE)
 	{
 		info.bossfont->SetScale(1.2f);
-		info.bossfont->printf(50, 20, HGETEXT_RIGHT|HGETEXT_MIDDLE, "%d", bossinfo.remain);
+		info.bossfont->printf(50, 20, HGETEXT_RIGHT|HGETEXT_MIDDLE, "%d", BossInfo::bossinfo.remain);
 
-		int ttime = bossinfo.limit-timer/60;
+		int ttime = BossInfo::bossinfo.limit-timer/60;
 		if (ttime < 4)
 			info.bossfont->SetColor(0xffff0000);
 		else if (ttime < 11)
@@ -416,7 +417,7 @@ void FrontDisplay::BossInfoDisplay()
 		}
 		info.bossfont->printf(400, 20, HGETEXT_CENTER|HGETEXT_MIDDLE, "%d", ttime);
 
-		info.bossasciifont->printf(60, 20, HGETEXT_LEFT, "%s", bossinfo.enemyename);
+		info.bossasciifont->printf(60, 20, HGETEXT_LEFT, "%s", BossInfo::bossinfo.enemyename);
 
 		if(bSpell)
 		{
@@ -438,7 +439,7 @@ void FrontDisplay::BossInfoDisplay()
 
 			info.bossspellline->Render(296, yt);
 
-			int tlenth = strlen(bossinfo.spellname);
+			int tlenth = strlen(BossInfo::bossinfo.spellname);
 			float spellnamew = tlenth*8;
 			DWORD spellnamealpha = 0xff000000;
 			if(Player::p.y < 100)
@@ -460,7 +461,7 @@ void FrontDisplay::BossInfoDisplay()
 			{
 				info.spellfailedtext->Render(280, yt+20);
 			}
-			info.bossasciifont->printf(410, yt+16, HGETEXT_RIGHT, "%03d/%03d", bossinfo.get, bossinfo.meet);
+			info.bossasciifont->printf(410, yt+16, HGETEXT_RIGHT, "%03d/%03d", BossInfo::bossinfo.get, BossInfo::bossinfo.meet);
 		}
 		hge->Gfx_RenderQuad(&infobody.iqBossBlood.quad);
 	}
@@ -488,8 +489,8 @@ void FrontDisplay::BossInfoDisplay()
 void FrontDisplay::BossTimeCircleDisplay()
 {
 	BYTE flag = BossInfo::flag;
-	WORD timer = bossinfo.timer;
-	BYTE limit = bossinfo.limit;
+	WORD timer = BossInfo::bossinfo.timer;
+	BYTE limit = BossInfo::bossinfo.limit;
 	if (flag < BOSSINFO_COLLAPSE)
 	{
 		float scale;
@@ -503,14 +504,14 @@ void FrontDisplay::BossTimeCircleDisplay()
 			{
 				scale = (timer-60*limit)*0.8f / (30-15*limit);
 			}
-			info.timecircle->RenderEx(en[ENEMY_MAINBOSSINDEX].x, en[ENEMY_MAINBOSSINDEX].y, timer/15.0f, scale);
+			info.timecircle->RenderEx(Enemy::en[ENEMY_MAINBOSSINDEX].x, Enemy::en[ENEMY_MAINBOSSINDEX].y, timer/15.0f, scale);
 		}
 	}
 }
 
 void FrontDisplay::EnemyXDisplay()
 {
-	info.enemyx->Render(en[ENEMY_MAINBOSSINDEX].x, 472);
+	info.enemyx->Render(Enemy::en[ENEMY_MAINBOSSINDEX].x, 472);
 }
 
 void FrontDisplay::ItemInfoDisplay(infoFont * item)
@@ -615,7 +616,7 @@ bool FrontDisplay::Init()
 	info.timecircle = SpriteItemManager::CreateSpriteByName(SI_BOSS_TIMECIRCLE);
 	info.enemyx = SpriteItemManager::CreateSpriteByName(SI_ENEMY_X);
 
-	info.lifebar = SpriteItemManager::CreateSpriteByName(SI_NULL);
+	info.lifebar = SpriteItemManager::CreateSpriteByName(SI_WHITE);
 	info.star = SpriteItemManager::CreateSpriteByName(SI_FRONTINFO_STAR);
 	info.getbonus = SpriteItemManager::CreateSpriteByName(SI_FRONTINFO_GETBONUS);
 	info.failed = SpriteItemManager::CreateSpriteByName(SI_FRONTINFO_FAILED);

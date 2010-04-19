@@ -2,16 +2,16 @@
 #include "../Header/Main.h"
 #include "../Header/SpriteItemManager.h"
 #include "../Header/BResource.h"
+#include "../Header/SpriteItemManager.h"
+#include "../Header/Process.h"
+#include "../Header/Scripter.h"
 
-BGLayer * ubg[UBGLAYERMAX];
-BGLayerSet BGLayer::set[BGLAYERSETMAX];
-BGLayer bg[BGLAYERMAX];
-BGLayer fg[FGLAYERMAX];
-
-BGLayer bgmask;
-BGLayer fgpause;
+BGLayer BGLayer::ubg[UBGLAYERMAX];
+BGLayerSet BGLayer::bglayerset[BGLAYERSETMAX];
 
 WORD BGLayer::setindex = 0;
+
+HTEXTURE * BGLayer::tex = NULL;
 
 BGLayer::BGLayer()
 {
@@ -21,43 +21,33 @@ BGLayer::BGLayer()
 
 BGLayer::~BGLayer()
 {
-	if (sprite)
-	{
-		delete sprite;
-		sprite = NULL;
-	}
+	SpriteItemManager::FreeSprite(&sprite);
 }
 
-void BGLayer::Init()
+void BGLayer::Init(HTEXTURE * _tex)
 {
-	for(int i=0;i<BGLAYERMAX;i++)
-	{
-		ubg[i] = & bg[i];
-	}
-	for(int i=0;i<FGLAYERMAX;i++)
-	{
-		ubg[i+BGLAYERMAX] = & fg[i];
-	}
-	ubg[BGMASKINDEX] = & bgmask;
-	ubg[FGPAUSEINDEX] = & fgpause;
 
 	for(int i=0; i<BGLAYERSETMAX; i++)
 	{
-		set[i].sID = 0;
-		set[i].timer = 0;
+		bglayerset[i].sID = BGLAYERSET_NONE;
+		bglayerset[i].timer = 0;
+	}
+	for (int i=0; i<UBGLAYERMAX; i++)
+	{
+		ubg[i].exist = false;
+		ubg[i].timer = 0;
+		ubg[i].changetimer = 0;
+		ubg[i].flag = 0;
 	}
 	setindex = 0;
+	tex = _tex;
 }
 
 void BGLayer::KillOtherLayer()
 {
-	for (int i=0; i<BGLAYERMAX; i++)
+	for (int i=0; i<BGLAYERMAX+FGLAYERMAX; i++)
 	{
-		bg[i].exist = false;
-	}
-	for (int i=0; i<FGLAYERMAX; i++)
-	{
-		fg[i].exist = false;
+		ubg[i].exist = false;
 	}
 }
 
@@ -66,17 +56,17 @@ void BGLayer::SetBlend(int blend)
 	sprite->SetBlendMode(blend);
 }
 
-void BGLayer::valueSetByName(HTEXTURE * tex, const char * spritename, float cenx, float ceny, float width, float height, DWORD col)
+void BGLayer::valueSetByName(const char * spritename, float cenx, float ceny, float width, float height, DWORD col)
 {
-	valueSet(tex, SpriteItemManager::GetIndexByName(spritename), cenx, ceny, width, height, col);
+	valueSet(SpriteItemManager::GetIndexByName(spritename), cenx, ceny, width, height, col);
 }
 
-void BGLayer::valueSet(HTEXTURE * tex, int siID, float cenx, float ceny, float width, float height, DWORD col)
+void BGLayer::valueSet(int siID, float cenx, float ceny, float width, float height, DWORD col)
 {
-	valueSet(tex, siID, cenx - (width>0?width/2:0), ceny - (height>0?height/2:0), 0, width, height, 0, 0, 0, 0, 0, 9000, false, false, col);
+	valueSet(siID, cenx - (width>0?width/2:0), ceny - (height>0?height/2:0), 0, width, height, 0, 0, 0, 0, 0, 9000, false, false, col);
 }
 
-void BGLayer::valueSet(HTEXTURE * _tex, int siID, float x, float y, float z, float w, float h, int rotx, int roty, int rotz, float paral, float _speed /* = 0 */, int _angle /* = 9000 */, bool _move /* = false */, bool _rotate /* = false */, DWORD col /* = 0xffffffff */)
+void BGLayer::valueSet(int siID, float x, float y, float z, float w, float h, int rotx, int roty, int rotz, float paral, float _speed /* = 0 */, int _angle /* = 9000 */, bool _move /* = false */, bool _rotate /* = false */, DWORD col /* = 0xffffffff */)
 {
 	speed	=	_speed;
 	angle	=	_angle;
@@ -87,7 +77,7 @@ void BGLayer::valueSet(HTEXTURE * _tex, int siID, float x, float y, float z, flo
 	changetimer	=	0;
 
 	spriteData * _sd = SpriteItemManager::CastSprite(siID);
-	HTEXTURE tex = _tex[_sd->tex];
+	HTEXTURE _tex = tex[_sd->tex];
 
 
 	float tx = (float)_sd->tex_x;
@@ -96,8 +86,8 @@ void BGLayer::valueSet(HTEXTURE * _tex, int siID, float x, float y, float z, flo
 	th = (float)_sd->tex_h;
 	if (tw < 0 || th < 0)
 	{
-		tw = hge->Texture_GetWidth(tex) - tx;
-		th = hge->Texture_GetHeight(tex) - ty;
+		tw = hge->Texture_GetWidth(_tex) - tx;
+		th = hge->Texture_GetHeight(_tex) - ty;
 	}
 	if (w < 0)
 	{
@@ -112,16 +102,16 @@ void BGLayer::valueSet(HTEXTURE * _tex, int siID, float x, float y, float z, flo
 	width	=	w;
 	height	=	h;
 
-	if (sprite)
+	if (!sprite)
 	{
-//		delete sprite;
-		sprite->SetTexture(tex);
-		sprite->SetTextureRect(tx, ty, tw, th);
+		sprite = SpriteItemManager::CreateNullSprite();
+		if (!sprite)
+		{
+			return;
+		}
 	}
-	else
-	{
-		sprite = new hgeSprite(tex, tx, ty, tw, th);
-	}
+
+	SpriteItemManager::SetSpriteData(sprite, _tex, tx, ty, tw, th);
 
 	sprite->SetBlendMode(BLEND_DEFAULT);
 
@@ -256,6 +246,88 @@ void BGLayer::SetFlag(BYTE _flag, BYTE maxtime)
 	flag = _flag;
 	mtimer = maxtime;
 	changetimer = 0;
+}
+
+void BGLayer::Action(bool active)
+{
+	DWORD stopflag = Process::mp.GetStopFlag();
+	bool binstop = FRAME_STOPFLAGCHECK_(stopflag, FRAME_STOPFLAG_LAYER);
+	if (!binstop)
+	{
+		if(active)
+		{
+			for(int i=0; i<BGLAYERSETMAX; i++)
+			{
+				if(bglayerset[i].sID != 0)
+				{
+					bglayerset[i].timer++;
+					setindex = i;
+
+					if (bglayerset[i].timer < bglayerset[i].quittime)
+					{
+						Scripter::scr.sceneExecute(bglayerset[i].sID, bglayerset[i].timer);
+					}
+					else if (bglayerset[i].timer == bglayerset[i].quittime)
+					{
+						Scripter::scr.sceneExecute(bglayerset[i].sID, SCRIPT_CON_QUIT);
+					}
+				}
+			}
+		}
+	}
+	for (int i=0; i<BGFGLAYERMAX; i++)
+	{
+		if (ubg[i].exist)
+		{
+			ubg[i].action();
+		}
+	}
+}
+
+void BGLayer::ActionSpecial()
+{
+	if (ubg[UBGID_BGMASK].exist)
+	{
+		ubg[UBGID_BGMASK].action();
+	}
+	if (ubg[UFGID_FGPAUSE].exist)
+	{
+		ubg[UFGID_FGPAUSE].action();
+	}
+}
+
+void BGLayer::RenderBG()
+{
+	for (int i=0;i<BGLAYERMAX;i++)
+	{
+		if(ubg[i].exist)
+		{
+			ubg[i].Render();
+		}
+	}
+	if (ubg[UBGID_BGMASK].exist)
+	{
+		ubg[UBGID_BGMASK].Render();
+	}
+}
+
+void BGLayer::RenderFG()
+{
+	for (int i=BGLAYERMAX; i<BGFGLAYERMAX; i++)
+	{
+		if (ubg[i].exist)
+		{
+			ubg[i].Render();
+		}
+	}
+}
+
+void BGLayer::RenderFGPause()
+{
+	if (ubg[UFGID_FGPAUSE].exist)
+	{
+		ubg[UFGID_FGPAUSE].Render();
+	}
 }
 
 void BGLayer::Render()

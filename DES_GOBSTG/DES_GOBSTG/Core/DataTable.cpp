@@ -100,15 +100,68 @@ bool _DataTable::DataTableDefine()
 	strcpy(BResource::res.resdata.spritedefinefilename, BResource::res.resdata.datafoldername);
 	_READSTRINGBUFFERLINE(2);
 	strcat(BResource::res.resdata.spritedefinefilename, buffer);
-	strcpy(BResource::res.resdata.playerbulletdefinefilename, BResource::res.resdata.datafoldername);
-	_READSTRINGBUFFERLINE(2);
-	strcat(BResource::res.resdata.playerbulletdefinefilename, buffer);
-	strcpy(BResource::res.resdata.playerbulletdefinefilename, BResource::res.resdata.datafoldername);
+	strcpy(BResource::res.resdata.playershootdefinefilename, BResource::res.resdata.datafoldername);
 	_READSTRINGBUFFERLINE(2);
 	strcat(BResource::res.resdata.playershootdefinefilename, buffer);
 	strcpy(BResource::res.resdata.playerghostdefinefilename, BResource::res.resdata.datafoldername);
 	_READSTRINGBUFFERLINE(2);
 	strcat(BResource::res.resdata.playerghostdefinefilename, buffer);
+	return true;
+}
+
+bool _DataTable::PackageTableDefine()
+{
+	ZeroMemory(BResource::res.resdata.packagefilename, sizeof(char) * PACKAGEMAX * M_PATHMAX);
+	_READSTRINGBUFFERLINE(3);
+	while (!feof(file))
+	{
+		_BREAKCOMMENTBUFFER;
+		fscanf(file, "%d", &tindex);
+		_CHECKEOF_DATATABLE;
+		fscanf(file, "%s", BResource::res.resdata.packagefilename[tindex]);
+	}
+	return true;
+}
+
+bool _DataTable::TextureTableDefine()
+{
+	ZeroMemory(BResource::res.resdata.texfilename, sizeof(char) * TEXMAX * M_PATHMAX);
+	_READSTRINGBUFFERLINE(3);
+	while (!feof(file))
+	{
+		_BREAKCOMMENTBUFFER;
+		fscanf(file, "%d", &tindex);
+		_CHECKEOF_DATATABLE;
+		fscanf(file, "%s", BResource::res.resdata.texfilename[tindex]);
+	}
+	return true;
+}
+
+bool _DataTable::EffectTableDefine()
+{
+	ZeroMemory(BResource::res.resdata.effectsysfilename, sizeof(char) * EFFECTSYSTYPEMAX * M_PATHMAX);
+	_READSTRINGBUFFERLINE(3);
+	while (!feof(file))
+	{
+		_BREAKCOMMENTBUFFER;
+		fscanf(file, "%d", &tindex);
+		_CHECKEOF_DATATABLE;
+		fscanf(file, "%s", BResource::res.resdata.effectsysfilename[tindex]);
+	}
+	return true;
+}
+
+bool _DataTable::SETableDefine()
+{
+	ZeroMemory(BResource::res.resdata.sefilename, sizeof(char) * SEMAX * M_PATHMAX);
+	_READSTRINGBUFFERLINE(3);
+	while (!feof(file))
+	{
+		_BREAKCOMMENTBUFFER;
+		fscanf(file, "%d", &tindex);
+		_CHECKEOF_DATATABLE;
+		fscanf(file, "%s", BResource::res.resdata.sefilename[tindex]);
+	}
 	return true;
 }
 
@@ -248,7 +301,7 @@ bool _DataTable::BulletDefineFile()
 bool _DataTable::EnemyDefineFile()
 {
 	ZeroMemory(BResource::res.enemydata, RSIZE_ENEMY);
-	_READSTRINGBUFFERLINE(23);
+	_READSTRINGBUFFERLINE(18);
 	while (!feof(file))
 	{
 		_INITTINT;
@@ -257,14 +310,11 @@ bool _DataTable::EnemyDefineFile()
 		enemyData * item = &(BResource::res.enemydata[tindex]);
 		_CHECKEOF_DATATABLE;
 
-		fscanf(file, "%d%d%d%d%f%f%d%d%d%d%d%d%d%d%d%d%d%f%f\t%[^\t]\t%[^\r\n]", 
-			_SAVETINT, 
-			_SAVETINT, 
-			_SAVETINT,
+		fscanf(file, "%s%d%f%f%d%d%d%d%d%d%d%d%d%d\t%[^\t]\t%[^\r\n]", 
+			strbuffer[0], 
 			_SAVETINT, 
 			&(item->collision_w), 
 			&(item->collision_h), 
-			_SAVETINT, 
 			_SAVETINT, 
 			&(item->standshake), 
 			_SAVETINT, 
@@ -275,18 +325,13 @@ bool _DataTable::EnemyDefineFile()
 			_SAVETINT,
 			_SAVETINT, 
 			_SAVETINT, 
-			&(item->usetexw),
-			&(item->usetexh),
 			item->name,
 			item->ename);
 
 		_DOSWAPTINT;
 		_INITTINT;
-		item->tex = _LOADTINT;
+		item->siid = SpriteItemManager::GetIndexByName(strbuffer[0]);
 		item->faceIndex  = _LOADTINT;
-		item->tex_nCol = _LOADTINT;
-		item->tex_nRow  = _LOADTINT;
-		item->startFrame  = _LOADTINT;
 		item->standFrame  = _LOADTINT;
 		item->rightPreFrame  = _LOADTINT;
 		item->rightFrame = _LOADTINT;
@@ -303,7 +348,7 @@ bool _DataTable::EnemyDefineFile()
 bool _DataTable::PlayerDefineFile()
 {
 	ZeroMemory(BResource::res.playerdata, RSIZE_PLAYER);
-	_READSTRINGBUFFERLINE(23);
+	_READSTRINGBUFFERLINE(18);
 	while (!feof(file))
 	{
 		_INITTINT;
@@ -312,7 +357,7 @@ bool _DataTable::PlayerDefineFile()
 		playerData * item = &(BResource::res.playerdata[tindex]);
 		_CHECKEOF_DATATABLE;
 
-		fscanf(file, "%f%f%f%f%d%d%d%d%d%d%d%d%d%d%d%d%d%d%f%f\t%[^\r\n]", 
+		fscanf(file, "%f%f%f%f%d%d%d%d%s%d%d%d%d%d%d\t%[^\r\n]", 
 			&(item->collision_r), 
 			&(item->fastspeed), 
 			&(item->slowspeed), 
@@ -321,18 +366,13 @@ bool _DataTable::PlayerDefineFile()
 			_SAVETINT, 
 			_SAVETINT, 
 			_SAVETINT, 
+			strbuffer[0], 
 			_SAVETINT, 
 			_SAVETINT, 
 			_SAVETINT, 
 			_SAVETINT, 
 			_SAVETINT, 
 			_SAVETINT, 
-			_SAVETINT, 
-			_SAVETINT, 
-			_SAVETINT, 
-			_SAVETINT, 
-			&(item->usetexw),
-			&(item->usetexh),
 			(item->name));
 
 		_DOSWAPTINT;
@@ -340,11 +380,8 @@ bool _DataTable::PlayerDefineFile()
 		item->shotdelay = _LOADTINT;
 		item->borderlast = _LOADTINT;
 		item->bomblast = _LOADTINT;
-		item->tex = _LOADTINT;
+		item->siid = SpriteItemManager::GetIndexByName(strbuffer[0]);
 		item->faceIndex = _LOADTINT;
-		item->tex_nCol = _LOADTINT;
-		item->tex_nRow = _LOADTINT;
-		item->startFrame = _LOADTINT;
 		item->standFrame = _LOADTINT;
 		item->leftPreFrame = _LOADTINT;
 		item->leftFrame = _LOADTINT;
@@ -382,32 +419,6 @@ bool _DataTable::SpriteDefineFile()
 	return true;
 }
 
-bool _DataTable::PlayerBulletDefineFile()
-{
-	ZeroMemory(BResource::res.playerbulletdata, RSIZE_PLAYERBULLET);
-	_READSTRINGBUFFERLINE(7);
-	while (!feof(file))
-	{
-		_INITTINT;
-		_BREAKCOMMENTBUFFER;
-		fscanf(file, "%d", &tindex);
-		_CHECKEOF_DATATABLE;
-		playerbulletData * item = &(BResource::res.playerbulletdata[tindex]);
-
-		fscanf(file, "%d%f%f%f%f", 
-			_SAVETINT, 
-			&(item->x), 
-			&(item->y), 
-			&(item->w), 
-			&(item->h));
-
-		_DOSWAPTINT;
-		_INITTINT;
-		item->tex = _LOADTINT;
-	}
-	return true;
-}
-
 bool _DataTable::PlayerShootDefineFile()
 {
 	ZeroMemory(BResource::res.playershootdata, RSIZE_PLAYERSHOOT);
@@ -420,9 +431,9 @@ bool _DataTable::PlayerShootDefineFile()
 		_CHECKEOF_DATATABLE;
 		playershootData * item = &(BResource::res.playershootdata[tindex]);
 
-		fscanf(file, "%d%d%d%x%f%d%d%d%f%f%f%f%f%d", 
+		fscanf(file, "%d%s%d%x%f%d%d%d%f%f%f%f%f%d", 
 			_SAVETINT, 
-			_SAVETINT, 
+			strbuffer[0], 
 			_SAVETINT, 
 			_SAVETINT, 
 			&(item->power), 
@@ -439,7 +450,7 @@ bool _DataTable::PlayerShootDefineFile()
 		_DOSWAPTINT;
 		_INITTINT;
 		item->userID = _LOADTINT;
-		item->ID = _LOADTINT;
+		item->siid = SpriteItemManager::GetIndexByName(strbuffer[0]);
 		item->timeMod = _LOADTINT;
 		item->flag = _LOADTINT;
 		item->arrange = _LOADTINT;
@@ -460,8 +471,8 @@ bool _DataTable::PlayerGhostDefineFile()
 		_CHECKEOF_DATATABLE;
 		playerghostData * item = &(BResource::res.playerghostdata[tindex]);
 
-		fscanf(file, "%d%f%f%f%x%d%f%d%d", 
-			&(item->siID), 
+		fscanf(file, "%s%f%f%f%x%d%f%d%d", 
+			strbuffer[0], 
 			&(item->xadj), 
 			&(item->yadj), 
 			&(item->speed), 
@@ -473,6 +484,7 @@ bool _DataTable::PlayerGhostDefineFile()
 
 		_DOSWAPTINT;
 		_INITTINT;
+		item->siID = SpriteItemManager::GetIndexByName(strbuffer[0]);
 		item->flag = _LOADTINT;
 		item->blend = _LOADTINT;
 	}
@@ -523,10 +535,21 @@ bool Data::GetTableFile(BYTE type)
 	int tint[32];
 	switch (type)
 	{
-/*
 	case DATA_DATATABLEDEFINE:
 		_DataTable::datatable.DataTableDefine();
-		break;*/
+		break;
+	case DATA_PACKAGETABLEDEFINE:
+		_DataTable::datatable.PackageTableDefine();
+		break;
+	case DATA_TEXTURETABLEDEFINE:
+		_DataTable::datatable.TextureTableDefine();
+		break;
+	case DATA_EFFECTTABLEDEFINE:
+		_DataTable::datatable.EffectTableDefine();
+		break;
+	case DATA_SETABLEDEFINE:
+		_DataTable::datatable.SETableDefine();
+		break;
 
 	case DATA_CUSTOMCONSTFILE:
 		_DataTable::datatable.CustomConstFile();
@@ -550,9 +573,6 @@ bool Data::GetTableFile(BYTE type)
 		_DataTable::datatable.SpriteDefineFile();
 		break;
 
-	case DATA_PLAYERBULLETDEFINE:
-		_DataTable::datatable.PlayerBulletDefineFile();
-		break;
 	case DATA_PLAYERSHOOTDEFINE:
 		_DataTable::datatable.PlayerShootDefineFile();
 		break;

@@ -3,6 +3,9 @@
 
 #include "BObject.h"
 
+#define BULLETMAX			0x3000
+#define BULLETCOLORMAX		0x10
+#define BULLETTYPECOLORMAX	(BULLETTYPEMAX * BULLETCOLORMAX)
 
 #define BULLETACTIONMAX		0x20
 #define BULLETIZELISTMAX	0x04
@@ -192,6 +195,10 @@ public:
 
 	static void Init(HTEXTURE tex);
 	static void Release();
+	static void Action();
+	static void IzelAction();
+	static void ClearAll();
+	static void RenderAll();
 	void Render();
 
 	virtual void action();
@@ -258,11 +265,12 @@ public:
 
 	static RenderDepth renderDepth[BULLETTYPEMAX];
 	static Bullet _bu;
-	static hgeSprite * sp[BULLETTYPECOLORMAX];
+	static hgeSprite * sprite[BULLETTYPECOLORMAX];
 	static VectorList<IzeZone> izel;
 	static HTEXTURE tex;
 	static WORD index;
+
+	static VectorList<Bullet>bu;
 };
-extern VectorList<Bullet>bu;
 
 #endif

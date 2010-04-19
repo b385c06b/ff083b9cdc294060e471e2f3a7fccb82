@@ -2,8 +2,10 @@
 #include "../Header/Main.h"
 #include "../Header/Export.h"
 #include "../Header/Player.h"
+#include "../Header/Target.h"
+#include "../Header/Process.h"
 
-Effectsys effsys[EFFECTSYSMAX];
+Effectsys Effectsys::effsys[EFFECTSYSMAX];
 hgeEffectSystem Effectsys::efftype[EFFECTSYSTYPEMAX];
 
 Effectsys::Effectsys()
@@ -39,6 +41,35 @@ bool Effectsys::Init(HTEXTURE * tex, const char * foldername, char name[][M_PATH
 		}
 	}
 	return true;
+}
+
+void Effectsys::Clear()
+{
+	exist = false;
+}
+
+void Effectsys::Action()
+{
+	DWORD stopflag = Process::mp.GetStopFlag();
+	bool binstop = FRAME_STOPFLAGCHECK_(stopflag, FRAME_STOPFLAG_EFFECTSYS);
+	if (!binstop)
+	{
+		for (int i=0; i<EFFECTSYSMAX; i++)
+		{
+			if (effsys[i].exist)
+			{
+				effsys[i].action();
+			}
+		}
+	}
+}
+
+void Effectsys::ClearAll()
+{
+	for(int i=0; i<EFFECTSYSMAX; i++)
+	{
+		effsys[i].Clear();
+	}
 }
 
 void Effectsys::valueSet(WORD ID, float x, float y, int lifetime)
@@ -102,6 +133,17 @@ void Effectsys::Fire()
 	eff->Fire();
 }
 
+void Effectsys::RenderAll()
+{
+	for(int i=0; i<EFFECTSYSMAX; i++)
+	{
+		if(effsys[i].exist)
+		{
+			effsys[i].Render();
+		}
+	}
+}
+
 void Effectsys::Render()
 {
 	eff->Render();
@@ -141,7 +183,10 @@ void Effectsys::action()
 		}
 		else
 		{
-			chaseAim(tar[tarAim].x, tar[tarAim].y, chasetimer);
+			float tarx;
+			float tary;
+			Target::GetValue(tarID, &tarx, &tary);
+			chaseAim(tarx, tary, chasetimer);
 		}
 	}
 
@@ -155,8 +200,7 @@ void Effectsys::action()
 	MoveTo(x, y, z);
 	if (tarID != 0xff)
 	{
-		tar[tarID].x = x;
-		tar[tarID].y = y;
+		Target::SetValue(tarID, x, y);
 	}
 	eff->Update();
 }

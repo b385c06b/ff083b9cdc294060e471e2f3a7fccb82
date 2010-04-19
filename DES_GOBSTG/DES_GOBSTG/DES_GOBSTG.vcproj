@@ -546,10 +546,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Process\PlayerBulletInit.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\Class\PlayerGhost.cpp"
 					>
 				</File>
@@ -571,6 +567,10 @@
 				</File>
 				<File
 					RelativePath=".\Class\Selector.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Class\Target.cpp"
 					>
 				</File>
 			</Filter>
@@ -640,6 +640,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Header\ProcessDefine.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Header\processPrep.h"
 					>
 				</File>
@@ -689,6 +693,10 @@
 				</File>
 				<File
 					RelativePath=".\Header\Effectsys.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Header\EffectSysIDDefine.h"
 					>
 				</File>
 				<File
@@ -749,6 +757,10 @@
 				</File>
 				<File
 					RelativePath=".\Header\Selector.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Header\Target.h"
 					>
 				</File>
 			</Filter>

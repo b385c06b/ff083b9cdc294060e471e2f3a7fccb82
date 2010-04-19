@@ -17,9 +17,9 @@ int Process::processClear()
 	{
 		frameskip = M_DEFAULT_FRAMESKIP;
 
-		fgpause.exist = true;
-		fgpause.changetimer = 0;
-		fgpause.flag = FG_PAUSEIN;
+		BGLayer::ubg[UFGID_FGPAUSE].exist = true;
+		BGLayer::ubg[UFGID_FGPAUSE].changetimer = 0;
+		BGLayer::ubg[UFGID_FGPAUSE].flag = FG_PAUSEIN;
 
 		LONGLONG tscore = 0;
 
@@ -47,8 +47,8 @@ int Process::processClear()
 
 		Player::p.nScore += tscore;
 
-		fdisp.SetValue(tscore, 0, 0, (!islast) && (!practicemode));
-		fdisp.SetState(FDISP_NEXTSTAGE, _PCLEAR_FDISP_TIME);
+		FrontDisplay::fdisp.SetValue(tscore, 0, 0, (!islast) && (!practicemode));
+		FrontDisplay::fdisp.SetState(FDISP_NEXTSTAGE, _PCLEAR_FDISP_TIME);
 	}
 
 	if (gametime == _PCLEAR_FDIPS_CANCELTIME)
@@ -58,8 +58,8 @@ int Process::processClear()
 
 	if(gametime > _PCLEAR_FDISP_TIME /*&& !replaymode*/ || gametime > _PCLEAR_FDIPS_CANCELTIME && hge->Input_GetDIKey(KS_FIRE, DIKEY_DOWN))
 	{
-		fdisp.SetState(FDISP_NEXTSTAGE, 0);
-		fgpause.exist = false;
+		FrontDisplay::fdisp.SetState(FDISP_NEXTSTAGE, FDISPSTATE_OFF);
+		BGLayer::ubg[UFGID_FGPAUSE].exist = false;
 
 		scene -= SCLEAR;
 		InfoSelect::Clear();
@@ -86,7 +86,7 @@ int Process::processClear()
 		if(!replaymode)
 		{
 			seed = timeGetTime();
-			rpy.partFill(tpart);
+			Replay::rpy.partFill(tpart);
 		}
 		gametime = 0;
 		if (!replaymode)
@@ -115,7 +115,7 @@ int Process::processClear()
 		clearPrep();
 		if(replaymode && tpart != 0xff)
 		{
-			seed = rpy.partinfo[tpart].seed;
+			seed = Replay::rpy.partinfo[tpart].seed;
 		}
 
 		srandt(seed);

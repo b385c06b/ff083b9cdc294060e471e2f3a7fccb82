@@ -13,9 +13,9 @@ int Process::processPlayerSelect()
 	gametime++;
 	if(gametime == 1)
 	{
-		scr.eventExecute(SCR_EVENT_ENTERSTATE, STATE_PLAYER_SELECT);
+		Scripter::scr.eventExecute(SCR_EVENT_ENTERSTATE, STATE_PLAYER_SELECT);
 	}
 	retvalue = PGO;
-	scr.controlExecute(STATE_PLAYER_SELECT, gametime);
+	Scripter::scr.controlExecute(STATE_PLAYER_SELECT, gametime);
 	return retvalue;
 }

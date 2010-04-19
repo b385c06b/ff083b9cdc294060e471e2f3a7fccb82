@@ -18,21 +18,21 @@ int Process::processDifficultSelect()
 	gametime++;
 	if(gametime == 1)
 	{
-		scr.eventExecute(SCR_EVENT_ENTERSTATE, STATE_DIFFICULT_SELECT);
-		fdisp.SetState(FDISP_PANEL, 0);
+		Scripter::scr.eventExecute(SCR_EVENT_ENTERSTATE, STATE_DIFFICULT_SELECT);
+		FrontDisplay::fdisp.SetState(FDISP_PANEL, FDISPSTATE_OFF);
 		if(nowdifflv >= M_DIFFI_EXTRA_START)
 			nowdifflv = defaultdifflv;
 
-		scr.SetIntValue(SCR_RESERVEBEGIN, -1);
-		scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);
-		scr.SetIntValue(SCR_RESERVEBEGIN+2, 0);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, -1);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+2, 0);
 	}
 	retvalue = PGO;
-	scr.controlExecute(STATE_DIFFICULT_SELECT, gametime);
+	Scripter::scr.controlExecute(STATE_DIFFICULT_SELECT, gametime);
 
-	int tsec = scr.GetIntValue(SCR_RESERVEBEGIN);
-	int tsnolistindex = scr.GetIntValue(SCR_RESERVEBEGIN+1);
-	int tspmode = scr.GetIntValue(SCR_RESERVEBEGIN+16);
+	int tsec = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN);
+	int tsnolistindex = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN+1);
+	int tspmode = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN+16);
 
 	if (tsec == 0)
 	{
@@ -114,7 +114,7 @@ int Process::processDifficultSelect()
 				_ifs.linkl("|14252", tmaxbonus);
 
 				_ifs.valueSet(i, _ifs.info, 80, i*40+160, _ifs.coltype, _ifs.flag);
-				infoselect.push_back(_ifs);
+				InfoSelect::infoselect.push_back(_ifs);
 
 				i++;
 			}
@@ -129,8 +129,8 @@ int Process::processDifficultSelect()
 		scene = snolist[InfoSelect::select];
 	}
 
-	scr.SetIntValue(SCR_RESERVEBEGIN, tsec);
-	scr.SetIntValue(SCR_RESERVEBEGIN+1, tsnolistindex);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, tsec);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, tsnolistindex);
 
 	return retvalue;
 }

@@ -5,7 +5,7 @@
 #include "../Header/SpriteItemManager.h"
 #include "../Header/PushKey.h"
 
-list<Selector> sel;
+list<Selector> Selector::sel;
 
 int Selector::select = 0;
 int Selector::sellock = 0;
@@ -39,11 +39,9 @@ Selector::~Selector()
 
 void Selector::Clear()
 {
-	for(list<Selector>::iterator i=sel.begin();i!=sel.end();i++)
+	for(list<Selector>::iterator it=sel.begin();it!=sel.end();it++)
 	{
-		if(i->sprite)
-			delete i->sprite;
-		i->sprite = NULL;
+		SpriteItemManager::FreeSprite(&(it->sprite));
 	}
 	sel.clear();
 	complete = false;
@@ -244,7 +242,7 @@ bool Selector::confirm(float cenx, float ceny, bool settrue)
 		confirminit = true;
 	}
 
-	if(hge->Input_GetDIKey(KS_SPECIAL_MP, DIKEY_UP) || (mp.playing && hge->Input_GetDIKey(KS_PAUSE_MP)))
+	if(hge->Input_GetDIKey(KS_SPECIAL_MP, DIKEY_UP) || (Process::mp.playing && hge->Input_GetDIKey(KS_PAUSE_MP)))
 	{
 		SE::push(SE_SYSTEM_CANCEL);
 		confirminit = false;

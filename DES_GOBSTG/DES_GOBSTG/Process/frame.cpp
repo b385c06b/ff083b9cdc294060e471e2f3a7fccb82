@@ -16,7 +16,7 @@ int Process::frame()
 #ifdef __DEBUG
 	if(hge->Input_GetKeyState(HGEK_BACKSPACE))
 	{
-		scr.LoadAll();
+		Scripter::scr.LoadAll();
 		state = STATE_TITLE;
 		gametime = 0;
 		return PTURN;
@@ -32,7 +32,7 @@ int Process::frame()
 	{
 		if (!replaymode)
 		{
-			if (chat.chatting)
+			if (Chat::chatitem.chatting)
 			{
 				hge->Input_SetDIKey(KS_FIRE, (bool)(gametime%5 == 0));
 			}
@@ -138,14 +138,6 @@ int Process::frame()
 		return PQUIT;
 
 	frameEnd();
-	if (stopflag)
-	{
-		stoptimer--;
-		if (stoptimer == 0)
-		{
-			stopflag = 0;
-		}
-	}
 
 	return PGO;
 }

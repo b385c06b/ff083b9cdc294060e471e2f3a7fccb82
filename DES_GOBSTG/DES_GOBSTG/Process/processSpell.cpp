@@ -8,9 +8,9 @@ int Process::processSpell()
 	gametime++;
 	if(gametime == 1)
 	{
-		scr.eventExecute(SCR_EVENT_ENTERSTATE, STATE_SPELL);
+		Scripter::scr.eventExecute(SCR_EVENT_ENTERSTATE, STATE_SPELL);
 	}
 	retvalue = PGO;
-	scr.controlExecute(STATE_SPELL, gametime);
+	Scripter::scr.controlExecute(STATE_SPELL, gametime);
 	return retvalue;
 }

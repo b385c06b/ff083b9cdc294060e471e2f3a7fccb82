@@ -72,7 +72,7 @@ void PlayerGhost::valueSet(WORD _ID, bool move)
 	}
 	else
 	{
-		SpriteItemManager::SetSprite(_pgd->siID, sprite, mp.tex);
+		SpriteItemManager::SetSprite(_pgd->siID, sprite, Process::mp.tex);
 	}
 }
 
@@ -300,7 +300,7 @@ void PlayerGhost::action()
 		headangle = 0;
 	}
 
-	SpriteItemManager::SetSprite(_pgd->siID, sprite, mp.tex);
+	SpriteItemManager::SetSprite(_pgd->siID, sprite, Process::mp.tex);
 	if (flag & PGFLAG_SYNCPLAYER)
 	{
 		float tex_x, tex_y, tex_w, tex_h;

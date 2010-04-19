@@ -3,6 +3,8 @@
 
 #include "BObject.h"
 
+#define	BEAMMAX				0x100
+
 #define BEAM_INVALIDSCALE	0.5f
 
 #define BEAMFLAG_NONE		0x00
@@ -15,10 +17,13 @@ class Beam : public BObject
 {
 public:
 	Beam();
-	virtual ~Beam();
+	~Beam();
 
 	static void Init();
 	static bool Build(float x, float y, int angle, float speed, BYTE type, BYTE color, WORD length, BYTE flag, int fadeouttime, BYTE tarID);
+	static void Action();
+	static void ClearAll();
+	static void RenderAll();
 
 	void valueSet(WORD ID, float x, float y,int angle, float speed, BYTE type, BYTE color, WORD length, BYTE flag, int fadeouttime = 0, BYTE tarID = 0xff);
 	bool isInRect(float r, float aimx, float aimy);
@@ -53,8 +58,7 @@ public:
 	BYTE	pintar;
 
 	static WORD index;
+	static VectorList<Beam> be;
 };
-
-extern VectorList<Beam> be;
 
 #endif

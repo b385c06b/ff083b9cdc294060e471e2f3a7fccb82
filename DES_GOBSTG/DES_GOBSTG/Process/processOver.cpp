@@ -29,46 +29,46 @@ int Process::processOver()
 		BGLayer::KillOtherLayer();
 
 		Player::p.exist = false;
-		bgmask.exist = false;
-		fdisp.SetState(FDISP_PANEL, 0);
+		BGLayer::ubg[UBGID_BGMASK].exist = false;
+		FrontDisplay::fdisp.SetState(FDISP_PANEL, FDISPSTATE_OFF);
 		musicChange(0, true);
 
 		strcpy(savefilename, "");
 
 		PushKey::SetPushEvent(PUSHKEY_ID_UIUSE, KS_LEFT, KS_RIGHT);
-		scr.SetIntValue(SCR_RESERVEBEGIN, 0);
-		scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);
-		scr.SetIntValue(SCR_RESERVEBEGIN+2, 0);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, 0);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+2, 0);
 
-		rpy.Fill();
+		Replay::rpy.Fill();
 
-		nowdifflv = Data::data.getDiffi(rpy.rpyinfo.startscene);
+		nowdifflv = Data::data.getDiffi(Replay::rpy.rpyinfo.startscene);
 
-		scr.SetIntValue(SCR_RESERVEBEGIN+3, DataConnector::Insert());
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+3, DataConnector::Insert());
 	}
 	retvalue = PGO;
-	retvalue = scr.controlExecute(STATE_OVER, gametime);
+	retvalue = Scripter::scr.controlExecute(STATE_OVER, gametime);
 	//pushtimer depth sec nowchar insert
-	int tdepth = scr.GetIntValue(SCR_RESERVEBEGIN);
-	int tsec = scr.GetIntValue(SCR_RESERVEBEGIN+1);
-	int tnowchar = scr.GetIntValue(SCR_RESERVEBEGIN+2);
-	int tinsert = scr.GetIntValue(SCR_RESERVEBEGIN+3);
+	int tdepth = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN);
+	int tsec = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN+1);
+	int tnowchar = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN+2);
+	int tinsert = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN+3);
 
 	if(tdepth == 0)
 	{
 		char scorebuffer[M_STRITOAMAX];
-		_i64toa(rpy.rpyinfo.score, scorebuffer, 10);
+		_i64toa(Replay::rpy.rpyinfo.score, scorebuffer, 10);
 		char alivenessbuffer[M_STRITOAMAX];
-		_i64toa(rpy.rpyinfo.faith, alivenessbuffer, 10);
+		_i64toa(Replay::rpy.rpyinfo.faith, alivenessbuffer, 10);
 		char lostbuffer[M_STRITOAMAX];
-		sprintf(lostbuffer, "%.2f", rpy.rpyinfo.lost);
+		sprintf(lostbuffer, "%.2f", Replay::rpy.rpyinfo.lost);
 		strcat(lostbuffer, "%");
 
-		for(list<Selector>::iterator i=sel.begin();i!=sel.end();i++)
+		for(list<Selector>::iterator i=Selector::sel.begin();i!=Selector::sel.end();i++)
 		{
 			if(i->ID < 0x10)
 			{
-				if(rpy.rpyinfo.cont)
+				if(Replay::rpy.rpyinfo.cont)
 				{
 					if(i->ID == 2)
 					{
@@ -108,16 +108,16 @@ int Process::processOver()
 			else if((i->ID & 0xf0) == 0x40)
 			{
 				if(i->ID & 1)
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(rpy.rpyinfo.miss%10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.miss%10), i->sprite, tex);
 				else
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(rpy.rpyinfo.miss/10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.miss/10), i->sprite, tex);
 			}
 			else if((i->ID & 0xf0) == 0x50)
 			{
 				if(i->ID & 1)
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(rpy.rpyinfo.cont%10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.cont%10), i->sprite, tex);
 				else
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(rpy.rpyinfo.cont/10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.cont/10), i->sprite, tex);
 			}
 			else if((i->ID & 0xf0) == 0x60)
 			{
@@ -137,16 +137,16 @@ int Process::processOver()
 			else if((i->ID & 0xf0) == 0x70)
 			{
 				if(i->ID & 1)
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(rpy.rpyinfo.border%10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.border%10), i->sprite, tex);
 				else
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(rpy.rpyinfo.border/10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.border/10), i->sprite, tex);
 			}
 			else if((i->ID & 0xf0) == 0x80)
 			{
 				if(i->ID & 1)
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(rpy.rpyinfo.get%10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.get%10), i->sprite, tex);
 				else
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(rpy.rpyinfo.get/10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.get/10), i->sprite, tex);
 			}
 		}
 		tdepth = 1;
@@ -158,50 +158,50 @@ int Process::processOver()
 
 		strcpy(_ifs[0].info, BResource::res.resdata.uistr.score);
 		strcat(_ifs[0].info, "|010");
-		_ifs[0].linkl(NULL, rpy.rpyinfo.score);
+		_ifs[0].linkl(NULL, Replay::rpy.rpyinfo.score);
 
 		strcpy(_ifs[1].info, BResource::res.resdata.uistr.usingchara);
 
 		for (int i=0; i<M_PL_ONESETPLAYER;i ++)
 		{
 			strcpy(_ifs[2+i].info, "|006");
-			strcat(_ifs[2+i].info, Data::data.getPlayerName(rpy.rpyinfo.usingchara[i]));
+			strcat(_ifs[2+i].info, Data::data.getPlayerName(Replay::rpy.rpyinfo.usingchara[i]));
 		}
 
 		strcpy(_ifs[5].info, BResource::res.resdata.uistr.date);
-		_ifs[5].linki("|21014", rpy.rpyinfo.year);
+		_ifs[5].linki("|21014", Replay::rpy.rpyinfo.year);
 		strcat(_ifs[5].info, "/");
-		_ifs[5].linki("|21517", rpy.rpyinfo.month);
+		_ifs[5].linki("|21517", Replay::rpy.rpyinfo.month);
 		strcat(_ifs[5].info, "/");
-		_ifs[5].linki("|21820", rpy.rpyinfo.day);
+		_ifs[5].linki("|21820", Replay::rpy.rpyinfo.day);
 		strcat(_ifs[5].info, " ");
-		_ifs[5].linki("|22123", rpy.rpyinfo.hour);
+		_ifs[5].linki("|22123", Replay::rpy.rpyinfo.hour);
 		strcat(_ifs[5].info, ":");
-		_ifs[5].linki("|22426", rpy.rpyinfo.minute);
+		_ifs[5].linki("|22426", Replay::rpy.rpyinfo.minute);
 
 		strcpy(_ifs[6].info, BResource::res.resdata.uistr.faith);
-		_ifs[6].linki("|012", rpy.rpyinfo.faith);
+		_ifs[6].linki("|012", Replay::rpy.rpyinfo.faith);
 
 		strcpy(_ifs[7].info, BResource::res.resdata.uistr.lost);
-		_ifs[7].linkf("|012", 0, rpy.rpyinfo.lost);
+		_ifs[7].linkf("|012", 0, Replay::rpy.rpyinfo.lost);
 		strcat(_ifs[7].info, "%");		
 
 		strcpy(_ifs[8].info, BResource::res.resdata.uistr.misstime);
-		_ifs[8].linki("|022", rpy.rpyinfo.miss);
+		_ifs[8].linki("|022", Replay::rpy.rpyinfo.miss);
 
 		strcpy(_ifs[9].info, BResource::res.resdata.uistr.bordertime);
-		_ifs[9].linki("|022", rpy.rpyinfo.border);
+		_ifs[9].linki("|022", Replay::rpy.rpyinfo.border);
 
 		strcpy(_ifs[10].info, BResource::res.resdata.uistr.gettime);
-		_ifs[10].linki("|022", rpy.rpyinfo.get);
+		_ifs[10].linki("|022", Replay::rpy.rpyinfo.get);
 
 		strcpy(_ifs[11].info, BResource::res.resdata.uistr.modeflag);
 		strcat(_ifs[11].info, "|010");
-		if(rpy.rpyinfo.modeflag & M_RPYMODE_SPELL)
+		if(Replay::rpy.rpyinfo.modeflag & M_RPYMODE_SPELL)
 		{
 			strcat(_ifs[11].info, BResource::res.resdata.uistr.mode_spell);
 		}
-		else if(rpy.rpyinfo.modeflag & M_RPYMODE_PRACTICE)
+		else if(Replay::rpy.rpyinfo.modeflag & M_RPYMODE_PRACTICE)
 		{
 			strcat(_ifs[11].info, BResource::res.resdata.uistr.mode_practice);
 		}
@@ -213,7 +213,7 @@ int Process::processOver()
 		for(int i=0;i<11;i++)
 		{
 			_ifs[i].valueSet(i+10, _ifs[i].info, 50, 90+i*25, INFO_GREEN, SEL_NONACTIVE);
-			infoselect.push_back(_ifs[i]);
+			InfoSelect::infoselect.push_back(_ifs[i]);
 		}
 
 		if(!strcmp(savefilename, ""))
@@ -233,7 +233,7 @@ int Process::processOver()
 		}
 
 		_ifs[12].valueSet(2, BResource::res.resdata.uistr.confirm, 320, 410, INFO_GREEN);
-		infoselect.push_back(_ifs[12]);
+		InfoSelect::infoselect.push_back(_ifs[12]);
 
 		InfoSelect::Setup(3, 0);
 
@@ -252,10 +252,10 @@ int Process::processOver()
 	}
 	else if(tdepth == 3)
 	{
-		if(infoselect.size() > 12)
+		if(InfoSelect::infoselect.size() > 12)
 		{
-			infoselect.pop_back();
-			infoselect.pop_back();
+			InfoSelect::infoselect.pop_back();
+			InfoSelect::infoselect.pop_back();
 		}
 
 		if(hge->Input_GetDIKey(KS_UP, DIKEY_DOWN) || hge->Input_GetDIKey(KS_DOWN, DIKEY_DOWN))
@@ -336,13 +336,13 @@ skip1:
 		strcat(_ifs[0].info, "|006");
 		strcat(_ifs[0].info, username);
 		_ifs[0].valueSet(0, _ifs[0].info, 345, 90, INFO_RED);
-		infoselect.push_back(_ifs[0]);
+		InfoSelect::infoselect.push_back(_ifs[0]);
 
 		strcpy(_ifs[1].info, BResource::res.resdata.uistr.filename);
 		strcat(_ifs[1].info, "|010");
 		strcat(_ifs[1].info, savefilename);
 		_ifs[1].valueSet(1, _ifs[1].info, 215, 380, INFO_RED);
-		infoselect.push_back(_ifs[1]);
+		InfoSelect::infoselect.push_back(_ifs[1]);
 
 		if(tsec == 2)
 		{
@@ -395,8 +395,8 @@ skip1:
 	else if(tdepth == 6)
 	{
 //		rpy.Fill();
-		strcpy(rpy.rpyinfo.username, username);
-		rpy.Save(savefilename);
+		strcpy(Replay::rpy.rpyinfo.username, username);
+		Replay::rpy.Save(savefilename);
 
 		tdepth = 7;
 	}
@@ -461,7 +461,7 @@ skip1:
 			strcat(_ifs[i].info, "%");
 
 			_ifs[i].valueSet(i == tinsert-1 ? 0 : i+2, _ifs[i].info, 30, 120+24*i, INFO_GREEN, i == tinsert-1 ? SEL_NULL : SEL_NONACTIVE);
-			infoselect.push_back(_ifs[i]);
+			InfoSelect::infoselect.push_back(_ifs[i]);
 		}
 
 		if(!tinsert)
@@ -469,7 +469,7 @@ skip1:
 		else
 		{
 			_ifs[10].valueSet(1, BResource::res.resdata.uistr.confirm, 300, 380, INFO_GREEN);
-			infoselect.push_back(_ifs[10]);
+			InfoSelect::infoselect.push_back(_ifs[10]);
 			InfoSelect::Setup(2, 0);
 		}
 
@@ -483,7 +483,7 @@ skip1:
 			goto skip2;
 		}
 
-		for(list<InfoSelect>::iterator i=infoselect.begin();i!=infoselect.end();i++)
+		for(list<InfoSelect>::iterator i=InfoSelect::infoselect.begin();i!=InfoSelect::infoselect.end();i++)
 		{
 			if(i->ID == 0)
 			{
@@ -502,8 +502,8 @@ skip1:
 				}
 				_ifs.info[11] = ' ';
 				_ifs.valueSet(i->ID, _ifs.info, i->x, i->y, i->coltype, i->flag);
-				infoselect.push_back(_ifs);
-				i = infoselect.erase(i);
+				InfoSelect::infoselect.push_back(_ifs);
+				i = InfoSelect::infoselect.erase(i);
 				break;
 			}
 		}
@@ -598,8 +598,8 @@ skip2:
 			InfoSelect::avoid = true;
 	}
 skip3:
-	scr.SetIntValue(SCR_RESERVEBEGIN, tdepth);
-	scr.SetIntValue(SCR_RESERVEBEGIN+1, tsec);
-	scr.SetIntValue(SCR_RESERVEBEGIN+2, tnowchar);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, tdepth);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, tsec);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+2, tnowchar);
 	return retvalue;
 }

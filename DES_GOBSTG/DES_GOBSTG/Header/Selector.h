@@ -99,8 +99,8 @@ public:
 	static bool confirminit;
 
 	static bool avoid;
+	static list<Selector> sel;
 };
 
-extern list<Selector> sel;
 
 #endif

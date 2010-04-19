@@ -168,7 +168,7 @@ int Process::processInit()
 	if(binmode)
 	{
 		Data::data.binmode = true;
-		scr.binmode = true;
+		Scripter::scr.binmode = true;
 #ifdef __RELEASE
 //		hge->System_SetState(HGE_LOGFILE, "");
 #endif // __RELEASE
@@ -183,12 +183,12 @@ int Process::processInit()
 			errorcode = PROC_ERROR_RESOURCE;
 			return PQUIT;
 		}
-		if(!scr.LoadAll())
+		if(!Scripter::scr.LoadAll())
 		{
 			errorcode = PROC_ERROR_SCRIPT;
 			return PQUIT;
 		}
-		if(!BResource::res.Pack(strdesc, BResource::res.customconstdata))
+		if(!BResource::res.Pack(Scripter::scr.strdesc, BResource::res.customconstdata))
 		{
 #ifdef __DEBUG
 			HGELOG("Error in Packing Resource Data.");
@@ -202,7 +202,7 @@ int Process::processInit()
 			return PQUIT;
 		}
 	}
-	if(!BResource::res.Gain(strdesc, binmode?BResource::res.customconstdata:NULL))
+	if(!BResource::res.Gain(Scripter::scr.strdesc, binmode?BResource::res.customconstdata:NULL))
 	{
 #ifdef __DEBUG
 		HGELOG("Error in Gaining Resource Data.");
@@ -210,7 +210,7 @@ int Process::processInit()
 		errorcode = PROC_ERROR_DATA;
 		return PQUIT;
 	}
-	if(scr.binmode && !scr.LoadAll())
+	if(Scripter::scr.binmode && !Scripter::scr.LoadAll())
 	{
 		errorcode = PROC_ERROR_SCRIPT;
 		return PQUIT;
@@ -230,7 +230,7 @@ int Process::processInit()
 		return PQUIT;
 	}
 
-	BGLayer::Init();
+	BGLayer::Init(tex);
 
 	SE::vol = sevol;
 	if(!SE::Initial())
@@ -304,7 +304,7 @@ int Process::processInit()
 		Export::clientAdjustWindow();
 	}
 
-	chat.Init();
+	Chat::chatitem.Init();
 
 	Selector::Clear();
 	InfoSelect::Clear();
@@ -313,7 +313,6 @@ int Process::processInit()
 	subchara_1	= 0;
 	subchara_2	= 0;
 	nowdifflv	= defaultdifflv;
-	randi		= 0;
 	errorcode = PROC_ERROR_NONE;
 	titleselect = 0;
 

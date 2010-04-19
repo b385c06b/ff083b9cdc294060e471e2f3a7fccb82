@@ -272,6 +272,9 @@ struct ftFirstSet
 #define FDISP_HISCORE		3
 #define FDISP_EXTEND		4
 
+#define FDISPSTATE_ON	1
+#define FDISPSTATE_OFF	0
+
 #define FDISP_STATE_COUNT	120
 
 class FrontDisplay
@@ -325,8 +328,8 @@ public:
 	BYTE fullpowercount;
 	BYTE hiscorecount;
 	BYTE extendcount;
-};
 
-extern FrontDisplay fdisp;
+	static FrontDisplay fdisp;
+};
 
 #endif

@@ -72,7 +72,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="nafxcwd.lib"
-				LinkIncremental="0"
+				LinkIncremental="1"
 				AdditionalLibraryDirectories="../lib/vc;../../lib/vc"
 				IgnoreDefaultLibraryNames=""
 				DelayLoadDLLs="hge_d.dll"
@@ -335,6 +335,10 @@
 			</File>
 			<File
 				RelativePath=".\ReplayViewDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\DES_GOBSTG\DES_GOBSTG\Core\SpriteItemManager.cpp"
 				>
 			</File>
 			<File

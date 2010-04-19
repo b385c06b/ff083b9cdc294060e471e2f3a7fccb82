@@ -18,7 +18,7 @@ BGVALUE 11 SI_TopContent_Replay
 	TotalCenterX 56 -1 -1
 	0xffffffff
 
-BGVALUE BGMASK SI_Null
+BGVALUE BGMASK SI_White
 	TotalCenterX 265 610 390
 	0xA0000000
 

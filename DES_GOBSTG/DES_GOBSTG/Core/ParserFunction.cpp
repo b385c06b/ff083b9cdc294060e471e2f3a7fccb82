@@ -76,31 +76,31 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 				d[i].bfloat = false;
 				break;
 			case SCR_BUANGLE:
-				idesc[i] = bu[Bullet::index].angle;
+				idesc[i] = Bullet::bu[Bullet::index].angle;
 				d[i].bfloat = false;
 				break;
 			case SCR_BUSPEED:
-				fdesc[i] = bu[Bullet::index].speed;
+				fdesc[i] = Bullet::bu[Bullet::index].speed;
 				d[i].bfloat = true;
 				break;
 			case SCR_BUX:
-				fdesc[i] = bu[Bullet::index].x;
+				fdesc[i] = Bullet::bu[Bullet::index].x;
 				d[i].bfloat = true;
 				break;
 			case SCR_BUY:
-				fdesc[i] = bu[Bullet::index].y;
+				fdesc[i] = Bullet::bu[Bullet::index].y;
 				d[i].bfloat = true;
 				break;
 			case SCR_BUTIMER:
-				idesc[i] = bu[Bullet::index].timer;
+				idesc[i] = Bullet::bu[Bullet::index].timer;
 				d[i].bfloat = false;
 				break;
 			case SCR_BUCANCELABLE:
-				idesc[i] = bu[Bullet::index].cancelable;
+				idesc[i] = Bullet::bu[Bullet::index].cancelable;
 				d[i].bfloat = false;
 				break;
 			case SCR_BUHAVEGRAY:
-				idesc[i] = (int)bu[Bullet::index].HaveGray();
+				idesc[i] = (int)Bullet::bu[Bullet::index].HaveGray();
 				d[i].bfloat = false;
 				break;
 
@@ -109,31 +109,31 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 				d[i].bfloat = false;
 				break;
 			case SCR_BEANGLE:
-				idesc[i] = be[Beam::index].angle;
+				idesc[i] = Beam::be[Beam::index].angle;
 				d[i].bfloat = false;
 				break;
 			case SCR_BESPEED:
-				fdesc[i] = be[Beam::index].speed;
+				fdesc[i] = Beam::be[Beam::index].speed;
 				d[i].bfloat = true;
 				break;
 			case SCR_BEX:
-				fdesc[i] = be[Beam::index].x;
+				fdesc[i] = Beam::be[Beam::index].x;
 				d[i].bfloat = true;
 				break;
 			case SCR_BEY:
-				fdesc[i] = be[Beam::index].y;
+				fdesc[i] = Beam::be[Beam::index].y;
 				d[i].bfloat = true;
 				break;
 			case SCR_BETIMER:
-				idesc[i] = be[Beam::index].timer;
+				idesc[i] = Beam::be[Beam::index].timer;
 				d[i].bfloat = false;
 				break;
 			case SCR_BEHOLDTAR:
-				idesc[i] = be[Beam::index].holdtar;
+				idesc[i] = Beam::be[Beam::index].holdtar;
 				d[i].bfloat = false;
 				break;
 			case SCR_BEPINTAR:
-				idesc[i] = be[Beam::index].pintar;
+				idesc[i] = Beam::be[Beam::index].pintar;
 				d[i].bfloat = false;
 				break;
 			}
@@ -145,15 +145,15 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 			switch (nowval)
 			{
 			case SCR_GHX:
-				fdesc[i] = gh[Ghost::index].x;
+				fdesc[i] = Ghost::gh[Ghost::index].x;
 				d[i].bfloat = true;
 				break;
 			case SCR_GHY:
-				fdesc[i] = gh[Ghost::index].y;
+				fdesc[i] = Ghost::gh[Ghost::index].y;
 				d[i].bfloat = true;
 				break;
 			case SCR_GHTIMER:
-				idesc[i] = gh[Ghost::index].timer;
+				idesc[i] = Ghost::gh[Ghost::index].timer;
 				d[i].bfloat = false;
 				break;
 			case SCR_GHI:
@@ -161,39 +161,39 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 				d[i].bfloat = false;
 				break;
 			case SCR_GHANGLE:
-				idesc[i] = gh[Ghost::index].angle;
+				idesc[i] = Ghost::gh[Ghost::index].angle;
 				d[i].bfloat = false;
 				break;
 			case SCR_GHSPEED:
-				fdesc[i] = gh[Ghost::index].speed;
+				fdesc[i] = Ghost::gh[Ghost::index].speed;
 				d[i].bfloat = true;
 				break;
 			case SCR_GHAMAP:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				idesc[i] = gh[Ghost::index].aMainAngle(Player::p.x, Player::p.y, _tdi);
+				idesc[i] = Ghost::gh[Ghost::index].aMainAngle(Player::p.x, Player::p.y, _tdi);
 				d[i].bfloat = false;
 				break;
 			case SCR_GHRMAP:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				idesc[i] = gh[Ghost::index].rMainAngle(Player::p.x, Player::p.y, _tdi);
+				idesc[i] = Ghost::gh[Ghost::index].rMainAngle(Player::p.x, Player::p.y, _tdi);
 				d[i].bfloat = false;
 				break;
 			case SCR_GHAIMX:
-				fdesc[i] = gh[Ghost::index].aim.x;
+				fdesc[i] = Ghost::gh[Ghost::index].aim.x;
 				d[i].bfloat = true;
 				break;
 			case SCR_GHAIMY:
-				fdesc[i] = gh[Ghost::index].aim.y;
+				fdesc[i] = Ghost::gh[Ghost::index].aim.y;
 				d[i].bfloat = true;
 				break;
 			case SCR_GHLIFE:
-				fdesc[i] = gh[Ghost::index].life;
+				fdesc[i] = Ghost::gh[Ghost::index].life;
 				d[i].bfloat = true;
 				break;
 			case SCR_GHAC:
-				idesc[i] = gh[Ghost::index].ac;
+				idesc[i] = Ghost::gh[Ghost::index].ac;
 				d[i].bfloat = false;
 				break;
 			}
@@ -205,15 +205,15 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 			switch (nowval)
 			{
 			case SCR_ENX:
-				fdesc[i] = en[Enemy::index].x;
+				fdesc[i] = Enemy::en[Enemy::index].x;
 				d[i].bfloat = true;
 				break;
 			case SCR_ENY:
-				fdesc[i] = en[Enemy::index].y;
+				fdesc[i] = Enemy::en[Enemy::index].y;
 				d[i].bfloat = true;
 				break;
 			case SCR_ENTIMER:
-				idesc[i] = en[Enemy::index].timer;
+				idesc[i] = Enemy::en[Enemy::index].timer;
 				d[i].bfloat = false;
 				break;
 			case SCR_ENI:
@@ -221,35 +221,35 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 				d[i].bfloat = false;
 				break;
 			case SCR_ENANGLE:
-				idesc[i] = en[Enemy::index].angle;
+				idesc[i] = Enemy::en[Enemy::index].angle;
 				d[i].bfloat = false;
 				break;
 			case SCR_ENSPEED:
-				fdesc[i] = en[Enemy::index].speed;
+				fdesc[i] = Enemy::en[Enemy::index].speed;
 				d[i].bfloat = true;
 				break;
 			case SCR_ENAMAP:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				idesc[i] = en[Enemy::index].aMainAngle(Player::p.x, Player::p.y, _tdi);
+				idesc[i] = Enemy::en[Enemy::index].aMainAngle(Player::p.x, Player::p.y, _tdi);
 				d[i].bfloat = false;
 				break;
 			case SCR_ENRMAP:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				idesc[i] = en[Enemy::index].rMainAngle(Player::p.x, Player::p.y, _tdi);
+				idesc[i] = Enemy::en[Enemy::index].rMainAngle(Player::p.x, Player::p.y, _tdi);
 				d[i].bfloat = false;
 				break;
 			case SCR_ENAIMX:
-				fdesc[i] = en[Enemy::index].aim.x;
+				fdesc[i] = Enemy::en[Enemy::index].aim.x;
 				d[i].bfloat = true;
 				break;
 			case SCR_ENAIMY:
-				fdesc[i] = en[Enemy::index].aim.y;
+				fdesc[i] = Enemy::en[Enemy::index].aim.y;
 				d[i].bfloat = true;
 				break;
 			case SCR_ENLIFE:
-				fdesc[i] = en[Enemy::index].life;
+				fdesc[i] = Enemy::en[Enemy::index].life;
 				d[i].bfloat = true;
 				break;
 			}
@@ -271,7 +271,7 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 				d[i].bfloat = false;
 				break;
 			case SCR_SEED:
-				idesc[i] = mp.seed;
+				idesc[i] = Process::mp.seed;
 				d[i].bfloat = false;
 				break;
 			case SCR_SINA:
@@ -353,13 +353,13 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 			case SCR_TX:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				fdesc[i] = tar[_tdi].x;
+				fdesc[i] = Target::GetX(_tdi);
 				d[i].bfloat = true;
 				break;
 			case SCR_TY:
 				++(*p);
 				_tdi = CINT(Value(&(*p), i, 0));
-				fdesc[i] = tar[_tdi].y;
+				fdesc[i] = Target::GetY(_tdi);
 				d[i].bfloat = true;
 				break;
 			case SCR_TIME:
@@ -376,7 +376,7 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 				break;
 
 			case SCR_DIFFI:
-				idesc[i] = mp.nowdifflv;
+				idesc[i] = Process::mp.nowdifflv;
 				d[i].bfloat = false;
 				break;
 			case SCR_SNOSTAGE:
@@ -424,13 +424,13 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 				d[i].bfloat = false;
 				break;
 			case SCR_GETSCENE:
-				idesc[i] = mp.scene;
+				idesc[i] = Process::mp.scene;
 				d[i].bfloat = false;
 				break;
 			case SCR_MODE:
-				if (mp.practicemode)
+				if (Process::mp.practicemode)
 				{
-					if (mp.spellmode)
+					if (Process::mp.spellmode)
 					{
 						idesc[i] = M_MODE_SPELL;
 					}
@@ -446,11 +446,11 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 				d[i].bfloat = false;
 				break;
 			case SCR_REPLAYMODE:
-				idesc[i] = mp.replaymode;
+				idesc[i] = Process::mp.replaymode;
 				d[i].bfloat = false;
 				break;
 			case SCR_FRAMESKIP:
-				idesc[i] = mp.frameskip;
+				idesc[i] = Process::mp.frameskip;
 				d[i].bfloat = false;
 				break;
 			}
@@ -462,7 +462,7 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 			switch (nowval)
 			{
 			case SCR_CHATI:
-				idesc[i] = chat.chati;
+				idesc[i] = Chat::chatitem.chati;
 				d[i].bfloat = false;
 				break;
 
@@ -615,7 +615,7 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 				d[i].bfloat = false;
 				break;
 			case SCR_BGSTIMER:
-				idesc[i] = BGLayer::set[BGLayer::setindex].timer;
+				idesc[i] = BGLayer::bglayerset[BGLayer::setindex].timer;
 				d[i].bfloat = false;
 				break;
 			}

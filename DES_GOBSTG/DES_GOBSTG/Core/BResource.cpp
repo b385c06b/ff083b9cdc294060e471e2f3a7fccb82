@@ -96,6 +96,27 @@ bool BResource::Fill()
 	//copy to data
 	//
 
+	strcpy(resdata.datadefinefilename, resdata.datafoldername);
+	strcat(resdata.datadefinefilename, Data::data.sRead(DATA_RESOURCEFILE, sec, Data::data.nLinkType(RESDATAN_DATADEFINEFILE), RESDEFAULT_DATADATADEFINE));
+	//copy to data
+	//
+	strcpy(resdata.packagedefinefilename, resdata.datafoldername);
+	strcat(resdata.packagedefinefilename, Data::data.sRead(DATA_RESOURCEFILE, sec, Data::data.nLinkType(RESDATAN_PACKAGEDEFINEFILE), RESDEFAULT_DATAPACKAGEDEFINE));
+	//copy to data
+	//
+	strcpy(resdata.texturedefinefilename, resdata.datafoldername);
+	strcat(resdata.texturedefinefilename, Data::data.sRead(DATA_RESOURCEFILE, sec, Data::data.nLinkType(RESDATAN_TEXTUREDEFINEFILE), RESDEFAULT_DATATEXTUREDEFINE));
+	//copy to data
+	//
+	strcpy(resdata.effectdefinefilename, resdata.datafoldername);
+	strcat(resdata.effectdefinefilename, Data::data.sRead(DATA_RESOURCEFILE, sec, Data::data.nLinkType(RESDATAN_EFFECTDEFINEFILE), RESDEFAULT_DATAEFFECTDEFINE));
+	//copy to data
+	//
+	strcpy(resdata.sedefinefilename, resdata.datafoldername);
+	strcat(resdata.sedefinefilename, Data::data.sRead(DATA_RESOURCEFILE, sec, Data::data.nLinkType(RESDATAN_SEDEFINEFILE), RESDEFAULT_DATASEDEFINE));
+	//copy to data
+	//
+
 	strcpy(resdata.customconstfilename, resdata.datafoldername);
 	strcat(resdata.customconstfilename, Data::data.sRead(DATA_RESOURCEFILE, sec, Data::data.nLinkType(RESDATAN_CUSTOMCONSTFILE), RESDEFAULT_DATACUSTOMCONST));
 	//copy to data
@@ -131,11 +152,6 @@ bool BResource::Fill()
 	//copy to data
 	//
 
-	strcpy(resdata.playerbulletdefinefilename, resdata.datafoldername);
-	strcat(resdata.playerbulletdefinefilename, Data::data.sRead(DATA_RESOURCEFILE, sec, Data::data.nLinkType(RESDATAN_PLAYERBULLETDEFINEFILE), RESDEFAULT_DATAPLAYERBULLETDEFINE));
-	//copy to data
-	//
-
 	strcpy(resdata.playershootdefinefilename, resdata.datafoldername);
 	strcat(resdata.playershootdefinefilename, Data::data.sRead(DATA_RESOURCEFILE, sec, Data::data.nLinkType(RESDATAN_PLAYERSHOOTDEFINEFILE), RESDEFAULT_DATAPLAYERSHOOTDEFINE));
 	//copy to data
@@ -145,31 +161,6 @@ bool BResource::Fill()
 	strcat(resdata.playerghostdefinefilename, Data::data.sRead(DATA_RESOURCEFILE, sec, Data::data.nLinkType(RESDATAN_PLAYERGHOSTDEFINEFILE), RESDEFAULT_DATAPLAYERGHOSTDEFINE));
 	//copy to data
 	//
-
-	name = Data::data.nLinkType(RESDATAN_TYPE);
-	for(int i=0;i<PACKAGEMAX;i++)
-	{
-		name = Data::data.nLinkNum(name, i+1);
-		strcpy(resdata.packagefilename[i], Data::data.sRead(DATA_RESOURCEFILE, Data::data.sLinkType(RESDATAS_PACKAGE), name, ""));
-	}
-
-	for(int i=0;i<TEXMAX;i++)
-	{
-		name = Data::data.nLinkNum(name, i+1);
-		strcpy(resdata.texfilename[i], Data::data.sRead(DATA_RESOURCEFILE, Data::data.sLinkType(RESDATAS_TEXTURE), name, ""));
-	}
-
-	for(int i=0;i<SEMAX;i++)
-	{
-		name = Data::data.nLinkNum(name, i+1);
-		strcpy(resdata.sefilename[i], Data::data.sRead(DATA_RESOURCEFILE, Data::data.sLinkType(RESDATAS_SE), name, ""));
-	}
-
-	for(int i=0; i<EFFECTSYSTYPEMAX; i++)
-	{
-		name = Data::data.nLinkNum(name, i+1);
-		strcpy(resdata.effectsysfilename[i], Data::data.sRead(DATA_RESOURCEFILE, Data::data.sLinkType(RESDATAS_EFFECTSYS), name, ""));
-	}
 
 	strcpy(buffer, Data::data.sRead(DATA_RESOURCEFILE, Data::data.sLinkType(RESDATAS_EXTENSION), Data::data.nLinkType(RESDATAN_SCRIPTEXT7), RESDEFAULT_SCRIPTEXT7));
 	if(strlen(buffer) > 8)
@@ -434,9 +425,13 @@ void BResource::CopyData()
 		Data::data.enemydefinefilename = resdata.enemydefinefilename;
 		Data::data.playerdefinefilename = resdata.playerdefinefilename;
 		Data::data.spritedefinefilename = resdata.spritedefinefilename;
-		Data::data.playerbulletdefinefilename = resdata.playerbulletdefinefilename;
 		Data::data.playershootdefinefilename = resdata.playershootdefinefilename;
 		Data::data.playerghostdefinefilename = resdata.playerghostdefinefilename;
+		Data::data.datadefinefilename = resdata.datadefinefilename;
+		Data::data.packagedefinefilename = resdata.packagedefinefilename;
+		Data::data.texturedefinefilename = resdata.texturedefinefilename;
+		Data::data.effectdefinefilename = resdata.effectdefinefilename;
+		Data::data.sedefinefilename = resdata.sedefinefilename;
 	}
 }
 
@@ -464,11 +459,20 @@ bool BResource::SetDataFile()
 			return false;
 		if (!Data::data.SetFile(Data::data.spritedefinefilename, DATA_SPRITEDEFINEFILE))
 			return false;
-		if (!Data::data.SetFile(Data::data.playerbulletdefinefilename, DATA_PLAYERBULLETDEFINE))
-			return false;
 		if (!Data::data.SetFile(Data::data.playershootdefinefilename, DATA_PLAYERSHOOTDEFINE))
 			return false;
 		if (!Data::data.SetFile(Data::data.playerghostdefinefilename, DATA_PLAYERGHOSTDEFINE))
+			return false;
+
+		if (!Data::data.SetFile(Data::data.datadefinefilename, DATA_DATATABLEDEFINE))
+			return false;
+		if (!Data::data.SetFile(Data::data.packagedefinefilename, DATA_PACKAGETABLEDEFINE))
+			return false;
+		if (!Data::data.SetFile(Data::data.texturedefinefilename, DATA_TEXTURETABLEDEFINE))
+			return false;
+		if (!Data::data.SetFile(Data::data.effectdefinefilename, DATA_EFFECTTABLEDEFINE))
+			return false;
+		if (!Data::data.SetFile(Data::data.sedefinefilename, DATA_SETABLEDEFINE))
 			return false;
 	}
 	return true;

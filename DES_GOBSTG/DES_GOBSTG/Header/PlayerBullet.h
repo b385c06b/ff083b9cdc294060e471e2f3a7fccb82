@@ -30,14 +30,18 @@ class PlayerBullet : public BObject
 {
 public:
 	PlayerBullet();
-	virtual ~PlayerBullet();
+	~PlayerBullet();
 
 	static void Init(HTEXTURE * tex);
 	static void Build(int shootdataID);
+	static void Action();
+	static void ClearAll();
 
 	void valueSet(WORD ID, BYTE arrange, float xbias, float ybias, float scale, int angle, float speed, float accelspeed, float power, int hitonfactor, WORD flag, BYTE seID);
 
-	virtual void action();
+	void action();
+
+	static void RenderAll();
 	void Render();
 
 	void hitOn();
@@ -67,18 +71,19 @@ public:
 
 	int		locktimer;
 	int		hitonfactor;
+	int		animation;
 
 	WORD	flag;
 
 	BYTE	arrange;
 
-	static hgeSprite * spPlayerBullet[PLAYERBULLETSPRITEMAX];
+	static hgeSprite * sprite[PLAYERSHOOTTYPEMAX][PLAYERBULLETTYPE];
 	static DWORD bcol0, bcol1, bcol2, bcol3;
 	static HTEXTURE * tex;
 	static int locked;
 	static WORD beams;
-};
 
-extern VectorList<PlayerBullet>pb;
+	static VectorList<PlayerBullet>pb;
+};
 
 #endif

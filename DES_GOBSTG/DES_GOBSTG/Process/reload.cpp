@@ -7,43 +7,21 @@ bool Process::reload()
 	frameskip = M_DEFAULT_FRAMESKIP;
 
 	strcpy(rpyfilename, "");
-	replayIndex = 0;
+	Replay::rpy.replayIndex = 0;
 
 	Selector::Clear();
 	Player::p.exist = false;
-	for(int i=0; i<BGLAYERSETMAX; i++)
-	{
-		BGLayer::set[i].sID = 0;
-	}
-	BGLayer::KillOtherLayer();
-	bgmask.exist = false;
-	fgpause.exist = false;
-	fdisp.SetState(FDISP_PANEL, 0);
-	for(int i=0;i<ENEMYMAX;i++)
-	{
-		en[i].exist = false;
-		en[i].able = false;
-	}
-	for(int i=0;i<GHOSTMAX;i++)
-	{
-		gh[i].exist = false;
-		gh[i].able = false;
-	}	
-	for(int i=0;i<EFFECTSPMAX;i++)
-	{
-		es[i].exist = false;
-	}
-	for(int i=0;i<TARGETMAX;i++)
-	{
-		tar[i].x = 0;
-		tar[i].y = 0;
-	}
+
+	BGLayer::Init(tex);
+
+	FrontDisplay::fdisp.SetState(FDISP_PANEL, FDISPSTATE_OFF);
+	Enemy::ClearAll();
+	Ghost::ClearAll();
+	EffectSp::ClearAll();
+	Target::ClearAll();
 	InfoSelect::Clear();
-	Chat::chatting = false;
-	Chat::timer = 0;
-	Chat::chati = 0;
-	Chat::chatinit = false;
-	BossInfo::empty();
+	Chat::chatitem.ClearAll();
+	BossInfo::Clear();
 	Player::ncCont = 0;
 	Player::ncGet = 0;
 	Player::ncBorder = 0;
@@ -75,8 +53,8 @@ bool Process::reload()
 	BossInfo::Init();
 	InfoQuad::tex = tex[TEX_WHITE];
 
-	fdisp.Init();
-	Fontsys::font = fdisp.info.normalfont;
+	FrontDisplay::fdisp.Init();
+	Fontsys::font = FrontDisplay::fdisp.info.normalfont;
 	//Heatup
 	Fontsys::HeatUp();
 

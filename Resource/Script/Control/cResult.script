@@ -28,7 +28,7 @@ SD [ptsel] RESERVEBEGIN + 2
 
 IF D ptsec < -1
 {
-	BGVALUE BGMASK SI_Null
+	BGVALUE BGMASK SI_White
 		160 160 260 140
 		0xA0000000
 
@@ -110,7 +110,7 @@ ELSEIF D ptsec < 0
 				SEL_NONACTIVE
 			ISELSET 0 0 true 0 0 0 0
 		}
-		BGVALUE BGMASK SI_Null
+		BGVALUE BGMASK SI_White
 			TotalCenterX 280 580 320
 			0xA0000000
 

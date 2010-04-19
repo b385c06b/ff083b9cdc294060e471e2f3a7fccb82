@@ -5,6 +5,16 @@
 #include "Const.h"
 #include "BObject.h"
 
+#define BGLAYERMAX			0x0C
+#define FGLAYERMAX			0x04
+
+#define BGFGLAYERMAX		(BGLAYERMAX+FGLAYERMAX)
+#define UBGLAYERMAX			(BGLAYERMAX+FGLAYERMAX+2)
+#define UBGID_BGMASK		(UBGLAYERMAX-2)
+#define UFGID_FGPAUSE		(UBGLAYERMAX-1)
+
+#define BGLAYERSETMAX		0x08
+
 #define BG_NONE			0
 #define BG_WHITEFLASH	1
 #define BG_REDFLASH		2
@@ -47,15 +57,20 @@ class BGLayer : public BObject
 {
 public:
 	BGLayer();
-	virtual ~BGLayer();
+	~BGLayer();
 
-	static void Init();
+	static void Init(HTEXTURE * tex);
+	static void KillOtherLayer();
+	static void Action(bool active);
+	static void ActionSpecial();
+	static void RenderBG();
+	static void RenderFG();
+	static void RenderFGPause();
 
 	void Render();
-	void valueSet(HTEXTURE * tex, int siID, float x, float y, float z, float w, float h, int rotx, int roty, int rotz, float paral, float speed = 0, int angle = 9000, bool move = false, bool rotate = false, DWORD col = 0xffffffff);
-	void valueSet(HTEXTURE * tex, int siID, float cenx, float ceny, float width, float height, DWORD col = 0xffffffff);
-	static void KillOtherLayer();
-	void valueSetByName(HTEXTURE * tex, const char * spritename, float cenx, float ceny, float width=-1, float height=-1, DWORD col = 0xffffffff);
+	void valueSet(int siID, float x, float y, float z, float w, float h, int rotx, int roty, int rotz, float paral, float speed = 0, int angle = 9000, bool move = false, bool rotate = false, DWORD col = 0xffffffff);
+	void valueSet(int siID, float cenx, float ceny, float width, float height, DWORD col = 0xffffffff);
+	void valueSetByName(const char * spritename, float cenx, float ceny, float width=-1, float height=-1, DWORD col = 0xffffffff);
 	void texRectSet(float texx, float texy, float texw, float texh);
 	void rectSet(float x, float y, float z, float w, float h, int rotx, int roty, int rotz);
 	void zSet(float z0, float z1, float z2, float z3);
@@ -68,6 +83,8 @@ public:
 	void SetBlend(int blend);
 
 	void action();
+
+
 
 public:
 //	hgeQuad	quad;
@@ -84,18 +101,12 @@ public:
 	BYTE	changetimer;
 	BYTE	mtimer;
 
-	static BGLayerSet set[BGLAYERSETMAX];
+	static BGLayer ubg[UBGLAYERMAX];
+	static BGLayerSet bglayerset[BGLAYERSETMAX];
 	static WORD setindex;
+
+	static HTEXTURE * tex;
+
 };
-
-extern BGLayer bg[BGLAYERMAX];
-extern BGLayer fg[FGLAYERMAX];
-
-extern BGLayer bgmask;
-//extern BGLayer fgpanel;
-extern BGLayer fgpause;
-//extern BGLayer fgdiff;
-
-extern BGLayer * ubg[UBGLAYERMAX];
 
 #endif

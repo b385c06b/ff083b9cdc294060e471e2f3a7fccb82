@@ -24,7 +24,7 @@ void Player::_Shoot()
 
 bool Player::Shoot()
 {
-	if(flag & PLAYER_SHOT || Chat::chatting)
+	if(flag & PLAYER_SHOT || Chat::chatitem.chatting)
 	{
 		shoottimer = 0;
 		return true;

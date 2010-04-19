@@ -9,10 +9,12 @@
 #include "../Header/Process.h"
 #include "../Header/BResource.h"
 #include "../Header/FrontDisplay.h"
+#include "../Header/SpriteItemManager.h"
+#include "../Header/EffectSysIDDefine.h"
 
 #define _DAMAGEZONEMAX	0x10
 
-Enemy en[ENEMYMAX];
+Enemy Enemy::en[ENEMYMAX];
 
 VectorList<DamageZone> Enemy::dmgz;
 HTEXTURE Enemy::texmain;
@@ -33,9 +35,7 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
-	if(sprite)
-		delete sprite;
-	sprite = NULL;
+	SpriteItemManager::FreeSprite(&sprite);
 }
 
 void Enemy::Init(HTEXTURE _texmain)
@@ -44,6 +44,53 @@ void Enemy::Init(HTEXTURE _texmain)
 	index = ENEMY_INDEXSTART;
 	dmgz.init(_DAMAGEZONEMAX);
 	dmgz.clear_item();
+}
+
+void Enemy::Action()
+{
+	PlayerBullet::locked = PBLOCK_LOST;
+	for(int i=0;i<ENEMYMAX;i++)
+	{
+		if(en[i].exist)
+		{
+			Process::mp.objcount ++;
+
+			DWORD stopflag = Process::mp.GetStopFlag();
+			bool binstop = FRAME_STOPFLAGCHECK_(stopflag, FRAME_STOPFLAG_ENEMY);
+			if (!binstop)
+			{
+				en[i].action();
+			}
+			else
+			{
+				en[i].actionInStop();
+			}
+			if(PlayerBullet::locked == PBLOCK_LOST && Enemy::en[i].able)
+			{
+				if (en[i].x <= M_CLIENT_RIGHT && en[i].x >= M_CLIENT_LEFT
+					&& en[i].y <= M_CLIENT_BOTTOM && en[i].y >= M_CLIENT_TOP)
+				{
+					PlayerBullet::locked = i;
+				}
+			}
+		}
+	}
+}
+
+void Enemy::ClearAll()
+{
+	for (int i=0; i<ENEMYMAX; i++)
+	{
+		en[i].Clear();
+	}
+	index = ENEMY_INDEXSTART;
+}
+
+void Enemy::Clear()
+{
+	exist = false;
+	able = false;
+	timer = 0;
 }
 
 void Enemy::DamageZoneBuild(float _x, float _y, float _r, float _power)
@@ -90,6 +137,24 @@ bool Enemy::Build(WORD _eID, BYTE _index, BYTE _tarID, float x, float y, int ang
 	en[index].eID = _eID;
 	en[index].tarID = _tarID;
 	return true;
+}
+
+void Enemy::RenderAll()
+{
+	for (int i=0; i<ENEMYMAX; i++)
+	{
+		if (en[i].exist)
+		{
+			en[i].Render();
+		}
+	}
+	for (int i=0; i<ENEMYMAX; i++)
+	{
+		if (en[i].exist)
+		{
+			en[i].RenderEffect();
+		}
+	}
 }
 
 void Enemy::Render()
@@ -156,15 +221,14 @@ void Enemy::valueSet(WORD _ID, float _x, float _y, int _angle, float _speed, BYT
 
 	headangle = -angle;
 
-	if(!sprite)
-		sprite = new hgeSprite(texmain, 0, 0, 32, 32);
-	if(type >= ENEMY_BOSSTYPEBEGIN)
+	enemyData * _enemydata = &(BResource::res.enemydata[type]);
+	if (sprite)
 	{
-		sprite->SetTexture(mp.tex[BResource::res.enemydata[type].tex]);
+		SpriteItemManager::ChangeSprite(_enemydata->siid, sprite);
 	}
 	else
 	{
-		sprite->SetTexture(texmain);
+		sprite = SpriteItemManager::CreateSprite(_enemydata->siid);
 	}
 	initFrameIndex();
 	setFrame(ENEMY_FRAME_STAND);
@@ -534,7 +598,7 @@ void Enemy::bossAction()
 		defrate = 1.0f;
 	else if(timer == ENEMY_BOSSINFITIMER)
 		defrate = 0;
-	if (bossinfo.spellflag & BISF_WAIT)
+	if (BossInfo::bossinfo.spellflag & BISF_WAIT)
 	{
 		defrate = 1.0f;
 	}
@@ -569,9 +633,9 @@ void Enemy::bossAction()
 		if(storetimer[ID] == 1)
 		{
 			SE::push(SE_BOSS_POWER_1, x);
-			fdisp.infobody.effBossStore.Stop(true);
-			fdisp.infobody.effBossStore.Fire();
-			fdisp.infobody.effBossStore.MoveTo(x, y, 0, true);
+			FrontDisplay::fdisp.infobody.effBossStore.Stop(true);
+			FrontDisplay::fdisp.infobody.effBossStore.Fire();
+			FrontDisplay::fdisp.infobody.effBossStore.MoveTo(x, y, 0, true);
 		}
 		else if(storetimer[ID] == 120)
 		{
@@ -581,9 +645,9 @@ void Enemy::bossAction()
 	}
 	else
 	{
-		fdisp.infobody.effBossStore.Stop();
+		FrontDisplay::fdisp.infobody.effBossStore.Stop();
 	}
-	fdisp.infobody.effBossStore.MoveTo(x, y);
+	FrontDisplay::fdisp.infobody.effBossStore.MoveTo(x, y);
 	if(bossflag[ID] & BOSS_SPELLUP)
 	{
 		if (!pdata->attackFrame)
@@ -610,7 +674,7 @@ void Enemy::bossAction()
 void Enemy::initFrameIndex()
 {
 	enemyData * pdata = &(BResource::res.enemydata[type]);
-	int tfi = pdata->startFrame;
+	int tfi = 0;
 	frameindex[ENEMY_FRAME_STAND] = tfi;
 
 	bool bhr = pdata->rightPreFrame;
@@ -690,12 +754,8 @@ void Enemy::setFrame(BYTE frameenum)
 void Enemy::setIndexFrame(BYTE index)
 {
 	enemyData * pdata = &(BResource::res.enemydata[type]);
-	float tw = pdata->usetexw / (pdata->tex_nCol);
-	float th = pdata->usetexh / (pdata->tex_nRow);
-	float ltx = tw * (index % (pdata->tex_nCol));
-	float lty = th * (index / (pdata->tex_nCol));
-	sprite->SetTextureRect(ltx, lty, tw, th);
-	sprite->SetFlip(flipx, false);
+	SpriteItemManager::ChangeSprite(pdata->siid+index, sprite);
+	SpriteItemManager::SetSpriteFlip(sprite, flipx);
 }
 
 void Enemy::GetCollisionRect(float * w, float * h)
@@ -706,7 +766,7 @@ void Enemy::GetCollisionRect(float * w, float * h)
 
 void Enemy::CostLife(float power)
 {
-	if (!Player::p.bBomb || !(bossinfo.spellflag & BISF_NOBOMBDAMAGE))
+	if (!Player::p.bBomb || !(BossInfo::bossinfo.spellflag & BISF_NOBOMBDAMAGE))
 	{
 		life -= power * (1 - defrate);
 	}
@@ -743,25 +803,25 @@ void Enemy::DoShot()
 	float tw;
 	float th;
 	GetCollisionRect(&tw, &th);
-	if (pb.size)
+	if (PlayerBullet::pb.getSize())
 	{
 		DWORD i = 0;
-		DWORD size = pb.size;
-		for (pb.toBegin(); i<size; pb.toNext(), i++)
+		DWORD size = PlayerBullet::pb.getSize();
+		for (PlayerBullet::pb.toBegin(); i<size; PlayerBullet::pb.toNext(), i++)
 		{
-			if (pb.isValid() && (*pb).able)
+			if (PlayerBullet::pb.isValid() && (*PlayerBullet::pb).able)
 			{
-				if ((*pb).isInRange(x, y, tw, th))
+				if ((*PlayerBullet::pb).isInRange(x, y, tw, th))
 				{
-					CostLife((*pb).power);
+					CostLife((*PlayerBullet::pb).power);
 				}
 			}
 		}
 	}
-	if (dmgz.size)
+	if (dmgz.getSize())
 	{
 		DWORD i = 0;
-		DWORD size = dmgz.size;
+		DWORD size = dmgz.getSize();
 		for (dmgz.toBegin(); i<size; dmgz.toNext(), i++)
 		{
 			if (dmgz.isValid())
@@ -782,7 +842,7 @@ void Enemy::DoShot()
 		SE::push(SE_ENEMY_DAMAGE_1, x);
 
 		if(BossInfo::flag && type >= ENEMY_BOSSTYPEBEGIN)
-			fdisp.info.enemyx->SetColor(0xffffffff);
+			FrontDisplay::fdisp.info.enemyx->SetColor(0xffffffff);
 	}
 
 	if(damage && !damagetimer)
@@ -802,7 +862,7 @@ void Enemy::DoShot()
 			effShot.Fire();
 
 			if(BossInfo::flag && type >= ENEMY_BOSSTYPEBEGIN)
-				fdisp.info.enemyx->SetColor(0xc0ffffff);
+				FrontDisplay::fdisp.info.enemyx->SetColor(0xc0ffffff);
 
 			if(life < maxlife / 5)
 			{
@@ -822,7 +882,7 @@ void Enemy::DoShot()
 	{
 		WORD tindex = index;
 		index = ID;
-		scr.edefExecute(eID, SCRIPT_CON_POST);
+		Scripter::scr.edefExecute(eID, SCRIPT_CON_POST);
 		index = tindex;
 
 		if (life < 0)
@@ -855,7 +915,7 @@ void Enemy::action()
 
 	if(!fadeout)
 	{
-		if((Chat::chatting || (BossInfo::flag >= BOSSINFO_COLLAPSE)) && type < ENEMY_BOSSTYPEBEGIN)
+		if((Chat::chatitem.chatting || (BossInfo::flag >= BOSSINFO_COLLAPSE)) && type < ENEMY_BOSSTYPEBEGIN)
 		{
 			life = 0;
 			fadeout = true;
@@ -866,7 +926,7 @@ void Enemy::action()
 		{
 			WORD tindex = index;
 			index = ID;
-			scr.edefExecute(eID, timer);
+			Scripter::scr.edefExecute(eID, timer);
 			index = tindex;
 		}
 		matchAction();
@@ -896,8 +956,7 @@ void Enemy::action()
 
 		if(tarID != 0xff)
 		{
-			tar[tarID].x = x;
-			tar[tarID].y = y;
+			Target::SetValue(tarID, x, y);
 		}
 
 		float tw;
@@ -914,9 +973,9 @@ void Enemy::action()
 		{
 			int txdiff = fabsf(Player::p.x - x);
 			if(txdiff < ENEMY_BOSSX_FADERANGE)
-				fdisp.info.enemyx->SetColor(((0x40 + txdiff*2) << 24) | 0xffffff);
+				FrontDisplay::fdisp.info.enemyx->SetColor(((0x40 + txdiff*2) << 24) | 0xffffff);
 			else
-				fdisp.info.enemyx->SetColor(0x80ffffff);
+				FrontDisplay::fdisp.info.enemyx->SetColor(0x80ffffff);
 		}
 		DoShot();
 		if(x > M_DELETECLIENT_RIGHT || x < M_DELETECLIENT_LEFT || y > M_DELETECLIENT_BOTTOM || y < M_DELETECLIENT_TOP)
@@ -951,7 +1010,7 @@ void Enemy::action()
 
 void Enemy::giveItem()
 {
-	if(mp.spellmode)
+	if(Process::mp.spellmode)
 		return;
 
 	bool first = true;

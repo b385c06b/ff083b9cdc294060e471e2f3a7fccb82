@@ -15,18 +15,18 @@ int Process::processEnding()
 		BGLayer::KillOtherLayer();
 
 		Player::p.exist = false;
-		bgmask.exist = false;
-		fdisp.SetState(FDISP_PANEL, 0);
+		BGLayer::ubg[UBGID_BGMASK].exist = false;
+		FrontDisplay::fdisp.SetState(FDISP_PANEL, FDISPSTATE_OFF);
 		musicChange(0, true);
 
-		scr.SetIntValue(SCR_RESERVEBEGIN, 0);
-		scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, 0);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);
 	}
 	retvalue = PGO;
-	retvalue = scr.controlExecute(STATE_ENDING, gametime);
+	retvalue = Scripter::scr.controlExecute(STATE_ENDING, gametime);
 	//pushtimer depth
-	int tpushtimer = scr.GetIntValue(SCR_RESERVEBEGIN);
-	int tdepth = scr.GetIntValue(SCR_RESERVEBEGIN+1);
+	int tpushtimer = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN);
+	int tdepth = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN+1);
 
 	if (tdepth == 0)
 	{
@@ -51,8 +51,8 @@ int Process::processEnding()
 	{
 		tpushtimer = 0;
 	}
-	scr.SetIntValue(SCR_RESERVEBEGIN, tpushtimer);
-	scr.SetIntValue(SCR_RESERVEBEGIN+1, tdepth);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, tpushtimer);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, tdepth);
 
 	return retvalue;
 }

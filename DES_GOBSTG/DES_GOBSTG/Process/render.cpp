@@ -8,150 +8,39 @@ int Process::render()
 		return renderInit();
 	}
 	//BGLayer
-	for(int i=0;i<BGLAYERMAX;i++)
-	{
-		if(bg[i].exist)
-		{
-			bg[i].Render();
-		}
-	}
-	if(bgmask.exist)
-	{
-		bgmask.Render();
-	}
+	BGLayer::RenderBG();
 
 	if(Player::p.exist || state == STATE_CONTINUE)
 	{
-		if (bossinfo.flag && bossinfo.isSpell())
+		if (BossInfo::bossinfo.flag && BossInfo::bossinfo.isSpell())
 		{
-			fdisp.BossTimeCircleDisplay();
-//			bossinfo.RenderTimeCircle();
+			FrontDisplay::fdisp.BossTimeCircleDisplay();
 		}
 		if(!Player::p.bBorder)
 		{
-			for(int i=0;i<GHOSTMAX;i++)
-			{
-				if(gh[i].exist)
-					gh[i].Render();
-			}
+			Ghost::RenderAll();
 		}
-		for(int i=0;i<ENEMYMAX;i++)
-		{
-			if(en[i].exist)
-				en[i].Render();
-		}
-		for(int i=0;i<ENEMYMAX;i++)
-		{
-			if(en[i].exist)
-				en[i].RenderEffect();
-		}
-		if (pb.size)
-		{
-			DWORD i = 0;
-			DWORD size = pb.size;
-			for (pb.toBegin(); i<size; pb.toNext(), i++)
-			{
-				if (pb.isValid())
-				{
-					(*pb).Render();
-				}
-
-			}
-		}
-		if(Player::p.exist)
-			Player::p.Render();
-
-		if(Player::p.exist)
-		{
-			Player::p.RenderEffect();
-		}
+		Enemy::RenderAll();
+		PlayerBullet::RenderAll();
+		Player::RenderAll();
 
 		//3D objs
-		for(int i=0; i<EFFECTSYSMAX; i++)
-		{
-			if(effsys[i].exist)
-			{
-				effsys[i].Render();
-			}
-		}
-
-		if (be.size)
-		{
-			DWORD i = 0;
-			DWORD size = be.size;
-			for (be.toBegin(); i<size; be.toNext(), i++)
-			{
-				if (be.isValid())
-				{
-					(*be).Render();
-				}
-			}
-		}
-
-		if (bu.size)
-		{
-			for (int i=0; i<BULLETTYPEMAX; i++)
-			{
-				if (Bullet::renderDepth[i].haveType)
-				{
-					for (bu.toIndex(Bullet::renderDepth[i].startIndex); bu.index != Bullet::renderDepth[i].endIndex; bu.toNext())
-					{
-						if (bu.isValid() && (*bu).getRenderDepth() == i)
-						{
-							(*bu).Render();
-						}
-					}
-				}
-			}
-		}
+		Effectsys::RenderAll();
+		Beam::RenderAll();
+		Bullet::RenderAll();
 		if(BossInfo::flag)
 		{
-			bossinfo.exist = false;
-			fdisp.BossInfoDisplay();
+			BossInfo::bossinfo.exist = false;
+			FrontDisplay::fdisp.BossInfoDisplay();
 		}
 
 		if(Player::p.bBorder)
 		{
-			for(int i=0;i<GHOSTMAX;i++)
-			{
-				if(gh[i].exist)
-					gh[i].Render();
-			}
+			Ghost::RenderAll();
 		}
-		if (mi.size)
-		{
-			DWORD i = 0;
-			DWORD size = mi.size;
-			for (mi.toBegin(); i<size; mi.toNext(), i++)
-			{
-				if (mi.isValid())
-				{
-					(*mi).Render();
-				}
-			}
-		}
+		Item::RenderAll();
+		Chat::chatitem.Render();
 
-		if(Chat::chatting)
-		{
-			chat.Render();
-		}
-
-		if (Item::infofont.size)
-		{
-			DWORD i = 0;
-			DWORD size = Item::infofont.size;
-			for (Item::infofont.toBegin(); i<size; Item::infofont.toNext(), i++)
-			{
-				if (!Item::infofont.isValid())
-				{
-					continue;
-				}
-				infoFont * _i = &(*(Item::infofont));
-				if(state != STATE_PAUSE)
-					_i->timer++;
-				fdisp.ItemInfoDisplay(_i);
-			}
-		}
 
 		DWORD tcolor;
 		if(Player::p.x < 170 && Player::p.y > 420)
@@ -164,27 +53,18 @@ int Process::render()
 		}
 	}
 
-	for(int i=0;i<FGLAYERMAX;i++)
-	{
-		if(fg[i].exist)
-		{
-			fg[i].Render();
-		}
-	}
-	if(fgpause.exist)
-	{
-		fgpause.Render();
-	}
+	BGLayer::RenderFG();
+	BGLayer::RenderFGPause();
 	Selector::Render();
 	InfoSelect::Render();
 
 	Export::clientSetMatrix();
 
-	fdisp.PanelDisplay();
+	FrontDisplay::fdisp.PanelDisplay();
 
 	if(Player::p.exist && BossInfo::flag)
 	{
-		fdisp.EnemyXDisplay();
+		FrontDisplay::fdisp.EnemyXDisplay();
 	}
 	return PGO;
 }

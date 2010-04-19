@@ -1,0 +1,11 @@
+73	h5nc	51
+Usage	Table	
+CustomConstFile	TH_tamaokiba_CUSTOMCONST.table	
+SpellDefineFile	TH_tamaokiba_SPELLDEFINE.table	
+MusicDefineFile	TH_tamaokiba_MUSICDEFINE.table	
+BulletDefineFile	TH_tamaokiba_BULLETDEFINE.table	
+EnemyDefineFile	TH_tamaokiba_ENEMYDEFINE.table	
+PlayerDefineFile	TH_tamaokiba_PLAYERDEFINE.table	
+SpriteDefineFile	TH_tamaokiba_SPRITEDEFINE.table	
+PlayerShootDefineFile	TH_tamaokiba_PLAYERSHOOTDEFINE.table	
+PlayerGhostDefineFile	TH_tamaokiba_PLAYERGHOSTDEFINE.table	

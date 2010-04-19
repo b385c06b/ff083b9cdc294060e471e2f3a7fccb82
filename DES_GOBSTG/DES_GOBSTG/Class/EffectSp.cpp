@@ -6,7 +6,7 @@
 
 BYTE EffectSp::evtype;
 
-EffectSp es[EFFECTSPMAX];
+EffectSp EffectSp::es[EFFECTSPMAX];
 
 EffectSp::EffectSp()
 {
@@ -15,9 +15,21 @@ EffectSp::EffectSp()
 
 EffectSp::~EffectSp()
 {
-	if(sprite)
-		delete sprite;
-	sprite = NULL;
+	SpriteItemManager::FreeSprite(&sprite);
+}
+
+void EffectSp::ClearAll()
+{
+	for (int i=0; i<EFFECTSPMAX; i++)
+	{
+		es[i].Clear();
+	}
+}
+
+void EffectSp::Clear()
+{
+	exist = false;
+	timer = 0;
 }
 
 void EffectSp::Render()

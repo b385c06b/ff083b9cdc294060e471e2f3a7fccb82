@@ -4,10 +4,12 @@
 #include "../Header/SE.h"
 #include "../Header/SpriteItemManager.h"
 #include "../Header/FrontDisplayName.h"
+#include "../Header/Process.h"
+#include "../Header/FrontDisplay.h"
 
 hgeSprite * Item::spItem[ITEMSPRITEMAX];
 
-VectorList<Item> mi;
+VectorList<Item> Item::mi;
 VectorList<infoFont>Item::infofont;
 
 #define _ITEM_GETR				32
@@ -45,6 +47,12 @@ void Item::Init()
 	}
 }
 
+void Item::ClearAll()
+{
+	mi.clear_item();
+	infofont.clear_item();
+}
+
 void Item::valueSet(WORD type, float _x, float _y, bool _bDrained, int _angle, float _speed)
 {
 	ID			=	type;
@@ -73,7 +81,7 @@ void Item::ChangeItemID(WORD oriID, WORD toID)
 {
 	DWORD nowindex = mi.index;
 	DWORD i = 0;
-	DWORD size = mi.size;
+	DWORD size = mi.getSize();
 	for (mi.toBegin(); i<size; mi.toNext(), i++)
 	{
 		if (!mi.isValid())
@@ -104,6 +112,38 @@ void Item::Release()
 	infofont.clear();
 }
 
+void Item::RenderAll()
+{
+	if (mi.getSize())
+	{
+		DWORD i = 0;
+		DWORD size = mi.getSize();
+		for (mi.toBegin(); i<size; mi.toNext(), i++)
+		{
+			if (mi.isValid())
+			{
+				(*mi).Render();
+			}
+		}
+	}
+	if (infofont.getSize())
+	{
+		DWORD i = 0;
+		DWORD size = infofont.getSize();
+		for (infofont.toBegin(); i<size; infofont.toNext(), i++)
+		{
+			if (!infofont.isValid())
+			{
+				continue;
+			}
+			infoFont * _i = &(*(infofont));
+			if(Process::mp.state != STATE_PAUSE)
+				_i->timer++;
+			FrontDisplay::fdisp.ItemInfoDisplay(_i);
+		}
+	}
+}
+
 void Item::Render()
 {
 	if(y < 0)
@@ -116,12 +156,12 @@ void Item::Render()
 
 void Item::drainAll()
 {
-	if (mi.size)
+	if (mi.getSize())
 	{
 		DWORD _index = mi.index;
 
 		DWORD i = 0;
-		DWORD size = mi.size;
+		DWORD size = mi.getSize();
 		for (mi.toBegin(); i<size; mi.toNext(), i++)
 		{
 			if (!mi.isValid())
@@ -140,12 +180,12 @@ void Item::drainAll()
 
 void Item::undrainAll()
 {
-	if (mi.size)
+	if (mi.getSize())
 	{
 		DWORD _index = mi.index;
 
 		DWORD i = 0;
-		DWORD size = mi.size;
+		DWORD size = mi.getSize();
 		for (mi.toBegin(); i<size; mi.toNext(), i++)
 		{
 			if (!mi.isValid())
@@ -162,6 +202,35 @@ void Item::undrainAll()
 			}
 		}
 		mi.index = _index;
+	}
+}
+
+void Item::Action()
+{
+	if (mi.getSize())
+	{
+		DWORD stopflag = Process::mp.GetStopFlag();
+		bool binstop = FRAME_STOPFLAGCHECK_(stopflag, FRAME_STOPFLAG_ITEM);
+		if (!binstop)
+		{
+			DWORD i = 0;
+			DWORD size = mi.getSize();
+			for (mi.toBegin(); i<size; mi.toNext(), i++)
+			{
+				if (!mi.isValid())
+				{
+					continue;
+				}
+				if ((*mi).exist)
+				{
+					(*mi).action();
+				}
+				else
+				{
+					mi.pop();
+				}
+			}
+		}
 	}
 }
 

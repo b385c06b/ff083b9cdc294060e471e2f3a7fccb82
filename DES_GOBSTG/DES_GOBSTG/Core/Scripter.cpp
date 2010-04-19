@@ -3,7 +3,7 @@
 #include "../Header/Data.h"
 #include "../Header/Main.h"
 
-Scripter scr;
+Scripter Scripter::scr;
 
 bool Scripter::stopEdefScript = false;
 

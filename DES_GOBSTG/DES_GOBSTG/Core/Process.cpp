@@ -1,17 +1,6 @@
 #include "../Header/processPrep.h"
 
-replayFrame replayframe[M_SAVEINPUTMAX];
-
-Process mp;
-
-DWORD replayIndex = 0;
-
-float worldx = 0;
-float worldy = 0;
-float worldz = 0;
-
-int randi = 0;
-BYTE tari = 0;
+Process Process::mp;
 
 Process::Process()
 {
@@ -46,6 +35,48 @@ Process::Process()
 
 Process::~Process()
 {
+}
+
+
+void Process::SetStop(DWORD _stopflag, int _stoptime)
+{
+	int useindex = 0;
+	int minstoptimer = 0;
+	for (int i=0; i<FRAME_STOPINFOMAX; i++)
+	{
+		if (!stopflag[i])
+		{
+			useindex = i;
+			break;
+		}
+		if (!minstoptimer || stoptimer[i] < minstoptimer)
+		{
+			useindex = i;
+		}
+	}
+	stopflag[useindex] = _stopflag;
+	stoptimer[useindex] = _stoptime;
+}
+
+DWORD Process::GetStopFlag(int index)
+{
+	if (index >= 0 && index < FRAME_STOPINFOMAX)
+	{
+		if (stoptimer[index])
+		{
+			return stopflag[index];
+		}
+		return 0;
+	}
+	DWORD _stopflag = 0;
+	for (int i=0; i<FRAME_STOPINFOMAX; i++)
+	{
+		if (stoptimer[i])
+		{
+			_stopflag |= stopflag[i];
+		}
+	}
+	return _stopflag;	
 }
 
 void Process::Realease()
@@ -97,8 +128,8 @@ void Process::Realease()
 	Item::Release();
 	Fontsys::Release();
 	BossInfo::Release();
-	chat.Release();
-	fdisp.Release();
+	Chat::chatitem.Release();
+	FrontDisplay::fdisp.Release();
 
 	for(int i=0;i<TEXMAX;i++)
 	{
@@ -112,6 +143,41 @@ void Process::Realease()
 		texInit = NULL;
 	}
 	hge->Stream_Free(stream);
+}
+
+void Process::ClearAll()
+{
+	Selector::Clear();
+	BGLayer::Init(tex);
+	Beam::ClearAll();
+	Enemy::ClearAll();
+	Ghost::ClearAll();
+	EffectSp::ClearAll();
+	Target::ClearAll();
+	Bullet::ClearAll();
+	Item::ClearAll();
+	PlayerBullet::ClearAll();
+	InfoSelect::Clear();
+	Chat::chatitem.ClearAll();
+	BossInfo::Clear();
+	Player::p.ClearSet();
+
+	pauseinit = false;
+
+	for (int i=0; i<FRAME_STOPINFOMAX; i++)
+	{
+		stopflag[i] = 0;
+		stoptimer[i] = 0;
+	}
+
+	worldx = 0;
+	worldy = 0;
+	worldz = 0;
+
+	frameskip = M_DEFAULT_FRAMESKIP;
+
+	Scripter::stopEdefScript = false;
+
 }
 
 
@@ -133,20 +199,25 @@ void Process::SetShake(BYTE round, bool force/* =false */)
 
 void Process::WorldShake()
 {
-	if (worldshaketimer)
+	DWORD stopflag = mp.GetStopFlag();
+	bool binstop = FRAME_STOPFLAGCHECK_(stopflag, FRAME_STOPFLAG_WORLDSHAKE);
+	if (!binstop)
 	{
-		worldshaketimer--;
-		if (!worldshaketimer)
+		if (worldshaketimer)
 		{
-			round = 0;
-			worldx = 0;
-			worldy = 0;
-		}
-		else
-		{
-			int tangle = (round*15-worldshaketimer) * 4800;
-			worldx = sint(tangle) * 10;
-			worldy = cost(tangle) * 10;
+			worldshaketimer--;
+			if (!worldshaketimer)
+			{
+				round = 0;
+				worldx = 0;
+				worldy = 0;
+			}
+			else
+			{
+				int tangle = (round*15-worldshaketimer) * 4800;
+				worldx = sint(tangle) * 10;
+				worldy = cost(tangle) * 10;
+			}
 		}
 	}
 }

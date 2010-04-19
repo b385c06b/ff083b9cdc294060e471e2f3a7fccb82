@@ -3,6 +3,9 @@
 
 #include "BObject.h"
 #include "Effectsys.h"
+#include "Target.h"
+
+#define GHOSTMAX			0x80
 
 #define GHOST_COLLISIONR	8
 
@@ -15,9 +18,13 @@ public:
 	virtual ~Ghost();
 
 	static bool Build(WORD gID, BYTE tarID, BYTE belong, float x, float y, int angle, float speed, BYTE type, float life, int ac);
+	static void Action();
+	static void ClearAll();
+	static void RenderAll();
 
 	void valueSet(WORD ID, float x, float y, int angle, float speed, BYTE type, float life, int ac);
 	void valueSet(WORD ID, BYTE belong, int angle, float speed, BYTE type, float life, int ac);
+	void Clear();
 
 	void CostLife(float power);
 
@@ -51,8 +58,7 @@ public:
 	BYTE	type;
 
 	static WORD index;
+	static Ghost gh[GHOSTMAX];
 };
-
-extern Ghost gh[GHOSTMAX];
 
 #endif

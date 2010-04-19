@@ -6,9 +6,10 @@
 #include "../Header/BossInfo.h"
 #include "../Header/Item.h"
 #include "../Header/Main.h"
+#include "../Header/Target.h"
+#include "../Header/Process.h"
 
-VectorList<Beam> be;
-
+VectorList<Beam> Beam::be;
 WORD Beam::index;
 
 Beam::Beam()
@@ -26,6 +27,42 @@ void Beam::Init()
 	index = 0;
 }
 
+void Beam::Action()
+{
+	if (be.getSize())
+	{
+		DWORD stopflag = Process::mp.GetStopFlag();
+		bool binstop = FRAME_STOPFLAGCHECK_(stopflag, FRAME_STOPFLAG_BEAM);
+		if (!binstop)
+		{
+			DWORD i = 0;
+			DWORD size = be.getSize();
+			for (be.toBegin(); i<size; be.toNext(), i++)
+			{
+				if (!be.isValid())
+				{
+					continue;
+				}
+				if ((*be).exist)
+				{
+					Process::mp.objcount ++;
+
+					(*be).action();
+				}
+				else
+				{
+					be.pop();
+				}
+			}
+		}
+	}
+}
+
+void Beam::ClearAll()
+{
+	be.clear_item();
+}
+
 bool Beam::Build(float x, float y, int angle, float speed, BYTE type, BYTE color, WORD length, BYTE flag, int fadeouttime, BYTE tarID)
 {
 	Beam * _tbe;
@@ -35,14 +72,30 @@ bool Beam::Build(float x, float y, int angle, float speed, BYTE type, BYTE color
 	return true;
 }
 
+void Beam::RenderAll()
+{
+	if (be.getSize())
+	{
+		DWORD i = 0;
+		DWORD size = be.getSize();
+		for (be.toBegin(); i<size; be.toNext(), i++)
+		{
+			if (be.isValid())
+			{
+				(*be).Render();
+			}
+		}
+	}
+}
+
 void Beam::Render()
 {
 	int i = type*BULLETCOLORMAX+color;
-	int tblend = Bullet::sp[i]->GetBlendMode();
-	Bullet::sp[i]->SetBlendMode(BLEND_ALPHAADD);
-	Bullet::sp[i]->SetColor(alpha<<24|diffuse);
-	Bullet::sp[i]->RenderEx(x, y, ARC(angle+headangle+BULLET_ANGLEOFFSET), vscale, hscale);
-	Bullet::sp[i]->SetBlendMode(tblend);
+	int tblend = Bullet::sprite[i]->GetBlendMode();
+	Bullet::sprite[i]->SetBlendMode(BLEND_ALPHAADD);
+	Bullet::sprite[i]->SetColor(alpha<<24|diffuse);
+	Bullet::sprite[i]->RenderEx(x, y, ARC(angle+headangle+BULLET_ANGLEOFFSET), vscale, hscale);
+	Bullet::sprite[i]->SetBlendMode(tblend);
 }
 
 void Beam::valueSet(WORD _ID, float _x, float _y, int _angle, float _speed, BYTE _type, BYTE _color, WORD _length, BYTE _flag, int _fadeouttime, BYTE _tarID)
@@ -167,24 +220,29 @@ void Beam::action()
 		}
 		if (holdtar != 0xff)
 		{
+			float holdx;
+			float holdy;
+			Target::GetValue(holdtar, &holdx, &holdy);
 			if (pintar != 0xff)
 			{
-				SetVector(tar[holdtar].x, tar[holdtar].y, tar[pintar].x, tar[pintar].y);
+				float pinx;
+				float piny;
+				Target::GetValue(pintar, &pinx, &piny);
+				SetVector(holdx, holdy, pinx, piny);
 			}
 			else
 			{
 				float factor = (hscale * 16.0f - holdoffset) / speed;
-				SetVector(tar[holdtar].x, tar[holdtar].y, tar[holdtar].x + factor * xplus, tar[holdtar].y + factor * yplus);
+				SetVector(holdx, holdy, holdx + factor * xplus, holdy + factor * yplus);
 			}
 		}
 
 		if(tarID != 0xff)
 		{
-			tar[tarID].x = x;
-			tar[tarID].y = y;
+			Target::SetValue(tarID, x, y);
 		}
 
-		if(Chat::chatting)
+		if(Chat::chatitem.chatting)
 		{
 			fadeout = true;
 			timer = 0;

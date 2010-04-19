@@ -12,6 +12,8 @@
 #include "../Header/BossInfo.h"
 #include "../Header/InfoQuad.h"
 #include "../Header/BResource.h"
+#include "../Header/SpriteItemManager.h"
+#include "../Header/EffectSysIDDefine.h"
 
 Player Player::p;
 
@@ -20,6 +22,8 @@ BYTE Player::ncCont = 0;
 BYTE Player::ncGet = 0;
 BYTE Player::ncMiss = 0;
 BYTE Player::ncPause = 0;
+
+float Player::lostStack = 0;
 
 #define _PL_ITEMDRAINNPOP	(PL_NPOPMAX * 4 / 5)
 
@@ -68,9 +72,7 @@ Player::Player()
 
 Player::~Player()
 {
-	if(sprite)
-		delete sprite;
-	sprite = NULL;
+	SpriteItemManager::FreeSprite(&sprite);
 }
 
 void Player::initFrameIndex()
@@ -91,7 +93,7 @@ void Player::initFrameIndex()
 			_ID = ID;
 		}
 		playerData * pdata = &(BResource::res.playerdata[_ID]);
-		int tfi = pdata->startFrame;
+		int tfi = 0;
 		frameindex[i][PLAYER_FRAME_STAND] = tfi;
 
 		bool bhr = pdata->rightPreFrame;
@@ -173,14 +175,8 @@ void Player::setFrame(BYTE frameenum)
 void Player::setIndexFrame(BYTE index)
 {
 	playerData * pdata = &(BResource::res.playerdata[nowID]);
-	HTEXTURE nowtex = mp.tex[BResource::res.playerdata[nowID].tex];
-	sprite->SetTexture(nowtex);
-	float tw = pdata->usetexw / (pdata->tex_nCol);
-	float th = pdata->usetexh / (pdata->tex_nRow);
-	float ltx = tw * (index % (pdata->tex_nCol));
-	float lty = th * (index / (pdata->tex_nCol));
-	sprite->SetTextureRect(ltx, lty, tw, th);
-	sprite->SetFlip(flipx, false);
+	SpriteItemManager::ChangeSprite(BResource::res.playerdata[nowID].siid+index, sprite);
+	SpriteItemManager::SetSpriteFlip(sprite, flipx);
 }
 
 
@@ -456,6 +452,40 @@ void Player::UpdatePlayerData()
 	shotdelay = pdata->shotdelay;
 	borderlast = pdata->borderlast;
 	bomblast = pdata->bomblast;
+
+	if (sprite)
+	{
+		SpriteItemManager::ChangeSprite(pdata->siid, sprite);
+	}
+	else
+	{
+		sprite = SpriteItemManager::CreateSprite(pdata->siid);
+	}
+}
+
+void Player::Action()
+{
+	AddLostStack();
+	if (p.exist && Process::mp.state != STATE_CLEAR)
+	{
+		Process::mp.alltime++;
+		DWORD stopflag = Process::mp.GetStopFlag();
+		bool binstop = FRAME_STOPFLAGCHECK_(stopflag, FRAME_STOPFLAG_PLAYER);
+		if (!binstop)
+		{
+			p.action();
+		}
+	}
+}
+
+void Player::AddLostStack()
+{
+	float lost = (hge->Timer_GetDelta() - 1/60.0f) * 100 * 60.0f;
+	if(lost < 0)
+		lost = 0;
+	if(lost > 100)
+		lost = 100;
+	lostStack += lost;
 }
 
 void Player::valueSet(WORD _ID, WORD _ID_sub_1, WORD _ID_sub_2, BYTE _nLife, bool bContinue)
@@ -491,9 +521,6 @@ void Player::valueSet(WORD _ID, WORD _ID_sub_1, WORD _ID_sub_2, BYTE _nLife, boo
 		fastCounter		=	0;
 		borderCounter	=	0;
 	}
-
-	if(!sprite)
-		sprite = new hgeSprite(mp.tex[BResource::res.playerdata[ID].tex], 0, 0, 0, 0);
 	setFrame(PLAYER_FRAME_STAND);
 
 	effGraze.valueSet(EFF_PL_GRAZE, *this);
@@ -595,7 +622,7 @@ void Player::action()
 			flag &= ~PLAYER_MERGE;
 	if(flag & PLAYER_SHOT)
 	{
-		bool shotdelaychange = bossinfo.isSpell() && (BossInfo::spellflag & BISF_SHOT);
+		bool shotdelaychange = BossInfo::bossinfo.isSpell() && (BossInfo::spellflag & BISF_SHOT);
 		if (shotdelaychange)
 		{
 			shotdelay += PLSHOTDELAY_ADD;
@@ -669,7 +696,7 @@ void Player::action()
 				}
 			}
 		}
-		if(!chat.chatting && !bInfi)
+		if(!Chat::chatitem.chatting && !bInfi)
 		{
 			nPop -= _PL_NPOPCOST;
 			if (nPop > _PL_EXTENDNPOP)
@@ -730,12 +757,12 @@ void Player::action()
 		{
 			updateFrame(PLAYER_FRAME_STAND);
 		}
-		if(hge->Input_GetDIKey(KS_FIRE_MP) && !Chat::chatting)
+		if(hge->Input_GetDIKey(KS_FIRE_MP) && !Chat::chatitem.chatting)
 			flag |= PLAYER_SHOOT;
 	}
 	if(hge->Input_GetDIKey(KS_SPECIAL_MP) && !(flag & PLAYER_MERGE))
 	{
-		callBomb(mp.spellmode);
+		callBomb(Process::mp.spellmode);
 	}
 
 	if (!(flag & PLAYER_MERGE) || mergetimer >= 32)
@@ -875,9 +902,9 @@ void Player::DoGraze(float x, float y)
 			nPop = _PL_EXTENDNPOP;
 		}
 
-		if(bossinfo.isSpell() && !bossinfo.failed && bossinfo.limit)
+		if(BossInfo::bossinfo.isSpell() && !BossInfo::bossinfo.failed && BossInfo::bossinfo.limit)
 		{
-			bossinfo.bonus += bossinfo.maxbonus/(bossinfo.limit*60);
+			BossInfo::bossinfo.bonus += BossInfo::bossinfo.maxbonus/(BossInfo::bossinfo.limit*60);
 		}
 
 		flag |= PLAYER_GRAZE;
@@ -900,7 +927,7 @@ void Player::AddPower(int power)
 
 void Player::DoPlayerBulletHit(int hitonfactor)
 {
-	if (!bBorder && !bBomb && (!bossinfo.flag || bossinfo.flag==BOSSINFO_ENABLE))
+	if (!bBorder && !bBomb && (!BossInfo::bossinfo.flag || BossInfo::bossinfo.flag==BOSSINFO_ENABLE))
 	{
 		AddPower(hitonfactor);
 	}
@@ -959,7 +986,7 @@ void Player::callCollapse()
 
 bool Player::callBomb(bool onlyborder)
 {
-	if (Chat::chatting || (flag & PLAYER_COLLAPSE) || (flag & PLAYER_BOMB))
+	if (Chat::chatitem.chatting || (flag & PLAYER_COLLAPSE) || (flag & PLAYER_BOMB))
 	{
 		return false;
 	}
@@ -1047,7 +1074,7 @@ bool Player::Merge()
 		y = PL_MERGEPOS_Y - (mergetimer-16) * 4.5f;
 		alpha = (mergetimer-16) * 8;
 	}
-	else if(mergetimer == 48 && mp.spellmode)
+	else if(mergetimer == 48 && Process::mp.spellmode)
 	{
 		mergetimer = 208;
 	}
@@ -1067,7 +1094,7 @@ bool Player::Merge()
 bool Player::Shot()
 {
 	shottimer++;
-	if (mp.spellmode)
+	if (Process::mp.spellmode)
 	{
 		shottimer = shotdelay;
 	}
@@ -1092,7 +1119,7 @@ bool Player::Shot()
 		Item::undrainAll();
 		SE::push(SE_PLAYER_SHOT, x);
 	}
-	else if (shottimer == (8>shotdelay?shotdelay:8) && bossinfo.isSpell() && (BossInfo::spellflag & BISF_BOMB) && !mp.spellmode)
+	else if (shottimer == (8>shotdelay?shotdelay:8) && BossInfo::bossinfo.isSpell() && (BossInfo::spellflag & BISF_BOMB) && !Process::mp.spellmode)
 	{
 		if (callBomb())
 		{
@@ -1120,7 +1147,7 @@ bool Player::Collapse()
 
 		nPop = 0;
 
-		if(bossinfo.isSpell())
+		if(BossInfo::bossinfo.isSpell())
 			BossInfo::failed = true;
 		esCollapse.x = x;
 		esCollapse.y = y;
@@ -1261,7 +1288,7 @@ bool Player::Bomb()
 	if(bombtimer == 1)
 	{
 		nFaith *= _PL_BOMBFAITHCOSTRATE;
-		if(bossinfo.isSpell())
+		if(BossInfo::bossinfo.isSpell())
 			BossInfo::failed = true;
 		Item::drainAll();
 		bInfi = true;
@@ -1385,6 +1412,18 @@ bool Player::Graze()
 	effGraze.Fire();
 	SE::push(SE_PLAYER_GRAZE, x);
 	return true;
+}
+
+void Player::RenderAll()
+{
+	if (p.exist)
+	{
+		p.Render();
+	}
+	if (p.exist)
+	{
+		p.RenderEffect();
+	}
 }
 
 void Player::Render()

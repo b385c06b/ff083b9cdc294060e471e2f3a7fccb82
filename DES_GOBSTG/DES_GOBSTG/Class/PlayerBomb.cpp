@@ -3,5 +3,5 @@
 
 void Player::_Bomb()
 {
-	scr.eventExecute(SCR_EVENT_PLAYERBOMB, bombtimer);
+	Scripter::scr.eventExecute(SCR_EVENT_PLAYERBOMB, bombtimer);
 }

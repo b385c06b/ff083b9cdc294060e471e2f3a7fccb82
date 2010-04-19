@@ -13,14 +13,14 @@ int Process::processOption()
 	gametime++;
 	if(gametime == 1)
 	{
-		scr.SetIntValue(SCR_RESERVEBEGIN, 0);
-		scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, 0);
+		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);
 		PushKey::SetPushEvent(PUSHKEY_ID_UIUSE, KS_LEFT, KS_RIGHT);
 	}
-	scr.controlExecute(STATE_OPTION, gametime);
+	Scripter::scr.controlExecute(STATE_OPTION, gametime);
 	//-> pushtimer sel depth
-	int tsel = scr.GetIntValue(SCR_RESERVEBEGIN);
-	int tdepth = scr.GetIntValue(SCR_RESERVEBEGIN+1);
+	int tsel = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN);
+	int tdepth = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN+1);
 
 	tsel = Selector::select;
 	if(!tdepth)
@@ -48,7 +48,7 @@ int Process::processOption()
 			SE::push(SE_SYSTEM_OK);
 			tdepth = 1;
 
-			for(list<Selector>::iterator i=sel.begin();i!=sel.end();i++)
+			for(list<Selector>::iterator i=Selector::sel.begin();i!=Selector::sel.end();i++)
 			{
 				if(i->ID < 0x10)
 				{
@@ -178,7 +178,7 @@ int Process::processOption()
 		{
 			SE::push(SE_SYSTEM_OK);
 			tdepth = 0;
-			for(list<Selector>::iterator i=sel.begin();i!=sel.end();i++)
+			for(list<Selector>::iterator i=Selector::sel.begin();i!=Selector::sel.end();i++)
 			{
 				if(i->ID < 0x10)
 				{
@@ -200,7 +200,7 @@ int Process::processOption()
 	SE::vol = sevol;
 	hge->Channel_SetVolume(channel, bgmvol);
 
-	for(list<Selector>::iterator i=sel.begin();i!=sel.end();i++)
+	for(list<Selector>::iterator i=Selector::sel.begin();i!=Selector::sel.end();i++)
 	{
 		if((i->ID & 0xf0) == 0x80)
 		{
@@ -281,8 +281,8 @@ int Process::processOption()
 		}
 	}
 
-	scr.SetIntValue(SCR_RESERVEBEGIN, tsel);
-	scr.SetIntValue(SCR_RESERVEBEGIN+1, tdepth);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, tsel);
+	Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, tdepth);
 
 	return PGO;
 }

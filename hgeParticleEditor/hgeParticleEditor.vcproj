@@ -67,7 +67,7 @@
 				AdditionalOptions="/NODEFAULTLIB:LIBCMT.LIB"
 				AdditionalDependencies=""
 				OutputFile="$(OutDir)/EffectEditor.exe"
-				LinkIncremental="0"
+				LinkIncremental="1"
 				AdditionalLibraryDirectories="../lib/vc;../../lib/vc"
 				IgnoreDefaultLibraryNames=""
 				DelayLoadDLLs="hge_d.dll"
@@ -316,6 +316,10 @@
 			</File>
 			<File
 				RelativePath="..\Des_gobstg\Des_gobstg\Core\InitDllLoader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\DES_GOBSTG\DES_GOBSTG\Core\SpriteItemManager.cpp"
 				>
 			</File>
 		</Filter>
