@@ -22,7 +22,7 @@ Comment	Index	SIID	FaceIndex	Collision_W	Collision_H	StandFrame	StandShake	Right
 -	37	SI_Boss_17_0	17	24	28	1	1	4	1	0	0	2	1	0	0	¥¢¥ê¥¹¡¤¥Þ©`¥¬¥È¥í¥¤¥É	Alice Margatroid
 -	38	SI_Boss_18_0	18	24	28	4	1	3	1	0	0	3	1	0	4	›ªÊ¸¡¤ÕŒÔL×Ó	Moriya Suwako
 -	39	SI_Boss_19_0	19	24	28	4	1	3	1	0	0	0	1	0	0	ËÄ¼¾Ó³Šª¡¤¥ä¥Þ¥¶¥Ê¥É¥¥	Shikieiki Yamaxanadu
--	40	SI_Boss_20_0	20	24	28	4	1	3	1	3	1	2	1	4	1	»êÆÇ¡¤Ñý‰ô	Konpaku Youmu
+-	40	SI_Boss_20_0	20	24	28	4	1	3	1	3	1	0	0	4	1	»êÆÇ¡¤Ñý‰ô	Konpaku Youmu
 -	41	SI_Boss_21_0	21	24	28	4	1	3	1	0	0	3	1	0	0	Ð¡Ò°‰V¡¤Ð¡î®	Onozuka Komachi
 -	42	SI_Boss_22_0	22	24	28	1	1	3	1	0	0	3	1	0	0	°ËÒâ¡¤ÓÀÁÕ	Eirin Yagokoro
 -	43	SI_Boss_23_0	23	24	28	4	1	2	1	0	0	0	1	0	0	°Ëë…¡¤Ë{	Ran Yakumo
