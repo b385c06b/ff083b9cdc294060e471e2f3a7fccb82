@@ -218,6 +218,8 @@ void BGLayer::rectSet(float _x, float _y, float z, float w, float h, int rotx, i
 	{
 		h *= height;
 	}
+	width = w;
+	height = h;
 
 	if (rotx)
 	{

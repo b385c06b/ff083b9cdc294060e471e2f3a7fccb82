@@ -281,20 +281,20 @@ SD [ttar] D 6
 SD [ptanglesave] D 7
 
 BL 5 tbaseangle 17 2
-	tbasex tbasey tbaseangle tspeed
-	42 0 24 0
+	tbasex tbasey tbaseangle 0 tspeed 0
+	40 0 24 0
 SD [i] 2
 LOOP [i]
 {
 	BL 5 SIGN i * 12500 + tbaseangle 17 0
-		tbasex tbasey tbaseangle tspeed
-		42 0 24 0
+		tbasex tbasey tbaseangle 0 tspeed 0
+		40 0 24 0
 	BL 4 SIGN i * 13500 + tbaseangle 16 -3
-		tbasex tbasey tbaseangle tspeed
-		42 0 24 0
+		tbasex tbasey tbaseangle 0 tspeed 0
+		40 0 24 0
 	BL 2 SIGN i * 14500 + tbaseangle 15 -5
-		tbasex tbasey tbaseangle tspeed
-		42 0 24 0
+		tbasex tbasey tbaseangle 0 tspeed 0
+		40 0 24 0
 }
 B tbasex tbasey
 	tbaseangle tspeed

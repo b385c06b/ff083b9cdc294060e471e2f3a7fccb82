@@ -140,6 +140,7 @@ struct bulletData
 	BYTE fadecolor;
 	BYTE bonuscolor;
 	BYTE renderdepth;
+	BYTE renderflag;
 };
 
 struct enemyData 

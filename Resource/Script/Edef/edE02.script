@@ -299,6 +299,6 @@ IF EN@ % 240 > 45
 	SD [tangle] EN@ % 240 - 44 * 450 * tmod + tangle
 }
 B ENX ENY
-	true tangle 1.5
+	tangle 1.5
 	8 1 8 0 0xff
 A 0

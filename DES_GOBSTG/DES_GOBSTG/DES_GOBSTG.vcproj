@@ -580,10 +580,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\Header\BulletListActionConst.h"
-				>
-			</File>
 			<Filter
 				Name="Core"
 				>
@@ -685,6 +681,10 @@
 				</File>
 				<File
 					RelativePath=".\Header\Bullet.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Header\BulletListActionConst.h"
 					>
 				</File>
 				<File

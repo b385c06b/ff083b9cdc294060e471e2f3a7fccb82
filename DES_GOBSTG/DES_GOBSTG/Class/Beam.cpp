@@ -371,7 +371,7 @@ void Beam::action()
 
 bool Beam::isInRect(float aimx, float aimy, float r)
 {
-	if(vscale < BEAM_INVALIDSCALE)
+	if(hscale < BEAM_INVALIDSCALE)
 		return false;
 
 	float _x = x;

@@ -296,12 +296,12 @@ IF EN@ % 24 < 12
 
 EA ENAC_OVERPLAYER_XYOOOTCE
 	CenterBossX CenterBossY 0 0
-	0 60 60 60
+	0 180 60 60
 	
 @ @@>% 180 15
 
 BL RAND % 4 + 5 0 12 0
-	RANDR 180 + 200 RANDR 60 + 80 9000 RAND % 8 /f 10.0 +f 2.0
+	RANDR 180 + 200 RANDR 60 + 80 9000 0 RAND % 8 /f 10.0 +f 2.0 0
 	2 2 8 0
 
 @ @@>% 180 60
@@ -336,7 +336,7 @@ SD [_0] ENAMAP 0
 A 5
 	TIMERRANGE 60 90 SPEEDSETADD 8
 BL 3 _0 tdist /f 4.0 -1
-	ENX ENY _0 0.0
+	ENX ENY _0 0 0.0 0
 	3 tmod * 4 + 2 8 0
 A 0
 
@@ -362,7 +362,7 @@ SD [i] 7
 LOOP [i]
 {
 	BL 12 _0 18.0 -1
-		i * 50 + trandx + 24 RANDR 30 + 80 _0 0.1
+		i * 50 + trandx + 24 RANDR 30 + 80 _0 0 0.1 0
 		3 tmod * 4 + 2 8 0
 }
 A 0
@@ -460,7 +460,7 @@ LOOP [i]
 	{
 		BEB tox +f tbasex toy +f tbasey
 			j + 1 * 2 * 500 + tangle 0.4 0 2
-			480 16 BEAMFLAG_HS 8 120 0xff
+			480 16 BEAMFLAG_HS 150 120 0xff
 	}
 }
 

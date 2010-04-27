@@ -20,7 +20,7 @@ SD [ttimemod] EN@ % 500 < 250
 A 3
 	TIMEREQUAL 90 FADEOUT
 BL 15 0 45 8
-	ENX ENY 9000 0.0
+	ENX ENY 9000 0 0.0 0
 	3 SIGN ttimemod * 2 + 4 8 0
 A 0
 
@@ -37,7 +37,7 @@ LOOP [i]
 		TIMERLESS 80 ANGLESETADD i * 10 + 200 * ttimemod
 		TIMERLESS 160 SPEEDSETADD i / 3 + 2
 	BL 13 0 50 8
-		i * 1.2f +f ENX + trandx ENY + trandy -9000 i *f 0.15
+		i * 1.2f +f ENX + trandx ENY + trandy -9000 0 i *f 0.15 0
 		1 ttimemod * 2 + 4 8 0
 }
 A 0
@@ -68,7 +68,7 @@ SD [ttimemod] SIGN ttimemod
 A 3
 	TIMEREQUAL 90 FADEOUT
 BL 13 0 50 8
-	ttimemod *f 8.0 +f ENX ENY 9000 0.0
+	ttimemod *f 8.0 +f ENX ENY 9000 0 0.0 0
 	3 ttimemod * 2 + 4 8 0
 A 0
 
@@ -85,7 +85,7 @@ LOOP [i]
 		TIMERLESS 80 ANGLESETADD i * 11 + 200 * ttimemod
 		TIMERLESS 105 SPEEDSETADD i / 4 + 2
 	BL 15 0 45 8
-		i *f 1.2 +f ENX + trandx ENY + trandy -9000 i *f 0.15
+		i *f 1.2 +f ENX + trandx ENY + trandy -9000 0 i *f 0.15 0
 		1 ttimemod * 2 + 4 8 0
 }
 A 0
@@ -167,7 +167,7 @@ EA ENAC_REPOSITION_OOOOOOCO
 	
 BEB PX -120
 	9000 1.5 0 0
-	CenterH + 240 16 BEAMFLAG_HS 8 15 0xff
+	CenterH + 240 16 BEAMFLAG_HS 60 15 0xff
 
 @ @@%[ 120 45
 BOSSATTACK
@@ -176,7 +176,7 @@ BOSSATTACK
 
 BEB PX -120
 	9000 2.5 0 0
-	TotalH + 240 16 BEAMFLAG_HS 8 60 0xff
+	TotalH + 240 16 BEAMFLAG_HS 60 60 0xff
 
 @ @@>%< 240 3 2
 

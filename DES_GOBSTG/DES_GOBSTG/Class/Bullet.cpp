@@ -11,6 +11,9 @@
 #include "../Header/Process.h"
 #include "../Header/BulletListActionConst.h"
 
+#define _BULLETRENDERFLAG_NONE	0
+#define _BULLETRENDERFLAG_ROUND	1
+
 #define _IZEZONEMAX			0x20
 
 RenderDepth Bullet::renderDepth[BULLETTYPEMAX];
@@ -231,7 +234,12 @@ void Bullet::Render()
 	if (sprite[i])
 	{
 		sprite[i]->SetColor(alpha<<24 | diffuse);
-		sprite[i]->RenderEx(x, y, ARC(angle+headangle+BULLET_ANGLEOFFSET), hscale);
+		float arc = 0;
+		if (!(BResource::res.bulletdata[type].renderflag & _BULLETRENDERFLAG_ROUND))
+		{
+			arc = ARC(angle+headangle+BULLET_ANGLEOFFSET);
+		}
+		sprite[i]->RenderEx(x, y, arc, hscale);
 	}
 }
 
@@ -1343,7 +1351,10 @@ bool Bullet::ChangeAction()
 				case CALLEVENT:
 					if (doit)
 					{
+						int _index = index;
 						Scripter::scr.Execute(SCR_EVENT, _EXEACL_(1), _EXEACL_(2));
+						index = _index;
+						bu.toIndex(_index);
 					}
 					i+=2;
 					doit = false;
