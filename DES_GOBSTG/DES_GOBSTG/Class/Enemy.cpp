@@ -133,7 +133,8 @@ bool Enemy::Build(WORD _eID, BYTE _index, BYTE _tarID, float x, float y, int ang
 	}
 	if(!rv)
 		return false;
-	en[index].valueSet(index, x, y, angle, speed, type, life, infitimer, take);
+	en[index].valueSet(index, x, y, angle, speed, type, life, infitimer);
+	en[index].setTake(take);
 	en[index].eID = _eID;
 	en[index].tarID = _tarID;
 	return true;
@@ -157,6 +158,24 @@ void Enemy::RenderAll()
 	}
 }
 
+void Enemy::Fadeout()
+{
+	if (!fadeout)
+	{
+
+		if (type < ENEMY_BOSSTYPEBEGIN)
+		{
+			SE::push(SE_BOSS_DEAD, x);
+		}
+		else if (life <= 0)
+		{
+			SE::push(SE_ENEMY_DEAD, x);
+		}
+	}
+	fadeout = true;
+	timer = 0;
+}
+
 void Enemy::Render()
 {
 	sprite->SetColor(alpha<<24|diffuse);
@@ -172,8 +191,29 @@ void Enemy::RenderEffect()
 	effShot.Render();
 }
 
-void Enemy::valueSet(WORD _ID, float _x, float _y, int _angle, float _speed, BYTE _type, float _life, int _infitimer, DWORD _take,
-					 WORD _ac, float para0, float para1, float para2, float para3)
+void Enemy::setAction(WORD _ac, float _para_x, float _para_y, float _para_speed, float _para_friction, int _para_angle, int _para_time, int _para_counter, int _para_endtime)
+{
+	ac = _ac;
+	para_x = _para_x;
+	para_y = _para_y;
+	para_speed = _para_speed;
+	para_friction = _para_friction;
+	para_angle = _para_angle;
+	para_time = _para_time;
+	para_counter = _para_counter;
+	para_endtime = _para_endtime;
+	if (ac == ENAC_FADEOUT_OOOOOTOO && para_time < 0)
+	{
+		Fadeout();
+	}
+}
+
+void Enemy::setTake(DWORD _take)
+{
+	take = _take;
+}
+
+void Enemy::valueSet(WORD _ID, float _x, float _y, int _angle, float _speed, BYTE _type, float _life, int _infitimer)
 {
 	ID		=	_ID;
 	x		=	_x;
@@ -182,9 +222,7 @@ void Enemy::valueSet(WORD _ID, float _x, float _y, int _angle, float _speed, BYT
 	speed	=	_speed;
 	type	=	_type;
 	life	=	_life;
-	ac		=	_ac;
 	angle	=	_angle;
-	take	=	_take;
 	infitimer = _infitimer;
 
 	timer	=	0;
@@ -214,10 +252,7 @@ void Enemy::valueSet(WORD _ID, float _x, float _y, int _angle, float _speed, BYT
 	aim.x	=	0;
 	aim.y	=	0;
 
-	para[0] = para0;
-	para[1] = para1;
-	para[2] = para2;
-	para[3] = para3;
+	ac		=	ENAC_NONE;
 
 	headangle = -angle;
 
@@ -243,180 +278,111 @@ void Enemy::matchAction()
 	{
 	case ENAC_NONE:
 		break;
-	case ENAC_DIRECTSET_XYAS:
+	case ENAC_DIRECTSET_XYSOAOOO:
 		//x，y，angle，speed
 		//直接设置（需要连续设置）
-		x = para[0];
-		y = para[1];
-		angle = para[2];
-		speed = para[3]/1000.0f;
+		x = para_x;
+		y = para_y;
+		angle = para_angle;
+		speed = para_speed;
+		ac = ENAC_NONE;
 		break;
-	case ENAC_CHASEPLAYER_TFR:
-		//作用时间，摩擦力，退出角度
+	case ENAC_CHASEPLAYER_OOSFATOO:
+		//作用时间，摩擦力，退出角度，退出速度
 		//靠近主角
-		if(timer < para[0])
+		if(timer < para_time)
 		{
 			angle = aMainAngle(Player::p.x, Player::p.y);
-			speed *= para[1]/1000.0f;
+			speed *= para_friction;
 		}
 		else
 		{
-			angle = (int)para[2];
+			angle = para_angle;
+			speed = para_speed;
 		}
 		break;
-	case ENAC_ATTENUATION_TFER:
-		//作用时间，摩擦力，停止时间，退出角度
+	case ENAC_CHASEAIM_XYSOAOCO:
+		//目标x，目标y，追击时间，退出角度，退出速度
 		//向原方向前进、停止、撤离
-		if(timer < para[0])
+		if (para_counter)
 		{
-			speed *= para[1]/1000.0f;
-		}
-		else if(timer < para[2])
-			speed = 0;
-		else
-		{
-			angle = (int)para[3];
-			speed += 0.03f;
-		}
-		break;
-	case ENAC_CIRCLE_TXYE:
-		//[+-]起始时间，环绕中心x，环绕中心y，终止时间
-		//绕圆周行走
-		if(para[0] > 0)
-		{
-			if(timer > (DWORD)para[0] && timer < (DWORD)para[3])
-			{
-				float tr = DIST(x, y, para[1], para[2]);
-				angle += ANGLE(speed / tr);
-			}
+			para_counter = chaseAim(para_x, para_y, para_counter);
 		}
 		else
 		{
-			if(timer > (DWORD)(-para[0]) && timer < (DWORD)para[3])
-			{
-				float tr = DIST(x, y, para[1], para[2]);
-				angle -= ANGLE(speed / tr);
-			}
+			angle = para_angle;
+			speed = para_speed;
 		}
 		break;
-	case ENAC_BROKENLINE_CATE:
-		//作用时间[计数器]，变角范围，更替周期，终止时间
-		//折线行走
-		if((int)para[0] && timer < para[3])
+	case ENAC_TURNANGLE_OOOOATOE:
+		//起始时间，增加角度，终止时间
+		//弧线行走
+		if (timer >= para_time && timer < para_endtime)
 		{
-			speed = speed * ((int)para[0] - 1) / (int)para[0];
-			para[0] -= 0.8f;
-			para[0] = (int)para[0];
-		}
-		else if(timer < para[3])
-		{
-			para[0] = para[2];
-			speed = para[2] / 30;
-			if(para[1] > 0)
-			{
-				angle = para[1];
-				para[1] = 18000 - para[1];
-			}
-			else
-			{
-				angle = 18000 + para[1];
-				para[1] = -18000 - para[1];
-			}
-		}
-		else
-		{
-			speed += 0.03f;
-			angle = -9000;
-		}
-		break;
-	case ENAC_STOPANDSTRIKE_TEA:
-		//作用时间，停止时间，放弃时间
-		//减速至0，后冲向Player
-		if(timer < para[0])
-		{
-			speed -= speed / (para[0] - timer);
-		}
-		else if(timer < para[1])
-		{
-			speed = 0;
-		}
-		else if(timer < para[2])
-		{
-			speed += 0.06f;
-			angle = aMainAngle(Player::p.x, Player::p.y);
+			angle += para_angle;
 		}
 		break;
 
-	case ENAC_REPOSITION_T:
+	case ENAC_FADEOUT_OOOOOTOO:
+		//消失时间
+		//直接消失
+		if (timer > para_time)
+		{
+			Fadeout();
+		}
+		break;
+
+	case ENAC_REPOSITION_OOOOOOCO:
 		//作用时间[计数器]
 		//BOSS出场复位
-		if((int)para[0])
+		if(para_counter)
 		{
-			chaseAim(M_ACTIVECLIENT_BOSSX, M_ACTIVECLIENT_BOSSY, para[0]);
-			para[0] -= 0.8f;
-			para[0] = (int)para[0];
+			para_counter = chaseAim(M_ACTIVECLIENT_BOSSX, M_ACTIVECLIENT_BOSSY, para_counter);
 		}
 		else
 		{
-			ac = 0;
+			ac = ENAC_NONE;
 			speed = 0;
 		}
 		break;
-	case ENAC_OVERPLAYER_CXYT:
-		//作用时间[计数器]，目标x，目标y，更替周期
+	case ENAC_OVERPLAYER_XYOOOTCE:
+		//作用时间[计数器]，目标x，目标y，更替周期，追击使用时间
 		//在主角上方随机
-		if((int)para[0])
+		if(timer % para_time == 0)
 		{
-			chaseAim(para[1], para[2], para[0]);
-			para[0] -= 0.8f;
-			para[0] = (int)para[0];
-		}
-		else if(timer % (int)para[3] == 0)
-		{
-			para[0] = 2 * para[3] > 120 ? 120 : 2 * para[3];
+			para_counter = para_endtime;
 			if(Player::p.x > x)
-				para[1] = Player::p.x + randt() % 60;
+				para_x = Player::p.x + randtf(0, 60);
 			else
-				para[1] = Player::p.x - randt() % 60;
-			if(para[1] < M_ACTIVECLIENT_RIGHT*0.15f)
+				para_x = Player::p.x - randtf(0, 60);
+			float leftedge = M_ACTIVECLIENT_LEFT + M_ACTIVECLIENT_EDGE*2;
+			float rightedge = M_ACTIVECLIENT_RIGHT - M_ACTIVECLIENT_EDGE*2;
+			if(para_x < leftedge)
 			{
-				if(x <= M_ACTIVECLIENT_RIGHT*0.15f + 8)
-					para[1] = M_ACTIVECLIENT_RIGHT*0.15f + 8 + randt() % 50;
+				if(x <= leftedge + M_ACTIVECLIENT_EDGE)
+					para_x = leftedge + M_ACTIVECLIENT_EDGE + randtf(0, 50);
 				else
-					para[1] = M_ACTIVECLIENT_RIGHT*0.15f;
+					para_x = leftedge;
 			}
-			else if(para[1] > M_ACTIVECLIENT_RIGHT*0.85f)
+			else if(para_x > rightedge)
 			{
-				if(x >= M_ACTIVECLIENT_RIGHT*0.85f- 8)
-					para[1] = M_ACTIVECLIENT_RIGHT*0.85f - 8 - randt() % 50;
+				if(x >= rightedge - M_ACTIVECLIENT_EDGE)
+					para_x = rightedge - M_ACTIVECLIENT_EDGE - randtf(0, 50);
 				else
-					para[1] = M_ACTIVECLIENT_RIGHT*0.85f;
+					para_x = rightedge;
 			}
-			para[2] = randt() % 80 + M_ACTIVECLIENT_BOSSY - 40;
+			para_y = randtf(-40, 40) + M_ACTIVECLIENT_BOSSY;
 		}
-		break;
-	case ENAC_CHASETO_CXY:
-		//作用时间[计数器]，目标x，目标y
-		//滑步走向点
-		if((int)para[0])
+		else if(para_counter)
 		{
-			chaseAim(para[1], para[2], para[0]);
-			para[0] -= 0.8f;
-			para[0] = (int)para[0];
+			para_counter = chaseAim(para_x, para_y, para_counter);
 		}
 		else
+		{
 			speed = 0;
+		}
 		break;
 	}
-}
-
-void Enemy::setMove(float para0, float para1, float para2, float para3, WORD _ac)
-{
-	para[0] = para0;
-	para[1] = para1;
-	para[2] = para2;
-	para[3] = para3;
-	ac = _ac;
 }
 
 void Enemy::updateFrame(BYTE frameenum, int usetimer /* = -1*/)
@@ -891,8 +857,7 @@ void Enemy::DoShot()
 
 			SE::push(SE_ENEMY_DEAD, x);
 
-			fadeout = true;
-			timer = 0;
+			Fadeout();
 		}
 	}
 
@@ -918,8 +883,7 @@ void Enemy::action()
 		if((Chat::chatitem.chatting || (BossInfo::bossinfo.bossout())) && type < ENEMY_BOSSTYPEBEGIN)
 		{
 			life = 0;
-			fadeout = true;
-			timer = 0;
+			Fadeout();
 		}
 
 		if(eID && !Scripter::stopEdefScript)

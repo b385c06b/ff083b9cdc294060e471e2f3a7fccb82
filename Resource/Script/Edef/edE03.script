@@ -9,8 +9,9 @@ EDEFFILE
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 @ @@% 240
 
@@ -38,7 +39,7 @@ LOOP [i]
 		TIMEREQUAL 60 ANGLESETAMAP i - 2 * 1500
 		TIMERRANGE 60 75 SPEEDSETADD 12
 	B ENX ENY
-		true RANDR 6000 + 9000 5.0
+		RANDR 6000 + 9000 5.0
 		24 1 8 0 0xff
 }
 A 0
@@ -48,8 +49,9 @@ A 0
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	60 CenterBossX CenterBossY 120
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 120 60 60
 
 @ @@>%]% 160 180 40 4
 
@@ -79,13 +81,15 @@ LOOP [i]
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 @ 120
 
-EA 4 ENAC_CHASETO_CXY
-	60 CenterX 160
+EA ENAC_CHASEAIM_XYSOAOCO
+	CenterX 160 0 0
+	0 0 60 0
 
 @ @@>%= 120 90 29
 
@@ -103,7 +107,7 @@ A 3
 LOOP [i]
 {
 	B i * 35 + 39 + toffset tline * 50 - 10 + _0
-		true 0 0.0
+		0 0.0
 		2 tmod * 4 + 2 32 24 0xff
 }
 A 0
@@ -116,7 +120,7 @@ SD [tangle] EN@ * -217 + SEED
 SD [tangle] RANDR 900 + tangle
 
 B ENX - 22 ENY - 30
-	true tangle RAND % 10 /f 10.0 +f 1.0
+	tangle RAND % 10 /f 10.0 +f 1.0
 	6 2 8 0 0xff
 
 ///////
@@ -124,8 +128,9 @@ B ENX - 22 ENY - 30
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	60 CenterBossX CenterBossY 240
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 240 60 60
 
 @ @@>% 180 120
 
@@ -154,8 +159,9 @@ A 0
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 @ 120
 
@@ -183,15 +189,17 @@ GHSAIM 4 300
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 SD [_0] 0
 SD [_1] 1
 	
 @ @@% 180
 
-EA 4 ENAC_CHASETO_CXY
-	60 PX RANDR 40 +f CenterBossY
+EA ENAC_CHASEAIM_XYSOAOCO
+	PX RANDR 40 +f CenterBossY 0 0
+	0 0 60 0
 
 @ @@>%= 180 180 60
 
@@ -201,7 +209,7 @@ BOSSSTORE
 
 SD [toffset] EN@ % 180 - 80 / 10 * -1
 B ENX ENY
-	true 9000 toffset *f 0.5 +f 3.0
+	9000 toffset *f 0.5 +f 3.0
 	15 0 8 0 0xff
 
 @ @@>%= 180 180 90
@@ -234,10 +242,10 @@ SDf [trandy] RANDR 35
 A 3
 	TIMEREQUAL 90 FADEOUT
 B TX _0 +f trandx TY _0 +f trandy
-	true _2 0.0
+	_2 0.0
 	4 2 8 0 0xff
 B TX _1 +f trandx TY _1 +f trandy
-	true _3 0.0
+	_3 0.0
 	4 2 8 0 0xff
 A 0
 
@@ -246,8 +254,9 @@ A 0
 
 @ 1
 
-EA 4 ENAC_CHASETO_CXY
-	60 CenterX CenterY
+EA ENAC_CHASEAIM_XYSOAOCO
+	CenterX CenterY 0 0
+	0 0 60 0
 
 @ 120
 
@@ -269,14 +278,14 @@ A 13
 	TIMEREQUAL 48 ANGLESETRMAP tmod - 1 * 150
 	TIMERRANGE 50 90 SPEEDSETADD 3
 B ENX ENY
-	true tangle 3.0
+	tangle 3.0
 	24 1 8 0 0xff
 A 0
 
 IF EN@ % 24 < 12
 {
 	B ENX ENY
-		true tangle * -1 2.5
+		tangle * -1 2.5
 		24 2 8 0 0xff
 }
 
@@ -285,8 +294,9 @@ IF EN@ % 24 < 12
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	60 CenterBossX CenterBossY 60
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 60 60 60
 	
 @ @@>% 180 15
 
@@ -305,15 +315,17 @@ BC 32 ENAMAP 0 0
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 	
 @ @@% 180
 
 SD [tmod] EN@ % 360 < 180
 SD [tmodx] tmod * 180
-EA 4 ENAC_CHASETO_CXY
-	60 RANDR 60 + tmodx + 134 RANDR 30 + 120
+EA ENAC_CHASEAIM_XYSOAOCO
+	RANDR 60 + tmodx + 134 RANDR 30 + 120 0 0
+	0 0 60 0
 
 @ @@>%= 180 180 60
 
@@ -360,8 +372,9 @@ A 0
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 @ @@>%[] 180 540 200 207
 
@@ -385,7 +398,7 @@ SDf [tbasey] SINA tangle *f 75.0
 A 3
 	TIMEREQUAL 45 FADEOUT
 B tmod * 240 + 104 +f tbasex 140 +f tbasey
-	true 9000 0.0
+	9000 0.0
 	41 0 8 0 0xff
 A 0
 
@@ -403,7 +416,7 @@ LOOP [i]
 	}
 	SD [trand] RANDR 1200
 	B CenterW * i RAND % 420 + 30
-		true i * 18000 + trand RAND % 5 /f 10.0 +f 1.2
+		i * 18000 + trand RAND % 5 /f 10.0 +f 1.2
 		10 j * 6 + 2 8 0 0xff
 }
 
@@ -418,8 +431,9 @@ BC 32 ENAMAP 0 0
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	60 CenterBossX CenterBossY 120
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 120 60 60
 SD [_0] 0
 
 @ @@>% 180 120
@@ -470,8 +484,9 @@ BC 32 RAND 60
 
 @ 1
 
-EA 4 ENAC_CHASETO_CXY
-	60 CenterX CenterY
+EA ENAC_CHASEAIM_XYSOAOCO
+	CenterX CenterY 0 0
+	0 0 60 0
 	
 @ 120
 
@@ -513,5 +528,5 @@ BC 32 ENAMAP 0 0
 @ @@>% 600 180
 
 B ENX ENY
-	false 0 0.4
+	ENAMAP 0 0.4
 	24 2 16 0 0xff

@@ -9,8 +9,9 @@ EDEFFILE
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	120 CenterBossX CenterBossY 120
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 120 120 60
 
 @ @@>%<% 120 120 30 15
 
@@ -26,8 +27,9 @@ LOOP [i]
 	SD [j] 3
 	LOOP [j]
 	{
+		SDf [trmap] j * 80 - 80
 		B ENX ENY
-			false j * 80 - 80 i *f 0.2f +f 1.0
+			ENRMAP trmap i *f 0.2f +f 1.0
 			21 2 8 0 0xff
 	}
 }
@@ -46,14 +48,14 @@ LOOP [i]
 	LOOP [j]
 	{
 		B i * 7 + basex j * -9 + basey
-			true SIGN j * 9000 SIGN j *f 1.5
+			SIGN j * 9000 SIGN j *f 1.5
 			8 0 8 0 0xff
 	}
 	IF i % 4 - 2
 	{
 		B i * 7 + basex + 4 basey - 8
-		true 9000 1.5
-		8 i + 1 * 2 8 0 0xff
+			9000 1.5
+			8 i + 1 * 2 8 0 0xff
 	}
 }
 
@@ -62,8 +64,9 @@ LOOP [i]
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 @ @@[ 120
 
@@ -99,8 +102,9 @@ LOOP [i]
 
 @ @@% 120
 
-EA 4 ENAC_CHASETO_CXY
-	60 PX RANDR 60 +f CenterBossY
+EA ENAC_CHASEAIM_XYSOAOCO
+	PX RANDR 60 +f CenterBossY 0 0
+	0 0 60 0
 
 @ @@>%= 120 120 60
 
@@ -124,7 +128,7 @@ IF D pflag * tyok
 		A 4
 			TIMERLESS 60 ANGLESETADD SIGN i * 300
 		B TX ttar TY ttar
-			true EN@ % 60 * tangle - 9000 1.2
+			EN@ % 60 * tangle - 9000 1.2
 			21 0 8 0 0xff
 		A 0
 	}
@@ -141,25 +145,29 @@ BC 16 RAND 0
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 @ @@%= 480 360
 
-EA 2 ENAC_REPOSITION_T
-	45
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 45 0
 SE $SE_Bullet_2 ENX
 
 @ @@%><% 480 0 360 120
 
-EA 4 ENAC_CHASETO_CXY
-	45 EN@ % 240 > 0 *f CenterW + 8 270
+EA ENAC_CHASEAIM_XYSOAOCO
+	EN@ % 240 > 0 *f CenterW + 8 270 0 0
+	0 0 45 0
 SE $SE_Bullet_2 ENX
 	
 @ @@%><>%= 480 360 120 120 60
 
-EA 4 ENAC_CHASETO_CXY
-	15 EN@ - 60 % 240 > 0 *f CenterW + 8 0
+EA ENAC_CHASEAIM_XYSOAOCO
+	EN@ - 60 % 240 > 0 *f CenterW + 8 0 0 0
+	0 0 15 0
 SE $SE_Bullet_2 ENX
 
 @ @@%<>%<% 480 405 120 120 45 2
@@ -182,8 +190,9 @@ BC 16 SIGN BUI * EN@ * 240 + SEED 0
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	45 CenterBossX CenterBossY 180
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 180 45 45
 SD [_0] 0
 
 @ @@% 180

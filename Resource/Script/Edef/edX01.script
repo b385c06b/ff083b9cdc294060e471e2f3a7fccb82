@@ -9,8 +9,9 @@ EDEFFILE
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	120 CenterBossX CenterBossY 120
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 120 120 60
 
 @ @@>% 120 8
 

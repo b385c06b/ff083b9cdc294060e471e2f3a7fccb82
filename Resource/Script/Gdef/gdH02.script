@@ -22,7 +22,7 @@ SD [i] 4
 LOOP [i]
 {
 	B GHX GHY
-		true i * 1500 + toffset i *f 0.2 +f 1.0
+		i * 1500 + toffset i *f 0.2 +f 1.0
 		5 i % 2 + 3 8 0 0xff
 
 }
@@ -33,7 +33,7 @@ LOOP [i]
 @ @@%<% 60 20 3
 
 B GHX GHY
-	true GHAIMX 2.0
+	GHAIMX 2.0
 	1 2 8 0 0xff
 
 ///////
@@ -51,7 +51,7 @@ SD [i] 2
 LOOP [i]
 {
 	B GHX GHY
-		true i * 18000 + tangle 0.1
+		i * 18000 + tangle 0.1
 		10 GHAIMX 8 0 0xff
 }
 A 0

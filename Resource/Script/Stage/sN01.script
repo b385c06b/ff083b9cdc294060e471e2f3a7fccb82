@@ -44,8 +44,9 @@ IF CHATI - 0xff !
 		BCONTROL BTYPE_ENEMY [index]
 			ENX ENY ENANGLE 0 ENSPEED
 
-		EA 4 ENAC_CHASETO_CXY
-			60 SIGN i * 300 + CenterBossX CenterBossY - 40
+		EA ENAC_CHASEAIM_XYSOAOCO
+			SIGN i * 300 + CenterBossX CenterBossY - 40 0 0
+			0 0 60 0
 	}
 }
 

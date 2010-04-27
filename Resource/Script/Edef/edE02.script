@@ -9,15 +9,17 @@ EDEFFILE
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 @ @@>%<% 180 240 180 60
 
 SD [tmod] NOW@ / 60 % 3
 SD [toffset] tmod * 100 + 124
-EA 4 ENAC_CHASETO_CXY
-	60 RANDR 30 + toffset RANDR 80 + CenterBossY
+EA ENAC_CHASEAIM_XYSOAOCO
+	RANDR 30 + toffset RANDR 80 + CenterBossY 0 0
+	0 0 60 0
 
 IF tmod !
 {
@@ -25,7 +27,7 @@ IF tmod !
 	LOOP [i]
 	{
 		B ENX ENY
-			false 0 i *f 0.25 +f 1.2
+			ENAMAP 0 i *f 0.25 +f 1.2
 			17 0 8 0 0xff
 	}
 }
@@ -49,7 +51,7 @@ ELSE
 	LOOP [i]
 	{
 		B ENX ENY
-			true RAND RAND % 5 /f 5.0 +f 1.2
+			RAND RAND % 5 /f 5.0 +f 1.2
 			13 6 8 0 0xff
 	}
 }
@@ -59,8 +61,9 @@ ELSE
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 @ @@>%<% 240 120 60 3
 
@@ -80,8 +83,9 @@ A 0
 SD [i] 3
 LOOP [i]
 {
+	SDf [trmap] i * 100 - 100
 	B ENX ENY
-		false i * 100 - 100 2.5
+		ENRMAP trmap 2.5
 		2 8 8 0 0xff
 }
 
@@ -90,8 +94,9 @@ LOOP [i]
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	60 CenterBossX CenterBossY 180
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 180 60 60
 
 @ @@>%<% 180 180 30 15
 
@@ -110,8 +115,9 @@ GB 0x8216 0xff 0xff
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 	
 @ 180
 
@@ -122,7 +128,7 @@ GB 0x8220 0xff 0xff
 @ @@>%<% 240 180 32 4
 
 B ENX ENY
-	false 0 EN@ % 180 *f 0.1 +f 1.5
+	ENAMAP 0 EN@ % 180 *f 0.1 +f 1.5
 	17 7 16 0 0xff
 
 ////////////
@@ -130,8 +136,9 @@ B ENX ENY
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	60 CenterBossX CenterBossY 180
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 180 60 60
 
 @ 180
 
@@ -155,8 +162,9 @@ BC 32 RAND 8
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	60 CenterBossX CenterBossY 180	
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 180 60 60
 
 @ @@>%<%<% 180 240 180 8 6 2
 
@@ -175,7 +183,7 @@ SD [taoffset] EN@ * 377
 LOOP [i]
 {
 	B ENX ENY
-		true SIGN i * taoffset + 9000 3.0
+		SIGN i * taoffset + 9000 3.0
 		4 2 8 0 0xff
 }
 A 0
@@ -191,15 +199,16 @@ BC 40 RAND 8
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 @ @@>% 540 2
 
 SD [tmod] EN@ % 4 > 0
 SD [tmod] SIGN tmod
 B ENX ENY
-	true EN@ * 500 + SEED * tmod 2.2
+	EN@ * 500 + SEED * tmod 2.2
 	4 2 8 0 0xff
 
 @ @@% 240
@@ -232,15 +241,17 @@ SD [_0] 0
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 SD [_0] 0
 
 @ @@% 240
 
 SD [tmod] EN@ % 480 *f 0.8
-EA 4 ENAC_CHASETO_CXY
-	60 RANDR 60 + tmod + 128 CenterBossY
+EA ENAC_CHASEAIM_XYSOAOCO
+	RANDR 60 + tmod + 128 CenterBossY 0 0
+	0 0 60 0
 SD [_1] ENAMAP 0
 
 @ @@>%= 240 240 145
@@ -260,8 +271,9 @@ BOSSATTACK
 
 @ @@>%= 240 240 180
 
-EA 4 ENAC_CHASETO_CXY
-	4 CenterW -f ENX CenterBossY
+EA ENAC_CHASEAIM_XYSOAOCO
+	CenterW -f ENX CenterBossY 0 0
+	0 0 4 0
 SD [_0] 2
 
 @ @@>%= 240 240 181

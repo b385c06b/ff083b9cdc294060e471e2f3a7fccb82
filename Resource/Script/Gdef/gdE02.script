@@ -17,7 +17,7 @@ GHSET SIGN tmod * 12000 + GHANGLE GHSPEED GHAC
 A 4
 	TIMERLESS 64 SPEEDSETADD -10
 B GHX GHY
-	true RAND 4.0
+	RAND 4.0
 	2 0 32 32 0xff
 A 0
 
@@ -36,7 +36,7 @@ SD [ttimer] SINA ttimer *f 36000.0
 LOOP [i]
 {
 	B GHX GHY
-		true i * 9000 + ttimer + GHANGLE i % 2 *f 0.5 +f 1.0
+		i * 9000 + ttimer + GHANGLE i % 2 *f 0.5 +f 1.0
 		2 i % 2 + 6 16 32 0xff
 }
 
@@ -73,6 +73,6 @@ A 14
 	VALEQUAL [_0] 1 SPEEDSET toffset + 250
 	VALEQUAL [_0] 1 ANGLESETAMAP GH@ % 3 * 2500 - 2500
 B GHX GHY
-	true toffset * 440 + SEED toffset /f 100.0 +f 1.5
+	toffset * 440 + SEED toffset /f 100.0 +f 1.5
 	3 2 8 0 0xff
 A 0

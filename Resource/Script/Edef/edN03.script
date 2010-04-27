@@ -9,8 +9,9 @@ EDEFFILE
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 // Intro
 @ @@]%= 500 250 144
@@ -95,8 +96,9 @@ A 0
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	60 CenterBossX CenterBossY 180
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 180 60 60
 
 @ @@% 180
 
@@ -157,8 +159,9 @@ A 0
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 @ @@%= 120 85
 	
@@ -179,7 +182,7 @@ BEB PX -120
 
 SD [tw] CenterW
 B RAND % tw 0
-	true RANDR 1500 + 9000 RAND % 90 /f 45.0
+	RANDR 1500 + 9000 RAND % 90 /f 45.0
 	4 5 8 0 0xff
 
 
@@ -188,8 +191,9 @@ B RAND % tw 0
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	60 CenterBossX CenterBossY 240
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 240 60 60
 SD [_0] 0
 SD [_1] 1
 SD [_2] 2
@@ -227,56 +231,63 @@ BEPIN BEI _2 _3 0
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 ///////
 # 0x0333
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 /////////
 # 0x0337
 
 @ 1
 
-EA 4 ENAC_CHASETO_CXY
-	60 CenterX CenterY
+EA ENAC_CHASEAIM_XYSOAOCO
+	CenterX CenterY 0 0
+	0 0 60 0
 
 ////////
 # 0x0341
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	60 CenterBossX CenterBossY 60
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 60 60 60
 
 ///////
 # 0x0349
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 ///////
 # 0x0353
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 ///////
 # 0x0357
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	60 CenterBossX CenterBossY 120
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 120 60 60
 SD [_0] 0
 
 ///////
@@ -284,5 +295,6 @@ SD [_0] 0
 
 @ 1
 
-EA 4 ENAC_CHASETO_CXY
-	60 CenterX CenterY
+EA ENAC_CHASEAIM_XYSOAOCO
+	CenterX CenterY 0 0
+	0 0 60 0

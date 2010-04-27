@@ -1,5 +1,6 @@
 #include "../Header/Scripter.h"
 #include "../Header/processPrep.h"
+#include "../Header/BulletListActionConst.h"
 
 bool Scripter::Parse(int varcount)
 {
@@ -287,9 +288,9 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_BUBUILD:
-					if(rv = Copy(&i, 10))
+					if(rv = Copy(&i, 9))
 					{
-						Bullet::Build(CAST(d[0]), CAST(d[1]), (bool)(CAST(d[2])), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]), CAST(d[9]));
+						Bullet::Build(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]));
 					}
 					break;
 				case SCR_BUACTIONSET:
@@ -473,18 +474,24 @@ bool Scripter::Parse(int varcount)
 						int _tdi = CAST(d[0]);
 						if(_tdi)
 						{
-							if(rv = Copy(&i, _tdi))
+							if(rv = Copy(&i, ENEMY_PARAMAX*2))
 							{
-								Enemy::en[Enemy::index].ac = CAST(d[0]);
-								for(int j=0; j<_tdi-1; j++)
+								Enemy::en[Enemy::index].ac = _tdi;
+								int j=0;
+								for(; j<ENEMY_PARAMAX; j++)
 								{
-									Enemy::en[Enemy::index].para[j] = CAST(d[j+1]);
+									Enemy::en[Enemy::index].fpara[j] = CAST(d[j]);
+								}
+								j = 0;
+								for(; j<ENEMY_PARAMAX; j++)
+								{
+									Enemy::en[Enemy::index].ipara[j] = CAST(d[j+ENEMY_PARAMAX]);
 								}
 							}
 						}
 						else
 						{
-							Enemy::en[Enemy::index].ac = 0;
+							Enemy::en[Enemy::index].ac = ENAC_NONE;
 						}
 					}
 					break;

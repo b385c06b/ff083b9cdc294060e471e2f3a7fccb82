@@ -22,12 +22,12 @@ A 10
 	VALEQUAL [_0] 2 TYPESET 8
 	VALEQUAL [_0] 2 SPEEDSET 250
 B CenterW -f BUX BUY
-	true 18000 - BUANGLE 0
+	18000 - BUANGLE 0
 	60 2 8 0 0xff
 B BUX -f CenterX /f 2.0 +f CenterX BUY
-	true 9000 0
+	9000 0
 	60 2 8 0 0xff
 B CenterW -f BUX -f CenterX /f 2.0 +f CenterX BUY
-	true 9000 0
+	9000 0
 	60 2 8 0 0xff
 A 0

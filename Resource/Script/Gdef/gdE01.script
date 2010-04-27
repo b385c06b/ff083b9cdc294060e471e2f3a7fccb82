@@ -26,7 +26,7 @@ GHSET GHANGLE + toffset GHSPEED +f 0.06f GHAC
 @ @@]% 75 3
 
 B GHX GHY
-	false 0 GHI % 2 *f 0.5 +f 1.5
+	GHAMAP 0 GHI % 2 *f 0.5 +f 1.5
 	4 GHI % 2 + 1 8 0 0xff
 
 // ///////////// //
@@ -40,6 +40,6 @@ A 13
 	TIMEREQUAL 50 SPEEDSET 0
 	TIMERRANGE 90 120 SPEEDSETADD 5
 B GHX GHY
-	true GHAIMX + toffset 2.5
+	GHAIMX + toffset 2.5
 	11 GHAIMY + 4 8 8 0xff
 A 0

@@ -26,6 +26,6 @@ SD [tangle] GHI * SEED
 A 4
 	TIMERLESS 60 ANGLESETADD GHI % 2 * 600
 B GHX GHY
-	true GH@ * 1000 + tangle 2.0
+	GH@ * 1000 + tangle 2.0
 	1 GHI % 3 + 5 8 0 0xff
 A 0

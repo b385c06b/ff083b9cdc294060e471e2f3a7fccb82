@@ -9,8 +9,9 @@ EDEFFILE
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	60 CenterBossX CenterBossY 240
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 240 60 60
 
 @ @@>%<% 160 240 180 12
 
@@ -24,8 +25,9 @@ BC tmod * 4 + 8 EN@ * 900 + SEED 0
 
 @ 1
 
-EA 4 ENAC_CHASETO_CXY
-	60 CenterX CenterY
+EA ENAC_CHASEAIM_XYSOAOCO
+	CenterX CenterY 0 0
+	0 0 60 0
 SD [i] 32
 LOOP [i]
 {
@@ -43,7 +45,7 @@ A 18
 	TIMEREQUAL 120 ANGLESET RANDR 1000 + 9000
 	TIMERRANGE 120 180 SPEEDSETADD RAND % 2 + 4
 B ENX ENY
-	true 0 0.0
+	0 0.0
 	4 RAND % 3 + 12 8 0 0xff
 A 0
 
@@ -52,8 +54,9 @@ A 0
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 @ @@%= 120 85
 	
@@ -74,7 +77,7 @@ BEB PX -120
 
 SD [tw] CenterW
 B RAND % tw 0
-	true RANDR 1500 + 9000 RAND % 90 /f 45.0
+	RANDR 1500 + 9000 RAND % 90 /f 45.0
 	4 5 8 0 0xff
 
 
@@ -83,8 +86,9 @@ B RAND % tw 0
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	60 CenterBossX CenterBossY 240
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 240 60 60
 SD [_0] 0
 SD [_1] 1
 SD [_2] 2
@@ -109,14 +113,14 @@ ST _3 tcenx -f txoff tceny -f tyoff
 IF EN@ % 8 < 7
 {
 	B RAND % 440 0
-		true RAND % 2000 + 8000 RAND % 50 /f 100.0 +f 2.5
+		RAND % 2000 + 8000 RAND % 50 /f 100.0 +f 2.5
 		8 2 8 0 0xff
 }
 
 IF EN@ % 120 !
 {
 	B tcenx tceny
-		true tangle - 9000 2.4
+		tangle - 9000 2.4
 		15 2 8 0 _4
 }
 IZEZONE IZE_EVENT TX _4 TY _4 1 64 $IzeEvent_0318
@@ -137,8 +141,9 @@ BEPIN BEI _2 _3 0
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 SD [_0] 0
 SD [_1] 1
 
@@ -173,7 +178,7 @@ SETPSPEEDFACTOR 0.6
 A 3
 	TIMEREQUAL 120 FADEOUT
 B TX _0 TY _0
-	true 9000 0.0
+	9000 0.0
 	15 0 32 0 0xff
 A 0
 
@@ -200,8 +205,9 @@ A 0
 
 @ 1
 
-EA 4 ENAC_CHASETO_CXY
-	60 CenterX 160
+EA ENAC_CHASEAIM_XYSOAOCO
+	CenterX 160 0 0
+	0 0 60 0
 
 @ 120
 
@@ -230,13 +236,15 @@ LOOP [i]
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 @ @@> 120
 
-EA 5 ENAC_DIRECTSET_XYAS
-	ENX ENY ENAMAP 0 1500
+EA ENAC_DIRECTSET_XYSOAOOO
+	ENX ENY 15 0
+	ENAMAP 0 0 0 0
 
 @ @@>% 160 60
 
@@ -252,8 +260,9 @@ A 0
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	60 CenterBossX CenterBossY 120
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 120 60 60
 SD [_0] 0
 
 @ @@>% 180 120

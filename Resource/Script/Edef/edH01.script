@@ -9,8 +9,9 @@ EDEFFILE
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	120 CenterBossX CenterBossY 120
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 120 120 60
 
 @ @@% 120
 
@@ -34,8 +35,9 @@ A 0
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	120 CenterBossX CenterBossY 75
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 75 120 60
 
 @ @@>% 120 75
 
@@ -59,8 +61,9 @@ BC 32 ENAMAP 0 8
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 @ @@% 180
 
@@ -69,7 +72,7 @@ SE $SE_Bullet_2 ENX
 @ @@>%<% 120 180 40 3
 
 B ENX ENY
-	false 0 EN@ % 180 /f 5.0 +f 2.0
+	ENAMAP 0 EN@ % 180 /f 5.0 +f 2.0
 	17 2 8 0 0xff
 
 @ @@>%>% 120 120 45 15
@@ -91,8 +94,9 @@ A 0
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	180 CenterBossX CenterBossY 180
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 180 180 60
 
 @ @@% 240
 
@@ -122,8 +126,9 @@ A 0
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 @ @@> 120
 
@@ -159,7 +164,7 @@ LOOP [i]
 		XLESS 20 CALLEVENT $Event_Bullet_0130 POST@
 		XLESS 20 FADEOUT
 	B ENX ENY
-		true tfilter * 12000 + toffset i *f 0.3 +f 1.5
+		tfilter * 12000 + toffset i *f 0.3 +f 1.5
 		15 tfilter 8 0 0xff
 }
 A 0
@@ -172,6 +177,8 @@ SDf [trandy] trandx * trandx * -1 + 3600
 SD [trandy] SQRT trandy
 SD [trandy] RANDR trandy
 
+SDf [trmap] RANDR 240
+
 B trandx +f ENX trandy +f ENY
-	false RANDR 240 RAND % 5 /f 5.0 +f 1.0
+	ENRMAP tramp RAND % 5 /f 5.0 +f 1.0
 	10 RAND % 2 + 6 8 0 0xff

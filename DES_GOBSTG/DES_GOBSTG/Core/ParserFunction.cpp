@@ -176,8 +176,8 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 				break;
 			case SCR_GHRMAP:
 				++(*p);
-				_tdi = CINT(Value(&(*p), i, 0));
-				idesc[i] = Ghost::gh[Ghost::index].rMainAngle(Player::p.x, Player::p.y, _tdi);
+				_tdf = CFLOAT(Value(&(*p), i, 0));
+				idesc[i] = Ghost::gh[Ghost::index].rMainAngle(Player::p.x, Player::p.y, _tdf);
 				d[i].bfloat = false;
 				break;
 			case SCR_GHAIMX:
@@ -236,8 +236,8 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 				break;
 			case SCR_ENRMAP:
 				++(*p);
-				_tdi = CINT(Value(&(*p), i, 0));
-				idesc[i] = Enemy::en[Enemy::index].rMainAngle(Player::p.x, Player::p.y, _tdi);
+				_tdf = CFLOAT(Value(&(*p), i, 0));
+				idesc[i] = Enemy::en[Enemy::index].rMainAngle(Player::p.x, Player::p.y, _tdf);
 				d[i].bfloat = false;
 				break;
 			case SCR_ENAIMX:

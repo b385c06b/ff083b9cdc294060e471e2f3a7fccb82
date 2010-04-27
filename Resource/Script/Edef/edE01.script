@@ -14,32 +14,36 @@ EDEFFILE
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 	
 // boss复位到左侧
 # 0x0002
 
 @ 1
 
-EA 4 ENAC_CHASETO_CXY
-	60 CenterBossX - 80 CenterBossY - 20
+EA ENAC_CHASEAIM_XYSOAOCO
+	CenterBossX - 80 CenterBossY - 20 0 0
+	0 0 60 0
 	
 // boss复位到右侧
 # 0x0003
 
 @ 1
 
-EA 4 ENAC_CHASETO_CXY
-	60 CenterBossX + 80 CenterBossY - 20
+EA ENAC_CHASEAIM_XYSOAOCO
+	CenterBossX + 80 CenterBossY - 20 0 0
+	0 0 60 0
 	
 // ////////////// //
 # 0x0104
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	120 CenterBossX CenterBossY 120
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 120 120 60
 
 @ @@>%<% 120 150 15 5
 
@@ -65,8 +69,9 @@ LOOP [i]
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	120 CenterBossX CenterBossY 75
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 75 120 60
 
 @ @@>% 120 75
 
@@ -91,8 +96,9 @@ LOOP [i]
 
 @ 1
 
-EA 2 ENAC_REPOSITION_T
-	60
+EA ENAC_REPOSITION_OOOOOOCO
+	0 0 0 0
+	0 0 60 0
 
 @ @@>%= 240 240 96
 
@@ -102,8 +108,9 @@ LOOP [i]
 	SD [j] 3
 	LOOP [j]
 	{
+		SDf [trmap] j * 60 - 60
 		B ENX ENY
-			false j * 60 - 60 i *f 0.2 +f 2.0
+			ENRMAP trmap i *f 0.2 +f 2.0
 			6 14 8 0 0xff
 	}
 }
@@ -124,8 +131,9 @@ BC 12 tangle toffset * -3
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	120 CenterBossX CenterBossY 75
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 75 120 60
 
 @ @@% 180
 
@@ -150,8 +158,9 @@ LOOP [i]
 
 @ 1
 
-EA 5 ENAC_OVERPLAYER_CXYT
-	60 CenterBossX CenterBossY 78
+EA ENAC_OVERPLAYER_XYOOOTCE
+	CenterBossX CenterBossY 0 0
+	0 78 60 60
 
 @ @@% 180
 
