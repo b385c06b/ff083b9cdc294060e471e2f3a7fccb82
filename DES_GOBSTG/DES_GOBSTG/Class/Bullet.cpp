@@ -356,7 +356,7 @@ void Bullet::IzeBuild(BYTE _type, float _x, float _y, BYTE _maxtime, float _r, B
 
 void Bullet::DoIze()
 {
-	if (cancelable || BossInfo::bossinfo.flag>=BOSSINFO_COLLAPSE)
+	if (cancelable || BossInfo::bossinfo.bossout())
 	{
 		if (izel.getSize())
 		{

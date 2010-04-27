@@ -41,7 +41,7 @@ bool FrameFunc()
 
 bool FocusGainFunc()
 {
-	Fontsys::FocusChanged();
+	Fontsys::fontsys.FocusChanged();
 	return false;
 }
 

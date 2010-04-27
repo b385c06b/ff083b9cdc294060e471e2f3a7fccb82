@@ -16,12 +16,6 @@
 #include "../Header/Bullet.h"
 
 BossInfo BossInfo::bossinfo;
-int BossInfo::sno;
-int BossInfo::turntoscene;
-bool BossInfo::failed;
-bool BossInfo::allover;
-BYTE BossInfo::flag;
-BYTE BossInfo::spellflag;
 
 bool BossInfo::Init()
 {
@@ -67,6 +61,16 @@ bool BossInfo::isSpell()
 	return flag && !(spellflag & BISF_NOTSPELL);
 }
 
+bool BossInfo::bossable()
+{
+	return (bool)(flag & BOSSINFO_ONMASK);
+}
+
+bool BossInfo::bossout()
+{
+	return (bool)(flag & BOSSINFO_OUTMASK);
+}
+
 void BossInfo::bossUp()
 {
 	Fill(Process::mp.scene);
@@ -82,7 +86,7 @@ void BossInfo::bossUp()
 	{
 		BGLayer::ubg[UBGID_BGMASK].SetFlag(BG_WHITEFLASH, BGMT_FLASH);
 		Enemy::bossflag[ENEMY_MAINBOSSINDEX] = BOSS_SPELLUP;
-		Fontsys::SignUp(FONTSYS_SPELLNAMEUSE, spellname, FrontDisplay::fdisp.info.smallfont);
+		Fontsys::fontsys.SignUp(FONTSYS_SPELLNAMEUSE, spellname, FrontDisplay::fdisp.info.smallfont);
 		get = DataConnector::nGet();
 		meet = DataConnector::nMeet() - 1;
 		if(meet < 0)
@@ -103,7 +107,7 @@ void BossInfo::quit()
 	{
 		Player::p.bInfi = false;
 	}
-	else if (flag & BOSSINFO_TIMEOVER)
+	else if (!bossout())
 	{
 		failed = true;
 	}
@@ -262,7 +266,7 @@ bool BossInfo::action()
 			Enemy::en[ENEMY_MAINBOSSINDEX].alpha = 0xff;
 		}
 	}
-	if(!(spellflag & BISF_NOTSPELL) && flag < BOSSINFO_COLLAPSE)
+	if(!(spellflag & BISF_NOTSPELL) && !bossout())
 	{
 		if(!failed && !(spellflag & BISF_WAIT))
 		{
@@ -279,7 +283,7 @@ bool BossInfo::action()
 		else if(timer == limit * 60 - 1)
 			Enemy::en[ENEMY_MAINBOSSINDEX].life = -1;
 	}
-	if(flag < BOSSINFO_COLLAPSE)
+	if(!bossout())
 	{
 		if(timer >= (limit-10) * 60 && timer % 60 == 0)
 			SE::push(SE_BOSS_TIMEOUT);

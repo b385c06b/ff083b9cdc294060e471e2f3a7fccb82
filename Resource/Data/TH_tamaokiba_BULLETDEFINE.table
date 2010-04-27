@@ -1,6 +1,6 @@
 73	h5nc	48											
 Comment	Type	SIID	nRoll	nColor	CollisionType	Collision_Main	Collision_Sub	FadeColor	BonusColor	nTurnAngle	seID	RenderType	RenderDepth
--	0	SI_Bullet_ShuttleBeam_0	0	16	2	16	5	160	0	0	90	4	20
+-	0	SI_Bullet_ShuttleBeam_0	0	16	2	7	3	160	0	0	90	4	20
 -	1	SI_Bullet_Scale_0	0	16	1	2	2.5	160	0	0	90	2	14
 -	2	SI_Bullet_Ring_0	0	16	1	5	0	160	0	0	90	2	13
 -	3	SI_Bullet_MiddleBall_0	0	16	1	5	0	160	0	0	90	2	11

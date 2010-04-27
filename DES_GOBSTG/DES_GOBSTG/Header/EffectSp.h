@@ -23,8 +23,10 @@ public:
 	static void ClearAll();
 	void Clear();
 
-	void valueSet(BYTE type, float x, float y, int angle, float speed, bool onplayer = true, WORD ID = 0);
-	void colorSet(DWORD color);
+	void valueSet(int siID, float x, float y, int angle, float speed, bool onplayer = true);
+	void colorSet(DWORD color, int blend=-1);
+	void scaleSet(float hscale, float vscale=0);
+	void posSet(float x, float y);
 
 	void action();
 	void Render();
@@ -35,11 +37,13 @@ public:
 public:
 	hgeSprite * sprite;
 
+	int siID;
 	bool onplayer;
 	BYTE type;
 
+	int blend;
+
 	static BYTE evtype;
-	static EffectSp es[EFFECTSPMAX];
 };
 
 #endif

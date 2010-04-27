@@ -15,34 +15,38 @@
 
 #define BGLAYERSETMAX		0x08
 
-#define BG_NONE			0
-#define BG_WHITEFLASH	1
-#define BG_REDFLASH		2
-#define BG_YELLOWFLASH	3
+#define BG_NONE			0x00
 
+#define BG_FLAGMASK		0xf0
+
+#define BG_FLASHFLAG	0x10
+#define BG_WHITEFLASH	0x10
+#define BG_REDFLASH		0x11
+#define BG_YELLOWFLASH	0x12
 #define BGMT_FLASH		0x20
 
-#define BG_WHITEOUT		11
-#define BG_REDOUT		12
-
+#define BG_OUTFLAG		0x20
+#define BG_WHITEOUT		0x20
+#define BG_REDOUT		0x21
 #define BGMT_OUT		0x80
 
-#define BG_FADEIN		40
-#define BG_FADEINHALF	41
-#define BG_FADEOUT		42
-
+#define BG_FADEFLAG		0x40
+#define BG_FADEIN		0x40
+#define BG_FADEINHALF	0x41
+#define BG_FADEOUT		0x42
 #define BGMT_FADE		0x40
 
-#define BG_LIGHTUP			100
-#define BG_LIGHTRED			110
-#define BG_LIGHTUPNORMAL	120
-
+#define BG_LIGHTFLAG		0x80
+#define BG_LIGHTUP			0x80
+#define BG_LIGHTRED			0x81
+#define BG_LIGHTUPNORMAL	0x82
 #define BGMT_LIGHT			0x40
 
-#define FG_PAUSEIN		200
-#define FG_PAUSEOUT		210
-
+#define FG_PAUSEFLAG	0xf0
+#define FG_PAUSEIN		0xf0
+#define FG_PAUSEOUT		0xf1
 #define FGMT_PAUSE		0x18
+
 
 struct BGLayerSet
 {
@@ -76,7 +80,7 @@ public:
 	void zSet(float z0, float z1, float z2, float z3);
 	void scaleSet(float hscale, float vscale);
 	void colorSet(DWORD col0, DWORD col1, DWORD col2, DWORD col3);
-	void moveSet(bool move, bool rotate);
+	void moveSet(float speed, float zSpeed, int angle, bool move, bool rotate);
 	void parallelogram(float paral);
 	void vertexSet(float x0, float y0, float z0, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3);
 	void SetFlag(BYTE flag, BYTE maxtime);
@@ -93,6 +97,7 @@ public:
 	DWORD	acol[4];
 	bool	move;			//move vertex
 	bool	rotate;			//set move to enable
+	float	zSpeed;
 	float	width;
 	float	height;
 	int		tw;

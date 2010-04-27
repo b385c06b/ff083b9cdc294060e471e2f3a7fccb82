@@ -55,7 +55,7 @@ LOOP [i]
 	SD [toffset] i * 9000
 	BEB GHX GHY
 		SIGN i * GH@ * 78 + SEED + toffset 2.5 0 8
-		120 BEAMFLAG_NONE 0xff 0xff
+		120 16 BEAMFLAG_NONE 8 0xff 0xff
 }
 
 ///////

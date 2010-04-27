@@ -841,7 +841,7 @@ void Enemy::DoShot()
 	{
 		SE::push(SE_ENEMY_DAMAGE_1, x);
 
-		if(BossInfo::flag && type >= ENEMY_BOSSTYPEBEGIN)
+		if(BossInfo::bossinfo.bossable() && type >= ENEMY_BOSSTYPEBEGIN)
 			FrontDisplay::fdisp.info.enemyx->SetColor(0xffffffff);
 	}
 
@@ -861,7 +861,7 @@ void Enemy::DoShot()
 			diffuse = 0xb40000;
 			effShot.Fire();
 
-			if(BossInfo::flag && type >= ENEMY_BOSSTYPEBEGIN)
+			if(BossInfo::bossinfo.bossable() && type >= ENEMY_BOSSTYPEBEGIN)
 				FrontDisplay::fdisp.info.enemyx->SetColor(0xc0ffffff);
 
 			if(life < maxlife / 5)
@@ -915,7 +915,7 @@ void Enemy::action()
 
 	if(!fadeout)
 	{
-		if((Chat::chatitem.chatting || (BossInfo::flag >= BOSSINFO_COLLAPSE)) && type < ENEMY_BOSSTYPEBEGIN)
+		if((Chat::chatitem.chatting || (BossInfo::bossinfo.bossout())) && type < ENEMY_BOSSTYPEBEGIN)
 		{
 			life = 0;
 			fadeout = true;
@@ -969,7 +969,7 @@ void Enemy::action()
 				Player::p.DoShot();
 			}
 		}
-		if(BossInfo::flag)
+		if(BossInfo::bossinfo.bossable())
 		{
 			int txdiff = fabsf(Player::p.x - x);
 			if(txdiff < ENEMY_BOSSX_FADERANGE)

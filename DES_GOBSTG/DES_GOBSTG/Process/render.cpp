@@ -12,7 +12,7 @@ int Process::render()
 
 	if(Player::p.exist || state == STATE_CONTINUE)
 	{
-		if (BossInfo::bossinfo.flag && BossInfo::bossinfo.isSpell())
+		if (BossInfo::bossinfo.bossable() && BossInfo::bossinfo.isSpell())
 		{
 			FrontDisplay::fdisp.BossTimeCircleDisplay();
 		}
@@ -27,8 +27,11 @@ int Process::render()
 		//3D objs
 		Effectsys::RenderAll();
 		Beam::RenderAll();
+#ifdef __DEBUG
+//		Beam::Debug_RenderCollision();
+#endif
 		Bullet::RenderAll();
-		if(BossInfo::flag)
+		if(BossInfo::bossinfo.bossable())
 		{
 			BossInfo::bossinfo.exist = false;
 			FrontDisplay::fdisp.BossInfoDisplay();
@@ -62,7 +65,7 @@ int Process::render()
 
 	FrontDisplay::fdisp.PanelDisplay();
 
-	if(Player::p.exist && BossInfo::flag)
+	if(Player::p.exist && BossInfo::bossinfo.bossable())
 	{
 		FrontDisplay::fdisp.EnemyXDisplay();
 	}

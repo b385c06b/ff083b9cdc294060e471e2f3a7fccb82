@@ -244,7 +244,7 @@ void Ghost::action()
 			SE::push(SE_GHOST_MERGE, x);
 		}
 
-		if(Chat::chatitem.chatting || BossInfo::flag >= BOSSINFO_COLLAPSE)
+		if(Chat::chatitem.chatting || BossInfo::bossinfo.bossout())
 		{
 			life = 0;
 			fadeout = true;

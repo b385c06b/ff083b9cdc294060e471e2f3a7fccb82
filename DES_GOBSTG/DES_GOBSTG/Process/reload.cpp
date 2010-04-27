@@ -21,7 +21,7 @@ bool Process::reload()
 	Target::ClearAll();
 	InfoSelect::Clear();
 	Chat::chatitem.ClearAll();
-	BossInfo::Clear();
+	BossInfo::bossinfo.Clear();
 	Player::ncCont = 0;
 	Player::ncGet = 0;
 	Player::ncBorder = 0;
@@ -50,13 +50,14 @@ bool Process::reload()
 	Beam::Init();
 	PlayerBullet::Init(tex);
 
-	BossInfo::Init();
+	BossInfo::bossinfo.Init();
 	InfoQuad::tex = tex[TEX_WHITE];
 
 	FrontDisplay::fdisp.Init();
-	Fontsys::font = FrontDisplay::fdisp.info.normalfont;
+	Fontsys::fontsys.Init(FrontDisplay::fdisp.info.normalfont);
+//	Fontsys::fontsys.font = FrontDisplay::fdisp.info.normalfont;
 	//Heatup
-	Fontsys::HeatUp();
+	Fontsys::fontsys.HeatUp();
 
 #ifdef __DEBUG
 	HGELOG("\nCleared up.\n");

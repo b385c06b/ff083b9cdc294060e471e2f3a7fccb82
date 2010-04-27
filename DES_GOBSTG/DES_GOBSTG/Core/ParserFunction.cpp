@@ -467,11 +467,11 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 				break;
 
 			case SCR_BOSSFAILED:
-				idesc[i] = BossInfo::failed;
+				idesc[i] = BossInfo::bossinfo.failed;
 				d[i].bfloat = false;
 				break;
 			case SCR_BOSSFLAG:
-				idesc[i] = BossInfo::flag;
+				idesc[i] = BossInfo::bossinfo.flag;
 				d[i].bfloat = false;
 				break;
 

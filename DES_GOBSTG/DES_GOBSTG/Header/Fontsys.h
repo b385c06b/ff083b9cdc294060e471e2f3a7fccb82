@@ -23,25 +23,26 @@ class Fontsys
 	~Fontsys(){};
 
 public:
-	static void Init();
-	static void HeatUp();
-	static void FocusChanged();
-	static void Release();
+	void Init(HD3DFONT font);
+	void HeatUp();
+	void FocusChanged();
+	void Release();
 
-	static void SignUp(BYTE ID, const char * text = NULL, HD3DFONT font=NULL);
-	static void Render(BYTE ID, float x, float y, DWORD ucol, DWORD dcol, float shadow = 0, float hext = 0, float vext = 0);
+	void SignUp(BYTE ID, const char * text = NULL, HD3DFONT font=NULL);
+	void Render(BYTE ID, float x, float y, DWORD ucol, DWORD dcol, float shadow = 0, float hext = 0, float vext = 0);
 
-	static int strTranslate(char * dtext, const char * stext);
+	int strTranslate(char * dtext, const char * stext);
 
 public:
-	static char text[FONTSYSMAX][M_STRMAX];
-	static HD3DFONT usingfont[FONTSYSMAX];
-	static hgeQuad quad[FONTSYSMAX];
-	static HTARGET tar[FONTSYSMAX];
-	static int lines[FONTSYSMAX];
+	char text[FONTSYSMAX][M_STRMAX];
+	HD3DFONT usingfont[FONTSYSMAX];
+	hgeQuad quad[FONTSYSMAX];
+	HTARGET tar[FONTSYSMAX];
+	int lines[FONTSYSMAX];
 	static int changeID;
 
-	static HD3DFONT font;
+	HD3DFONT font;
+	static Fontsys fontsys;
 };
 
 #endif

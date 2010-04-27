@@ -1,0 +1,84 @@
+[Project ID]
+Signature=UE Proj: v.1
+[Project Information]
+Compilable=1
+Use Relative Directory=1
+Relative to Project File=1
+Project Start=DA07040001001A000A0036003000000070
+Project Directory=E:\hge[0x073]\Resource\Script
+Include Sub Directories=1
+Project Tagfile=
+Project Wordfile=
+Filter=
+Using VCS=0
+Save Account=0
+Create Tagfile=0
+CTags Legacy Support=0
+Working Time=25541
+[Files]
+0=.\
+[Group Filter]
+.\=*.script
+.\Control\=*.script
+.\Edef\=*.script
+.\Event\=*.script
+.\Function\=*.script
+.\Gdef\=*.script
+.\Scene\=*.script
+.\Stage\=*.script
+[Folders]
+.\=1
+.\ - Control=1
+.\ - Function=1
+[uemakeXp]
+ReleaseMode=0
+[Debug Settings]
+Program Arguments=
+Selected Debugger=0
+Source Paths=
+Symbol Paths=
+Working Directory=
+[Open Files]
+Active File Display Mode=3
+Active File Index=9
+Open File Line0=6169
+Open File Line1=1611
+Open File Line2=1578
+Open File Line3=3606
+Open File Line4=1195
+Open File Line5=2943
+Open File Line6=554
+Open File Line7=0
+Open File Line8=0
+Open File Line9=46
+Open File Pos0=6470
+Open File Pos1=1831
+Open File Pos2=1764
+Open File Pos3=3898
+Open File Pos4=1440
+Open File Pos5=3278
+Open File Pos6=770
+Open File Pos7=69
+Open File Pos8=231
+Open File Pos9=235
+Open File Window Pos0=0,1,-1,-1,-8,-30,50,50,1091,365
+Open File Window Pos1=0,1,-1,-1,-8,-30,75,75,928,390
+Open File Window Pos2=0,1,-1,-1,-8,-30,100,100,953,415
+Open File Window Pos3=0,1,-1,-1,-8,-30,125,125,978,440
+Open File Window Pos4=0,1,-1,-1,-8,-30,0,0,853,315
+Open File Window Pos5=0,1,-1,-1,-8,-30,25,25,878,340
+Open File Window Pos6=0,1,-1,-1,-8,-30,50,50,903,365
+Open File Window Pos7=0,1,-1,-1,-8,-30,125,125,978,440
+Open File Window Pos8=0,1,-1,-1,-8,-30,0,0,853,315
+Open File Window Pos9=2,3,-1,-1,-8,-30,25,25,878,340
+Open File0=E:\hge[0x073]\Resource\Script\Edef\edE03.script
+Open File1=E:\hge[0x073]\Resource\Script\Edef\edH01.script
+Open File10=
+Open File2=E:\hge[0x073]\Resource\Script\Edef\edH02.script
+Open File3=E:\hge[0x073]\Resource\Script\Edef\edH03.script
+Open File4=E:\hge[0x073]\Resource\Script\Edef\edN01.script
+Open File5=E:\hge[0x073]\Resource\Script\Edef\edN03.script
+Open File6=E:\hge[0x073]\Resource\Script\Gdef\gdE02.script
+Open File7=E:\hge[0x073]\Resource\Script\Function\fCommon.script
+Open File8=E:\hge[0x073]\Resource\Script\Stage\sE01.script
+Open File9=E:\hge[0x073]\Resource\Script\Control\cOver.script

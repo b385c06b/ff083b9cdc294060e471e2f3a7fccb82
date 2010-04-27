@@ -71,7 +71,7 @@ LOOP [i]
 	SD [tmod] EN@ * 732
 	BEB ENX ENY
 		i * 9000 + tmod + SEED 2.0 0 2
-		180 BEAMFLAG_NONE 0xff 0xff
+		180 16 BEAMFLAG_NONE 8 0xff 0xff
 }
 
 ///////
@@ -446,7 +446,7 @@ LOOP [i]
 	{
 		BEB tox +f tbasex toy +f tbasey
 			j + 1 * 2 * 500 + tangle 0.4 0 2
-			480 BEAMFLAG_HS 120 0xff
+			480 16 BEAMFLAG_HS 8 120 0xff
 	}
 }
 

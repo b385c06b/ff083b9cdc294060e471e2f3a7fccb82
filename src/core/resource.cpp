@@ -128,7 +128,7 @@ bool CALL HGE_Impl::Resource_CreatePack(const char * filename, int password, hge
 		}
 		zipCloseFileInZip(zip);
 
-		vai = va_arg(ap, hgeMemoryFile *);
+		vai = (hgeMemoryFile *)va_arg(ap, hgeMemoryFile *);
 	}
 
 	zipClose(zip, NULL);

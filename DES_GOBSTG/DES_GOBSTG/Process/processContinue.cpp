@@ -8,6 +8,7 @@
 
 int Process::processContinue()
 {
+	int tsec;
 	if(Player::p.ncCont >= M_PL_CONTINUEMAX || practicemode)
 		goto exit;
 
@@ -22,7 +23,7 @@ int Process::processContinue()
 
 	Scripter::scr.controlExecute(STATE_CONTINUE, SCRIPT_CON_INIT);
 	//60 sec
-	int tsec = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN);
+	tsec = Scripter::scr.GetIntValue(SCR_RESERVEBEGIN);
 
 	if(hge->Input_GetDIKey(KS_FIRE, DIKEY_DOWN))
 	{

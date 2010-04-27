@@ -6,10 +6,13 @@
 #include "Const.h"
 #include "Effectsys.h"
 
-#define BOSSINFO_ENABLE		1
-#define BOSSINFO_UP			2
-#define BOSSINFO_COLLAPSE	4
-#define BOSSINFO_TIMEOVER	8
+#define BOSSINFO_ONMASK		0x0f
+#define BOSSINFO_ENABLE		0x01
+#define BOSSINFO_UP			0x02
+
+#define BOSSINFO_OUTMASK	0xf0
+#define BOSSINFO_COLLAPSE	0x10
+#define BOSSINFO_TIMEOVER	0x20
 
 #define BISF_NONE			0x00
 #define BISF_SHOT			0x01
@@ -27,6 +30,9 @@ public:
 	void bossUp();
 	void bossCollapse();
 
+	bool bossable();
+	bool bossout();
+
 	bool action();
 	void quit();
 
@@ -34,9 +40,9 @@ public:
 
 	bool isSpell();
 
-	static void Clear();
-	static bool Init();
-	static void Release();
+	void Clear();
+	bool Init();
+	void Release();
 
 public:
 	char enemyname[M_STRMAX];
@@ -54,13 +60,13 @@ public:
 	BYTE limit;
 	BYTE remain;
 
-	static bool failed;
-	static bool allover;
-	static int sno;
-	static int turntoscene;
+	bool failed;
+	bool allover;
+	int sno;
+	int turntoscene;
 
-	static BYTE flag;
-	static BYTE spellflag;
+	BYTE flag;
+	BYTE spellflag;
 
 	static BossInfo bossinfo;
 };

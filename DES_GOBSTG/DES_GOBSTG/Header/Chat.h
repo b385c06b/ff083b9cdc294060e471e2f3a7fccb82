@@ -30,6 +30,8 @@ public:
 
 	void Render();
 
+	bool IsChatting();
+
 	bool chatOn(BYTE leftID, BYTE rightID, BYTE chatsprite);
 	bool chatOff();
 

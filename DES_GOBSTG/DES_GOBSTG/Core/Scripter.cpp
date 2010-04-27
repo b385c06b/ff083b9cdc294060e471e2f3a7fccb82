@@ -579,6 +579,12 @@ Token Scripter::GetToken()
 	ret.type = 0;
 	ret.value = 0;
 
+	int i = 0;
+	bool quoted = false;
+	bool bIsAddress = false;
+	bool bFound = false;
+	int kti = 0;
+
 	if(binmode)
 	{
 		goto exit;
@@ -590,8 +596,6 @@ Token Scripter::GetToken()
 		goto exit;
 	}
 
-	int i = 0;
-	bool quoted = false;
 	while(true)
 	{
 		if(!fread(&buffer[i], 1, 1, file))
@@ -781,7 +785,6 @@ Token Scripter::GetToken()
 	ret.type |= SCR_TOKEN_KEYWORD;
 
 	//variable
-	bool bIsAddress = false;
 	if(buffer[0] == '[' && buffer[strlen(buffer)-1] == ']')
 	{
 		bIsAddress = true;
@@ -841,7 +844,6 @@ Token Scripter::GetToken()
 	}
 
 	//keyword
-	bool bFound = false;
 	//timefunc
 	if (!strncmp(buffer, SCRKT_STR_TIMEFUNC, sizeof(char)*SCRKT_SIZE_TIMEFUNC))
 	{
@@ -892,7 +894,6 @@ Token Scripter::GetToken()
 		bFound = true;
 	}
 	//keyword
-	int kti = 0;
 	if (!bFound)
 	{
 		for(; scrKeyTable[kti].code != SCR_CONST || strcmp(scrKeyTable[kti].word, SCR_CONST_STR); kti++)

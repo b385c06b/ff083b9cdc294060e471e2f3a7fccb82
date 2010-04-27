@@ -53,6 +53,10 @@ void BGLayer::KillOtherLayer()
 
 void BGLayer::SetBlend(int blend)
 {
+	if (!exist || !sprite)
+	{
+		return;
+	}
 	sprite->SetBlendMode(blend);
 }
 
@@ -61,25 +65,25 @@ void BGLayer::valueSetByName(const char * spritename, float cenx, float ceny, fl
 	valueSet(SpriteItemManager::GetIndexByName(spritename), cenx, ceny, width, height, col);
 }
 
-void BGLayer::valueSet(int siID, float cenx, float ceny, float width, float height, DWORD col)
+void BGLayer::valueSet(int siID, float cenx, float ceny, float w, float h, DWORD col)
 {
-	valueSet(siID, cenx - (width>0?width/2:0), ceny - (height>0?height/2:0), 0, width, height, 0, 0, 0, 0, 0, 9000, false, false, col);
-}
-
-void BGLayer::valueSet(int siID, float x, float y, float z, float w, float h, int rotx, int roty, int rotz, float paral, float _speed /* = 0 */, int _angle /* = 9000 */, bool _move /* = false */, bool _rotate /* = false */, DWORD col /* = 0xffffffff */)
-{
-	speed	=	_speed;
-	angle	=	_angle;
+	speed	=	0;
+	angle	=	9000;
 	hscale	=	1.0f;
 	vscale	=	1.0f;
 	flag	=	BG_NONE;
 	timer	=	0;
 	changetimer	=	0;
+	exist = true;
+	move = false;
+	rotate = false;
+	zSpeed = 0;
 
 	spriteData * _sd = SpriteItemManager::CastSprite(siID);
 	HTEXTURE _tex = tex[_sd->tex];
 
-
+	float _x = cenx;
+	float _y = ceny;
 	float tx = (float)_sd->tex_x;
 	float ty = (float)_sd->tex_y;
 	tw = (float)_sd->tex_w;
@@ -91,17 +95,16 @@ void BGLayer::valueSet(int siID, float x, float y, float z, float w, float h, in
 	}
 	if (w < 0)
 	{
-		w = tw;
-		x -= w / 2;
+		w *= -tw;
 	}
 	if (h < 0)
 	{
-		h = th;
-		y -= h / 2;
+		h *= -th;
 	}
+	_x -= w / 2;
+	_y -= h / 2;
 	width	=	w;
 	height	=	h;
-
 	if (!sprite)
 	{
 		sprite = SpriteItemManager::CreateNullSprite();
@@ -112,43 +115,60 @@ void BGLayer::valueSet(int siID, float x, float y, float z, float w, float h, in
 	}
 
 	SpriteItemManager::SetSpriteData(sprite, _tex, tx, ty, tw, th);
-
 	sprite->SetBlendMode(BLEND_DEFAULT);
-
-	rectSet(x, y, z, w, h, rotx, roty, rotz);
-	parallelogram(paral);
+	rectSet(_x, _y, 0, w, h, 0, 0, 0);
 	sprite->SetColor(col);
 	for (int i=0; i<4; i++)
 	{
 		ocol[i] = col;
 	}
+//	valueSet(siID, cenx - (width>0?width/2:0), ceny - (height>0?height/2:0), 0, width, height, 0, 0, 0, 0, 0, 9000, false, false, col);
+}
 
-
-	exist = true;
-	move = _move;
-	rotate = _rotate;
+void BGLayer::valueSet(int siID, float x, float y, float z, float w, float h, int rotx, int roty, int rotz, float paral, float _speed /* = 0 */, int _angle /* = 9000 */, bool _move /* = false */, bool _rotate /* = false */, DWORD col /* = 0xffffffff */)
+{
+	valueSet(siID, 0, 0, -1, -1, col);
+	rectSet(x, y, z, w, h, rotx, roty, rotz);
+	moveSet(_speed, 0, _angle, _move, _rotate);
+	parallelogram(paral);
 }
 
 void BGLayer::texRectSet(float texx, float texy, float texw, float texh)
 {
-	sprite->SetTextureRect(texx, texy, texw, texh);
+	if (!exist)
+	{
+		return;
+	}
+	SpriteItemManager::SetSpriteTextureRect(sprite, texx, texy, texw, texh);
 	tw = texw;
 	th = texh;
 }
 
 void BGLayer::scaleSet(float _hscale, float _vscale)
 {
+	if (!exist)
+	{
+		return;
+	}
 	hscale *= _hscale;
 	vscale *= _vscale;
 }
 
 void BGLayer::zSet(float z0, float z1, float z2, float z3)
 {
+	if (!exist || !sprite)
+	{
+		return;
+	}
 	sprite->SetZ(z0, z1, z2, z3);
 }
 
 void BGLayer::colorSet(DWORD col0, DWORD col1, DWORD col2, DWORD col3)
 {
+	if (!exist || !sprite)
+	{
+		return;
+	}
 	sprite->SetColor(col0, col1, col2, col3);
 	
 	ocol[0] = col0;
@@ -157,14 +177,25 @@ void BGLayer::colorSet(DWORD col0, DWORD col1, DWORD col2, DWORD col3)
 	ocol[3] = col3;
 }
 
-void BGLayer::moveSet(bool _move, bool _rotate)
+void BGLayer::moveSet(float _speed, float _zSpeed, int _angle, bool _move, bool _rotate)
 {
+	if (!exist)
+	{
+		return;
+	}
+	speed = _speed;
+	zSpeed = _zSpeed;
+	angle = _angle;
 	move = _move;
 	rotate = _rotate;
 }
 
 void BGLayer::rectSet(float _x, float _y, float z, float w, float h, int rotx, int roty, int rotz)
 {
+	if (!exist)
+	{
+		return;
+	}
 	/*
 	if (hge->System_Is2DMode())
 	{
@@ -178,6 +209,15 @@ void BGLayer::rectSet(float _x, float _y, float z, float w, float h, int rotx, i
 
 	float wx = w, wy = 0, wz = 0;
 	float hx = 0, hy = h, hz = 0;
+
+	if (w < 0)
+	{
+		w *= width;
+	}
+	if (h < 0)
+	{
+		h *= height;
+	}
 
 	if (rotx)
 	{
@@ -214,6 +254,10 @@ void BGLayer::rectSet(float _x, float _y, float z, float w, float h, int rotx, i
 
 void BGLayer::parallelogram(float paral)
 {
+	if (!exist)
+	{
+		return;
+	}
 	/*
 	if (hge->System_Is2DMode())
 	{
@@ -226,6 +270,10 @@ void BGLayer::parallelogram(float paral)
 
 void BGLayer::vertexSet(float x0, float y0, float z0, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3)
 {
+	if (!exist)
+	{
+		return;
+	}
 	/*
 	if (hge->System_Is2DMode())
 	{
@@ -243,7 +291,32 @@ void BGLayer::vertexSet(float x0, float y0, float z0, float x1, float y1, float 
 
 void BGLayer::SetFlag(BYTE _flag, BYTE maxtime)
 {
+	if (!exist)
+	{
+		return;
+	}
 	flag = _flag;
+	if (maxtime < 0)
+	{
+		switch (flag & BG_FLAGMASK)
+		{
+		case BG_FLASHFLAG:
+			maxtime = BGMT_FLASH;
+			break;
+		case BG_OUTFLAG:
+			maxtime = BGMT_OUT;
+			break;
+		case BG_FADEFLAG:
+			maxtime = BGMT_FADE;
+			break;
+		case BG_LIGHTFLAG:
+			maxtime = BGMT_LIGHT;
+			break;
+		case FG_PAUSEFLAG:
+			maxtime = FGMT_PAUSE;
+			break;
+		}
+	}
 	mtimer = maxtime;
 	changetimer = 0;
 }
@@ -258,7 +331,7 @@ void BGLayer::Action(bool active)
 		{
 			for(int i=0; i<BGLAYERSETMAX; i++)
 			{
-				if(bglayerset[i].sID != 0)
+				if(bglayerset[i].sID != BGLAYERSET_NONE)
 				{
 					bglayerset[i].timer++;
 					setindex = i;
@@ -340,7 +413,10 @@ void BGLayer::Render()
 	else
 	{
 	*/
+	if (sprite)
+	{
 		hge->Gfx_RenderQuad(&(sprite->quad));
+	}
 	//}
 }
 
@@ -351,6 +427,14 @@ void BGLayer::action()
 	float costa = cost(angle);
 	float sinta = sint(angle);
 
+	if (zSpeed)
+	{
+		for (int i=0; i<4; i++)
+		{
+			sprite->quad.v[i].z += zSpeed;
+		}
+	}
+
 	if(!move)
 	{
 		//roll the layer
@@ -359,17 +443,18 @@ void BGLayer::action()
 			float xt = speed * costa;
 			float yt = speed * sinta;
 
-			sprite->quad.v[0].tx -= xt;	sprite->quad.v[0].ty -= yt;
-			sprite->quad.v[1].tx -= xt;	sprite->quad.v[1].ty -= yt;
-			sprite->quad.v[2].tx -= xt;	sprite->quad.v[2].ty -= yt;
-			sprite->quad.v[3].tx -= xt;	sprite->quad.v[3].ty -= yt;
+			for (int i=0; i<4; i++)
+			{
+				sprite->quad.v[i].tx -= xt;
+				sprite->quad.v[i].ty -= yt;
+			}
 		}
 		else if(speed != 0)
 		{
-			sprite->quad.v[0].ty -= speed;
-			sprite->quad.v[1].ty -= speed;
-			sprite->quad.v[2].ty -= speed;
-			sprite->quad.v[3].ty -= speed;
+			for (int i=0; i<4; i++)
+			{
+				sprite->quad.v[i].ty -= speed;
+			}
 		}
 	}
 	else if(!rotate)
@@ -387,10 +472,11 @@ void BGLayer::action()
 		else
 		{
 		*/
-			sprite->quad.v[0].x += xt;	sprite->quad.v[0].y += yt;
-			sprite->quad.v[1].x += xt;	sprite->quad.v[1].y += yt;
-			sprite->quad.v[2].x += xt;	sprite->quad.v[2].y += yt;
-			sprite->quad.v[3].x += xt;	sprite->quad.v[3].y += yt;
+		for (int i=0; i<4; i++)
+		{
+			sprite->quad.v[i].x += xt;
+			sprite->quad.v[i].y += yt;
+		}
 //		}
 
 	}
@@ -481,20 +567,18 @@ void BGLayer::action()
 				for(int i=0;i<4;i++)
 				{
 					acol[i] = 0x00000000;
-					ocol[i] = 0xffffffff;
 				}
 				break;
 			case BG_LIGHTUPNORMAL:
 				for (int i=0; i<4; i++)
 				{
-					acol[i] = 0xffffffff;
+					acol[i] = ocol[i] & 0xffffff;
 				}
 				break;
 			case BG_LIGHTRED:
 				for(int i=0;i<4;i++)
 				{
 					acol[i] = 0xffff0000;
-					ocol[i] = 0xffffffff;
 				}
 				break;
 
@@ -502,7 +586,7 @@ void BGLayer::action()
 				for(int i=0;i<4;i++)
 				{
 					acol[i] = ocol[i];
-					ocol[i] = 0xf0000000;
+					ocol[i] = 0xc0000000;
 				}
 				break;
 			case FG_PAUSEOUT:

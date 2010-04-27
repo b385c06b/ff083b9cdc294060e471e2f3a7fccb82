@@ -214,10 +214,10 @@ void FrontDisplay::NextStageDisplay()
 
 void FrontDisplay::BossAction()
 {
-	BYTE flag = BossInfo::flag;
+	BYTE flag = BossInfo::bossinfo.flag;
 	WORD timer = BossInfo::bossinfo.timer;
 	bool bSpell = BossInfo::bossinfo.isSpell();
-	if(flag >= BOSSINFO_COLLAPSE)
+	if(BossInfo::bossinfo.bossout())
 	{
 		infobody.effBossStore.Stop();
 		infobody.effBossCollapse.action();
@@ -306,7 +306,7 @@ void FrontDisplay::BossAction()
 		{
 			if (bSpell)
 			{
-				if (!BossInfo::failed)
+				if (!BossInfo::bossinfo.failed)
 				{
 					SE::push(SE_BOSS_BONUS);
 				}
@@ -372,7 +372,7 @@ void FrontDisplay::BossAction()
 		info.bossasciifont->SetColor(0xffffffff);
 	}
 
-	if(flag >= BOSSINFO_COLLAPSE)
+	if(BossInfo::bossinfo.bossout())
 	{
 		if(timer == 1)
 		{
@@ -394,14 +394,14 @@ void FrontDisplay::BossMoveItemEffect(float x, float y)
 
 void FrontDisplay::BossInfoDisplay()
 {
-	BYTE flag = BossInfo::flag;
+	BYTE flag = BossInfo::bossinfo.flag;
 	WORD timer = BossInfo::bossinfo.timer;
 	bool bSpell = BossInfo::bossinfo.isSpell();
-	bool failed = BossInfo::failed;
+	bool failed = BossInfo::bossinfo.failed;
 	DWORD bonus = BossInfo::bossinfo.bonus;
 //	exist = false;
 	infobody.effBossStore.Render();
-	if(flag < BOSSINFO_COLLAPSE)
+	if(!BossInfo::bossinfo.bossout())
 	{
 		info.bossfont->SetScale(1.2f);
 		info.bossfont->printf(50, 20, HGETEXT_RIGHT|HGETEXT_MIDDLE, "%d", BossInfo::bossinfo.remain);
@@ -444,7 +444,7 @@ void FrontDisplay::BossInfoDisplay()
 			DWORD spellnamealpha = 0xff000000;
 			if(Player::p.y < 100)
 				spellnamealpha = 0x40000000;
-			Fontsys::Render(FONTSYS_SPELLNAMEUSE, 400-spellnamew, yt-5, spellnamealpha+0xffffff, spellnamealpha+0xff0000, 0.4f);
+			Fontsys::fontsys.Render(FONTSYS_SPELLNAMEUSE, 400-spellnamew, yt-5, spellnamealpha+0xffffff, spellnamealpha+0xff0000, 0.4f);
 
 			if (flag & BOSSINFO_UP)
 			{
@@ -488,10 +488,9 @@ void FrontDisplay::BossInfoDisplay()
 
 void FrontDisplay::BossTimeCircleDisplay()
 {
-	BYTE flag = BossInfo::flag;
 	WORD timer = BossInfo::bossinfo.timer;
 	BYTE limit = BossInfo::bossinfo.limit;
-	if (flag < BOSSINFO_COLLAPSE)
+	if (!BossInfo::bossinfo.bossout())
 	{
 		float scale;
 		if (timer >= 88)

@@ -3,14 +3,8 @@
 #include "../Header/Scripter.h"
 #include "../Header/Data.h"
 
-char Fontsys::text[FONTSYSMAX][M_STRMAX];
-HD3DFONT Fontsys::usingfont[FONTSYSMAX];
-HTARGET Fontsys::tar[FONTSYSMAX];
-hgeQuad Fontsys::quad[FONTSYSMAX];
-int Fontsys::lines[FONTSYSMAX];
-int Fontsys::changeID;
-
-HD3DFONT Fontsys::font = NULL;
+Fontsys Fontsys::fontsys;
+int Fontsys::changeID = -1;
 
 void Fontsys::Release()
 {
@@ -22,8 +16,9 @@ void Fontsys::Release()
 	}
 }
 
-void Fontsys::Init()
+void Fontsys::Init(HD3DFONT _font)
 {
+	font = _font;
 	Release();
 	changeID = -1;
 }

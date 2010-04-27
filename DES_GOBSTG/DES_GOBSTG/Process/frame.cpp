@@ -46,7 +46,7 @@ int Process::frame()
 	{
 		frameskip = M_DEFAULT_FRAMESKIP;
 	}
-	else if (BossInfo::allover)
+	else if (BossInfo::bossinfo.allover)
 	{
 		frameskip = M_FRAMESKIP_SLOWSKIP;
 	}

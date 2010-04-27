@@ -345,9 +345,9 @@ bool Scripter::Parse(int varcount)
 					break;
 
 				case SCR_BEBUILD:
-					if(rv = Copy(&i, 10))
+					if(rv = Copy(&i, 12))
 					{
-						Beam::Build(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), (CAST(d[7])), CAST(d[8]), CAST(d[9]));
+						Beam::Build(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), (CAST(d[7])), CAST(d[8]), CAST(d[9]), CAST(d[10]), CAST(d[11]));
 					}
 					break;
 				case SCR_BEVECTOR:
@@ -1023,10 +1023,10 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_BGMOVE:
-					if(rv = Copy(&i, 3))
+					if(rv = Copy(&i, 6))
 					{
 						int _tdi = CAST(d[0]);
-						BGLayer::ubg[_tdi].moveSet((bool)(CAST(d[1])), (bool)(CAST(d[2])));
+						BGLayer::ubg[_tdi].moveSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), (bool)(CAST(d[4])), (bool)(CAST(d[5])));
 					}
 					break;
 				case SCR_BGFLAG:

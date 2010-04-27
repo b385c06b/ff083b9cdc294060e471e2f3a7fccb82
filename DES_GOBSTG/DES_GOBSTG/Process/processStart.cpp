@@ -48,7 +48,7 @@ int Process::processStart()
 	else
 		frameStart();
 
-	if(hge->Input_GetDIKey(KS_PAUSE, DIKEY_DOWN) && !(Player::p.flag & PLAYER_SHOT) && state != STATE_CLEAR && !BossInfo::allover)
+	if(hge->Input_GetDIKey(KS_PAUSE, DIKEY_DOWN) && !(Player::p.flag & PLAYER_SHOT) && state != STATE_CLEAR && !BossInfo::bossinfo.allover)
 	{
 		saveInput = nowInput;
 		SE::push(SE_SYSTEM_PAUSE);

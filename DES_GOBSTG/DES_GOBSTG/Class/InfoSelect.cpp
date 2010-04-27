@@ -150,9 +150,9 @@ void InfoSelect::Render()
 	for(list<InfoSelect>::iterator i=infoselect.begin();i!=infoselect.end();i++)
 	{
 		if(InfoSelect::select == i->ID && !(i->flag & SEL_NONACTIVE))
-			Fontsys::Render(i->ID, i->x-2, i->y-2, i->ucol, i->dcol, 0.8f, 3, 1);
+			Fontsys::fontsys.Render(i->ID, i->x-2, i->y-2, i->ucol, i->dcol, 0.8f, 3, 1);
 		else
-			Fontsys::Render(i->ID, i->x, i->y, i->ucol, i->dcol, 0.8f);
+			Fontsys::fontsys.Render(i->ID, i->x, i->y, i->ucol, i->dcol, 0.8f);
 	}
 }
 
@@ -178,7 +178,7 @@ void InfoSelect::valueSet(BYTE _ID, const char * _info, float _x, float _y, BYTE
 {
 	ID = _ID;
 	strcpy(info, _info);
-	Fontsys::SignUp(ID, info);
+	Fontsys::fontsys.SignUp(ID, info);
 	x = _x;
 	y = _y;
 	coltype = _coltype;

@@ -264,6 +264,7 @@ int Process::processOver()
 		}
 
 		tsec = InfoSelect::select;
+		char nowchar;
 		if(tsec == 2)
 			goto skip1;
 
@@ -311,7 +312,7 @@ int Process::processOver()
 				savefilename[tnowchar+11] = ' ';
 		}
 
-		char nowchar = getInputNowChar(!tsec);
+		nowchar = getInputNowChar(!tsec);
 		if(nowchar > 0)
 		{
 			SE::push(SE_SYSTEM_OK);
@@ -477,6 +478,7 @@ skip1:
 	}
 	else if(tdepth == 8)
 	{
+		char nowchar;
 		if(!tinsert)
 		{
 			tsec = 1;
@@ -488,7 +490,7 @@ skip1:
 			if(i->ID == 0)
 			{
 				InfoSelect _ifs;
-				strcpy(_ifs.info, Fontsys::text[i->ID]);
+				strcpy(_ifs.info, Fontsys::fontsys.text[i->ID]);
 				for(int j=0;j<RPYINFO_USERNAMEMAX-1;j++)
 				{
 					if(username[j])
@@ -563,7 +565,7 @@ skip1:
 			username[tnowchar] = ' ';
 		}
 
-		char nowchar = getInputNowChar(!tsec);
+		nowchar = getInputNowChar(!tsec);
 		if(nowchar > 0)
 		{
 			SE::push(SE_SYSTEM_OK);

@@ -126,8 +126,8 @@ void Process::Realease()
 	Bullet::Release();
 	PlayerBullet::Release();
 	Item::Release();
-	Fontsys::Release();
-	BossInfo::Release();
+	Fontsys::fontsys.Release();
+	BossInfo::bossinfo.Release();
 	Chat::chatitem.Release();
 	FrontDisplay::fdisp.Release();
 
@@ -159,7 +159,7 @@ void Process::ClearAll()
 	PlayerBullet::ClearAll();
 	InfoSelect::Clear();
 	Chat::chatitem.ClearAll();
-	BossInfo::Clear();
+	BossInfo::bossinfo.Clear();
 	Player::p.ClearSet();
 
 	pauseinit = false;

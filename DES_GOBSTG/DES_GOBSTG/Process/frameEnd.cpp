@@ -20,19 +20,19 @@ void Process::frameEnd()
 		Item::Action();
 
 		Scripter::stopEdefScript = false;
-		if(BossInfo::flag)
+		if(BossInfo::bossinfo.flag)
 		{
 			if(BossInfo::bossinfo.action())
 			{
 				gametime = 0;
 				if(!spellmode)
 				{
-					scene = BossInfo::turntoscene;
+					scene = BossInfo::bossinfo.turntoscene;
 				}
 				else
 					Player::p.exist = false;
 			}
-			if(BossInfo::flag >= BOSSINFO_COLLAPSE)
+			if(BossInfo::bossinfo.bossout())
 				Scripter::stopEdefScript = true;
 		}
 	}

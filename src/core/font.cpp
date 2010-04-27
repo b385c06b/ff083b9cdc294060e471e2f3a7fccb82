@@ -47,11 +47,11 @@ HD3DFONT CALL HGE_Impl::Font_Load(const char * fontStyle,int height)
 	}
 
 	CFontList * newFont = new CFontList();
-	newFont->font = (HD3DFONT)(font);
+	newFont->font = (HD3DFONT)font;
 	newFont->next = fontList;
 	fontList = newFont;
 
-	return (HD3DFONT)(font);
+	return (HD3DFONT)font;
 
 }
 void CALL HGE_Impl::Font_Free(HD3DFONT font)

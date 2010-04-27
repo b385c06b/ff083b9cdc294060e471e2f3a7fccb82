@@ -109,7 +109,7 @@ int Process::processPause()
 				BGLayer::ubg[UBGID_BGMASK].exist = false;
 				FrontDisplay::fdisp.SetState(FDISP_PANEL, FDISPSTATE_OFF);
 				Player::p.exist = false;
-				BossInfo::Clear();
+				BossInfo::bossinfo.Clear();
 				getInput();
 				replaymode = false;
 				state = STATE_REPLAY;
@@ -122,7 +122,7 @@ int Process::processPause()
 				InfoSelect::Clear();
 				BGLayer::ubg[UBGID_BGMASK].exist = false;
 				FrontDisplay::fdisp.SetState(FDISP_PANEL, FDISPSTATE_OFF);
-				BossInfo::Clear();
+				BossInfo::bossinfo.Clear();
 				if(spellmode && !replaymode && gametime == 0)
 					state = STATE_CONTINUE;
 				else

@@ -14,6 +14,7 @@
 #include "../Header/BResource.h"
 #include "../Header/SpriteItemManager.h"
 #include "../Header/EffectSysIDDefine.h"
+#include "../Header/FrontDisplayName.h"
 
 Player Player::p;
 
@@ -432,13 +433,25 @@ void Player::ClearSet()
 
 	changePlayerID(nowID, true);
 
-	esChange.valueSet(EFFECT_PLAYERCHANGE, x, y, 0, 0);
-	esShot.valueSet(EFFECT_PLAYERSHOT, x, y, 0, 0);
-	esShot.colorSet(0xff0000);
-	esBorder.valueSet(EFFECT_PLAYERBORDER, x, y, 240, 1.5f, true);
-	esBorderZone.valueSet(EFFECT_PLAYERBORDERZONE, x, y, 240, -1.5f, true);
-	esPoint.valueSet(EFFECT_PLAYERPOINT, x, y, 0, 0);
-	esCollapse.valueSet(EFFECT_PLAYERCOLLAPSE, x, y, 160 ,0, false);
+	esChange.valueSet(SpriteItemManager::GetIndexByName(SI_PLAYER_SHOTITEM), x, y, 0, 0);
+	esChange.colorSet(0x80ffffff, BLEND_ALPHAADD);
+	esChange.scaleSet(3.0f);
+
+	esShot.valueSet(SpriteItemManager::GetIndexByName(SI_PLAYER_SHOTITEM), x, y, 0, 0);
+	esShot.colorSet(0xccff0000);
+	esShot.scaleSet(1.2f);
+
+	esBorder.valueSet(SpriteItemManager::GetIndexByName(SI_BORDER_CIRCLE), x, y, 240, 1.5f, true);
+	esBorder.colorSet(0xc0ffffff);
+
+	esBorderZone.valueSet(SpriteItemManager::GetIndexByName(SI_BORDER_CIRCLE), x, y, 240, -1.5f, true);
+	esBorderZone.colorSet(0x80ffffff);
+	esBorderZone.scaleSet(0.0f);
+
+	esPoint.valueSet(SpriteItemManager::GetIndexByName(SI_PLAYER_POINT), x, y, 0, 0);
+
+	esCollapse.valueSet(SpriteItemManager::GetIndexByName(SI_PLAYER_SHOTITEM), x, y, 160 ,0, false);
+	esCollapse.colorSet(0x80ffffff);
 }
 
 void Player::UpdatePlayerData()
@@ -622,7 +635,7 @@ void Player::action()
 			flag &= ~PLAYER_MERGE;
 	if(flag & PLAYER_SHOT)
 	{
-		bool shotdelaychange = BossInfo::bossinfo.isSpell() && (BossInfo::spellflag & BISF_SHOT);
+		bool shotdelaychange = BossInfo::bossinfo.isSpell() && (BossInfo::bossinfo.spellflag & BISF_SHOT);
 		if (shotdelaychange)
 		{
 			shotdelay += PLSHOTDELAY_ADD;
@@ -1119,7 +1132,7 @@ bool Player::Shot()
 		Item::undrainAll();
 		SE::push(SE_PLAYER_SHOT, x);
 	}
-	else if (shottimer == (8>shotdelay?shotdelay:8) && BossInfo::bossinfo.isSpell() && (BossInfo::spellflag & BISF_BOMB) && !Process::mp.spellmode)
+	else if (shottimer == (8>shotdelay?shotdelay:8) && BossInfo::bossinfo.isSpell() && (BossInfo::bossinfo.spellflag & BISF_BOMB) && !Process::mp.spellmode)
 	{
 		if (callBomb())
 		{
@@ -1134,7 +1147,7 @@ bool Player::Shot()
 		return true;
 	}
 
-	esShot.hscale = (shotdelay - shottimer) * 4.0f / shotdelay;
+	esShot.scaleSet((shotdelay - shottimer) * 4.0f / shotdelay);
 	return false;
 }
 
@@ -1148,9 +1161,10 @@ bool Player::Collapse()
 		nPop = 0;
 
 		if(BossInfo::bossinfo.isSpell())
-			BossInfo::failed = true;
-		esCollapse.x = x;
-		esCollapse.y = y;
+			BossInfo::bossinfo.failed = true;
+
+		esCollapse.posSet(x, y);
+
 		SE::push(SE_PLAYER_DEAD, x);
 
 		float aimx;
@@ -1223,9 +1237,8 @@ bool Player::Collapse()
 		return true;
 	}
 	
-	esCollapse.hscale = collapsetimer / 1.5f;
-	esCollapse.alpha = (BYTE)((WORD)(0xff * collapsetimer) / 0x3f);
-	esCollapse.colorSet(0xff0000);
+	esCollapse.scaleSet(collapsetimer / 1.5f);
+	esCollapse.colorSet(((BYTE)((WORD)(0xff * collapsetimer) / 0x3f))<<24|0xff0000);
 
 	alpha = (0xff - collapsetimer * 4);
 	vscale = (float)(collapsetimer)/40.0f + 1.0f;
@@ -1241,8 +1254,8 @@ bool Player::Border()
 		Item::drainAll();
 		nScore += nPower / 10000;
 	}
-	esBorder.hscale = (float)(borderlast-bordertimer) / (float)borderlast;
-	esBorderZone.hscale = (float)bordergraze * 2.0f / esBorderZone.GetWidth();
+	esBorder.scaleSet((float)(borderlast-bordertimer) / (float)borderlast);
+	esBorderZone.scaleSet((float)bordergraze * 2.0f / esBorderZone.GetWidth());
 	if(bordertimer == 1)
 	{
 		ncBorder++;
@@ -1289,7 +1302,7 @@ bool Player::Bomb()
 	{
 		nFaith *= _PL_BOMBFAITHCOSTRATE;
 		if(BossInfo::bossinfo.isSpell())
-			BossInfo::failed = true;
+			BossInfo::bossinfo.failed = true;
 		Item::drainAll();
 		bInfi = true;
 	}
@@ -1336,13 +1349,13 @@ bool Player::SlowChange()
 	}
 	else if(slowtimer == 16)
 	{
-		esPoint.alpha = 0xff;
+		esPoint.colorSet(0xffffffff);
 		slowtimer = 0;
 		return true;
 	}
 
 	esPoint.angle = (24 - slowtimer) * 25;
-	esPoint.alpha = slowtimer * 16;
+	esPoint.colorSet((shottimer*16)<<24|0xffffff);
 	return false;
 }
 
@@ -1403,7 +1416,7 @@ bool Player::PlayerChange()
 		playerchangetimer = 0;
 		return true;
 	}
-	esChange.colorSet(0x3030ff | (((16-playerchangetimer) * 16)<<16));
+	esChange.colorSet(0x803030ff | (((16-playerchangetimer) * 16)<<16));
 	return false;
 }
 

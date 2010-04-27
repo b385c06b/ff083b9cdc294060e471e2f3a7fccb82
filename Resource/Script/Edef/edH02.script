@@ -136,7 +136,7 @@ LOOP [i]
 {
 	BEB ENX ENY
 		0 1.2 0 i + 2
-		120 BEAMFLAG_HORIZON 0xffff 0xff
+		120 16 BEAMFLAG_HORIZON 8 0xffff 0xff
 	BEPIN BEI i i + 1 % 3 32
 }
 
