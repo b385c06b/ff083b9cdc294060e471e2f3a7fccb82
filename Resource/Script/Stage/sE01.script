@@ -7,7 +7,7 @@ STAGEFILE
 
 @ 1
 // Initial
-//* //////jump/////// //
+/* //////jump/////// //
 
 @ @@> 0
 CALLEX $jump 1 3

@@ -125,14 +125,20 @@ bool _DataTable::PackageTableDefine()
 
 bool _DataTable::TextureTableDefine()
 {
-	ZeroMemory(BResource::res.resdata.texfilename, sizeof(char) * TEXMAX * M_PATHMAX);
-	_READSTRINGBUFFERLINE(3);
+	ZeroMemory(BResource::res.texturedata, RSIZE_TEXTURE);
+	_READSTRINGBUFFERLINE(6);
 	while (!feof(file))
 	{
 		_BREAKCOMMENTBUFFER;
 		fscanf(file, "%d", &tindex);
 		_CHECKEOF_DATATABLE;
-		fscanf(file, "%s", BResource::res.resdata.texfilename[tindex]);
+		textureData * item = &(BResource::res.texturedata[tindex]);
+		fscanf(file, "%s%d%d%d",
+			item->texfilename,
+			&(item->texset),
+			&(item->width),
+			&(item->height)
+		);
 	}
 	return true;
 }

@@ -88,6 +88,9 @@ public:
 
 	void	ClearAll();
 
+	bool LoadTextureSet(int texset=-1);
+	bool FreeTextureSet(int texset=-1);
+
 public:
 	union{
 		struct{
@@ -123,6 +126,7 @@ public:
 
 	//texture
 	HTEXTURE	tex[TEXMAX];
+	hgeTextureInfo texinfo[TEXMAX];
 
 	//read ini
 	char	username[RPYINFO_USERNAMEMAX];

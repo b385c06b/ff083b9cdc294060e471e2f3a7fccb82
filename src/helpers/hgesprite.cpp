@@ -47,16 +47,8 @@ void hgeSprite::NewSprite(HTEXTURE texture, float texx, float texy, float w, flo
 {
 	float texx1, texy1, texx2, texy2;
 
-	if(texture)
-	{
-		tex_width = (float)hge->Texture_GetWidth(texture);
-		tex_height = (float)hge->Texture_GetHeight(texture);
-	}
-	else
-	{
-		tex_width = 1.0f;
-		tex_height = 1.0f;
-	}
+	tex_width = (float)hge->Texture_GetWidth(texture);
+	tex_height = (float)hge->Texture_GetHeight(texture);
 
 	if (w < 0 || h < 0)
 	{
@@ -277,16 +269,8 @@ void hgeSprite::SetTexture(HTEXTURE tex)
 
 	quad.tex=tex;
 
-	if(tex)
-	{
-		tw = (float)hge->Texture_GetWidth(tex);
-		th = (float)hge->Texture_GetHeight(tex);
-	}
-	else
-	{
-		tw = 1.0f;
-		th = 1.0f;
-	}
+	tw = (float)hge->Texture_GetWidth(tex);
+	th = (float)hge->Texture_GetHeight(tex);
 
 	if(tw!=tex_width || th!=tex_height)
 	{

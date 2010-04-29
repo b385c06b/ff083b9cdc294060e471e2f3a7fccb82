@@ -133,11 +133,11 @@ void Process::Realease()
 
 	for(int i=0;i<TEXMAX;i++)
 	{
-		if(tex[i])
+		if(tex[i].tex)
 			hge->Texture_Free(tex[i]);
 		tex[i] = NULL;
 	}
-	if (texInit)
+	if (texInit.tex)
 	{
 		hge->Texture_Free(texInit);
 		texInit = NULL;
@@ -180,6 +180,43 @@ void Process::ClearAll()
 
 }
 
+bool Process::LoadTextureSet(int texset/* =-1 */)
+{
+	bool bret = true;
+	for (int i=0; i<TEXMAX; i++)
+	{
+		if (!tex[i].tex && BResource::res.texturedata[i].texset > 0)
+		{
+			if (texset < 0 || BResource::res.texturedata[i].texset == texset)
+			{
+				tex[i] = BResource::res.LoadTexture(i);
+				if (!tex[i].tex && bret)
+				{
+					bret = false;
+				}
+//				texinfo[i].texw = hge->Texture_GetWidth(i);
+//				texinfo[i].texh = hge->Texture_GetHeight(i);
+			}
+		}
+	}
+	return bret;
+}
+
+bool Process::FreeTextureSet(int texset/* =-1 */)
+{
+	for (int i=TEX_WHITE+1; i<TEXMAX; i++)
+	{
+		if (tex[i].tex)
+		{
+			if (texset < 0 || BResource::res.texturedata[i].texset == texset)
+			{
+				hge->Texture_Free(tex[i]);
+				tex[i].tex = NULL;
+			}
+		}
+	}
+	return true;
+}
 
 void Process::musicSlide(float slidetime, int tovol, int pan, float pitch)
 {

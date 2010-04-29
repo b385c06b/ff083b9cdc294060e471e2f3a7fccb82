@@ -258,31 +258,31 @@ bool Selector::confirm(float cenx, float ceny, bool settrue)
 
 void Selector::matchSelect()
 {
-	for(list<Selector>::iterator i=sel.begin();i!=sel.end();i++)
+	for(list<Selector>::iterator it=sel.begin();it!=sel.end();it++)
 	{
-		if(i->ID == select && (i->flag & SEL_NONACTIVE))
+		if(it->ID == select && (it->flag & SEL_NONACTIVE))
 		{
-			list<Selector>::iterator j = i;
+			list<Selector>::iterator jt = it;
 			do
 			{
 				if(plus)
 				{
-					j++;
-					if(j == sel.end())
-						j++;
+					jt++;
+					if(jt == sel.end())
+						jt++;
 				}
 				else
 				{
-					j--;
-					if(j == sel.end())
-						j--;
+					jt--;
+					if(jt == sel.end())
+						jt--;
 				}
-				if(!((j->flag & SEL_NONACTIVE) || (j->flag & SEL_GRAY)))
+				if(!((jt->flag & SEL_NONACTIVE) || (jt->flag & SEL_GRAY)))
 				{
-					select = j->ID;
+					select = jt->ID;
 					break;
 				}
-			}while(j!=i);
+			}while(jt!=it);
 			break;
 		}
 	}

@@ -448,7 +448,7 @@ void RTexture::Parse(hgeResourceManager *rm, RScriptParser *sp, const char *name
 
 DWORD RTexture::Get(hgeResourceManager *rm)
 {
-	if(!handle) handle=(DWORD)hge->Texture_Load(filename, 0, mipmap);
+	if(!handle) handle=(DWORD)hge->Texture_Load(filename, 0, mipmap).tex;
 	return handle;
 }
 

@@ -119,6 +119,15 @@ ISELSET nowisel nowpt true 9 ystart - 30 yplus D ptiselfirstID
 
 // Init
 @ 1
+
+// Tex
+LOADTEXTURESET 7
+SD [i] 35
+LOOP [i]
+{
+	LOADTEXTURESET 200 + i
+}
+
 // Music
 MUSICCHANGE $MusicOP false
 // TurnOff
@@ -301,6 +310,21 @@ ELSE
 		{
 			SETTIME 0
 			STARTPREP
+			FREETEXTURESET -1
+			LOADTEXTURESET 2
+			LOADTEXTURESET 4
+			LOADTEXTURESET 9
+			LOADTEXTURESET 10
+			SD [chara_0] D ptfirst
+			SD [chara_1] D ptsecond
+			SD [chara_2] D ptthird
+			LOADTEXTURESET 100 + chara_0
+			LOADTEXTURESET 100 + chara_1
+			LOADTEXTURESET 100 + chara_2
+			LOADTEXTURESET 200 + chara_0
+			LOADTEXTURESET 200 + chara_1
+			LOADTEXTURESET 200 + chara_2
+			
 			SETSTATE STATE_START
 			EXECUTE CT_STAGE POST@ CT_SCENE
 		}

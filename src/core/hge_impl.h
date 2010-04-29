@@ -217,6 +217,7 @@ public:
 	virtual void		CALL	Gfx_SetTransform(float x=0, float y=0, float dx=0, float dy=0, float rot=0, float hscale=0, float vscale=0); 
 	virtual void		CALL	Gfx_SetTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX * pMatrix);
 	virtual D3DMATRIX	CALL	Gfx_GetTransform(D3DTRANSFORMSTATETYPE State);
+	virtual void		CALL	Gfx_SetTextureInfo(int nTexInfo, hgeTextureInfo * texinfo=NULL);
 
 	virtual HTARGET		CALL	Target_Create(int width, int height, bool zbuffer);
 	virtual void		CALL	Target_Free(HTARGET target);
@@ -331,7 +332,10 @@ public:
 	int					nPrim;
 	int					CurPrimType;
 	int					CurBlendMode;
-	HTEXTURE			CurTexture;
+	DWORD				CurTexture;
+
+	int					nTexInfo;
+	hgeTextureInfo	*	texInfo;
 
 	bool				_GfxInit();
 	void				_GfxDone();

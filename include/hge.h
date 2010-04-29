@@ -115,12 +115,79 @@ typedef unsigned __int64	QWORD;
 /*
 ** HGE Handle types
 */
-typedef DWORD HTEXTURE;
+//typedef DWORD HTEXTURE;
 typedef DWORD HTARGET;
 typedef DWORD HEFFECT;
 typedef DWORD HMUSIC;
 typedef DWORD HSTREAM;
 typedef DWORD HCHANNEL;
+
+typedef struct tagHgeTextureInfo
+{
+	DWORD * tex;
+	float texw;
+	float texh;
+}hgeTextureInfo;
+
+#ifdef __cplusplus
+class HTEXTURE
+{
+public:
+	HTEXTURE()
+	{
+		_Init();
+	};
+	HTEXTURE(DWORD _tex)
+	{
+		_Init(0, _tex);
+	};
+
+	HTEXTURE & operator = (DWORD _tex)
+	{
+		_Init(0, _tex);
+		return *this;
+	};
+	DWORD GetTexture(int ntexinfo, hgeTextureInfo * texinfo)
+	{
+		if (!tex && texinfo && texindex<ntexinfo)
+		{
+			if (texinfo[texindex].tex)
+			{
+				return *texinfo[texindex].tex;
+			}
+			return NULL;
+		}
+		return tex;
+	};
+	int GetTextureWidthByInfo(int ntexinfo, hgeTextureInfo * texinfo)
+	{
+		if (!texinfo || texindex>=ntexinfo)
+		{
+			return 1;
+		}
+		return texinfo[texindex].texw;
+	};
+	int GetTextureHeightByInfo(int ntexinfo, hgeTextureInfo * texinfo)
+	{
+		if (!texinfo || texindex>=ntexinfo)
+		{
+			return 1;
+		}
+		return texinfo[texindex].texh;
+	};
+private:
+	void _Init(int _texindex=0, DWORD _tex=NULL)
+	{
+		texindex=_texindex;
+		tex = _tex;
+	};
+public:
+	int texindex;
+	DWORD tex;
+};
+#else
+typedef DWORD HTEXTURE;
+#endif
 
 /************************************************************************/
 /* This define is added by Yuki                                         */
@@ -736,6 +803,8 @@ public:
 	/************************************************************************/
 	virtual void		CALL	Gfx_SetTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX * pMatrix) = 0;
 	virtual D3DMATRIX	CALL	Gfx_GetTransform(D3DTRANSFORMSTATETYPE State) = 0;
+
+	virtual void	CALL	Gfx_SetTextureInfo(int nTexInfo, hgeTextureInfo * texInfo=NULL) = 0;
 
 	virtual HTARGET		CALL	Target_Create(int width, int height, bool zbuffer) = 0;
 	virtual void		CALL	Target_Free(HTARGET target) = 0;

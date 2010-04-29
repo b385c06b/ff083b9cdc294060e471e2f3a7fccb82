@@ -92,10 +92,10 @@ int hgeEffectSystem::Load(const char * filename, HTEXTURE tex /* = 0 */, HTEXTUR
 	if(!_content)
 		return -1;
 	memcpy(&(ebi), _content + _offset, sizeof(hgeEffectBasicInfo));
-	texnum = ebi.tex;
-	if (tex == 0)
+	texnum = ebi.tex.texindex;
+	if (tex.tex == 0)
 	{
-		if(texnum < 0 || !texset[texnum])
+		if(texnum < 0/* || !texset[texnum].tex*/)
 		{
 			hge->Resource_Free(_content);
 			return texnum;

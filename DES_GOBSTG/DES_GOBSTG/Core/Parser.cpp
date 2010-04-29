@@ -613,6 +613,18 @@ bool Scripter::Parse(int varcount)
 			case SCRKW_CLASS_OTHER:
 				switch (nowval)
 				{
+				case SCR_LOADTEXTURESET:
+					if (rv = Copy(&i, 1))
+					{
+						Process::mp.LoadTextureSet(CAST(d[0]));
+					}
+					break;
+				case SCR_FREETEXTURESET:
+					if (rv = Copy(&i, 1))
+					{
+						Process::mp.FreeTextureSet(CAST(d[0]));
+					}
+					break;
 				case SCR_ITEMBUILD:
 					if (rv = Copy(&i, 6))
 					{

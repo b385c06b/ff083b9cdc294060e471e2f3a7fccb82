@@ -144,10 +144,10 @@ HTEXTURE hgeResourceManager::GetTexture(const char *name, int resgroup)
 	else
 	{
 		reshandle=hge->Texture_Load(name);
-		if(reshandle)
+		if(reshandle.tex)
 		{
 			resource=new RTexture();
-			resource->handle=reshandle;
+			resource->handle=reshandle.tex;
 			resource->resgroup=resgroup;
 			resource->mipmap=false;
 			strcpy(resource->name, name);

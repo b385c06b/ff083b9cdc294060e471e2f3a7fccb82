@@ -39,6 +39,13 @@ struct spellData{
 	BYTE battleID;
 };
 
+struct textureData{
+	char texfilename[M_STRMAX];
+	int texset;
+	int width;
+	int height;
+};
+
 struct uiStringData 
 {
 	char filename[M_STRMAX];
@@ -71,7 +78,7 @@ struct uiStringData
 struct resourceData
 {
 	//resource file
-	char texfilename[TEXMAX][M_PATHMAX];
+//	char texfilename[TEXMAX][M_PATHMAX];
 	char sefilename[SEMAX][M_PATHMAX];
 	char effectsysfilename[EFFECTSYSTYPEMAX][M_PATHMAX];
 	char packagefilename[PACKAGEMAX][M_PATHMAX];

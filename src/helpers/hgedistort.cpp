@@ -96,16 +96,8 @@ void hgeDistortionMesh::SetTextureRect(float x, float y, float w, float h)
 
 	tx=x; ty=y; width=w; height=h;
 
-	if (quad.tex)
-	{
-		tw=(float)hge->Texture_GetWidth(quad.tex);
-		th=(float)hge->Texture_GetHeight(quad.tex);
-	}
-	else
-	{
-		tw = w;
-		th = h;
-	}
+	tw=(float)hge->Texture_GetWidth(quad.tex);
+	th=(float)hge->Texture_GetHeight(quad.tex);
 
 	cellw=w/(nCols-1);
 	cellh=h/(nRows-1);

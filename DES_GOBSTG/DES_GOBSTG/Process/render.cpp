@@ -74,7 +74,7 @@ int Process::render()
 
 int Process::renderInit()
 {
-	if (texInit)
+	if (texInit.tex)
 	{
 		hgeQuad quad;
 		quad.blend = BLEND_DEFAULT;

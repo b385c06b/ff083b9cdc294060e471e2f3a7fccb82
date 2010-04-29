@@ -163,10 +163,12 @@ bool SpriteItemManager::SetSpriteData(hgeSprite * sprite, HTEXTURE _tex, float t
 	{
 		return false;
 	}
-	if (!_tex)
+/*
+	if (!_tex.tex)
 	{
 		_tex = tex[TEX_WHITE];
-	}
+	}*/
+
 	sprite->SetTexture(_tex);
 	if (!SetSpriteTextureRect(sprite, texx, texy, texw, texh))
 	{

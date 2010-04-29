@@ -53,10 +53,10 @@ bool EditorRes::Load()
 
 	for(int i=0; i<TEXMAX; i++)
 	{
-		if(strlen(BResource::res.resdata.texfilename[i]))
+		if(strlen(BResource::res.texturedata[i].texfilename))
 		{
-			tex[i] = hge->Texture_Load(BResource::res.resdata.texfilename[i]);
-			if(!tex[i])
+			tex[i] = hge->Texture_Load(BResource::res.texturedata[i].texfilename);
+			if(!tex[i].tex)
 				return false;
 		}
 	}
@@ -152,7 +152,7 @@ char * EditorRes::GetFullFilename(int effi)
 
 bool EditorRes::Save(int savei)
 {
-	if(!eff[savei] || texnum[savei] < 0 ||!tex[texnum[savei]])
+	if(!eff[savei] || texnum[savei] < 0 ||!tex[texnum[savei]].tex)
 	{
 		MessageBox(NULL, "Failed in Saving Effectsystem.", "Error", MB_OK);
 		return false;
@@ -188,7 +188,7 @@ void EditorRes::Release()
 
 	for(int i=0; i<TEXMAX; i++)
 	{
-		if(tex[i])
+		if(tex[i].tex)
 			hge->Texture_Free(tex[i]);
 		tex[i] = NULL;
 	}

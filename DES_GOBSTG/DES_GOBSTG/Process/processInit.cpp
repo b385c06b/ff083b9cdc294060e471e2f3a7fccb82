@@ -154,7 +154,7 @@ int Process::processInit()
 		return processPreInitial();
 	}
 
-	if (texInit)
+	if (texInit.tex)
 	{
 		hge->Texture_Free(texInit);
 		texInit = NULL;
@@ -210,6 +210,14 @@ int Process::processInit()
 		errorcode = PROC_ERROR_DATA;
 		return PQUIT;
 	}
+
+	for (int i=0; i<TEXMAX; i++)
+	{
+		texinfo[i].tex = NULL;
+		texinfo[i].texw = BResource::res.texturedata[i].width;
+		texinfo[i].texh = BResource::res.texturedata[i].height;
+	}
+
 	if(Scripter::scr.binmode && !Scripter::scr.LoadAll())
 	{
 		errorcode = PROC_ERROR_SCRIPT;
@@ -240,21 +248,36 @@ int Process::processInit()
 	}
 
 	char tnbuffer[M_STRMAX];
+
+	tex[TEX_WHITE] = hge->Texture_Load(BResource::res.texturedata[TEX_WHITE].texfilename);
+#ifdef __DEBUG
+	if(tex[TEX_WHITE].tex == NULL)
+	{
+		HGELOG("%s\nFailed in loading Texture File %s.(To be assigned to Index %d).", HGELOG_ERRSTR, BResource::res.texturedata[TEX_WHITE].texfilename, TEX_WHITE);
+		errorcode = PROC_ERROR_TEXTURE;
+		return PQUIT;
+	}
+	else
+	{
+		HGELOG("Succeeded in loading Texture File %s.(Assigned to Index %d).", BResource::res.texturedata[TEX_WHITE].texfilename, TEX_WHITE);
+	}
+#endif
+/*
 	for(int i=1;i<TEXMAX;i++)
 	{
-		if(tex[i])
+		if(tex[i].tex)
 			hge->Texture_Free(tex[i]);
 		tex[i] = NULL;
 
 		strcpy(tnbuffer, BResource::res.resdata.texfilename[i]);
 		if(!strlen(tnbuffer))
 		{
-			strcpy(tnbuffer, BResource::res.resdata.texfilename[TEX_WHITE]);
+			strcpy(tnbuffer, BResource::res.resdata.texfilename[TEX_WORD]);
 		}
 
 		tex[i] = hge->Texture_Load(tnbuffer);
 #ifdef __DEBUG
-		if(tex[i] == NULL)
+		if(tex[i].tex == NULL)
 		{
 			HGELOG("%s\nFailed in loading Texture File %s.(To be assigned to Index %d).", HGELOG_ERRSTR, tnbuffer, i);
 			errorcode = PROC_ERROR_TEXTURE;
@@ -267,19 +290,20 @@ int Process::processInit()
 #endif
 	}
 
-	tex[TEX_WORD] = hge->Texture_Load(BResource::res.resdata.texfilename[TEX_WORD]);
-#ifdef __DEBUG
-	if(tex[TEX_WORD] == NULL)
+	for (int i=0; i<TEXMAX; i++)
 	{
-		HGELOG("%s\nFailed in loading Texture File %s.(To be assigned to Index %d).", HGELOG_ERRSTR, BResource::res.resdata.texfilename[TEX_WORD], TEX_WORD);
-		errorcode = PROC_ERROR_TEXTURE;
-		return PQUIT;
-	}
-	else
+		tex[i].texindex = i;
+		texinfo[i].tex = &(tex[i].tex);
+		texinfo[i].texw = hge->Texture_GetWidth(tex[i].tex);
+		texinfo[i].texh = hge->Texture_GetHeight(tex[i].tex);
+	}*/
+
+	for (int i=0; i<TEXMAX; i++)
 	{
-		HGELOG("Succeeded in loading Texture File %s.(Assigned to Index %d).", BResource::res.resdata.texfilename[TEX_WORD], TEX_WORD);
+		tex[i].texindex = i;
+		texinfo[i].tex = &tex[i].tex;
 	}
-#endif
+	hge->Gfx_SetTextureInfo(TEXMAX, texinfo);
 
 	SpriteItemManager::Init(tex);
 

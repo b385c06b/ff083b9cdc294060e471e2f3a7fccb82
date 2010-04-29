@@ -832,7 +832,7 @@ void EditorUI::Update()
 		int i;
 		for(i=eres.bgtex-1; i>=0; i--)
 		{
-			if(eres.tex[i])
+			if(eres.tex[i].tex)
 			{
 				bFound = true;
 				break;
@@ -842,7 +842,7 @@ void EditorUI::Update()
 		{
 			for(i=TEXMAX-1; i>eres.bgtex; i--)
 			{
-				if(eres.tex[i])
+				if(eres.tex[i].tex)
 				{
 					bFound = true;
 					break;
@@ -1582,7 +1582,7 @@ bool EditorUI::ChangeBGTex(int texnum)
 		int i;
 		for(i=eres.bgtex+1; i<TEXMAX; i++)
 		{
-			if(eres.tex[i])
+			if(eres.tex[i].tex)
 			{
 				bFound = true;
 				break;
@@ -1592,7 +1592,7 @@ bool EditorUI::ChangeBGTex(int texnum)
 		{
 			for(i=0; i<eres.bgtex; i++)
 			{
-				if(eres.tex[i])
+				if(eres.tex[i].tex)
 				{
 					bFound = true;
 					break;
@@ -1603,7 +1603,7 @@ bool EditorUI::ChangeBGTex(int texnum)
 			texnum = i;
 	}
 
-	if(eres.tex[texnum])
+	if(eres.tex[texnum].tex)
 	{
 		eres.bg->SetTexture(eres.tex[texnum]);
 		eres.bg->SetTextureRect(0, 0, hge->Texture_GetWidth(eres.tex[texnum]), hge->Texture_GetHeight(eres.tex[texnum]));
@@ -1662,7 +1662,7 @@ bool EditorUI::EditEB()
 	{
 		if(ival >= 0 && ival < TEXMAX)
 		{
-			if(eres.tex[ival])
+			if(eres.tex[ival].tex)
 			{
 				eres.eff[ebnum]->ebi.tex = eres.tex[ival];
 				eres.texnum[ebnum] = ival;

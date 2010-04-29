@@ -275,6 +275,7 @@ bool BResource::Pack(void * pStrdesc, void * pCustomConstData)
 		RSIZE_PLAYERBULLET + 
 		RSIZE_PLAYERSHOOT + 
 		RSIZE_PLAYERGHOST + 
+		RSIZE_TEXTURE + 
 		sizeof(spellData) * spelldata.size();
 	BYTE * content = (BYTE *)malloc(size);
 	if(!content)
@@ -311,6 +312,8 @@ bool BResource::Pack(void * pStrdesc, void * pCustomConstData)
 	offset += RSIZE_PLAYERSHOOT;
 	memcpy(content+offset, playerghostdata, RSIZE_PLAYERGHOST);
 	offset += RSIZE_PLAYERGHOST;
+	memcpy(content+offset, texturedata, RSIZE_TEXTURE);
+	offset += RSIZE_TEXTURE;
 	for(vector<spellData>::iterator i=spelldata.begin(); i!=spelldata.end(); i++)
 	{
 		memcpy(content+offset, &(*i), sizeof(spellData));
@@ -368,6 +371,8 @@ bool BResource::Gain(void * pStrdesc, void * pCustomConstData)
 			offset += RSIZE_PLAYERSHOOT;
 			memcpy(playerghostdata, content+offset, RSIZE_PLAYERGHOST);
 			offset += RSIZE_PLAYERGHOST;
+			memcpy(texturedata, content+offset, RSIZE_TEXTURE);
+			offset += RSIZE_TEXTURE;
 			while(offset < size)
 			{
 				spellData _rdata;
@@ -476,6 +481,34 @@ bool BResource::SetDataFile()
 			return false;
 	}
 	return true;
+}
+
+HTEXTURE BResource::LoadTexture( int i )
+{
+	if (i < 0 || i >= TEXMAX)
+	{
+		return NULL;
+	}
+	HTEXTURE texret = NULL;
+	if(strlen(texturedata[i].texfilename))
+	{
+		texret = hge->Texture_Load(texturedata[i].texfilename);
+	}
+
+	if(texret.tex == NULL)
+	{
+#ifdef __DEBUG
+		HGELOG("%s\nFailed in loading Texture File %s.(To be assigned to Index %d).", HGELOG_ERRSTR, texturedata[i].texfilename, i);
+#endif
+		texret = hge->Texture_Create(0, 0);
+	}
+#ifdef __DEBUG
+	else
+	{
+		HGELOG("Succeeded in loading Texture File %s.(Assigned to Index %d).", texturedata[i].texfilename, i);
+	}
+#endif
+	return texret;
 }
 /*
 int BResource::SplitString(const char * str)

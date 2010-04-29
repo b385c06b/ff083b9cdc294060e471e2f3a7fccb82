@@ -94,7 +94,7 @@ void hgeFont::NewFont(const char *szFont, bool bMipmap/* =false */)
 			if(!sscanf(linebuf, "Bitmap = %s", pbuf)) continue;
 
 			hTexture=hge->Texture_Load(buf, 0, bMipmap);
-			if(!hTexture)
+			if(!hTexture.tex)
 			{
 				delete[] desc;	
 				return;
@@ -227,7 +227,7 @@ hgeFont::~hgeFont()
 {
 	for(int i=0; i<256; i++)
 		if(letters[i]) delete letters[i];
-	if(hTexture) hge->Texture_Free(hTexture);
+	if(hTexture.tex) hge->Texture_Free(hTexture);
 	hge->Release();
 }
 
