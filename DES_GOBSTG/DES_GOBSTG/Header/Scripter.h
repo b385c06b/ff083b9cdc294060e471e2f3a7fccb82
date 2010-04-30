@@ -3,7 +3,7 @@
 
 #include "MainDependency.h"
 #include "Const.h"
-#include "keytable.h"
+#include "ScripterDefines.h"
 
 #ifdef __DEBUG
 	#define __COUNT_SCRIPTSIZE
@@ -190,6 +190,8 @@ public:
 		return Execute(&event, name, con);
 	}
 
+	bool PushScript(int varcount);
+	bool PopScript(int varcount);
 
 	bool Parse(int varcount);
 
@@ -243,6 +245,12 @@ public:
 
 	int varIndex;
 	DWORD strdescIndex;
+
+	vector<Script> * psaved;
+	int * idescsaved;
+	TData * descsaved;
+
+	bool scriptpushed;
 
 	static bool stopEdefScript;
 

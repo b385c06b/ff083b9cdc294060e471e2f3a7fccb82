@@ -266,7 +266,6 @@ scrKeyWord scrKeyTable[] =
 	{"SQRT",					SCR_SQRT},
 	{"SIGN",					SCR_SIGN},
 	{"ROLL",					SCR_ROLL},
-	{"INTER",					SCR_INTER},
 
 	{"D",						SCR_D},
 	{"Du",						SCR_DU},
@@ -289,6 +288,7 @@ scrKeyWord scrKeyTable[] =
 	{"CHATI",					SCR_CHATI},
 	{"BOSSFAILED",				SCR_BOSSFAILED},
 	{"BOSSFLAG",				SCR_BOSSFLAG},
+	{"GETPEID",					SCR_GETPEID},
 	{"CHECKKEY",				SCR_CHECKKEY},
 	{"GETFLAG",					SCR_GETFLAG},
 	{"PLAYERNAME",				SCR_PLAYERNAME},

@@ -333,10 +333,8 @@ int Process::processInit()
 	Selector::Clear();
 	InfoSelect::Clear();
 
-	mainchara	= 0;
-	subchara_1	= 0;
-	subchara_2	= 0;
-	nowdifflv	= defaultdifflv;
+	SetChara(0, 0, 0);
+	SetDiffLv(defaultdifflv);
 	errorcode = PROC_ERROR_NONE;
 	titleselect = 0;
 

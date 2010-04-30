@@ -2,6 +2,7 @@
 #include "../Header/BResource.h"
 #include "../Header/Data.h"
 #include "../Header/Main.h"
+#include "../Header/keytable.h"
 
 Scripter Scripter::scr;
 
@@ -19,6 +20,7 @@ Scripter::Scripter()
 	binmode = false;
 	strdescIndex = 0;
 	varName = NULL;
+	scriptpushed = false;
 }
 
 Scripter::~Scripter()

@@ -218,6 +218,28 @@ bool Process::FreeTextureSet(int texset/* =-1 */)
 	return true;
 }
 
+void Process::SetDiffLv(int difflv)
+{
+	nowdifflv = difflv;
+	if (nowdifflv < M_DIFFI_EXTRA_START)
+	{
+		defaultdifflv = nowdifflv;
+	}
+}
+
+void Process::SetChara(WORD ID, WORD ID_sub_1, WORD ID_sub_2)
+{
+	mainchara = ID;
+	subchara_1 = ID_sub_1;
+	subchara_2 = ID_sub_2;
+}
+
+void Process::SetMode(int mode)
+{
+	spellmode = (bool)(mode & M_RPYMODE_SPELL);
+	practicemode = (bool)(mode & M_RPYMODE_PRACTICE);
+}
+
 void Process::musicSlide(float slidetime, int tovol, int pan, float pitch)
 {
 	if (hge->Channel_IsPlaying(channel))

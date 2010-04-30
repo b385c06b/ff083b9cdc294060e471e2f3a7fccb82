@@ -181,6 +181,7 @@ struct playerData
 	int siid;
 	WORD borderlast;
 	WORD bomblast;
+	BYTE eid;
 	BYTE shotdelay;
 	BYTE faceIndex;
 	BYTE standFrame;

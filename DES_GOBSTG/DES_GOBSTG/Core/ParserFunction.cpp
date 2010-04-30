@@ -1,5 +1,6 @@
 #include "../Header/Scripter.h"
 #include "../Header/processPrep.h"
+#include "../Header/keytable.h"
 
 void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 {
@@ -472,6 +473,17 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 				break;
 			case SCR_BOSSFLAG:
 				idesc[i] = BossInfo::bossinfo.flag;
+				d[i].bfloat = false;
+				break;
+
+			case SCR_GETPEID:
+				++(*p);
+				_tdi = CINT(Value(&(*p), i, 0));
+				if (_tdi < 0)
+				{
+					_tdi = Player::p.nowID;
+				}
+				idesc[i] = BResource::res.playerdata[_tdi].eid;
 				d[i].bfloat = false;
 				break;
 

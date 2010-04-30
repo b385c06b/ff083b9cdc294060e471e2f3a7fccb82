@@ -1,5 +1,6 @@
 #include "../Header/Scripter.h"
 #include "../Header/processPrep.h"
+#include "../Header/keytable.h"
 
 bool Scripter::Copy(vector<Script>::iterator * p, BYTE num, BYTE dstart)
 {

@@ -91,6 +91,10 @@ public:
 	bool LoadTextureSet(int texset=-1);
 	bool FreeTextureSet(int texset=-1);
 
+	void SetDiffLv(int difflv);
+	void SetChara(WORD ID, WORD ID_sub_1, WORD ID_sub_2);
+	void SetMode(int mode);
+
 public:
 	union{
 		struct{

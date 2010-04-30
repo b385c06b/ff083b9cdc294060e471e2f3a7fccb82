@@ -354,6 +354,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Core\Parse.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Core\Parser.cpp"
 					>
 				</File>
@@ -636,6 +640,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Header\Parser.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Header\Process.h"
 					>
 				</File>
@@ -649,6 +657,10 @@
 				</File>
 				<File
 					RelativePath=".\Header\Scripter.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Header\ScripterDefines.h"
 					>
 				</File>
 				<File

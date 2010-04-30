@@ -21,7 +21,9 @@ int Process::processDifficultSelect()
 		Scripter::scr.eventExecute(SCR_EVENT_ENTERSTATE, STATE_DIFFICULT_SELECT);
 		FrontDisplay::fdisp.SetState(FDISP_PANEL, FDISPSTATE_OFF);
 		if(nowdifflv >= M_DIFFI_EXTRA_START)
-			nowdifflv = defaultdifflv;
+		{
+			SetDiffLv(defaultdifflv);
+		}
 
 		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN, -1);
 		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);

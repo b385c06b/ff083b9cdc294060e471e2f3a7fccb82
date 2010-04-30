@@ -1,18 +1,57 @@
 #include "../Header/Scripter.h"
 #include "../Header/processPrep.h"
 #include "../Header/BulletListActionConst.h"
+#include "../Header/keytable.h"
+#include "../Header/Parser.h"
+
+bool Scripter::PushScript(int varcount)
+{
+	if (!scriptpushed)
+	{
+		psaved = pnow;
+		if (varcount)
+		{
+			idescsaved = (int *)malloc(sizeof(int) * varcount);
+			descsaved = (TData *)malloc(sizeof(TData) * varcount);
+			memcpy(idescsaved, &idesc[SCR_VARBEGIN], sizeof(int) * varcount);
+			memcpy(descsaved, &d[SCR_VARBEGIN], sizeof(TData) * varcount);
+		}
+		scriptpushed = true;
+		return true;
+	}
+	return false;
+}
+
+bool Scripter::PopScript(int varcount)
+{
+	if (scriptpushed)
+	{
+		if (varcount)
+		{
+			memcpy(&idesc[SCR_VARBEGIN], idescsaved, sizeof(int) * varcount);
+			memcpy(&d[SCR_VARBEGIN], descsaved, sizeof(TData) * varcount);
+			free(idescsaved);
+			free(descsaved);
+		}
+		pnow = psaved;
+		scriptpushed = false;
+		return true;
+	}
+	return false;
+}
 
 bool Scripter::Parse(int varcount)
 {
-	for(vector<Script>::iterator i=pnow->begin();i!=pnow->end();i++)
+	for(vector<Script>::iterator it=pnow->begin();it!=pnow->end();it++)
 	{
 		bool rv = false;
 		int depth = 0;
-		if(!i->value)
+		if(!it->value)
 			continue;
 
+		_Parser::Init(&it, varcount);
 		//Filter Type
-		DWORD nowval = i->value;
+		DWORD nowval = it->value;
 		switch (nowval & SCRKWMASK_TYPE)
 		{
 			/************************************************************************/
@@ -22,34 +61,45 @@ bool Scripter::Parse(int varcount)
 			switch (nowval)
 			{
 			case SCR_SD:
-				if(rv = Copy(&i, 2))
+				rv = _Parser::SD_();
+/*
+				if(rv = Copy(&it, 2))
 				{
 					if (d[1].bfloat)
 					{
 						CINT(d[1].value) = (int)(CFLOAT(d[1].value));
 					}
 					SetValue(CAST(d[0]), d[1].value, false);
-				}
+				}*/
+
 				break;
 			case SCR_SDF:
-				if(rv = Copy(&i, 2))
+				rv = _Parser::SDf_();
+/*
+				if(rv = Copy(&it, 2))
 				{
 					if (!d[1].bfloat)
 					{
 						CFLOAT(d[1].value) = (float)(CINT(d[1].value));
 					}
 					SetValue(CAST(d[0]), d[1].value, true);
-				}
+				}*/
+
 				break;
 			case SCR_ST:
-				if(rv = Copy(&i, 3))
+				rv = _Parser::ST_();
+/*
+				if(rv = Copy(&it, 3))
 				{
 					int _tdi = CAST(d[0]);
 					Target::SetValue(_tdi, CAST(d[1]), CAST(d[2]));
-				}
+				}*/
+
 				break;
 			case SCR_CALL:
-				if(rv = Copy(&i, 2))
+				rv = _Parser::CALL_();
+/*
+				if(rv = Copy(&it, 2))
 				{
 					vector<Script> * psaved = pnow;
 					int * idescsaved;
@@ -70,10 +120,13 @@ bool Scripter::Parse(int varcount)
 						free(descsaved);
 					}
 					pnow = psaved;
-				}
+				}*/
+
 				break;
 			case SCR_CALLEX:
-				if (rv = Copy(&i, 3))
+				rv = _Parser::CALLEX_();
+/*
+				if (rv = Copy(&it, 3))
 				{
 					vector<Script> * psaved = pnow;
 					int * idescsaved;
@@ -88,7 +141,7 @@ bool Scripter::Parse(int varcount)
 					int _tdi = UCAST(d[2]);
 					if (_tdi)
 					{
-						rv = Copy(&i, _tdi, 2);
+						rv = Copy(&it, _tdi, 2);
 					}
 					functionExecute(UCAST(d[0]), UCAST(d[1]));
 					if (varcount)
@@ -99,10 +152,13 @@ bool Scripter::Parse(int varcount)
 						free(descsaved);
 					}
 					pnow = psaved;
-				}
+				}*/
+
 				break;
 			case SCR_EXECUTE:
-				if(rv = Copy(&i, 3))
+				rv = _Parser::EXECUTE_();
+/*
+				if(rv = Copy(&it, 3))
 				{
 					vector<Script> * psaved = pnow;
 					int * idescsaved;
@@ -123,39 +179,58 @@ bool Scripter::Parse(int varcount)
 						free(descsaved);
 					}
 					pnow = psaved;
-				}
+				}*/
+
 				break;
 
 			case SCR_RETURN:
-				if(rv = Copy(&i, 1))
+				rv = _Parser::RETURN_();
+				if (rv)
+				{
+					return true;
+				}
+/*
+				if(rv = Copy(&it, 1))
 				{
 					Process::mp.retvalue = CAST(d[0]);
 					return true;
-				}
+				}*/
+
 				break;
 
 			case SCR_SETSTATE:
-				if(rv = Copy(&i, 1))
+				rv = _Parser::SETSTATE_();
+/*
+				if(rv = Copy(&it, 1))
 				{
 					Process::mp.state = CAST(d[0]);
-				}
+				}*/
+
 				break;
 			case SCR_SETTIME:
-				if(rv = Copy(&i, 1))
+				rv = _Parser::SETTIME_();
+/*
+				if(rv = Copy(&it, 1))
 				{
 					gametime = CAST(d[0]);
-				}
+				}*/
+
 				break;
 			case SCR_SETDIFFI:
-				if(rv = Copy(&i, 1))
+				rv = _Parser::SETDIFFI_();
+/*
+				if(rv = Copy(&it, 1))
 				{
 					Process::mp.nowdifflv = CAST(d[0]);
 					if(Process::mp.nowdifflv < M_DIFFI_EXTRA_START)
 						Process::mp.defaultdifflv = Process::mp.nowdifflv;
-				}
+				}*/
+
 				break;
 			case SCR_SETCHARA:
-				if(rv = Copy(&i, 3))
+				rv = _Parser::SETCHARA_();
+/*
+				if(rv = Copy(&it, 3))
 				{
 					Process::mp.mainchara = CAST(d[0]);
 					Process::mp.subchara_1 = CAST(d[1]);
@@ -163,36 +238,51 @@ bool Scripter::Parse(int varcount)
 					Player::p.ID = Process::mp.mainchara;
 					Player::p.ID_sub_1 = Process::mp.subchara_1;
 					Player::p.ID_sub_2 = Process::mp.subchara_2;
-				}
+				}*/
+
 				break;
 			case SCR_SETSCENE:
-				if(rv = Copy(&i, 1))
+				rv = _Parser::SETSCENE_();
+/*
+				if(rv = Copy(&it, 1))
 				{
 					Process::mp.scene = CAST(d[0]);
-				}
+				}*/
+
 				break;
 			case SCR_SETMODE:
-				if(rv = Copy(&i, 1))
+				rv = _Parser::SETMODE_();
+/*
+				if(rv = Copy(&it, 1))
 				{
 					int _tdi = CAST(d[0]);
 					Process::mp.spellmode = (bool)(_tdi & M_RPYMODE_SPELL);
 					Process::mp.practicemode = (bool)(_tdi & M_RPYMODE_PRACTICE);
-				}
+				}*/
+
 				break;
 			case SCR_STARTPREP:
+				rv = _Parser::STARTPREP_();
+/*
 				if (rv = true)
 				{
 					Process::mp.startPrep(false);
-				}
+				}*/
+
 				break;
 
 			case SCR_SETKEY:
-				if (rv = Copy(&i, 2))
+				rv = _Parser::SETKEY_();
+/*
+				if (rv = Copy(&it, 2))
 				{
 					hge->Input_SetDIKey(CAST(d[0]), CAST(d[1]));
-				}
+				}*/
+
 				break;
 			case SCR_DISABLEALLKEY:
+				rv = _Parser::DISABLEALLKEY_();
+/*
 				if (rv = true)
 				{
 					hge->Input_SetDIKey(KS_FIRE_MP, false);
@@ -203,63 +293,70 @@ bool Scripter::Parse(int varcount)
 					hge->Input_SetDIKey(KS_DOWN_MP, false);
 					hge->Input_SetDIKey(KS_LEFT_MP, false);
 					hge->Input_SetDIKey(KS_RIGHT_MP, false);
-				}
+				}*/
+
 				break;
 
 			case SCR_SETPUSHEVENT:
-				if (rv = Copy(&i, 7))
+				rv = _Parser::SETPUSHEVENT_();
+/*
+				if (rv = Copy(&it, 7))
 				{
 					PushKey::SetPushEvent(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]));
-				}
+				}*/
+
 				break;
 			case SCR_UPDATEPUSHEVENT:
-				if (rv = Copy(&i, 1))
+				rv = _Parser::UPDATEPUSHEVENT_();
+/*
+				if (rv = Copy(&it, 1))
 				{
 					PushKey::UpdatePushEvent(CAST(d[0]));
-				}
+				}*/
+
 				break;
 
 			case SCR_STOPACTION:
-				if (rv = Copy(&i, 2))
+				if (rv = Copy(&it, 2))
 				{
 					Process::mp.SetStop(CAST(d[0]), CAST(d[1]));
 				}
 				break;
 			case SCR_SETFRAMESKIP:
-				if (rv = Copy(&i, 1))
+				if (rv = Copy(&it, 1))
 				{
 					Process::mp.frameskip = CAST(d[0]);
 				}
 				break;
 
 			case SCR_MUSICCHANGE:
-				if(rv = Copy(&i, 2))
+				if(rv = Copy(&it, 2))
 				{
 					Process::mp.musicChange(CAST(d[0]), (bool)(CAST(d[1])));
 				}
 				break;
 			case SCR_MUSICSLIDE:
-				if (rv = Copy(&i, 4))
+				if (rv = Copy(&it, 4))
 				{
 					Process::mp.musicSlide(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]));
 				}
 				break;
 
 			case SCR_SE:
-				if(rv = Copy(&i, 2))
+				if(rv = Copy(&it, 2))
 				{
 					SE::push(CAST(d[0]), CAST(d[1]));
 				}
 				break;
 			case SCR_SEOFF:
-				if (rv = Copy(&i, 1))
+				if (rv = Copy(&it, 1))
 				{
 					SE::stop(CAST(d[0]));
 				}
 				break;
 
 			case SCR_HSVTORGB:
-				if (rv = Copy(&i, 5))
+				if (rv = Copy(&it, 5))
 				{
 					hgeColorHSV _hsv(CAST(d[0]) / 255.0f, CAST(d[1]) / 255.0f, CAST(d[2]) / 255.0f, CAST(d[3]) / 255.0f);
 					int _tdi = CAST(d[4]);
@@ -268,7 +365,7 @@ bool Scripter::Parse(int varcount)
 				break;
 
 			case SCR_SETSHAKE:
-				if (rv = Copy(&i, 2))
+				if (rv = Copy(&it, 2))
 				{
 					Process::mp.SetShake(CAST(d[0]), CAST(d[1]));
 				}
@@ -288,20 +385,20 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_BUBUILD:
-					if(rv = Copy(&i, 9))
+					if(rv = Copy(&it, 9))
 					{
 						Bullet::Build(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]));
 					}
 					break;
 				case SCR_BUACTIONSET:
-					if(rv = Copy(&i, 1))
+					if(rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
 						if(!_tdi)
 						{
 							Bullet::_bu.actionList[0] = SECTIONEND;
 						}
-						else if(rv = Copy(&i, _tdi))
+						else if(rv = Copy(&it, _tdi))
 						{
 							for(int j=0;j<_tdi;j++)
 							{
@@ -312,19 +409,19 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_BUBUILDCIRCLE:
-					if (rv = Copy(&i, 10))
+					if (rv = Copy(&it, 10))
 					{
 						Bullet::BuildCircle(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]), CAST(d[9]));
 					}
 					break;
 				case SCR_BUBUILDLINE:
-					if (rv = Copy(&i, 14))
+					if (rv = Copy(&it, 14))
 					{
 						Bullet::BuildLine(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]), CAST(d[9]), CAST(d[10]), CAST(d[11]), CAST(d[12]), CAST(d[13]));
 					}
 					break;
 				case SCR_BUDECANCEL:
-					if (rv = Copy(&i, 1))
+					if (rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
 						if (_tdi >= 0 && _tdi < BULLETMAX)
@@ -339,20 +436,20 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_IZEZONE:
-					if (rv = Copy(&i, 6))
+					if (rv = Copy(&it, 6))
 					{
 						Bullet::IzeBuild(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]));
 					}
 					break;
 
 				case SCR_BEBUILD:
-					if(rv = Copy(&i, 12))
+					if(rv = Copy(&it, 12))
 					{
 						Beam::Build(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), (CAST(d[7])), CAST(d[8]), CAST(d[9]), CAST(d[10]), CAST(d[11]));
 					}
 					break;
 				case SCR_BEVECTOR:
-					if (rv = Copy(&i, 5))
+					if (rv = Copy(&it, 5))
 					{
 						int _tdi = CAST(d[0]);
 						if (Beam::be.toIndex(_tdi) != VECLST_INDEXERROR)
@@ -368,7 +465,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_BEHOLD:
-					if (rv = Copy(&i, 4))
+					if (rv = Copy(&it, 4))
 					{
 						int _tdi = CAST(d[0]);
 						if (Beam::be.toIndex(_tdi) != VECLST_INDEXERROR)
@@ -385,7 +482,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_BEPIN:
-					if (rv = Copy(&i, 4))
+					if (rv = Copy(&it, 4))
 					{
 						int _tdi = CAST(d[0]);
 						if (Beam::be.toIndex(_tdi) != VECLST_INDEXERROR)
@@ -410,20 +507,20 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_GHBUILD:
-					if(rv = Copy(&i, 10))
+					if(rv = Copy(&it, 10))
 					{
 						Ghost::Build(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]), CAST(d[9]));
 					}
 					break;
 				case SCR_GHSAIM:
-					if(rv = Copy(&i, 2))
+					if(rv = Copy(&it, 2))
 					{
 						Ghost::gh[Ghost::index].aim.x = CAST(d[0]);
 						Ghost::gh[Ghost::index].aim.y = CAST(d[1]);
 					}
 					break;
 				case SCR_GHSET:
-					if(rv = Copy(&i, 3))
+					if(rv = Copy(&it, 3))
 					{
 						Ghost::gh[Ghost::index].angle = CAST(d[0]);
 						Ghost::gh[Ghost::index].speed = CAST(d[1]);
@@ -431,13 +528,13 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_GHCHASE:
-					if (rv = Copy(&i, 3))
+					if (rv = Copy(&it, 3))
 					{
 						Ghost::gh[Ghost::index].chaseAim(CAST(d[0]), CAST(d[1]), CAST(d[2]));
 					}
 					break;
 				case SCR_GHSETLIFE:
-					if (rv = Copy(&i, 2))
+					if (rv = Copy(&it, 2))
 					{
 						Ghost::gh[Ghost::index].life = CAST(d[0]);
 						Ghost::gh[Ghost::index].maxlife = CAST(d[1]);
@@ -448,7 +545,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_GHCHANGE:
-					if (rv = Copy(&i, 1))
+					if (rv = Copy(&it, 1))
 					{
 						Ghost::gh[Ghost::index].gID = CAST(d[0]);
 						Ghost::gh[Ghost::index].timer = 0;
@@ -463,18 +560,18 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_ENBUILD:
-					if(rv = Copy(&i, 11))
+					if(rv = Copy(&it, 11))
 					{
 						Enemy::Build(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]), CAST(d[9]), UCAST(d[10]));
 					}
 					break;
 				case SCR_ENACTIONSET:
-					if(rv = Copy(&i, 1))
+					if(rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
 						if(_tdi)
 						{
-							if(rv = Copy(&i, ENEMY_PARAMAX*2))
+							if(rv = Copy(&it, ENEMY_PARAMAX*2))
 							{
 								Enemy::en[Enemy::index].ac = _tdi;
 								int j=0;
@@ -496,20 +593,20 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_ENSAIM:
-					if(rv = Copy(&i, 2))
+					if(rv = Copy(&it, 2))
 					{
 						Enemy::en[Enemy::index].aim.x = CAST(d[0]);
 						Enemy::en[Enemy::index].aim.y = CAST(d[1]);
 					}
 					break;
 				case SCR_ENCHASE:
-					if (rv = Copy(&i, 3))
+					if (rv = Copy(&it, 3))
 					{
 						Enemy::en[Enemy::index].chaseAim(CAST(d[0]), CAST(d[1]), CAST(d[2]));
 					}
 					break;
 				case SCR_ENSETLIFE:
-					if (rv = Copy(&i, 2))
+					if (rv = Copy(&it, 2))
 					{
 						Enemy::en[Enemy::index].life = CAST(d[0]);
 						Enemy::en[Enemy::index].maxlife = CAST(d[1]);
@@ -520,7 +617,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_ENCHANGE:
-					if (rv = Copy(&i, 1))
+					if (rv = Copy(&it, 1))
 					{
 						Enemy::en[Enemy::index].eID = CAST(d[0]);
 						Enemy::en[Enemy::index].timer = 0;
@@ -528,7 +625,7 @@ bool Scripter::Parse(int varcount)
 					break;
 
 				case SCR_DAMAGEZONE:
-					if (rv = Copy(&i, 4))
+					if (rv = Copy(&it, 4))
 					{
 						Enemy::DamageZoneBuild(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]));
 					}
@@ -554,7 +651,7 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_RAMA:
-					if(rv = Copy(&i, 7))
+					if(rv = Copy(&it, 7))
 					{
 						int _tdi = CAST(d[6]);
 						BObject _tobj;
@@ -572,7 +669,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_DIST:
-					if (rv = Copy(&i, 5))
+					if (rv = Copy(&it, 5))
 					{
 						int _tdi = CAST(d[4]);
 						float _txo = CAST(d[0]);
@@ -584,7 +681,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_CHASEAIM:
-					if (rv = Copy(&i, 3))
+					if (rv = Copy(&it, 3))
 					{
 						int _tdi[2];
 						_tdi[0] = CAST(d[0]);
@@ -598,7 +695,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_INTER:
-					if (rv = Copy(&i, 4))
+					if (rv = Copy(&it, 4))
 					{
 						int _tdi = CAST(d[3]);
 						CFLOAT(d[_tdi].value) = INTER(CAST(d[0]), CAST(d[1]), CAST(d[2]));
@@ -614,19 +711,19 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_LOADTEXTURESET:
-					if (rv = Copy(&i, 1))
+					if (rv = Copy(&it, 1))
 					{
 						Process::mp.LoadTextureSet(CAST(d[0]));
 					}
 					break;
 				case SCR_FREETEXTURESET:
-					if (rv = Copy(&i, 1))
+					if (rv = Copy(&it, 1))
 					{
 						Process::mp.FreeTextureSet(CAST(d[0]));
 					}
 					break;
 				case SCR_ITEMBUILD:
-					if (rv = Copy(&i, 6))
+					if (rv = Copy(&it, 6))
 					{
 						Item::Build(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]));
 					}
@@ -646,7 +743,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_SPELLUP:
-					if(rv = Copy(&i, 3))
+					if(rv = Copy(&it, 3))
 					{
 						if(Process::mp.spellmode)
 						{
@@ -657,11 +754,11 @@ bool Scripter::Parse(int varcount)
 					break;
 
 				case SCR_ACONTROL:
-					if (rv = Copy(&i, 2))
+					if (rv = Copy(&it, 2))
 					{
 						int _tindex = CAST(d[0]);
 						int _tdi = CAST(d[1]);
-						if (rv = Copy(&i, _tdi))
+						if (rv = Copy(&it, _tdi))
 						{
 							if (_tindex >= 0 && _tindex < BULLETMAX)
 							{
@@ -691,7 +788,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_BCONTROL:
-					if(rv = Copy(&i, 2))
+					if(rv = Copy(&it, 2))
 					{
 						BObject * _tobj = NULL;
 						int _ttype = CAST(d[0]);
@@ -755,7 +852,7 @@ bool Scripter::Parse(int varcount)
 							}
 						}
 
-						if (rv = Copy(&i, 5))
+						if (rv = Copy(&it, 5))
 						{
 							if(_tobj)
 							{
@@ -775,7 +872,7 @@ bool Scripter::Parse(int varcount)
 					break;
 
 				case SCR_COLLISION_CIRCLE:
-					if (rv = Copy(&i, 6))
+					if (rv = Copy(&it, 6))
 					{
 						int _tdi = CAST(d[5]);
 						BObject _tobj;
@@ -786,7 +883,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_COLLISION_SQUARE:
-					if (rv = Copy(&i, 6))
+					if (rv = Copy(&it, 6))
 					{
 						int _tdi = CAST(d[5]);
 						BObject _tobj;
@@ -805,28 +902,28 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_EFFSETUP:
-					if (rv = Copy(&i, 5))
+					if (rv = Copy(&it, 5))
 					{
 						int _tdi = CAST(d[0]);
 						Effectsys::effsys[_tdi].valueSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]));
 					}
 					break;
 				case SCR_EFFSETUPEX:
-					if(rv = Copy(&i, 10))
+					if(rv = Copy(&it, 10))
 					{
 						int _tdi = CAST(d[0]);
 						Effectsys::effsys[_tdi].valueSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]), CAST(d[9]));
 					}
 					break;
 				case SCR_EFFSETUPCHASE:
-					if (rv = Copy(&i, 8))
+					if (rv = Copy(&it, 8))
 					{
 						int _tdi = CAST(d[0]);
 						Effectsys::effsys[_tdi].valueSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]));
 					}
 					break;
 				case SCR_EFFSTOP:
-					if (rv = Copy(&i, 1))
+					if (rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
 						if (Effectsys::effsys[_tdi].exist && Effectsys::effsys[_tdi].eff)
@@ -836,14 +933,14 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_EFFOFF:
-					if(rv = Copy(&i, 1))
+					if(rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
 						Effectsys::effsys[_tdi].exist = false;
 					}
 					break;
 				case SCR_EFFSET:
-					if(rv = Copy(&i, 4))
+					if(rv = Copy(&it, 4))
 					{
 						int _tdi = CAST(d[0]);
 						Effectsys::effsys[_tdi].angle = CAST(d[1]);
@@ -852,7 +949,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_EFFMOVETO:
-					if(rv = Copy(&i, 4))
+					if(rv = Copy(&it, 4))
 					{
 						int _tdi = CAST(d[0]);
 						Effectsys::effsys[_tdi].x = CAST(d[1]);
@@ -869,7 +966,7 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_SETPPOS:
-					if (rv = Copy(&i, 2))
+					if (rv = Copy(&it, 2))
 					{
 						float _tdfx = CAST(d[0]);
 						float _tdfy = CAST(d[1]);
@@ -882,7 +979,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_SETPLIFE:
-					if (rv = Copy(&i, 1))
+					if (rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
 						if (_tdi < 0)
@@ -893,7 +990,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_SETPPOWER:
-					if(rv = Copy(&i, 1))
+					if(rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
 						if (_tdi < 0)
@@ -904,7 +1001,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_SETPFAITH:
-					if (rv = Copy(&i, 1))
+					if (rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
 						if (_tdi < 0)
@@ -915,7 +1012,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_SETPPOINT:
-					if (rv = Copy(&i, 1))
+					if (rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
 						if (_tdi < 0)
@@ -926,7 +1023,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_SETPBBORDER:
-					if (rv = Copy(&i, 1))
+					if (rv = Copy(&it, 1))
 					{
 						if ((bool)(CAST(d[0])) ^ Player::p.bBorder)
 						{
@@ -935,7 +1032,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_SETPBSLOW:
-					if (rv = Copy(&i, 1))
+					if (rv = Copy(&it, 1))
 					{
 						Player::p.callSlowFastChange((bool)(CAST(d[0])));
 					}
@@ -947,19 +1044,19 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_SETPSPEED:
-					if (rv = Copy(&i, 1))
+					if (rv = Copy(&it, 1))
 					{
 						Player::p.speed = CAST(d[0]);
 					}
 					break;
 				case SCR_SETPSLOWSPEED:
-					if (rv = Copy(&i, 1))
+					if (rv = Copy(&it, 1))
 					{
 						Player::p.slowspeed = CAST(d[0]);
 					}
 					break;
 				case SCR_SETPSPEEDFACTOR:
-					if (rv = Copy(&i, 1))
+					if (rv = Copy(&it, 1))
 					{
 						Player::p.speedfactor = CAST(d[0]);
 					}
@@ -973,13 +1070,13 @@ bool Scripter::Parse(int varcount)
 					break;
 
 				case SCR_SHOOTPB:
-					if (rv = Copy(&i, 1))
+					if (rv = Copy(&it, 1))
 					{
 						PlayerBullet::Build(CAST(d[0]));
 					}
 					break;
 				case SCR_BONUSFLAG:
-					if (rv = Copy(&i, 1))
+					if (rv = Copy(&it, 1))
 					{
 						Player::p.bonusflag = CAST(d[0]);
 					}
@@ -993,84 +1090,84 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_BGVALUE:
-					if(rv = Copy(&i, 7))
+					if(rv = Copy(&it, 7))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].valueSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), UCAST(d[6]));
 					}
 					break;
 				case SCR_BGVALEX:
-					if (rv = Copy(&i, 16))
+					if (rv = Copy(&it, 16))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].valueSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]), CAST(d[9]), CAST(d[10]), CAST(d[11]), CAST(d[12]), (bool)(CAST(d[13])), (bool)(CAST(d[14])), UCAST(d[15]));
 					}
 					break;
 				case SCR_BGTEXRECT:
-					if(rv = Copy(&i, 5))
+					if(rv = Copy(&it, 5))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].texRectSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]));
 					}
 					break;
 				case SCR_BGRECT:
-					if(rv = Copy(&i, 9))
+					if(rv = Copy(&it, 9))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].rectSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]));
 					}
 					break;
 				case SCR_BGZ:
-					if(rv = Copy(&i, 5))
+					if(rv = Copy(&it, 5))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].zSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]));
 					}
 					break;
 				case SCR_BGSCALE:
-					if(rv = Copy(&i, 3))
+					if(rv = Copy(&it, 3))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].scaleSet(CAST(d[1]), CAST(d[2]));
 					}
 					break;
 				case SCR_BGCOLOR:
-					if(rv = Copy(&i, 5))
+					if(rv = Copy(&it, 5))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].colorSet(UCAST(d[1]), UCAST(d[2]), UCAST(d[3]), UCAST(d[4]));
 					}
 					break;
 				case SCR_BGMOVE:
-					if(rv = Copy(&i, 6))
+					if(rv = Copy(&it, 6))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].moveSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), (bool)(CAST(d[4])), (bool)(CAST(d[5])));
 					}
 					break;
 				case SCR_BGFLAG:
-					if(rv = Copy(&i, 3))
+					if(rv = Copy(&it, 3))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].SetFlag(CAST(d[1]), CAST(d[2]));
 					}
 					break;
 				case SCR_BGPARAL:
-					if(rv = Copy(&i, 2))
+					if(rv = Copy(&it, 2))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].parallelogram(CAST(d[1]));
 					}
 					break;
 				case SCR_BG4V:
-					if (rv = Copy(&i, 13))
+					if (rv = Copy(&it, 13))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].vertexSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]), CAST(d[9]), CAST(d[10]), CAST(d[11]), CAST(d[12]));
 					}
 					break;
 				case SCR_BGOFF:
-					if(rv = Copy(&i, 1))
+					if(rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
 						if (_tdi == -1)
@@ -1084,14 +1181,14 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_BGBLEND:
-					if (rv = Copy(&i, 2))
+					if (rv = Copy(&it, 2))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].SetBlend(CAST(d[1]));
 					}
 					break;
 				case SCR_BGSETUP:
-					if(rv = Copy(&i, 4))
+					if(rv = Copy(&it, 4))
 					{
 						int _tdi = CAST(d[0]);
 						if(CAST(d[2]) || BGLayer::bglayerset[_tdi].sID == BGLAYERSET_NONE)
@@ -1134,7 +1231,7 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_SELBUILD:
-					if(rv = Copy(&i, 16))
+					if(rv = Copy(&it, 16))
 					{
 						Selector::Build(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]),
 							CAST(d[7]), CAST(d[8]),
@@ -1149,7 +1246,7 @@ bool Scripter::Parse(int varcount)
 					rv = true;
 					break;
 				case SCR_SELCONFIRM:
-					if(rv = Copy(&i, 4))
+					if(rv = Copy(&it, 4))
 					{
 						int _tdi = CAST(d[3]);
 						CINT(d[_tdi].value) = Selector::confirm(CAST(d[0]), CAST(d[1]), CAST(d[2]));
@@ -1157,14 +1254,14 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_SELSET:
-					if(rv = Copy(&i, 7))
+					if(rv = Copy(&it, 7))
 					{
 						Selector::Setup(CAST(d[0]), CAST(d[1]), (bool)CAST(d[2]));
 						Selector::SetPageNum(CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]));
 					}
 					break;
 				case SCR_SELFLAG:
-					if (rv = Copy(&i, 2))
+					if (rv = Copy(&it, 2))
 					{
 						Selector * _sel = Selector::GetPointer(CAST(d[0]));
                         if (_sel)
@@ -1175,7 +1272,7 @@ bool Scripter::Parse(int varcount)
 					break;
 
 				case SCR_ISELBUILD:
-					if(rv = Copy(&i, 6))
+					if(rv = Copy(&it, 6))
 					{
 						InfoSelect::Build(CAST(d[0]), GetStringSp(1), CAST(d[2]), CAST(d[3]), CAST(d[4]), (CAST(d[5])));
 					}
@@ -1185,14 +1282,14 @@ bool Scripter::Parse(int varcount)
 					rv = true;
 					break;
 				case SCR_ISELSET:
-					if(rv = Copy(&i, 7))
+					if(rv = Copy(&it, 7))
 					{
 						InfoSelect::Setup(CAST(d[0]), CAST(d[1]), (bool)CAST(d[2]));
 						InfoSelect::SetPageNum(CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]));
 					}
 					break;
 				case SCR_ISELFLAG:
-					if (rv = Copy(&i, 2))
+					if (rv = Copy(&it, 2))
 					{
 						InfoSelect * _tifs = InfoSelect::GetPointer(CAST(d[0]));
 						if (_tifs)
@@ -1202,7 +1299,7 @@ bool Scripter::Parse(int varcount)
 					}
 					break;
 				case SCR_ISELCOLOR:
-					if (rv = Copy(&i, 2))
+					if (rv = Copy(&it, 2))
 					{
 						InfoSelect * _tifs = InfoSelect::GetPointer(CAST(d[0]));
 						if (_tifs)
@@ -1222,34 +1319,34 @@ bool Scripter::Parse(int varcount)
 			{
 			case SCR_IF:
 nest:
-				if(rv = Copy(&i, 1))
+				if(rv = Copy(&it, 1))
 				{
 					if(!CAST(d[0]))
 					{
 						while(true)
 						{
-							++i;
-							if(i->type & SCR_TOKEN_COMMAND && i->value == SCR_THEN)
+							++it;
+							if(it->type & SCR_TOKEN_COMMAND && it->value == SCR_THEN)
 								depth++;
-							if(i->type & SCR_TOKEN_COMMAND && i->value == SCR_END)
+							if(it->type & SCR_TOKEN_COMMAND && it->value == SCR_END)
 							{
 								depth--;
 								if(!depth)
 									break;
 							}
 						}
-						++i;
-						if(i!=pnow->end())
+						++it;
+						if(it!=pnow->end())
 						{
-							if(i->type & SCR_TOKEN_COMMAND && i->value == SCR_ELSE)
+							if(it->type & SCR_TOKEN_COMMAND && it->value == SCR_ELSE)
 								continue;
-							else if(i->type & SCR_TOKEN_COMMAND && i->value == SCR_ELSEIF)
+							else if(it->type & SCR_TOKEN_COMMAND && it->value == SCR_ELSEIF)
 								goto nest;
 							else
-								--i;
+								--it;
 						}
 						else
-							--i;
+							--it;
 					}
 				}
 				break;
@@ -1259,10 +1356,10 @@ nest:
 				{
 					while(true)
 					{
-						++i;
-						if(i->type & SCR_TOKEN_COMMAND && i->value == SCR_THEN)
+						++it;
+						if(it->type & SCR_TOKEN_COMMAND && it->value == SCR_THEN)
 							depth++;
-						if(i->type & SCR_TOKEN_COMMAND && i->value == SCR_END)
+						if(it->type & SCR_TOKEN_COMMAND && it->value == SCR_END)
 						{
 							depth--;
 							if(!depth)
@@ -1277,21 +1374,21 @@ nest:
 				continue;
 
 			case SCR_LOOP:
-				if(rv = Copy(&i, 1))
+				if(rv = Copy(&it, 1))
 				{
 					vector<Script> _while;
 					while(true)
 					{
-						++i;
-						if(i->type & SCR_TOKEN_COMMAND && i->value == SCR_THEN)
+						++it;
+						if(it->type & SCR_TOKEN_COMMAND && it->value == SCR_THEN)
 							depth++;
-						else if(i->type & SCR_TOKEN_COMMAND && i->value == SCR_END)
+						else if(it->type & SCR_TOKEN_COMMAND && it->value == SCR_END)
 						{
 							depth--;
 							if(!depth)
 								break;
 						}
-						_while.push_back(*i);
+						_while.push_back(*it);
 					}
 					vector<Script> * psaved = pnow;
 					pnow = &_while;
@@ -1312,14 +1409,14 @@ nest:
 				break;
 
 			case SCR_CHATON:
-				if(rv = Copy(&i, 1))
+				if(rv = Copy(&it, 1))
 				{
 					int _tdi = CAST(d[0]);
 					if(_tdi < 0 || _tdi > PLAYERTYPEMAX || Player::p.HavePlayer(_tdi))
 					{
 						if(!Chat::chatitem.chati)
 						{
-							if(rv = Copy(&i, 3))
+							if(rv = Copy(&it, 3))
 							{
 								if(Chat::chatitem.chatOn(CAST(d[0]), CAST(d[1]), CAST(d[2])))
 									Chat::chatitem.chati++;
@@ -1335,12 +1432,12 @@ nest:
 							}
 							for(int j=0;j<Chat::chatitem.chati;j++)
 							{
-								++i;
-								++i;
-								++i;
+								++it;
+								++it;
+								++it;
 							}
-							++i;
-							if(i->type & SCR_TOKEN_COMMAND && i->value == SCR_CHATOFF)
+							++it;
+							if(it->type & SCR_TOKEN_COMMAND && it->value == SCR_CHATOFF)
 							{
 								if(Chat::chatitem.chatOff())
 									Chat::chatitem.chati = 0xff;
@@ -1348,8 +1445,8 @@ nest:
 							}
 							else
 							{
-								--i;
-								if(rv = Copy(&i, 3))
+								--it;
+								if(rv = Copy(&it, 3))
 								{
 									if(Chat::chatitem.chat(CAST(d[0]), CAST(d[1]), GetStringSp(2)))
 										Chat::chatitem.chati++;
@@ -1363,8 +1460,8 @@ nest:
 chatout:
 						while(true)
 						{
-							++i;
-							if(i->type & SCR_TOKEN_COMMAND && i->value == SCR_CHATOFF)
+							++it;
+							if(it->type & SCR_TOKEN_COMMAND && it->value == SCR_CHATOFF)
 							{
 								rv = true;
 								break;
@@ -1384,7 +1481,7 @@ chatout:
 			switch (nowval)
 			{
 			case SCR_DATAGET:
-				if (rv = Copy(&i, 4))
+				if (rv = Copy(&it, 4))
 				{
 					int _tdi = CAST(d[3]);
 					CINT(d[_tdi].value) = Data::data.iRead(DATA_BINFILE, UCAST(d[0]), UCAST(d[1]), CAST(d[2]));
@@ -1392,7 +1489,7 @@ chatout:
 				}
 				break;
 			case SCR_DATAGETf:
-				if (rv = Copy(&i, 4))
+				if (rv = Copy(&it, 4))
 				{
 					int _tdi = CAST(d[4]);
 					CFLOAT(d[_tdi].value) = Data::data.fRead(DATA_BINFILE, UCAST(d[0]), UCAST(d[1]), CAST(d[2]));
@@ -1400,19 +1497,19 @@ chatout:
 				}
 				break;
 			case SCR_DATASET:
-				if (rv = Copy(&i, 3))
+				if (rv = Copy(&it, 3))
 				{
 					Data::data.iWrite(DATA_BINFILE, UCAST(d[0]), UCAST(d[1]), CAST(d[2]));
 				}
 				break;
 			case SCR_DATASETf:
-				if (rv = Copy(&i, 3))
+				if (rv = Copy(&it, 3))
 				{
 					Data::data.fWrite(DATA_BINFILE, UCAST(d[0]), UCAST(d[1]), CAST(d[2]));
 				}
 				break;
 			case SCR_SETFLAG:
-				if (rv = Copy(&i, 2))
+				if (rv = Copy(&it, 2))
 				{
 					Data::data.iWrite(DATA_BINFILE, DATAS_FLAG, UCAST(d[0]), CAST(d[1]));
 				}
@@ -1440,7 +1537,7 @@ chatout:
 		if(!rv)
 		{
 #ifdef __DEBUG
-			HGELOG("%s\nError in parsing %d.", HGELOG_ERRSTR, i->value);
+			HGELOG("%s\nError in parsing %d.", HGELOG_ERRSTR, it->value);
 			LogOut();
 #endif
 			return false;

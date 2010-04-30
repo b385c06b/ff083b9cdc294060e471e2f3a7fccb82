@@ -356,7 +356,7 @@ bool _DataTable::EnemyDefineFile()
 bool _DataTable::PlayerDefineFile()
 {
 	ZeroMemory(BResource::res.playerdata, RSIZE_PLAYER);
-	_READSTRINGBUFFERLINE(18);
+	_READSTRINGBUFFERLINE(19);
 	while (!feof(file))
 	{
 		_INITTINT;
@@ -365,7 +365,7 @@ bool _DataTable::PlayerDefineFile()
 		playerData * item = &(BResource::res.playerdata[tindex]);
 		_CHECKEOF_DATATABLE;
 
-		fscanf(file, "%f%f%f%f%d%d%d%d%s%d%d%d%d%d%d\t%[^\r\n]", 
+		fscanf(file, "%f%f%f%f%d%d%d%d%s%d%d%d%d%d%d%d\t%[^\r\n]", 
 			&(item->collision_r), 
 			&(item->fastspeed), 
 			&(item->slowspeed), 
@@ -381,6 +381,7 @@ bool _DataTable::PlayerDefineFile()
 			_SAVETINT, 
 			_SAVETINT, 
 			_SAVETINT, 
+			_SAVETINT, 
 			(item->name));
 
 		_DOSWAPTINT;
@@ -389,6 +390,7 @@ bool _DataTable::PlayerDefineFile()
 		item->borderlast = _LOADTINT;
 		item->bomblast = _LOADTINT;
 		item->siid = SpriteItemManager::GetIndexByName(strbuffer[0]);
+		item->eid = _LOADTINT;
 		item->faceIndex = _LOADTINT;
 		item->standFrame = _LOADTINT;
 		item->leftPreFrame = _LOADTINT;

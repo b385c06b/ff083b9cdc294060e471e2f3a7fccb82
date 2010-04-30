@@ -66,6 +66,7 @@ public:
 	static void Action();
 	static void AddLostStack();
 
+	void SetID(WORD ID, WORD ID_sub_1, WORD ID_sub_2);
 	void valueSet(WORD ID, WORD ID_sub_1, WORD ID_sub_2, BYTE nLife=PL_DEFAULTNPLAYER, bool bContinue = false);
 	void ClearSet();
 	void UpdatePlayerData();

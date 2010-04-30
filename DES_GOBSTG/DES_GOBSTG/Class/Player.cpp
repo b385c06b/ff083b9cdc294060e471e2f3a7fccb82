@@ -501,12 +501,17 @@ void Player::AddLostStack()
 	lostStack += lost;
 }
 
+void Player::SetID(WORD _ID, WORD _ID_sub_1, WORD _ID_sub_2)
+{
+	ID = _ID;
+	ID_sub_1 = _ID_sub_1;
+	ID_sub_2 = _ID_sub_2;
+	nowID = ID;
+}
+
 void Player::valueSet(WORD _ID, WORD _ID_sub_1, WORD _ID_sub_2, BYTE _nLife, bool bContinue)
 {
-	ID			=	_ID;
-	ID_sub_1	= _ID_sub_1;
-	ID_sub_2	= _ID_sub_2;
-	nowID		= ID;
+	SetID(_ID, _ID_sub_1, _ID_sub_2);
 	ClearSet();
 	initFrameIndex();
 	UpdatePlayerData();

@@ -56,53 +56,58 @@ Comment	CustomConst	Name	Value
 -	56	LayerBomb	1
 -	57	BGLayerSplit	6
 -	58	FGLayerSplit	2
--	60	FLAG_PlayerUseable_01	0
--	61	FLAG_PlayerUseable_02	1
--	62	FLAG_PlayerUseable_03	2
--	63	FLAG_PlayerUseable_04	3
--	64	FLAG_PlayerUseable_05	4
--	65	FLAG_PlayerUseable_06	5
--	66	FLAG_PlayerUseable_07	6
--	67	FLAG_PlayerUseable_08	7
--	68	FLAG_PlayerUseable_09	8
--	69	FLAG_PlayerUseable_10	9
--	70	FLAG_PlayerUseable_11	10
--	71	FLAG_PlayerUseable_12	11
--	72	FLAG_PlayerUseable_13	12
--	73	FLAG_PlayerUseable_14	13
--	74	FLAG_PlayerUseable_15	14
--	75	FLAG_PlayerUseable_16	15
--	76	FLAG_PlayerUseable_17	16
--	77	FLAG_PlayerUseable_18	17
--	78	FLAG_PlayerUseable_19	18
--	79	FLAG_PlayerUseable_20	19
--	80	FLAG_PlayerUseable_21	20
--	81	FLAG_PlayerUseable_22	21
--	82	FLAG_PlayerUseable_23	22
--	83	FLAG_StageTried_01	23
--	84	FLAG_StageTried_02	24
--	85	FLAG_StageTried_03	25
--	86	FLAG_StageTried_04	26
--	87	FLAG_StageTried_05	27
--	88	FLAG_StageTried_06	28
--	89	FLAG_StageTried_07	29
--	90	FLAG_StageTried_08	30
--	91	FLAG_StageTried_09	31
--	92	FLAG_StageTried_10	32
--	93	FLAG_StageTried_11	33
--	94	FLAG_StageTried_12	34
--	95	FLAG_StageTried_13	35
--	96	FLAG_StageTried_14	36
--	97	FLAG_StageTried_15	37
--	98	FLAG_StageTried_16	38
--	99	FLAG_StageTried_17	39
--	100	FLAG_StageTried_18	40
--	101	FLAG_StageTried_19	41
--	102	FLAG_StageTried_20	42
--	103	FLAG_StageTried_21	43
--	104	FLAG_StageTried_22	44
--	105	FLAG_StageTried_23	45
--	106	FLAG_StageTried_24	46
+#		Other	
+-	75	PlayerMax	22
+-	76	BossMax	35
+#		Flag	
+-	100	FLAG_PlayerUseable_01	0
+-	101	FLAG_PlayerUseable_02	1
+-	102	FLAG_PlayerUseable_03	2
+-	103	FLAG_PlayerUseable_04	3
+-	104	FLAG_PlayerUseable_05	4
+-	105	FLAG_PlayerUseable_06	5
+-	106	FLAG_PlayerUseable_07	6
+-	107	FLAG_PlayerUseable_08	7
+-	108	FLAG_PlayerUseable_09	8
+-	109	FLAG_PlayerUseable_10	9
+-	110	FLAG_PlayerUseable_11	10
+-	111	FLAG_PlayerUseable_12	11
+-	112	FLAG_PlayerUseable_13	12
+-	113	FLAG_PlayerUseable_14	13
+-	114	FLAG_PlayerUseable_15	14
+-	115	FLAG_PlayerUseable_16	15
+-	116	FLAG_PlayerUseable_17	16
+-	117	FLAG_PlayerUseable_18	17
+-	118	FLAG_PlayerUseable_19	18
+-	119	FLAG_PlayerUseable_20	19
+-	120	FLAG_PlayerUseable_21	20
+-	121	FLAG_PlayerUseable_22	21
+-	122	FLAG_PlayerUseable_23	22
+-	123	FLAG_StageTried_01	23
+-	124	FLAG_StageTried_02	24
+-	125	FLAG_StageTried_03	25
+-	126	FLAG_StageTried_04	26
+-	127	FLAG_StageTried_05	27
+-	128	FLAG_StageTried_06	28
+-	129	FLAG_StageTried_07	29
+-	130	FLAG_StageTried_08	30
+-	131	FLAG_StageTried_09	31
+-	132	FLAG_StageTried_10	32
+-	133	FLAG_StageTried_11	33
+-	134	FLAG_StageTried_12	34
+-	135	FLAG_StageTried_13	35
+-	136	FLAG_StageTried_14	36
+-	137	FLAG_StageTried_15	37
+-	138	FLAG_StageTried_16	38
+-	139	FLAG_StageTried_17	39
+-	140	FLAG_StageTried_18	40
+-	141	FLAG_StageTried_19	41
+-	142	FLAG_StageTried_20	42
+-	143	FLAG_StageTried_21	43
+-	144	FLAG_StageTried_22	44
+-	145	FLAG_StageTried_23	45
+-	146	FLAG_StageTried_24	46
+#		Event_PlayerBomb	
 -	160	Event_PlayerBomb_01	4000
 -	161	Event_PlayerBomb_02	4001
 -	162	Event_PlayerBomb_03	4002
@@ -126,8 +131,10 @@ Comment	CustomConst	Name	Value
 -	180	Event_PlayerBomb_21	4020
 -	181	Event_PlayerBomb_22	4021
 -	182	Event_PlayerBomb_23	4022
+#		Bomb	
 -	208	EffectSet_BombBegin	128
 -	209	Target_BombBegin	60
+#		PlayerID	
 -	300	PlayerID_01	0
 -	301	PlayerID_02	1
 -	302	PlayerID_03	2
@@ -150,6 +157,7 @@ Comment	CustomConst	Name	Value
 -	319	PlayerID_20	19
 -	320	PlayerID_21	20
 -	321	PlayerID_22	21
+#		EnemyID	
 -	350	EnemyID_01	20
 -	351	EnemyID_02	21
 -	352	EnemyID_03	22
@@ -185,6 +193,7 @@ Comment	CustomConst	Name	Value
 -	382	EnemyID_33	52
 -	383	EnemyID_34	53
 -	384	EnemyID_35	54
+#		Music	
 -	400	MusicEID_01	1
 -	401	MusicEID_02	2
 -	402	MusicEID_03	3
@@ -224,12 +233,16 @@ Comment	CustomConst	Name	Value
 -	436	MusicOP	35
 -	437	MusicED	36
 -	438	MusicStaff	37
+#		SE	
 -	448	SE_PlayerBomb_01	64
 -	449	SE_PlayerBomb_04b	86
 -	450	SE_Bullet_1	90
 -	451	SE_Bullet_2	91
 -	452	SE_Ghost_Merge	45
+#		Global	
 -	480	GlobalValue_Chat	143
+#		EventBullet	
 -	512	Event_Bullet_0130	400
 -	513	Event_Bullet_0240	401
+#		IzeEvent	
 -	600	IzeEvent_8221	60

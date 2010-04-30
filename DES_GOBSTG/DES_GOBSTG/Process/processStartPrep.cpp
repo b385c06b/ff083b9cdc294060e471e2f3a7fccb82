@@ -41,11 +41,8 @@ void Process::startPrep(bool callinit)
 			*/
 		seed = Replay::rpy.partinfo[part].seed;
 		scene = Replay::rpy.partinfo[part].scene;
-		mainchara = Replay::rpy.rpyinfo.usingchara[0];
-		subchara_1 = Replay::rpy.rpyinfo.usingchara[1];
-		subchara_2 = Replay::rpy.rpyinfo.usingchara[2];
-		spellmode = Replay::rpy.rpyinfo.modeflag & M_RPYMODE_SPELL;
-		practicemode = (bool)(Replay::rpy.rpyinfo.modeflag & M_RPYMODE_PRACTICE);
+		SetChara(Replay::rpy.rpyinfo.usingchara[0], Replay::rpy.rpyinfo.usingchara[1], Replay::rpy.rpyinfo.usingchara[2]);
+		SetMode(Replay::rpy.rpyinfo.modeflag);
 
 		Replay::rpy.replayIndex = Replay::rpy.partinfo[part].offset - 1;
 	}
