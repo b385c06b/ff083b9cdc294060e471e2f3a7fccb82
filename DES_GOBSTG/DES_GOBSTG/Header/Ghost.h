@@ -34,6 +34,11 @@ public:
 	void actionInStop();
 	void Render();
 
+	void SetAim(float aimx, float aimy);
+	void SetValue(int angle, float speed, int ac);
+	void SetLife(float life, float maxlife);
+	void ChangeGID(WORD gID);
+
 public:
 
 	Effectsys effghost;

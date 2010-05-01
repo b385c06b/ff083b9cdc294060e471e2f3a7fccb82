@@ -317,58 +317,82 @@ bool Scripter::Parse(int varcount)
 				break;
 
 			case SCR_STOPACTION:
+				rv = _Parser::STOPACTION_();
+/*
 				if (rv = Copy(&it, 2))
 				{
 					Process::mp.SetStop(CAST(d[0]), CAST(d[1]));
-				}
+				}*/
+
 				break;
 			case SCR_SETFRAMESKIP:
+				rv = _Parser::SETFRAMESKIP_();
+/*
 				if (rv = Copy(&it, 1))
 				{
 					Process::mp.frameskip = CAST(d[0]);
-				}
+				}*/
+
 				break;
 
 			case SCR_MUSICCHANGE:
+				rv = _Parser::MUSICCHANGE_();
+/*
 				if(rv = Copy(&it, 2))
 				{
 					Process::mp.musicChange(CAST(d[0]), (bool)(CAST(d[1])));
-				}
+				}*/
+
 				break;
 			case SCR_MUSICSLIDE:
+				rv = _Parser::MUSICSLIDE_();
+/*
 				if (rv = Copy(&it, 4))
 				{
 					Process::mp.musicSlide(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]));
-				}
+				}*/
+
 				break;
 
 			case SCR_SE:
+				rv = _Parser::SE_();
+/*
 				if(rv = Copy(&it, 2))
 				{
 					SE::push(CAST(d[0]), CAST(d[1]));
-				}
+				}*/
+
 				break;
 			case SCR_SEOFF:
+				rv = _Parser::SEOFF_();
+/*
 				if (rv = Copy(&it, 1))
 				{
 					SE::stop(CAST(d[0]));
-				}
+				}*/
+
 				break;
 
 			case SCR_HSVTORGB:
+				rv = _Parser::HSVTORGB_();
+/*
 				if (rv = Copy(&it, 5))
 				{
 					hgeColorHSV _hsv(CAST(d[0]) / 255.0f, CAST(d[1]) / 255.0f, CAST(d[2]) / 255.0f, CAST(d[3]) / 255.0f);
 					int _tdi = CAST(d[4]);
 					CINT(d[_tdi].value) = _hsv.GetHWColor();
-				}
+				}*/
+
 				break;
 
 			case SCR_SETSHAKE:
+				rv = _Parser::SETSHAKE_();
+/*
 				if (rv = Copy(&it, 2))
 				{
 					Process::mp.SetShake(CAST(d[0]), CAST(d[1]));
-				}
+				}*/
+
 				break;
 			}
 			break;
@@ -385,12 +409,17 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_BUBUILD:
+					rv = _Parser::B_();
+/*
 					if(rv = Copy(&it, 9))
 					{
 						Bullet::Build(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]));
-					}
+					}*/
+
 					break;
 				case SCR_BUACTIONSET:
+					rv = _Parser::A_();
+/*
 					if(rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
@@ -406,21 +435,30 @@ bool Scripter::Parse(int varcount)
 							}
 							Bullet::_bu.actionList[_tdi] = SECTIONEND;
 						}
-					}
+					}*/
+
 					break;
 				case SCR_BUBUILDCIRCLE:
+					rv = _Parser::BC_();
+/*
 					if (rv = Copy(&it, 10))
 					{
 						Bullet::BuildCircle(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]), CAST(d[9]));
-					}
+					}*/
+
 					break;
 				case SCR_BUBUILDLINE:
+					rv = _Parser::BL_();
+/*
 					if (rv = Copy(&it, 14))
 					{
 						Bullet::BuildLine(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]), CAST(d[9]), CAST(d[10]), CAST(d[11]), CAST(d[12]), CAST(d[13]));
-					}
+					}*/
+
 					break;
 				case SCR_BUDECANCEL:
+					rv = _Parser::BUDECANCEL_();
+/*
 					if (rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
@@ -431,24 +469,31 @@ bool Scripter::Parse(int varcount)
 								(*Bullet::bu).cancelable = false;
 							}
 						}
-						break;
+					}*/
 
-					}
 					break;
 				case SCR_IZEZONE:
+					rv = _Parser::IZEZONE_();
+/*
 					if (rv = Copy(&it, 6))
 					{
 						Bullet::IzeBuild(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]));
-					}
+					}*/
+
 					break;
 
 				case SCR_BEBUILD:
+					rv = _Parser::BEB_();
+/*
 					if(rv = Copy(&it, 12))
 					{
 						Beam::Build(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), (CAST(d[7])), CAST(d[8]), CAST(d[9]), CAST(d[10]), CAST(d[11]));
-					}
+					}*/
+
 					break;
 				case SCR_BEVECTOR:
+					rv = _Parser::BEVECTOR_();
+/*
 					if (rv = Copy(&it, 5))
 					{
 						int _tdi = CAST(d[0]);
@@ -462,9 +507,12 @@ bool Scripter::Parse(int varcount)
 								}
 							}
 						}
-					}
+					}*/
+
 					break;
 				case SCR_BEHOLD:
+					rv = _Parser::BEHOLD_();
+/*
 					if (rv = Copy(&it, 4))
 					{
 						int _tdi = CAST(d[0]);
@@ -479,9 +527,12 @@ bool Scripter::Parse(int varcount)
 								}
 							}
 						}
-					}
+					}*/
+
 					break;
 				case SCR_BEPIN:
+					rv = _Parser::BEPIN_();
+/*
 					if (rv = Copy(&it, 4))
 					{
 						int _tdi = CAST(d[0]);
@@ -491,12 +542,13 @@ bool Scripter::Parse(int varcount)
 							{
 								if ((*Beam::be).able)
 								{
-									(*Beam::be).SetHold(CAST(d[1]), CAST(d[2]), CAST(d[3]));
+									(*Beam::be).SetHoldPin(CAST(d[1]), CAST(d[2]), CAST(d[3]));
 								}
 							
 							}
 						}
-					}
+					}*/
+
 					break;
 				}
 				break;
@@ -507,33 +559,47 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_GHBUILD:
+					rv = _Parser::GB_();
+/*
 					if(rv = Copy(&it, 10))
 					{
 						Ghost::Build(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]), CAST(d[9]));
-					}
+					}*/
+
 					break;
 				case SCR_GHSAIM:
+					rv = _Parser::GHSAIM_();
+/*
 					if(rv = Copy(&it, 2))
 					{
 						Ghost::gh[Ghost::index].aim.x = CAST(d[0]);
 						Ghost::gh[Ghost::index].aim.y = CAST(d[1]);
-					}
+					}*/
+
 					break;
 				case SCR_GHSET:
+					rv = _Parser::GHSET_();
+/*
 					if(rv = Copy(&it, 3))
 					{
 						Ghost::gh[Ghost::index].angle = CAST(d[0]);
 						Ghost::gh[Ghost::index].speed = CAST(d[1]);
 						Ghost::gh[Ghost::index].ac = CAST(d[2]);
-					}
+					}*/
+
 					break;
 				case SCR_GHCHASE:
+					rv = _Parser::GHCHASE_();
+/*
 					if (rv = Copy(&it, 3))
 					{
 						Ghost::gh[Ghost::index].chaseAim(CAST(d[0]), CAST(d[1]), CAST(d[2]));
-					}
+					}*/
+
 					break;
 				case SCR_GHSETLIFE:
+					rv = _Parser::GHSETLIFE_();
+/*
 					if (rv = Copy(&it, 2))
 					{
 						Ghost::gh[Ghost::index].life = CAST(d[0]);
@@ -542,14 +608,18 @@ bool Scripter::Parse(int varcount)
 						{
 							Ghost::gh[Ghost::index].maxlife = Ghost::gh[Ghost::index].life;
 						}
-					}
+					}*/
+
 					break;
 				case SCR_GHCHANGE:
+					rv = _Parser::GHCHANGE_();
+/*
 					if (rv = Copy(&it, 1))
 					{
 						Ghost::gh[Ghost::index].gID = CAST(d[0]);
 						Ghost::gh[Ghost::index].timer = 0;
-					}
+					}*/
+
 					break;
 				}
 				break;
@@ -560,12 +630,17 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_ENBUILD:
+					rv = _Parser::EB_();
+/*
 					if(rv = Copy(&it, 11))
 					{
 						Enemy::Build(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]), CAST(d[9]), UCAST(d[10]));
-					}
+					}*/
+
 					break;
 				case SCR_ENACTIONSET:
+					rv = _Parser::EA_();
+/*
 					if(rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
@@ -590,22 +665,31 @@ bool Scripter::Parse(int varcount)
 						{
 							Enemy::en[Enemy::index].ac = ENAC_NONE;
 						}
-					}
+					}*/
+
 					break;
 				case SCR_ENSAIM:
+					rv = _Parser::ENSAIM_();
+/*
 					if(rv = Copy(&it, 2))
 					{
 						Enemy::en[Enemy::index].aim.x = CAST(d[0]);
 						Enemy::en[Enemy::index].aim.y = CAST(d[1]);
-					}
+					}*/
+
 					break;
 				case SCR_ENCHASE:
+					rv = _Parser::ENCHASE_();
+/*
 					if (rv = Copy(&it, 3))
 					{
 						Enemy::en[Enemy::index].chaseAim(CAST(d[0]), CAST(d[1]), CAST(d[2]));
-					}
+					}*/
+
 					break;
 				case SCR_ENSETLIFE:
+					rv = _Parser::ENSETLIFE_();
+/*
 					if (rv = Copy(&it, 2))
 					{
 						Enemy::en[Enemy::index].life = CAST(d[0]);
@@ -614,33 +698,46 @@ bool Scripter::Parse(int varcount)
 						{
 							Enemy::en[Enemy::index].maxlife = Enemy::en[Enemy::index].life;
 						}
-					}
+					}*/
+
 					break;
 				case SCR_ENCHANGE:
+					rv = _Parser::ENCHANGE_();
+/*
 					if (rv = Copy(&it, 1))
 					{
 						Enemy::en[Enemy::index].eID = CAST(d[0]);
 						Enemy::en[Enemy::index].timer = 0;
-					}
+					}*/
+
 					break;
 
 				case SCR_DAMAGEZONE:
+					rv = _Parser::DAMAGEZONE_();
+/*
 					if (rv = Copy(&it, 4))
 					{
 						Enemy::DamageZoneBuild(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]));
-					}
+					}*/
+
 					break;
 				case SCR_BOSSSTORE:
+					rv = _Parser::BOSSSTORE_();
+/*
 					if (rv = true)
 					{
 						Enemy::bossflag[Enemy::index] = BOSS_STORE;
-					}
+					}*/
+
 					break;
 				case SCR_BOSSATTACK:
+					rv = _Parser::BOSSATTACK_();
+/*
 					if (rv = true)
 					{
 						Enemy::bossflag[Enemy::index] = BOSS_ATTACK;
-					}
+					}*/
+
 					break;
 				}
 				break;
@@ -651,6 +748,8 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_RAMA:
+					rv = _Parser::RAMA_();
+/*
 					if(rv = Copy(&it, 7))
 					{
 						int _tdi = CAST(d[6]);
@@ -666,9 +765,12 @@ bool Scripter::Parse(int varcount)
 							CINT(d[_tdi].value) = _tobj.aMainAngle(CAST(d[3]), CAST(d[4]), CAST(d[5]));
 						}
 						d[_tdi].bfloat = false;
-					}
+					}*/
+
 					break;
 				case SCR_DIST:
+					rv = _Parser::DIST_();
+/*
 					if (rv = Copy(&it, 5))
 					{
 						int _tdi = CAST(d[4]);
@@ -678,9 +780,12 @@ bool Scripter::Parse(int varcount)
 						float _tya = CAST(d[3]);
 						CFLOAT(d[_tdi].value) = DIST(_txo, _tyo, _txa, _tya);
 						d[_tdi].bfloat = true;
-					}
+					}*/
+
 					break;
 				case SCR_CHASEAIM:
+					rv = _Parser::CHASEAIM_();
+/*
 					if (rv = Copy(&it, 3))
 					{
 						int _tdi[2];
@@ -692,15 +797,19 @@ bool Scripter::Parse(int varcount)
 						_obj.x += cost(_obj.angle) * _obj.speed;
 						_obj.y += sint(_obj.angle) * _obj.speed;
 						Target::SetValue(_tdi[0], _obj.x, _obj.y);
-					}
+					}*/
+
 					break;
 				case SCR_INTER:
+					rv = _Parser::INTER_();
+/*
 					if (rv = Copy(&it, 4))
 					{
 						int _tdi = CAST(d[3]);
 						CFLOAT(d[_tdi].value) = INTER(CAST(d[0]), CAST(d[1]), CAST(d[2]));
 						d[_tdi].bfloat = true;
-					}
+					}*/
+
 					break;
 				}
 				break;
@@ -711,22 +820,31 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_LOADTEXTURESET:
+					rv = _Parser::LOADTEXTURESET_();
+/*
 					if (rv = Copy(&it, 1))
 					{
 						Process::mp.LoadTextureSet(CAST(d[0]));
-					}
+					}*/
+
 					break;
 				case SCR_FREETEXTURESET:
+					rv = _Parser::FREETEXTURESET_();
+/*
 					if (rv = Copy(&it, 1))
 					{
 						Process::mp.FreeTextureSet(CAST(d[0]));
-					}
+					}*/
+
 					break;
 				case SCR_ITEMBUILD:
+					rv = _Parser::ITEMBUILD_();
+/*
 					if (rv = Copy(&it, 6))
 					{
 						Item::Build(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]));
-					}
+					}*/
+
 					break;
 				}
 				break;
@@ -737,12 +855,17 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_BOSSUP:
+					rv = _Parser::BOSSUP_();
+/*
 					if(rv = true)
 					{
 						BossInfo::bossinfo.bossUp();
-					}
+					}*/
+
 					break;
 				case SCR_SPELLUP:
+					rv = _Parser::SPELLUP_();
+/*
 					if(rv = Copy(&it, 3))
 					{
 						if(Process::mp.spellmode)
@@ -750,10 +873,13 @@ bool Scripter::Parse(int varcount)
 							int _tdi = CAST(d[0]);
 							Target::SetValue(_tdi, CAST(d[1]), CAST(d[2]));
 						}
-					}
+					}*/
+
 					break;
 
 				case SCR_ACONTROL:
+					rv = _Parser::ACONTROL_();
+/*
 					if (rv = Copy(&it, 2))
 					{
 						int _tindex = CAST(d[0]);
@@ -785,9 +911,12 @@ bool Scripter::Parse(int varcount)
 								}
 							}
 						}
-					}
+					}*/
+
 					break;
 				case SCR_BCONTROL:
+					rv = _Parser::BCONTROL_();
+/*
 					if(rv = Copy(&it, 2))
 					{
 						BObject * _tobj = NULL;
@@ -868,10 +997,13 @@ bool Scripter::Parse(int varcount)
 								d[_tdi].bfloat = false;
 							}
 						}
-					}
+					}*/
+
 					break;
 
 				case SCR_COLLISION_CIRCLE:
+					rv = _Parser::COLLISION_CIRCLE_();
+/*
 					if (rv = Copy(&it, 6))
 					{
 						int _tdi = CAST(d[5]);
@@ -880,9 +1012,12 @@ bool Scripter::Parse(int varcount)
 						_tobj.y = CAST(d[1]);
 						CINT(d[_tdi].value) = _tobj.checkCollisionCircle(CAST(d[2]), CAST(d[3]), CAST(d[4]));
 						d[_tdi].bfloat = false;
-					}
+					}*/
+
 					break;
 				case SCR_COLLISION_SQUARE:
+					rv = _Parser::COLLISION_SQUARE_();
+/*
 					if (rv = Copy(&it, 6))
 					{
 						int _tdi = CAST(d[5]);
@@ -891,7 +1026,8 @@ bool Scripter::Parse(int varcount)
 						_tobj.y = CAST(d[1]);
 						CINT(d[_tdi].value) = _tobj.checkCollisionSquare(CAST(d[2]), CAST(d[3]), CAST(d[4]));
 						d[_tdi].bfloat = false;
-					}
+					}*/
+
 					break;
 				}
 				break;
@@ -902,27 +1038,38 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_EFFSETUP:
+					rv = _Parser::EFFSETUP_();
+/*
 					if (rv = Copy(&it, 5))
 					{
 						int _tdi = CAST(d[0]);
 						Effectsys::effsys[_tdi].valueSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]));
-					}
+					}*/
+
 					break;
 				case SCR_EFFSETUPEX:
+					rv = _Parser::EFFSETUPEX_();
+/*
 					if(rv = Copy(&it, 10))
 					{
 						int _tdi = CAST(d[0]);
 						Effectsys::effsys[_tdi].valueSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]), CAST(d[9]));
-					}
+					}*/
+
 					break;
 				case SCR_EFFSETUPCHASE:
+					rv = _Parser::EFFSETUPCHASE_();
+/*
 					if (rv = Copy(&it, 8))
 					{
 						int _tdi = CAST(d[0]);
 						Effectsys::effsys[_tdi].valueSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]));
-					}
+					}*/
+
 					break;
 				case SCR_EFFSTOP:
+					rv = _Parser::EFFSTOP_();
+/*
 					if (rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
@@ -930,32 +1077,42 @@ bool Scripter::Parse(int varcount)
 						{
 							Effectsys::effsys[_tdi].Stop();
 						}
-					}
+					}*/
+
 					break;
 				case SCR_EFFOFF:
+					rv = _Parser::EFFOFF_();
+/*
 					if(rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
 						Effectsys::effsys[_tdi].exist = false;
-					}
+					}*/
+
 					break;
 				case SCR_EFFSET:
+					rv = _Parser::EFFSET_();
+/*
 					if(rv = Copy(&it, 4))
 					{
 						int _tdi = CAST(d[0]);
 						Effectsys::effsys[_tdi].angle = CAST(d[1]);
 						Effectsys::effsys[_tdi].speed = CAST(d[2]);
 						Effectsys::effsys[_tdi].zSpeed = CAST(d[3]);
-					}
+					}*/
+
 					break;
 				case SCR_EFFMOVETO:
+					rv = _Parser::EFFMOVETO_();
+/*
 					if(rv = Copy(&it, 4))
 					{
 						int _tdi = CAST(d[0]);
 						Effectsys::effsys[_tdi].x = CAST(d[1]);
 						Effectsys::effsys[_tdi].y = CAST(d[2]);
 						Effectsys::effsys[_tdi].z = CAST(d[3]);
-					}
+					}*/
+
 					break;
 				}
 				break;
@@ -966,6 +1123,8 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_SETPPOS:
+					rv = _Parser::SETPPOS_();
+/*
 					if (rv = Copy(&it, 2))
 					{
 						float _tdfx = CAST(d[0]);
@@ -976,9 +1135,12 @@ bool Scripter::Parse(int varcount)
 						_tdfy = _tdfy > PL_MOVABLE_BOTTOM ? PL_MOVABLE_BOTTOM : _tdfy;
 						Player::p.x = _tdfx;
 						Player::p.y = _tdfy;
-					}
+					}*/
+
 					break;
 				case SCR_SETPLIFE:
+					rv = _Parser::SETPLIFE_();
+/*
 					if (rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
@@ -987,9 +1149,12 @@ bool Scripter::Parse(int varcount)
 							break;
 						}
 						Player::p.nLife = _tdi > PL_NPLAYERMAX ? PL_NPLAYERMAX : _tdi;
-					}
+					}*/
+
 					break;
 				case SCR_SETPPOWER:
+					rv = _Parser::SETPPOWER_();
+/*
 					if(rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
@@ -998,9 +1163,12 @@ bool Scripter::Parse(int varcount)
 							break;
 						}
 						Player::p.nPower = _tdi;
-					}
+					}*/
+
 					break;
 				case SCR_SETPFAITH:
+					rv = _Parser::SETPFAITH_();
+/*
 					if (rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
@@ -1009,9 +1177,12 @@ bool Scripter::Parse(int varcount)
 							break;
 						}
 						Player::p.nFaith = _tdi;
-					}
+					}*/
+
 					break;
 				case SCR_SETPPOINT:
+					rv = _Parser::SETPPOINT_();
+/*
 					if (rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
@@ -1020,66 +1191,94 @@ bool Scripter::Parse(int varcount)
 							break;
 						}
 						Player::p.nPoint = _tdi;
-					}
+					}*/
+
 					break;
 				case SCR_SETPBBORDER:
+					rv = _Parser::SETPBBORDER_();
+/*
 					if (rv = Copy(&it, 1))
 					{
 						if ((bool)(CAST(d[0])) ^ Player::p.bBorder)
 						{
 							Player::p.callBomb(true);
 						}
-					}
+					}*/
+
 					break;
 				case SCR_SETPBSLOW:
+					rv = _Parser::SETPBSLOW_();
+/*
 					if (rv = Copy(&it, 1))
 					{
 						Player::p.callSlowFastChange((bool)(CAST(d[0])));
-					}
+					}*/
+
 					break;
 				case SCR_SETPBINFI:
+					rv = _Parser::SETPBINFI_();
+/*
 					if(rv = true)
 					{
 						Player::p.bInfi = true;
-					}
+					}*/
+
 					break;
 				case SCR_SETPSPEED:
+					rv = _Parser::SETPSPEED_();
+/*
 					if (rv = Copy(&it, 1))
 					{
 						Player::p.speed = CAST(d[0]);
-					}
+					}*/
+
 					break;
 				case SCR_SETPSLOWSPEED:
+					rv = _Parser::SETPSLOWSPEED_();
+/*
 					if (rv = Copy(&it, 1))
 					{
 						Player::p.slowspeed = CAST(d[0]);
-					}
+					}*/
+
 					break;
 				case SCR_SETPSPEEDFACTOR:
+					rv = _Parser::SETPSPEEDFACTOR_();
+/*
 					if (rv = Copy(&it, 1))
 					{
 						Player::p.speedfactor = CAST(d[0]);
-					}
+					}*/
+
 					break;
 
 				case SCR_COLLAPSE:
+					rv = _Parser::COLLAPSE_();
+/*
 					if (rv = true)
 					{
 						Player::p.callCollapse();
-					}
+					}*/
+
 					break;
 
 				case SCR_SHOOTPB:
+					rv = _Parser::SHOOTPB_();
+/*
 					if (rv = Copy(&it, 1))
 					{
 						PlayerBullet::Build(CAST(d[0]));
-					}
+					}*/
+
 					break;
 				case SCR_BONUSFLAG:
+					rv = _Parser::BONUSFLAG_();
+/*
 					if (rv = Copy(&it, 1))
 					{
 						Player::p.bonusflag = CAST(d[0]);
-					}
+					}*/
+
 					break;
 				}
 				break;
@@ -1537,7 +1736,10 @@ chatout:
 		if(!rv)
 		{
 #ifdef __DEBUG
-			HGELOG("%s\nError in parsing %d.", HGELOG_ERRSTR, it->value);
+			char strbuffer[M_STRMAX];
+			sprintf(strbuffer, "%s\nError in parsing %d. Point to 0x%x.", HGELOG_ERRSTR, it->value, it->pos);
+			HGELOG(strbuffer);
+			MessageBox(NULL, strbuffer, HGELOG_ERRSTR, MB_OK);
 			LogOut();
 #endif
 			return false;

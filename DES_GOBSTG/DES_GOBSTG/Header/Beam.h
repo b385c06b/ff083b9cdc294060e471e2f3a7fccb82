@@ -35,8 +35,8 @@ public:
 	void SetVector(const BObject &ori, const BObject &aim);
 	void SetVector(float orix, float oriy, float aimx, float aimy);
 
-	void SetHold(BYTE holdtar, float holdoffset);
-	void SetHold(BYTE holdtar, BYTE pintar, float holdoffset);
+	void SetHold(BYTE holdtar, float holdoffset, int angle);
+	void SetHoldPin(BYTE holdtar, BYTE pintar, float holdoffset);
 
 	virtual void action();
 

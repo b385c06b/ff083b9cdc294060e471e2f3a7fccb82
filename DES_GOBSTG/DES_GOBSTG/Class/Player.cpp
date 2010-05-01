@@ -348,8 +348,7 @@ bool Player::HavePlayer(WORD _ID)
 
 void Player::ClearSet()
 {
-	x			=	PL_MERGEPOS_X;
-	y			=	PL_MERGEPOS_Y;
+	SetPos(PL_MERGEPOS_X, PL_MERGEPOS_Y);
 
 	for(int i=0;i<PL_SAVELASTMAX;i++)
 	{
@@ -516,7 +515,7 @@ void Player::valueSet(WORD _ID, WORD _ID_sub_1, WORD _ID_sub_2, BYTE _nLife, boo
 	initFrameIndex();
 	UpdatePlayerData();
 
-	nLife		=	_nLife;
+	SetLife(_nLife);
 
 	nPower		=	PL_DEFAULTNPOWER;
 	nGraze		=	0;
@@ -785,14 +784,7 @@ void Player::action()
 
 	if (!(flag & PLAYER_MERGE) || mergetimer >= 32)
 	{
-		if(x > PL_MOVABLE_RIGHT)
-			x = PL_MOVABLE_RIGHT;
-		else if(x < PL_MOVABLE_LEFT)
-			x = PL_MOVABLE_LEFT;
-		if(y > PL_MOVABLE_BOTTOM)
-			y = PL_MOVABLE_BOTTOM;
-		else if(y < PL_MOVABLE_TOP)
-			y = PL_MOVABLE_TOP;
+		SetPos(x, y);
 	}
 
 	if (y < PL_ITEMDRAINY)
@@ -941,6 +933,37 @@ void Player::AddPower(int power)
 	{
 		nPower += power;
 	}
+}
+
+void Player::SetPos(float _x, float _y)
+{
+	x = _x;
+	y = _y;
+	if (x < PL_MOVABLE_LEFT)
+	{
+		x = PL_MOVABLE_LEFT;
+	}
+	else if (x > PL_MOVABLE_RIGHT)
+	{
+		x = PL_MOVABLE_RIGHT;
+	}
+	if (y < PL_MOVABLE_TOP)
+	{
+		y = PL_MOVABLE_TOP;
+	}
+	else if (y > PL_MOVABLE_BOTTOM)
+	{
+		y = PL_MOVABLE_BOTTOM;
+	}
+}
+
+void Player::SetLife(int _nLife)
+{
+	if (_nLife < 0)
+	{
+		return;
+	}
+	nLife = _nLife > PL_NPLAYERMAX ? PL_NPLAYERMAX : _nLife;
 }
 
 void Player::DoPlayerBulletHit(int hitonfactor)

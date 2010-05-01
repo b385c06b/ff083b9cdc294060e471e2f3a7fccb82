@@ -97,18 +97,16 @@ void Ghost::valueSet(WORD _ID, float _x, float _y, int _angle, float _speed, BYT
 	ID		=	_ID;
 	x		=	_x;
 	y		=	_y;
-	speed	=	_speed;
 	type	=	_type;
-	life	=	_life;
-	ac		=	_ac;
-	angle	=	_angle;
+
+	SetValue(_angle, _speed, _ac);
+	SetLife(_life, _life);
 
 	tarID	=	0xff;
 
 	timer	=	0;
 	cenx	=	x;
 	ceny	=	y;
-	maxlife	=	life;
 	exist	=	true;
 	fadeout	=	false;
 	able	=	true;
@@ -122,8 +120,7 @@ void Ghost::valueSet(WORD _ID, float _x, float _y, int _angle, float _speed, BYT
 	alpha	=	0xff;
 	belong	=	0xff;
 
-	aim.x	=	0;
-	aim.y	=	0;
+	SetAim(0, 0);
 
 	effghost.valueSet(EFF_GH_TYPEBEGIN + type, *this);
 
@@ -208,6 +205,35 @@ void Ghost::DoShot()
 			}
 		}
 	}
+}
+
+void Ghost::SetAim(float aimx, float aimy)
+{
+	aim.x = aimx;
+	aim.y = aimy;
+}
+
+void Ghost::SetValue(int _angle, float _speed, int _ac)
+{
+	angle = _angle;
+	speed = _speed;
+	ac = _ac;
+}
+
+void Ghost::SetLife(float _life, float _maxlife)
+{
+	life = _life;
+	maxlife = _maxlife;
+	if (maxlife < life)
+	{
+		maxlife = life;
+	}
+}
+
+void Ghost::ChangeGID(WORD _gID)
+{
+	gID = _gID;
+	timer = 0;
 }
 
 void Ghost::action()

@@ -97,9 +97,7 @@ void Effectsys::valueSet(WORD _ID, int _lifetime, float _x, float _y, float _z, 
 	x			= _x;
 	y			= _y;
 	z			= _z;
-	angle		= _angle;
-	speed		= _speed;
-	zSpeed		= _zSpeed;
+	SetValue(_angle, _speed, _zSpeed);
 	headangle	= 0;
 	hscale		= 1.0f;
 	vscale		= 1.0f;
@@ -142,6 +140,13 @@ void Effectsys::RenderAll()
 			effsys[i].Render();
 		}
 	}
+}
+
+void Effectsys::SetValue(int _angle, float _speed, float _zSpeed)
+{
+	angle = _angle;
+	speed = _speed;
+	zSpeed = _zSpeed;
 }
 
 void Effectsys::Render()

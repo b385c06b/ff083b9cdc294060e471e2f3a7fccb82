@@ -39,7 +39,7 @@ LOOP [i]
 	SD [tangle] i * 6000 + tangleplus
 	SDf [xOffset] COSA tangle *f r +f PX
 	SDf [yOffset] SINA tangle *f r +f PY
-	EFFMOVETO i + $EffectSet_BombBegin xOffset yOffset 0
+	EFFMOVETO i + $EffectSet_BombBegin xOffset yOffset 0 false
 	IZEZONE IZE_FADEOUT xOffset yOffset 1 36 0xff
 }
 
@@ -56,7 +56,7 @@ EFFSETUP $EffectSet_BombBegin 81
 @ @@> 0
 
 SETPPOS PX PY + 3
-EFFMOVETO $EffectSet_BombBegin PX PY 0
+EFFMOVETO $EffectSet_BombBegin PX PY 0 false
 
 SD [i] 6
 LOOP [i]
@@ -95,7 +95,7 @@ ST $Target_BombBegin PX PY
 @ @@> 0
 
 SETFRAMESKIP 2
-EFFMOVETO $EffectSet_BombBegin PX PY 0
+EFFMOVETO $EffectSet_BombBegin PX PY 0 false
 DISABLEALLKEY
 
 @ @@] 60
@@ -174,7 +174,7 @@ EFFSETUP $EffectSet_BombBegin 86
 
 @ @@> 0
 
-EFFMOVETO $EffectSet_BombBegin PX PY 0
+EFFMOVETO $EffectSet_BombBegin PX PY 0 false
 DAMAGEZONE PX PY 112 0.5
 
 //
@@ -210,7 +210,7 @@ EFFSETUP $EffectSet_BombBegin 88
 
 @ @@> 0
 
-EFFMOVETO $EffectSet_BombBegin PX PY 0
+EFFMOVETO $EffectSet_BombBegin PX PY 0 false
 BONUSFLAG PLBONUS_GRAZE
 
 //
@@ -226,7 +226,7 @@ EFFSETUP $EffectSet_BombBegin 89
 
 @ @@> 0
 
-EFFMOVETO $EffectSet_BombBegin PX PY 0
+EFFMOVETO $EffectSet_BombBegin PX PY 0 false
 SHOOTPB NOW@ % 2 + 160
 
 IZEZONE IZE_FADEOUT PX PY 1 60 0xff
@@ -244,7 +244,7 @@ EFFSETUP $EffectSet_BombBegin 90
 
 @ @@> 0
 
-EFFMOVETO $EffectSet_BombBegin PX PY 0
+EFFMOVETO $EffectSet_BombBegin PX PY 0 false
 BONUSFLAG PLBONUS_SHOOT
 
 //
@@ -260,7 +260,7 @@ EFFSETUP $EffectSet_BombBegin 91
 
 @ @@> 0
 
-EFFMOVETO $EffectSet_BombBegin PX PY 0
+EFFMOVETO $EffectSet_BombBegin PX PY 0 false
 BONUSFLAG PLBONUS_TIME
 
 //
@@ -276,7 +276,7 @@ EFFSETUP $EffectSet_BombBegin 92
 	
 @ @@> 0
 
-EFFMOVETO $EffectSet_BombBegin PX PY 0
+EFFMOVETO $EffectSet_BombBegin PX PY 0 false
 IZEZONE IZE_EVENT PX PY 1 96 $PlayerID_13
 
 //
@@ -303,7 +303,7 @@ SD RESERVEBEGIN 40
 @ @@[ 8
 
 SD [nowr] D RESERVEBEGIN
-EFFMOVETO $EffectSet_BombBegin TX $Target_BombBegin TY $Target_BombBegin nowr - 40 * -2
+EFFMOVETO $EffectSet_BombBegin TX $Target_BombBegin TY $Target_BombBegin nowr - 40 * -2 false
 
 SDf [nowr] nowr * 35
 IZEZONE IZE_EVENT TX $Target_BombBegin TY $Target_BombBegin 1 SQRT nowr $PlayerID_14
@@ -336,7 +336,7 @@ EFFSETUP $EffectSet_BombBegin 94
 
 @ @@> 0
 
-EFFMOVETO $EffectSet_BombBegin PX PY 0
+EFFMOVETO $EffectSet_BombBegin PX PY 0 false
 SHOOTPB NOW@ % 4 + 162
 
 IZEZONE IZE_FADEOUT PX PY 1 60 0xff
@@ -355,7 +355,7 @@ IZEZONE IZE_FADEOUT PX PY 210 480 0xff
 
 @ @@> 0
 
-EFFMOVETO $EffectSet_BombBegin PX PY 0
+EFFMOVETO $EffectSet_BombBegin PX PY 0 false
 
 @ @@% 3
 
@@ -396,7 +396,7 @@ SETPSLOWSPEED PSLOWSPEED *f 0.5
 
 @ @@> 0
 
-EFFMOVETO $EffectSet_BombBegin PX PY 0
+EFFMOVETO $EffectSet_BombBegin PX PY 0 false
 
 @ @@] 96
 
@@ -420,7 +420,7 @@ EFFSETUP $EffectSet_BombBegin 98
 
 @ @@> 0
 
-EFFMOVETO $EffectSet_BombBegin PX PY 0
+EFFMOVETO $EffectSet_BombBegin PX PY 0 false
 
 SD [i] 8
 LOOP [i]
@@ -450,7 +450,7 @@ EFFSETUP $EffectSet_BombBegin 99
 
 @ @@> 0
 
-EFFMOVETO $EffectSet_BombBegin PX PY 0
+EFFMOVETO $EffectSet_BombBegin PX PY 0 false
 
 //
 # $Event_PlayerBomb_21
@@ -467,7 +467,7 @@ EFFSETUP $EffectSet_BombBegin 100
 
 DISABLEALLKEY
 SETPPOS PX PY + 16
-EFFMOVETO $EffectSet_BombBegin PX PY 0
+EFFMOVETO $EffectSet_BombBegin PX PY 0 false
 IZEZONE IZE_FADEOUT CenterX CenterY 1 IZEOVERZONE 0xff
 DAMAGEZONE CenterX CenterY IZEOVERZONE 0.65
 
@@ -486,7 +486,7 @@ EFFSETUP $EffectSet_BombBegin 101
 @ 15
 
 SETPPOS PGX 0 PGY 0
-EFFMOVETO $EffectSet_BombBegin PX PY 0
+EFFMOVETO $EffectSet_BombBegin PX PY 0 false
 
 @ @@> 0
 

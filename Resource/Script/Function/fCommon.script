@@ -242,7 +242,7 @@ ELSE
 
 INTER CenterX tox intx [tox]
 INTER CenterY toy intx [toy]
-EFFMOVETO 0 tox toy 0
+EFFMOVETO 0 tox toy 0 false
 
 BGVALUE 12 SI_Battle_01 + battleoffset
 	tox toy stage > 5 * 78 +f width width /f 6.0

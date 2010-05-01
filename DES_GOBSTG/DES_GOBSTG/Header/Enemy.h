@@ -115,6 +115,10 @@ public:
 	void Render();
 	void RenderEffect();
 
+	void SetAim(float aimx, float aimy);
+	void SetLife(float life, float maxlife);
+	void ChangeEID(WORD eID);
+
 public:
 	Effectsys	effCollapse;
 	Effectsys	effShot;

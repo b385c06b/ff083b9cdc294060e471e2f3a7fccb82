@@ -17,9 +17,13 @@ public:
 
 	static void SetFloat(int i, float fval);
 	static void SetInt(int i, int ival);
-	static float GetFloat(int i);
-	static int GetInt(int i);
-	static DWORD GetUInt(int i);
+	static void SetUInt(int i, DWORD uval);
+	static float FGet(){return GetFloat(-1);};
+	static int IGet(){return GetInt(-1);};
+	static DWORD UGet(){return GetUInt(-1);};
+	static float GetFloat(int i=-1);
+	static int GetInt(int i=-1);
+	static DWORD GetUInt(int i=-1);
 
 	static bool PushScript();
 	static bool PopScript();
@@ -275,9 +279,13 @@ public:
 	static bool PGY_();
 	static bool HAVEPLAYER_();
 
-	static bool rv;
-	static vector<Script>::iterator * it;
-	static int varcount;
+	bool rv;
+	vector<Script>::iterator * it;
+	int varcount;
+	int indexcount;
+
+	static _Parser _p;
+	static _Parser _psaved;
 };
 
 #endif

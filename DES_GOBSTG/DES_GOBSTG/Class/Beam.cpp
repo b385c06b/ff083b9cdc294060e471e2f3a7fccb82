@@ -216,15 +216,16 @@ void Beam::SetVector(float orix, float oriy, float aimx, float aimy)
 	angle = aMainAngle(aimx, aimy);
 }
 
-void Beam::SetHold(BYTE _holdtar, float _holdoffset)
+void Beam::SetHold(BYTE _holdtar, float _holdoffset, int _angle)
 {
 	holdtar = _holdtar;
 	holdoffset = _holdoffset;
+	angle = _angle;
 }
 
-void Beam::SetHold(BYTE _holdtar, BYTE _pintar, float holdoffset)
+void Beam::SetHoldPin(BYTE _holdtar, BYTE _pintar, float holdoffset)
 {
-	SetHold(_holdtar, holdoffset);
+	SetHold(_holdtar, holdoffset, angle);
 	pintar = _pintar;
 }
 

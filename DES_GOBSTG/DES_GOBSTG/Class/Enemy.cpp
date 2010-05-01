@@ -191,6 +191,28 @@ void Enemy::RenderEffect()
 	effShot.Render();
 }
 
+void Enemy::SetAim(float aimx, float aimy)
+{
+	aim.x = aimx;
+	aim.y = aimy;
+}
+
+void Enemy::SetLife(float _life, float _maxlife)
+{
+	life = _life;
+	maxlife = _maxlife;
+	if (maxlife < life)
+	{
+		maxlife = life;
+	}
+}
+
+void Enemy::ChangeEID(WORD _eID)
+{
+	eID = _eID;
+	timer = 0;
+}
+
 void Enemy::setAction(WORD _ac, float _para_x, float _para_y, float _para_speed, float _para_friction, int _para_angle, int _para_time, int _para_counter, int _para_endtime)
 {
 	ac = _ac;

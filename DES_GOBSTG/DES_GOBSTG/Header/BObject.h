@@ -108,6 +108,15 @@ public:
 	};
 
 	void updateMove();
+	static void UpdateMove()
+	{
+		bobj.updateMove();
+	};
+
+	static BObject GetObject()
+	{
+		return bobj;
+	};
 
 public:
 	float	x;

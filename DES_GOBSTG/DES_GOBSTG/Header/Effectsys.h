@@ -33,6 +33,8 @@ public:
 	static void RenderAll();
 	void Render();
 
+	void SetValue(int angle, float speed, float zSpeed);
+
 public:
 	hgeEffectSystem * eff;
 

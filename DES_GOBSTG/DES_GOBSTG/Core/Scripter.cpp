@@ -532,9 +532,7 @@ addblock:
 
 						if(!binmode && file)
 						{
-							char tbuff[M_STRITOAMAX];
-							ltoa(ftell(file), tbuff, 16);
-							HGELOG("Point to 0x%s.", tbuff);
+							HGELOG("Point to 0x%x.", ftell(file));
 						}
 #endif
 						return false;
@@ -964,6 +962,12 @@ Token Scripter::GetToken()
 exit:
 	if(!binmode)
 	{
+#ifdef __DEBUG
+		if (file)
+		{
+			ret.pos = ftell(file);
+		}
+#endif
 		memcpy(bincontent+binoffset, &ret, sizeof(Token));
 		binoffset += sizeof(Token);
 		if(ret.type & SCR_TOKEN_HANDLE)

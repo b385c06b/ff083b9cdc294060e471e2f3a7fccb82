@@ -68,6 +68,9 @@ typedef struct tagToken
 {
 	DWORD value;
 	DWORD type;
+#ifdef __DEBUG
+	DWORD pos;
+#endif
 }Token;
 
 typedef Token Script;

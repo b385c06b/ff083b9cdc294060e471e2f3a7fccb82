@@ -130,6 +130,8 @@ public:
 	void GetScoreLife(float maxlife, bool isenemy = true);
 
 	void AddPower(int power);
+	void SetPos(float x, float y);
+	void SetLife(int nLife);
 
 public:
 	WORD	ID_sub_1;
