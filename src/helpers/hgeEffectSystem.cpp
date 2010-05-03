@@ -93,19 +93,25 @@ int hgeEffectSystem::Load(const char * filename, HTEXTURE tex /* = 0 */, HTEXTUR
 		return -1;
 	memcpy(&(ebi), _content + _offset, sizeof(hgeEffectBasicInfo));
 	texnum = ebi.tex.texindex;
+/*
 	if (tex.tex == 0)
-	{
+	{*/
+
 		if(texnum < 0/* || !texset[texnum].tex*/)
 		{
 			hge->Resource_Free(_content);
 			return texnum;
 		}
-		ebi.tex = texset[texnum];
+		HTEXTURE ttex(texnum, NULL);
+		ebi.tex = ttex;
+//		ebi.tex = texset[texnum];
+/*
 	}
 	else
 	{
 		ebi.tex = tex;
-	}
+	}*/
+
 	_offset += sizeof(hgeEffectBasicInfo);
 	while(_offset < _size)
 	{

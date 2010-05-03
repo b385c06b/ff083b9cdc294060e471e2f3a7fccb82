@@ -10,7 +10,7 @@ public:
 	SpriteItemManager();
 	~SpriteItemManager();
 
-	static void Init(HTEXTURE * tex);
+	static void Init();
 	static void Release();
 	static hgeSprite * CreateSprite(int index);
 	static bool CreateSprite(int index, hgeSprite ** sprite);
@@ -38,8 +38,6 @@ public:
 	static bool ptName(int index, hgeSprite * sprite, bool enemy = true);
 
 public:
-	static HTEXTURE * tex;
-
 	static int digituiIndex;
 
 	static int faceIndexEnemy;

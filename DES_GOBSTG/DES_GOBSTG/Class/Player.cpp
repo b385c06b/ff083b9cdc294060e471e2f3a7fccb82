@@ -81,19 +81,8 @@ void Player::initFrameIndex()
 	WORD _ID;
 	for (int i=0; i<M_PL_ONESETPLAYER; i++)
 	{
-		if (i == 1)
-		{
-			_ID = ID_sub_1;
-		}
-		else if (i == 2)
-		{
-			_ID = ID_sub_2;
-		}
-		else
-		{
-			_ID = ID;
-		}
-		playerData * pdata = &(BResource::res.playerdata[_ID]);
+		_ID = GetChara(i);
+		playerData * pdata = &(BResource::bres.playerdata[_ID]);
 		int tfi = 0;
 		frameindex[i][PLAYER_FRAME_STAND] = tfi;
 
@@ -148,7 +137,7 @@ void Player::initFrameIndex()
 BYTE Player::getFrameIndex(BYTE frameenum)
 {
 	flipx = false;
-	playerData * pdata = &(BResource::res.playerdata[nowID]);
+	playerData * pdata = &(BResource::bres.playerdata[nowID]);
 	if ((frameenum == PLAYER_FRAME_RIGHTPRE || frameenum == PLAYER_FRAME_RIGHT) && (!pdata->rightPreFrame) ||
 		(frameenum == PLAYER_FRAME_LEFTPRE || frameenum == PLAYER_FRAME_LEFT) && (!pdata->leftPreFrame))
 	{
@@ -175,8 +164,8 @@ void Player::setFrame(BYTE frameenum)
 
 void Player::setIndexFrame(BYTE index)
 {
-	playerData * pdata = &(BResource::res.playerdata[nowID]);
-	SpriteItemManager::ChangeSprite(BResource::res.playerdata[nowID].siid+index, sprite);
+	playerData * pdata = &(BResource::bres.playerdata[nowID]);
+	SpriteItemManager::ChangeSprite(BResource::bres.playerdata[nowID].siid+index, sprite);
 	SpriteItemManager::SetSpriteFlip(sprite, flipx);
 }
 
@@ -196,7 +185,7 @@ void Player::updateFrame(BYTE frameenum, int usetimer /* = -1*/)
 	{
 		return;
 	}
-	playerData * pdata = &(BResource::res.playerdata[nowID]);
+	playerData * pdata = &(BResource::bres.playerdata[nowID]);
 	frameoffset++;
 	BYTE tbyte;
 	switch (nowstate)
@@ -455,7 +444,7 @@ void Player::ClearSet()
 
 void Player::UpdatePlayerData()
 {
-	playerData * pdata = &(BResource::res.playerdata[nowID]);
+	playerData * pdata = &(BResource::bres.playerdata[nowID]);
 	r = pdata->collision_r;
 	speed = pdata->fastspeed;
 	slowspeed = pdata->slowspeed;
@@ -1507,4 +1496,21 @@ void Player::RenderEffect()
 		esCollapse.Render();
 
 	effCollapse.Render();
+}
+
+WORD Player::GetChara( int index )
+{
+	if (index == 0)
+	{
+		return ID;
+	}
+	if (index == 1)
+	{
+		return ID_sub_1;
+	}
+	if (index == 2)
+	{
+		return ID_sub_2;
+	}
+	return nowID;
 }

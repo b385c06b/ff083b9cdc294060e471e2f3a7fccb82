@@ -14,7 +14,6 @@ VectorList<PlayerBullet> PlayerBullet::pb;
 int PlayerBullet::locked = PBLOCK_LOST;
 
 hgeSprite * PlayerBullet::sprite[PLAYERSHOOTTYPEMAX][PLAYERBULLETTYPE];
-HTEXTURE * PlayerBullet::tex;
 
 DWORD PlayerBullet::bcol0;
 DWORD PlayerBullet::bcol1;
@@ -50,9 +49,8 @@ PlayerBullet::~PlayerBullet()
 {
 }
 
-void PlayerBullet::Init(HTEXTURE * _tex)
+void PlayerBullet::Init()
 {
-	tex = _tex;
 	Release();
 	pb.init(PLAYERBULLETMAX);
 
@@ -60,7 +58,7 @@ void PlayerBullet::Init(HTEXTURE * _tex)
 	{
 		for (int j=0; j<PLAYERBULLETTYPE; j++)
 		{
-			sprite[i][j] = SpriteItemManager::CreateSprite(BResource::res.playershootdata[i].siid+(((BResource::res.playershootdata[i].flag)&PBFLAG_ANIMATION)?j:0));
+			sprite[i][j] = SpriteItemManager::CreateSprite(BResource::bres.playershootdata[i].siid+(((BResource::bres.playershootdata[i].flag)&PBFLAG_ANIMATION)?j:0));
 		}
 	}
 }
@@ -102,7 +100,7 @@ void PlayerBullet::ClearAll()
 void PlayerBullet::Build(int shootdataID)
 {
 	PlayerBullet _pb;
-	playershootData * item = &(BResource::res.playershootdata[shootdataID]);
+	playershootData * item = &(BResource::bres.playershootdata[shootdataID]);
 	_pb.valueSet(shootdataID, item->arrange, item->xbias, item->ybias, 
 		item->scale, item->angle, item->speed, item->accelspeed, 
 		item->power, item->hitonfactor, item->flag, item->seID);
@@ -161,8 +159,8 @@ void PlayerBullet::valueSet(WORD _ID, BYTE _arrange, float _xbias, float _ybias,
 
 	if (flag & PBFLAG_BEAM)
 	{
-		hscale = M_ACTIVECLIENT_HEIGHT / SpriteItemManager::GetTexW(BResource::res.playershootdata[ID].siid);
-		vscale = scale / SpriteItemManager::GetTexH(BResource::res.playershootdata[ID].siid);
+		hscale = M_ACTIVECLIENT_HEIGHT / SpriteItemManager::GetTexW(BResource::bres.playershootdata[ID].siid);
+		vscale = scale / SpriteItemManager::GetTexH(BResource::bres.playershootdata[ID].siid);
 		angle = -9000;
 		for (int i=0; i<PLAYERBULLETTYPE; i++)
 		{

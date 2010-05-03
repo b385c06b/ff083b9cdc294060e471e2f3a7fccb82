@@ -6,7 +6,6 @@
 #include "../Header/BulletListActionConst.h"
 
 _Parser _Parser::_p;
-_Parser _Parser::_psaved;
 
 _Parser::_Parser()
 {
@@ -54,9 +53,9 @@ void _Parser::SetInt(int i, int ival)
 	Scripter::scr.SetIntValue(i, ival);
 }
 
-void _Parser::SetUInt(int i, DWORD uval)
+void _Parser::SetUInt(int i, DWORD uval, bool setfloat)
 {
-	Scripter::scr.SetDWORDValue(i, uval);
+	Scripter::scr.SetDWORDValue(i, uval, setfloat);
 }
 
 float _Parser::GetFloat(int i)
@@ -89,23 +88,54 @@ DWORD _Parser::GetUInt(int i)
 	return UCAST(Scripter::scr.d[i]);
 }
 
-bool _Parser::PushScript()
+char * _Parser::GetString(int i)
 {
-	if (Scripter::scr.PushScript(_p.varcount))
+	if (i < 0)
 	{
-		memcpy(&_psaved, &_p, sizeof(_Parser));
+		i = _p.indexcount;
+		++(_p.indexcount);
+	}
+	return Scripter::scr.GetString(i);
+}
+
+char * _Parser::GetStringSp(int i)
+{
+	if (i < 0)
+	{
+		i = _p.indexcount;
+		++(_p.indexcount);
+	}
+	return Scripter::scr.GetStringSp(i);
+}
+
+bool _Parser::PushScript(_Parser ** _ppsaved, vector<Script> ** psaved, int ** idescsaved, TData ** descsaved)
+{
+	if (!_ppsaved)
+	{
+		return false;
+	}
+	if (Scripter::scr.PushScript(_p.varcount, psaved, idescsaved, descsaved))
+	{
+		*_ppsaved = (_Parser *)malloc(sizeof(_Parser));
+		memcpy(*_ppsaved, &_p, sizeof(_Parser));
 		return true;
 	}
 	return false;
 }
 
-bool _Parser::PopScript()
+bool _Parser::PopScript(_Parser ** _ppsaved, vector<Script> ** psaved, int ** idescsaved, TData ** descsaved)
 {
-	if (Scripter::scr.PopScript(_p.varcount))
+	if (!_ppsaved)
 	{
-		memcpy(&_p, &_psaved, sizeof(_Parser));
+		return false;
+	}
+	if (Scripter::scr.PopScript(_p.varcount, psaved, idescsaved, descsaved))
+	{
+		memcpy(&_p, *_ppsaved, sizeof(_Parser));
+		free(*_ppsaved);
 		return true;
 	}
+	free(*_ppsaved);
 	return false;
 }
 
@@ -164,14 +194,18 @@ bool _Parser::CALL_()
 {
 	_ENTER_PARSE(2);
 
-	if (!PushScript())
+	_Parser * _psaved = NULL;
+	vector<Script> * psaved = NULL;
+	int * idescsaved = NULL;
+	TData * descsaved = NULL;
+	if (!PushScript(&_psaved, &psaved, &idescsaved, &descsaved))
 	{
 		return false;
 	}
 	DWORD _con = UGet();
 	DWORD _name = UGet();
 	Scripter::scr.functionExecute(_con, _name);
-	if (!PopScript())
+	if (!PopScript(&_psaved, &psaved, &idescsaved, &descsaved))
 	{
 		return false;
 	}
@@ -183,7 +217,11 @@ bool _Parser::CALLEX_()
 {
 	_ENTER_PARSE(3);
 
-	if (!PushScript())
+	_Parser * _psaved = NULL;
+	vector<Script> * psaved = NULL;
+	int * idescsaved = NULL;
+	TData * descsaved = NULL;
+	if (!PushScript(&_psaved, &psaved, &idescsaved, &descsaved))
 	{
 		return false;
 	}
@@ -195,7 +233,7 @@ bool _Parser::CALLEX_()
 	DWORD _con = UGet();
 	DWORD _name = UGet();
 	Scripter::scr.functionExecute(_con, _name);
-	if (!PopScript())
+	if (!PopScript(&_psaved, &psaved, &idescsaved, &descsaved))
 	{
 		return false;
 	}
@@ -207,7 +245,11 @@ bool _Parser::EXECUTE_()
 {
 	_ENTER_PARSE(3);
 
-	if (!PushScript())
+	_Parser * _psaved = NULL;
+	vector<Script> * psaved = NULL;
+	int * idescsaved = NULL;
+	TData * descsaved = NULL;
+	if (!PushScript(&_psaved, &psaved, &idescsaved, &descsaved))
 	{
 		return false;
 	}
@@ -215,7 +257,7 @@ bool _Parser::EXECUTE_()
 	DWORD _con = UGet();
 	DWORD _name = UGet();
 	Scripter::scr.Execute(_typeflag, _con, _name);
-	if (!PopScript())
+	if (!PopScript(&_psaved, &psaved, &idescsaved, &descsaved))
 	{
 		return false;
 	}
@@ -923,10 +965,10 @@ bool _Parser::INTER_()
 {
 	_ENTER_PARSE(4);
 
-	int _tdi = IGet();
 	float _a = FGet();
 	float _b = FGet();
 	float _x = FGet();
+	int _tdi = IGet();
 
 	SetFloat(_tdi, INTER(_a, _b, _x));
 
@@ -1415,181 +1457,382 @@ bool _Parser::BONUSFLAG_()
 
 bool _Parser::BGVALUE_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(7);
+
+	int _tdi = IGet();
+	int _siid = IGet();
+	float _cenx = FGet();
+	float _ceny = FGet();
+	float _width = FGet();
+	float _height = FGet();
+	DWORD _col = UGet();
+	BGLayer::ubg[_tdi].valueSet(_siid, _cenx, _ceny, _width, _height, _col);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::BGVALEX_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(16);
+
+	int _tdi = IGet();
+	int _siid = IGet();
+	float _x = FGet();
+	float _y = FGet();
+	float _z = FGet();
+	float _w = FGet();
+	float _h = FGet();
+	float _rotx = FGet();
+	float _roty = FGet();
+	float _rotz = FGet();
+	float _paral = FGet();
+	float _speed = FGet();
+	int _angle = IGet();
+	bool _bmove = (bool)IGet();
+	bool _brotate = (bool)IGet();
+	DWORD _col = UGet();
+	BGLayer::ubg[_tdi].valueSet(_siid, _x, _y, _z, _w, _h, _rotx, _roty, _rotz, _paral, _speed, _angle, _bmove, _brotate, _col);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::BGTEXRECT_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(5);
+
+	int _tdi = IGet();
+	float _texx = FGet();
+	float _texy = FGet();
+	float _texw = FGet();
+	float _texh = FGet();
+	BGLayer::ubg[_tdi].texRectSet(_texx, _texy, _texw, _texh);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::BGRECT_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(9);
+
+	int _tdi = IGet();
+	float _x = FGet();
+	float _y = FGet();
+	float _z = FGet();
+	float _w = FGet();
+	float _h = FGet();
+	float _rotx = FGet();
+	float _roty = FGet();
+	float _rotz = FGet();
+	BGLayer::ubg[_tdi].rectSet(_x, _y, _z, _w, _h, _rotx, _roty, _rotz);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::BGZ_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(5);
+
+	int _tdi = IGet();
+	float _z0 = FGet();
+	float _z1 = FGet();
+	float _z2 = FGet();
+	float _z3 = FGet();
+	BGLayer::ubg[_tdi].zSet(_z0, _z1, _z2, _z3);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::BGSCALE_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(3);
+
+	int _tdi = IGet();
+	float _hscale = FGet();
+	float _vscale = FGet();
+	BGLayer::ubg[_tdi].scaleSet(_hscale, _vscale);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::BGCOLOR_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(5);
+
+	int _tdi = IGet();
+	DWORD _col0 = UGet();
+	DWORD _col1 = UGet();
+	DWORD _col2 = UGet();
+	DWORD _col3 = UGet();
+	BGLayer::ubg[_tdi].colorSet(_col0, _col1, _col2, _col3);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::BGMOVE_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(6);
+
+	int _tdi = IGet();
+	float _speed = FGet();
+	float _zSpeed = FGet();
+	int _angle = IGet();
+	bool _bmove = (bool)IGet();
+	bool _brotate = (bool)IGet();
+	BGLayer::ubg[_tdi].moveSet(_speed, _zSpeed, _angle, _bmove, _brotate);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::BGFLAG_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(3);
+
+	int _tdi = IGet();
+	BYTE _flag = IGet();
+	BYTE _maxtime = IGet();
+	BGLayer::ubg[_tdi].SetFlag(_flag, _maxtime);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::BGPARAL_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(2);
+
+	int _tdi = IGet();
+	float _paral = FGet();
+	BGLayer::ubg[_tdi].parallelogram(_paral);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::BG4V_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(13);
+
+	int _tdi = IGet();
+	float _x0 = FGet();
+	float _y0 = FGet();
+	float _z0 = FGet();
+	float _x1 = FGet();
+	float _y1 = FGet();
+	float _z1 = FGet();
+	float _x2 = FGet();
+	float _y2 = FGet();
+	float _z2 = FGet();
+	float _x3 = FGet();
+	float _y3 = FGet();
+	float _z3 = FGet();
+	BGLayer::ubg[_tdi].vertexSet(_x0, _y0, _z0, _x1, _y1, _z1, _x2, _y2, _z2, _x3, _y3, _z3);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::BGOFF_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(1);
+
+	int _tdi = IGet();
+	if (_tdi < 0)
+	{
+		BGLayer::KillOtherLayer();
+	}
+	else
+	{
+		BGLayer::ubg[_tdi].exist = false;
+	}
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::BGBLEND_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(2);
+
+	int _tdi = IGet();
+	int _blend = IGet();
+	BGLayer::ubg[_tdi].SetBlend(_blend);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::BGSETUP_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(4);
+
+	int _setID = IGet();
+	int _sID = IGet();
+	bool _bforce = (bool)IGet();
+	int _quittime = IGet();
+
+	_Parser * _psaved = NULL;
+	vector<Script> * psaved = NULL;
+	int * idescsaved = NULL;
+	TData * descsaved = NULL;
+	if (!PushScript(&_psaved, &psaved, &idescsaved, &descsaved))
+	{
+		return false;
+	}
+	BGLayer::BGLayerSetup(_setID, _sID, _bforce, _quittime);
+	if (!PopScript(&_psaved, &psaved, &idescsaved, &descsaved))
+	{
+		return false;
+	}
+
 	_LEAVE_PARSE();
 }
 
 
 bool _Parser::SELBUILD_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(16);
+
+	BYTE _ID = IGet();
+	int _siid = IGet();
+	float _cenx = FGet();
+	float _ceny = FGet();
+	float _hscale = FGet();
+	float _vscale = FGet();
+	BYTE _maxtime = IGet();
+	float _xadj0 = FGet();
+	float _yadj0 = FGet();
+	float _xadj1 = FGet();
+	float _yadj1 = FGet();
+	float _xadj2 = FGet();
+	float _yadj2 = FGet();
+	float _xadj3 = FGet();
+	float _yadj3 = FGet();
+	BYTE _flag = IGet();
+	Selector::Build(_ID, _siid, _cenx, _ceny, _hscale, _vscale, _maxtime, _xadj0, _yadj0, _xadj1, _yadj1, _xadj2, _yadj2, _xadj3, _yadj3, _flag);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::SELCLEAR_()
 {
 	_ENTER_PARSE(0);
+
+	Selector::Clear();
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::SELCONFIRM_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(4);
+
+	float _cenx = FGet();
+	float _ceny = FGet();
+	bool _settrue = (bool)IGet();
+	int _tdi = IGet();
+	bool _bret = Selector::confirm(_cenx, _ceny, _settrue);
+	SetInt(_tdi, (int)_bret);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::SELSET_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(7);
+
+	int _nselect = IGet();
+	int _select = IGet();
+	bool _updown = (bool)IGet();
+	BYTE _nPageNum = IGet();
+	float _fadebegin = FGet();
+	float _offset = FGet();
+	int _initshift = IGet();
+	Selector::Setup(_nselect, _select, _updown);
+	Selector::SetPageNum(_nPageNum, _fadebegin, _offset, _initshift);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::SELFLAG_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(2);
+
+	int _index = IGet();
+	BYTE _flag = IGet();
+	Selector * _sel = Selector::GetPointer(_index);
+	if (_sel)
+	{
+		_sel->flag = _flag;
+	}
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::ISELBUILD_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(6);
+
+	BYTE _ID = IGet();
+	char * _info = SSpGet();
+	float _x = FGet();
+	float _y = FGet();
+	BYTE _coltype = IGet();
+	BYTE _flag = IGet();
+	InfoSelect::Build(_ID, _info, _x, _y, _coltype, _flag);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::ISELCLEAR_()
 {
 	_ENTER_PARSE(0);
+
+	InfoSelect::Clear();
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::ISELSET_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(7);
+
+	int _nselect = IGet();
+	int _select = IGet();
+	bool _updown = (bool)IGet();
+	BYTE _nPageNum = IGet();
+	float _fadebegin = FGet();
+	float _offset = FGet();
+	int _initshift = IGet();
+	InfoSelect::Setup(_nselect, _select, _updown);
+	InfoSelect::SetPageNum(_nPageNum, _fadebegin, _offset, _initshift);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::ISELFLAG_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(2);
+
+	int _index = IGet();
+	BYTE _flag = IGet();
+	InfoSelect * _ifs = InfoSelect::GetPointer(_index);
+	if (_ifs)
+	{
+		_ifs->flag = _flag;
+	}
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::ISELCOLOR_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(2);
+
+	int _index = IGet();
+	BYTE _coltype = IGet();
+	InfoSelect * _ifs = InfoSelect::GetPointer(_index);
+	if (_ifs)
+	{
+		_ifs->coltype = _coltype;
+	}
+
 	_LEAVE_PARSE();
 }
-
-
-bool _Parser::IF_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ELSE_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ELSEIF_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-
-bool _Parser::LOOP_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::SKIP_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
 
 bool _Parser::CHATON_()
 {
@@ -1606,662 +1849,83 @@ bool _Parser::CHATOFF_()
 
 bool _Parser::DATAGET_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(4);
+
+	DWORD _section = UGet();
+	DWORD _name = UGet();
+	int _defval = IGet();
+	int _tdi = IGet();
+	int _iret = Data::data.iRead(DATA_BINFILE, _section, _name, _defval);
+	SetInt(_tdi, _iret);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::DATAGETf_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(4);
+
+	DWORD _section = UGet();
+	DWORD _name = UGet();
+	float _defval = FGet();
+	int _tdi = IGet();
+	float _fret = Data::data.fRead(DATA_BINFILE, _section, _name, _defval);
+	SetInt(_tdi, _fret);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::DATASET_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(3);
+
+	DWORD _section = UGet();
+	DWORD _name = UGet();
+	int _val = IGet();
+	Data::data.iWrite(DATA_BINFILE, _section, _name, _val);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::DATASETf_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(3);
+
+	DWORD _section = UGet();
+	DWORD _name = UGet();
+	float _val = FGet();
+	Data::data.fWrite(DATA_BINFILE, _section, _name, _val);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::SETFLAG_()
 {
-	_ENTER_PARSE(0);
+	_ENTER_PARSE(2);
+
+	DWORD _name = UGet();
+	int _val = IGet();
+	Data::data.iWrite(DATA_BINFILE, DATAS_FLAG, _name, _val);
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::TRYSTAGE_()
 {
 	_ENTER_PARSE(0);
+
+	DataConnector::Try();
+
 	_LEAVE_PARSE();
 }
 
 bool _Parser::DEBUG_BREAKPOINT_()
 {
 	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
 
+#ifdef __DEBUG
+	Scripter::scr.LogOut();
+#endif
 
-bool _Parser::BUI_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BUANGLE_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BUSPEED_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BUX_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BUY_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BUat_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BUCANCELABLE_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BUHAVEGRAY_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BEI_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BEANGLE_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BESPEED_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BEX_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BEY_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BEat_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BEHOLDTAR_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BEPINTAR_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-
-bool _Parser::GHX_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::GHY_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::GHat_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::GHI_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::GHANGLE_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::GHSPEED_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::GHAMAP_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::GHRMAP_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::GHAIMX_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::GHAIMY_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::GHLIFE_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::GHAC_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-
-bool _Parser::ENX_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ENY_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ENat_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ENI_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ENANGLE_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ENSPEED_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ENAMAP_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ENRMAP_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ENAIMX_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ENAIMY_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ENLIFE_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-
-bool _Parser::RAND_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::RANDR_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::SEED_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::SINA_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::COSA_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::TANA_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ASIN2_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ACOS2_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ATAN2_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::SQRT_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::SIGN_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ROLL_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::D_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::Du_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::TX_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::TY_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::TIME_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::NOWsharp_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::NOWat_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::DIFFI_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::SNOSTAGE_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::SNODIFFI_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::SNOBATTLE_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::SNOUSER_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::CHARA_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::GETSCENE_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::MODE_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::REPLAYMODE_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::FRAMESKIP_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-
-bool _Parser::CHATI_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BOSSFAILED_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BOSSFLAG_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::GETPEID_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::CHECKKEY_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::GETFLAG_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::PLAYERNAME_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BOSSNAME_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::SPELLNAME_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::SPELLUSERNAME_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::SPELLUSERENAME_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-
-bool _Parser::BGSat_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::BGSI_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-
-bool _Parser::SELCOMPLETE_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::SEL_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::SELFIRSTID_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ISELCOMPLETE_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ISEL_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::ISELFIRSTID_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-
-bool _Parser::PX_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::PY_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::PLIFE_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::PBOMB_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::PPOWER_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::PFAITH_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::PPOINT_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::PBBORDER_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::PBSLOW_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::PBINFI_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::PSPEED_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::PSLOWSPEED_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::PGX_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::PGY_()
-{
-	_ENTER_PARSE(0);
-	_LEAVE_PARSE();
-}
-
-bool _Parser::HAVEPLAYER_()
-{
-	_ENTER_PARSE(0);
 	_LEAVE_PARSE();
 }

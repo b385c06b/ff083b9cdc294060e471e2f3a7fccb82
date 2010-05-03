@@ -96,18 +96,18 @@ bool Replay::Check(char * filename)
 	bool ret = false;
 
 	char treplayfilename[M_PATHMAX];
-	strcpy(treplayfilename, BResource::res.resdata.replayfoldername);
+	strcpy(treplayfilename, BResource::bres.resdata.replayfoldername);
 	strcat(treplayfilename, filename);
 	hge->Resource_AttachPack(treplayfilename, Data::data.password ^ REPLAYPASSWORD_XORMAGICNUM);
 
 	content = hge->Resource_Load(hge->Resource_GetPackFirstFileName(treplayfilename));
 	if(content)
 	{
-		if(strcmp((char *)(content + RPYOFFSET_SIGNATURE), BResource::res.resdata.replaysignature11))
+		if(strcmp((char *)(content + RPYOFFSET_SIGNATURE), BResource::bres.resdata.replaysignature11))
 			goto exit;
 		if(*(DWORD *)(content + RPYOFFSET_VERSION) != GAME_VERSION)
 			goto exit;
-		if(strcmp((char *)(content + RPYOFFSET_COMPLETESIGN), BResource::res.resdata.replaycompletesign3))
+		if(strcmp((char *)(content + RPYOFFSET_COMPLETESIGN), BResource::bres.resdata.replaycompletesign3))
 			goto exit;
 		ret = true;
 	}
@@ -122,7 +122,7 @@ bool Replay::Load(char * filename, bool getInput)
 	if(Check(filename))
 	{
         char treplayfilename[M_PATHMAX];
-		strcpy(treplayfilename, BResource::res.resdata.replayfoldername);
+		strcpy(treplayfilename, BResource::bres.resdata.replayfoldername);
 		strcat(treplayfilename, filename);
 		ret = Export::rpyLoad(treplayfilename, &rpyinfo, partinfo, getInput ? replayframe : NULL);
 		if (getInput)
@@ -143,11 +143,11 @@ void Replay::Save(char * filename)
 	DWORD _size = RPYOFFSET_INPUTDATA + (replayIndex + 1) * RPYSIZE_FRAME;
 	BYTE * _rpydata = (BYTE *)malloc(_size);
 	DWORD tdw;
-	memcpy(_rpydata + RPYOFFSET_SIGNATURE, BResource::res.resdata.replaysignature11, RPYSIZE_SIGNATURE);
+	memcpy(_rpydata + RPYOFFSET_SIGNATURE, BResource::bres.resdata.replaysignature11, RPYSIZE_SIGNATURE);
 	tdw = GAME_VERSION;
 	memcpy(_rpydata + RPYOFFSET_VERSION, &tdw, RPYSIZE_VERSION);
-	memcpy(_rpydata + RPYOFFSET_COMPLETESIGN, BResource::res.resdata.replaycompletesign3, RPYSIZE_COMPLETESIGN);
-	memcpy(_rpydata + RPYOFFSET_TAG, BResource::res.resdata.replaytag3, RPYSIZE_TAG);
+	memcpy(_rpydata + RPYOFFSET_COMPLETESIGN, BResource::bres.resdata.replaycompletesign3, RPYSIZE_COMPLETESIGN);
+	memcpy(_rpydata + RPYOFFSET_TAG, BResource::bres.resdata.replaytag3, RPYSIZE_TAG);
 	tdw = RPYOFFSET_PARTINFO;
 	memcpy(_rpydata + RPYOFFSET_INFOOFFSET, &tdw, RPYSIZE_INFOOFFSET);
 	strcpy(buffer, "");
@@ -162,7 +162,7 @@ void Replay::Save(char * filename)
 	memcpy(_rpydata + _size-sizeof(replayFrame), &buff, sizeof(replayFrame));
 
 	char treplayfilename[M_PATHMAX];
-	strcpy(treplayfilename, BResource::res.resdata.replayfoldername);
+	strcpy(treplayfilename, BResource::bres.resdata.replayfoldername);
 	strcat(treplayfilename, filename);
 
 	char crcfilename[M_PATHMAX];

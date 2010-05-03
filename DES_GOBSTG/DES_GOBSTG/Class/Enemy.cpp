@@ -17,7 +17,6 @@
 Enemy Enemy::en[ENEMYMAX];
 
 VectorList<DamageZone> Enemy::dmgz;
-HTEXTURE Enemy::texmain;
 WORD Enemy::index;
 BYTE Enemy::bossflag[ENEMY_BOSSMAX];
 BYTE Enemy::spelluptimer[ENEMY_BOSSMAX];
@@ -38,9 +37,8 @@ Enemy::~Enemy()
 	SpriteItemManager::FreeSprite(&sprite);
 }
 
-void Enemy::Init(HTEXTURE _texmain)
+void Enemy::Init()
 {
-	texmain = _texmain;
 	index = ENEMY_INDEXSTART;
 	dmgz.init(_DAMAGEZONEMAX);
 	dmgz.clear_item();
@@ -259,7 +257,7 @@ void Enemy::valueSet(WORD _ID, float _x, float _y, int _angle, float _speed, BYT
 	vscale	=	1.0f;
 	alpha	=	0xff;
 	diffuse	=	0xffffff;
-	faceindex = BResource::res.enemydata[type].faceIndex;
+	faceindex = BResource::bres.enemydata[type].faceIndex;
 
 	if (type >= ENEMY_BOSSTYPEBEGIN)
 	{
@@ -278,7 +276,7 @@ void Enemy::valueSet(WORD _ID, float _x, float _y, int _angle, float _speed, BYT
 
 	headangle = -angle;
 
-	enemyData * _enemydata = &(BResource::res.enemydata[type]);
+	enemyData * _enemydata = &(BResource::bres.enemydata[type]);
 	if (sprite)
 	{
 		SpriteItemManager::ChangeSprite(_enemydata->siid, sprite);
@@ -422,7 +420,7 @@ void Enemy::updateFrame(BYTE frameenum, int usetimer /* = -1*/)
 	{
 		return;
 	}
-	enemyData * pdata = &(BResource::res.enemydata[type]);
+	enemyData * pdata = &(BResource::bres.enemydata[type]);
 	frameoffset++;
 	BYTE tbyte;
 	switch (nowstate)
@@ -581,7 +579,7 @@ void Enemy::updateFrameAsMove()
 
 void Enemy::bossAction()
 {
-	enemyData * pdata = &(BResource::res.enemydata[type]);
+	enemyData * pdata = &(BResource::bres.enemydata[type]);
 	if(timer < ENEMY_BOSSINFITIMER)
 		defrate = 1.0f;
 	else if(timer == ENEMY_BOSSINFITIMER)
@@ -661,7 +659,7 @@ void Enemy::bossAction()
 
 void Enemy::initFrameIndex()
 {
-	enemyData * pdata = &(BResource::res.enemydata[type]);
+	enemyData * pdata = &(BResource::bres.enemydata[type]);
 	int tfi = 0;
 	frameindex[ENEMY_FRAME_STAND] = tfi;
 
@@ -723,7 +721,7 @@ void Enemy::initFrameIndex()
 BYTE Enemy::getFrameIndex(BYTE frameenum)
 {
 	flipx = false;
-	enemyData * pdata = &(BResource::res.enemydata[type]);
+	enemyData * pdata = &(BResource::bres.enemydata[type]);
 	if ((frameenum == ENEMY_FRAME_RIGHTPRE || frameenum == ENEMY_FRAME_RIGHT) && (!pdata->rightPreFrame) ||
 		(frameenum == ENEMY_FRAME_LEFTPRE || frameenum == ENEMY_FRAME_LEFT) && (!pdata->leftPreFrame))
 	{
@@ -741,15 +739,15 @@ void Enemy::setFrame(BYTE frameenum)
 
 void Enemy::setIndexFrame(BYTE index)
 {
-	enemyData * pdata = &(BResource::res.enemydata[type]);
+	enemyData * pdata = &(BResource::bres.enemydata[type]);
 	SpriteItemManager::ChangeSprite(pdata->siid+index, sprite);
 	SpriteItemManager::SetSpriteFlip(sprite, flipx);
 }
 
 void Enemy::GetCollisionRect(float * w, float * h)
 {
-	*w = BResource::res.enemydata[type].collision_w;
-	*h = BResource::res.enemydata[type].collision_h;
+	*w = BResource::bres.enemydata[type].collision_w;
+	*h = BResource::bres.enemydata[type].collision_h;
 }
 
 void Enemy::CostLife(float power)

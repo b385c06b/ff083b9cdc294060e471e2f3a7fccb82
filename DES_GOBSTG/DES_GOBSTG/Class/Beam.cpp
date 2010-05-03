@@ -167,7 +167,7 @@ void Beam::valueSet(WORD _ID, float _x, float _y, int _angle, float _speed, BYTE
 	xplus = cost(angle);
 	yplus = sint(angle);
 
-	spriteData * spdata = SpriteItemManager::CastSprite(BResource::res.bulletdata[type].siid);
+	spriteData * spdata = SpriteItemManager::CastSprite(BResource::bres.bulletdata[type].siid);
 	texw	=	spdata->tex_w;
 	texh	=	spdata->tex_h;
 
@@ -378,8 +378,8 @@ bool Beam::isInRect(float aimx, float aimy, float r)
 	float _x = x;
 	float _y = y;
 
-	float rl = BResource::res.bulletdata[type].collisionMain;
-	float rs = BResource::res.bulletdata[type].collisionSub;
+	float rl = BResource::bres.bulletdata[type].collisionMain;
+	float rs = BResource::bres.bulletdata[type].collisionSub;
 
 	float nowrl = vscale * rl;
 

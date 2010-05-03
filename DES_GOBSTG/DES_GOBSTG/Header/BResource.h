@@ -52,7 +52,7 @@ public:
 	customconstData * customconstdata;
 	textureData texturedata[TEXMAX];
 
-	static BResource res;
+	static BResource bres;
 };
 
 extern HGE * hge;

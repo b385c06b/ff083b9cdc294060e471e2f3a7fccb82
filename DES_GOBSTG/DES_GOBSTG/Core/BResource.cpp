@@ -2,7 +2,7 @@
 #include "../Header/data.h"
 #include "../Header/ConstResource.h"
 
-BResource BResource::res;
+BResource BResource::bres;
 
 BResource::BResource()
 {

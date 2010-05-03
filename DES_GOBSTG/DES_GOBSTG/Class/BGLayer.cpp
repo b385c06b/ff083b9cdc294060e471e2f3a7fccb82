@@ -11,8 +11,6 @@ BGLayerSet BGLayer::bglayerset[BGLAYERSETMAX];
 
 WORD BGLayer::setindex = 0;
 
-HTEXTURE * BGLayer::tex = NULL;
-
 BGLayer::BGLayer()
 {
 	exist	= false;
@@ -24,7 +22,7 @@ BGLayer::~BGLayer()
 	SpriteItemManager::FreeSprite(&sprite);
 }
 
-void BGLayer::Init(HTEXTURE * _tex)
+void BGLayer::Init()
 {
 
 	for(int i=0; i<BGLAYERSETMAX; i++)
@@ -40,7 +38,6 @@ void BGLayer::Init(HTEXTURE * _tex)
 		ubg[i].flag = 0;
 	}
 	setindex = 0;
-	tex = _tex;
 }
 
 void BGLayer::KillOtherLayer()
@@ -80,7 +77,7 @@ void BGLayer::valueSet(int siID, float cenx, float ceny, float w, float h, DWORD
 	zSpeed = 0;
 
 	spriteData * _sd = SpriteItemManager::CastSprite(siID);
-	HTEXTURE _tex = tex[_sd->tex];
+	HTEXTURE _tex(_sd->tex, NULL);/* = tex[_sd->tex];*/
 
 	float _x = cenx;
 	float _y = ceny;
@@ -368,6 +365,20 @@ void BGLayer::ActionSpecial()
 	if (ubg[UFGID_FGPAUSE].exist)
 	{
 		ubg[UFGID_FGPAUSE].action();
+	}
+}
+
+void BGLayer::BGLayerSetup(int setID, int sID, bool force, int quittime)
+{
+	if (force || bglayerset[setID].sID == BGLAYERSET_NONE)
+	{
+		if (bglayerset[setID].sID != BGLAYERSET_NONE && bglayerset[setID].sID != sID)
+		{
+			Scripter::scr.sceneExecute(BGLayer::bglayerset[setID].sID, SCRIPT_CON_POST);
+		}
+		bglayerset[setID].sID = sID;
+		bglayerset[setID].timer = 0;
+		bglayerset[setID].quittime = quittime;
 	}
 }
 

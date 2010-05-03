@@ -137,6 +137,10 @@ public:
 	{
 		_Init();
 	};
+	HTEXTURE(int _texindex, DWORD _tex)
+	{
+		_Init(_texindex, _tex);
+	};
 	HTEXTURE(DWORD _tex)
 	{
 		_Init(0, _tex);

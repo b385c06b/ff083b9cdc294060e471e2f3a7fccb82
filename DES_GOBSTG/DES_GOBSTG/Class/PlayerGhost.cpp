@@ -50,7 +50,7 @@ void PlayerGhost::valueSet(WORD _ID, bool move)
 	yshake	=	0.0f;
 	lastchasing	=	false;
 
-	playerghostData * _pgd = &(BResource::res.playerghostdata[ID]);
+	playerghostData * _pgd = &(BResource::bres.playerghostdata[ID]);
 	
 	speed	=	_pgd->speed;
 	flag	=	_pgd->flag;
@@ -173,7 +173,7 @@ void PlayerGhost::action()
 	bool chasing = false;
 	bool shooting = Player::p.flag & PLAYER_SHOOT;
 
-	playerghostData * _pgd = &(BResource::res.playerghostdata[ID]);
+	playerghostData * _pgd = &(BResource::bres.playerghostdata[ID]);
 
 	if (flag & PGFLAG_TRACE)
 	{

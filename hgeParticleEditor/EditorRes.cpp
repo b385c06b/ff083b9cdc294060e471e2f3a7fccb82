@@ -46,16 +46,16 @@ bool EditorRes::Load()
 	}
 	Data::data.GetIni();
 	Export::clientAdjustWindow();
-	BResource::res.Fill();
-	BResource::res.LoadPackage();
+	BResource::bres.Fill();
+	BResource::bres.LoadPackage();
 	font = new hgeFont("EditorFont\\font.fnt");
 //	res.SetDataFile();
 
 	for(int i=0; i<TEXMAX; i++)
 	{
-		if(strlen(BResource::res.texturedata[i].texfilename))
+		if(strlen(BResource::bres.texturedata[i].texfilename))
 		{
-			tex[i] = hge->Texture_Load(BResource::res.texturedata[i].texfilename);
+			tex[i] = hge->Texture_Load(BResource::bres.texturedata[i].texfilename);
 			if(!tex[i].tex)
 				return false;
 		}
@@ -71,11 +71,11 @@ bool EditorRes::Load()
 	for(int i=0; i<EFFECTSYSTYPEMAX; i++)
 	{
 		char buffer[M_STRMAX];
-		if(strlen(BResource::res.resdata.effectsysfilename[i]))
+		if(strlen(BResource::bres.resdata.effectsysfilename[i]))
 		{
 			eff[i] = new hgeEffectSystem;
-			strcpy(buffer, BResource::res.resdata.effectsysfoldername);
-			strcat(buffer, BResource::res.resdata.effectsysfilename[i]);
+			strcpy(buffer, BResource::bres.resdata.effectsysfoldername);
+			strcat(buffer, BResource::bres.resdata.effectsysfilename[i]);
 			texnum[i] = Export::effLoad(buffer, eff[i], tex);
 			if(texnum[i] < 0)
 			{
@@ -145,7 +145,7 @@ char * EditorRes::GetFilename(int effi)
 
 char * EditorRes::GetFullFilename(int effi)
 {
-	strcpy(fullfilename, BResource::res.resdata.effectsysfoldername);
+	strcpy(fullfilename, BResource::bres.resdata.effectsysfoldername);
 	strcat(fullfilename, GetFilename(effi));
 	return fullfilename;
 }

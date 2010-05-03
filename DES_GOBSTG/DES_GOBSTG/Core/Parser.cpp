@@ -4,40 +4,39 @@
 #include "../Header/keytable.h"
 #include "../Header/Parser.h"
 
-bool Scripter::PushScript(int varcount)
+bool Scripter::PushScript(int varcount, vector<Script> ** psaved, int ** idescsaved, TData ** descsaved)
 {
-	if (!scriptpushed)
+	if (!psaved || !idescsaved || !descsaved)
 	{
-		psaved = pnow;
-		if (varcount)
-		{
-			idescsaved = (int *)malloc(sizeof(int) * varcount);
-			descsaved = (TData *)malloc(sizeof(TData) * varcount);
-			memcpy(idescsaved, &idesc[SCR_VARBEGIN], sizeof(int) * varcount);
-			memcpy(descsaved, &d[SCR_VARBEGIN], sizeof(TData) * varcount);
-		}
-		scriptpushed = true;
-		return true;
+		return false;
 	}
-	return false;
+
+	*psaved = pnow;
+	if (varcount)
+	{
+		*idescsaved = (int *)malloc(sizeof(int) * varcount);
+		*descsaved = (TData *)malloc(sizeof(TData) * varcount);
+		memcpy(*idescsaved, &idesc[SCR_VARBEGIN], sizeof(int) * varcount);
+		memcpy(*descsaved, &d[SCR_VARBEGIN], sizeof(TData) * varcount);
+	}
+	return true;
 }
 
-bool Scripter::PopScript(int varcount)
+bool Scripter::PopScript(int varcount, vector<Script> ** psaved, int ** idescsaved, TData ** descsaved)
 {
-	if (scriptpushed)
+	if (!psaved || !idescsaved || !descsaved)
 	{
-		if (varcount)
-		{
-			memcpy(&idesc[SCR_VARBEGIN], idescsaved, sizeof(int) * varcount);
-			memcpy(&d[SCR_VARBEGIN], descsaved, sizeof(TData) * varcount);
-			free(idescsaved);
-			free(descsaved);
-		}
-		pnow = psaved;
-		scriptpushed = false;
-		return true;
+		return false;
 	}
-	return false;
+	if (varcount)
+	{
+		memcpy(&idesc[SCR_VARBEGIN], *idescsaved, sizeof(int) * varcount);
+		memcpy(&d[SCR_VARBEGIN], *descsaved, sizeof(TData) * varcount);
+		free(*idescsaved);
+		free(*descsaved);
+	}
+	pnow = *psaved;
+	return true;
 }
 
 bool Scripter::Parse(int varcount)
@@ -1289,83 +1288,118 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_BGVALUE:
+					rv = _Parser::BGVALUE_();
+/*
 					if(rv = Copy(&it, 7))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].valueSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), UCAST(d[6]));
-					}
+					}*/
+
 					break;
 				case SCR_BGVALEX:
+					rv = _Parser::BGVALEX_();
+/*
 					if (rv = Copy(&it, 16))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].valueSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]), CAST(d[9]), CAST(d[10]), CAST(d[11]), CAST(d[12]), (bool)(CAST(d[13])), (bool)(CAST(d[14])), UCAST(d[15]));
-					}
+					}*/
+
 					break;
 				case SCR_BGTEXRECT:
+					rv = _Parser::BGTEXRECT_();
+/*
 					if(rv = Copy(&it, 5))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].texRectSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]));
-					}
+					}*/
+
 					break;
 				case SCR_BGRECT:
+					rv = _Parser::BGRECT_();
+/*
 					if(rv = Copy(&it, 9))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].rectSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]));
-					}
+					}*/
+
 					break;
 				case SCR_BGZ:
+					rv = _Parser::BGZ_();
+/*
 					if(rv = Copy(&it, 5))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].zSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]));
-					}
+					}*/
+
 					break;
 				case SCR_BGSCALE:
+					rv = _Parser::BGSCALE_();
+/*
 					if(rv = Copy(&it, 3))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].scaleSet(CAST(d[1]), CAST(d[2]));
-					}
+					}*/
+
 					break;
 				case SCR_BGCOLOR:
+					rv = _Parser::BGCOLOR_();
+/*
 					if(rv = Copy(&it, 5))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].colorSet(UCAST(d[1]), UCAST(d[2]), UCAST(d[3]), UCAST(d[4]));
-					}
+					}*/
+
 					break;
 				case SCR_BGMOVE:
+					rv = _Parser::BGMOVE_();
+/*
 					if(rv = Copy(&it, 6))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].moveSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), (bool)(CAST(d[4])), (bool)(CAST(d[5])));
-					}
+					}*/
+
 					break;
 				case SCR_BGFLAG:
+					rv = _Parser::BGFLAG_();
+/*
 					if(rv = Copy(&it, 3))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].SetFlag(CAST(d[1]), CAST(d[2]));
-					}
+					}*/
+
 					break;
 				case SCR_BGPARAL:
+					rv = _Parser::BGPARAL_();
+/*
 					if(rv = Copy(&it, 2))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].parallelogram(CAST(d[1]));
-					}
+					}*/
+
 					break;
 				case SCR_BG4V:
+					rv = _Parser::BG4V_();
+/*
 					if (rv = Copy(&it, 13))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].vertexSet(CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]), CAST(d[7]), CAST(d[8]), CAST(d[9]), CAST(d[10]), CAST(d[11]), CAST(d[12]));
-					}
+					}*/
+
 					break;
 				case SCR_BGOFF:
+					rv = _Parser::BGOFF_();
+/*
 					if(rv = Copy(&it, 1))
 					{
 						int _tdi = CAST(d[0]);
@@ -1377,23 +1411,29 @@ bool Scripter::Parse(int varcount)
 						{
 							BGLayer::ubg[_tdi].exist = false;
 						}
-					}
+					}*/
+
 					break;
 				case SCR_BGBLEND:
+					rv = _Parser::BGBLEND_();
+/*
 					if (rv = Copy(&it, 2))
 					{
 						int _tdi = CAST(d[0]);
 						BGLayer::ubg[_tdi].SetBlend(CAST(d[1]));
-					}
+					}*/
+
 					break;
 				case SCR_BGSETUP:
+					rv = _Parser::BGSETUP_();
+/*
 					if(rv = Copy(&it, 4))
 					{
 						int _tdi = CAST(d[0]);
 						if(CAST(d[2]) || BGLayer::bglayerset[_tdi].sID == BGLAYERSET_NONE)
 						{
 							int _tsID = CAST(d[1]);
-							if(BGLayer::bglayerset[_tdi].sID != BGLAYERSET_NONE && BGLayer::bglayerset[_tdi].sID != CAST(d[1]))
+							if(BGLayer::bglayerset[_tdi].sID != BGLAYERSET_NONE && BGLayer::bglayerset[_tdi].sID != _tsID)
 							{
 								vector<Script> * psaved = pnow;
 								int * idescsaved;
@@ -1419,9 +1459,10 @@ bool Scripter::Parse(int varcount)
 							BGLayer::bglayerset[_tdi].quittime = CAST(d[3]);
 							BGLayer::bglayerset[_tdi].timer = 0;
 						}
-					}
+					}*/
 					break;
 				}
+
 				break;
 				/************************************************************************/
 				/* Select                                                               */
@@ -1430,6 +1471,8 @@ bool Scripter::Parse(int varcount)
 				switch (nowval)
 				{
 				case SCR_SELBUILD:
+					rv = _Parser::SELBUILD_();
+/*
 					if(rv = Copy(&it, 16))
 					{
 						Selector::Build(CAST(d[0]), CAST(d[1]), CAST(d[2]), CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]),
@@ -1438,28 +1481,40 @@ bool Scripter::Parse(int varcount)
 							CAST(d[11]), CAST(d[12]),
 							CAST(d[13]), CAST(d[14]),
 							(CAST(d[15])));
-					}
+					}*/
+
 					break;
 				case SCR_SELCLEAR:
+					rv = _Parser::SELCLEAR_();
+/*
 					Selector::Clear();
-					rv = true;
+					rv = true;*/
+
 					break;
 				case SCR_SELCONFIRM:
+					rv = _Parser::SELCONFIRM_();
+/*
 					if(rv = Copy(&it, 4))
 					{
 						int _tdi = CAST(d[3]);
 						CINT(d[_tdi].value) = Selector::confirm(CAST(d[0]), CAST(d[1]), CAST(d[2]));
 						d[_tdi].bfloat = false;
-					}
+					}*/
+
 					break;
 				case SCR_SELSET:
+					rv = _Parser::SELSET_();
+/*
 					if(rv = Copy(&it, 7))
 					{
 						Selector::Setup(CAST(d[0]), CAST(d[1]), (bool)CAST(d[2]));
 						Selector::SetPageNum(CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]));
-					}
+					}*/
+
 					break;
 				case SCR_SELFLAG:
+					rv = _Parser::SELFLAG_();
+/*
 					if (rv = Copy(&it, 2))
 					{
 						Selector * _sel = Selector::GetPointer(CAST(d[0]));
@@ -1467,27 +1522,39 @@ bool Scripter::Parse(int varcount)
                         {
 							_sel->flag = CAST(d[1]);
                         }
-					}
+					}*/
+
 					break;
 
 				case SCR_ISELBUILD:
+					rv = _Parser::ISELBUILD_();
+/*
 					if(rv = Copy(&it, 6))
 					{
 						InfoSelect::Build(CAST(d[0]), GetStringSp(1), CAST(d[2]), CAST(d[3]), CAST(d[4]), (CAST(d[5])));
-					}
+					}*/
+
 					break;
 				case SCR_ISELCLEAR:
+					rv = _Parser::ISELCLEAR_();
+/*
 					InfoSelect::Clear();
-					rv = true;
+					rv = true;*/
+
 					break;
 				case SCR_ISELSET:
+					rv = _Parser::ISELSET_();
+/*
 					if(rv = Copy(&it, 7))
 					{
 						InfoSelect::Setup(CAST(d[0]), CAST(d[1]), (bool)CAST(d[2]));
 						InfoSelect::SetPageNum(CAST(d[3]), CAST(d[4]), CAST(d[5]), CAST(d[6]));
-					}
+					}*/
+
 					break;
 				case SCR_ISELFLAG:
+					rv = _Parser::ISELFLAG_();
+/*
 					if (rv = Copy(&it, 2))
 					{
 						InfoSelect * _tifs = InfoSelect::GetPointer(CAST(d[0]));
@@ -1495,9 +1562,12 @@ bool Scripter::Parse(int varcount)
 						{
 							_tifs->flag = CAST(d[1]);
 						}
-					}
+					}*/
+
 					break;
 				case SCR_ISELCOLOR:
+					rv = _Parser::ISELCOLOR_();
+/*
 					if (rv = Copy(&it, 2))
 					{
 						InfoSelect * _tifs = InfoSelect::GetPointer(CAST(d[0]));
@@ -1505,7 +1575,8 @@ bool Scripter::Parse(int varcount)
 						{
 							_tifs->coltype = CAST(d[1]);
 						}
-					}
+					}*/
+
 				}
 				break;
 			}
@@ -1680,54 +1751,75 @@ chatout:
 			switch (nowval)
 			{
 			case SCR_DATAGET:
+				rv = _Parser::DATAGET_();
+/*
 				if (rv = Copy(&it, 4))
 				{
 					int _tdi = CAST(d[3]);
 					CINT(d[_tdi].value) = Data::data.iRead(DATA_BINFILE, UCAST(d[0]), UCAST(d[1]), CAST(d[2]));
 					d[_tdi].bfloat = false;
-				}
+				}*/
+
 				break;
 			case SCR_DATAGETf:
+				rv = _Parser::DATAGETf_();
+/*
 				if (rv = Copy(&it, 4))
 				{
 					int _tdi = CAST(d[4]);
 					CFLOAT(d[_tdi].value) = Data::data.fRead(DATA_BINFILE, UCAST(d[0]), UCAST(d[1]), CAST(d[2]));
 					d[_tdi].bfloat = true;
-				}
+				}*/
+
 				break;
 			case SCR_DATASET:
+				rv = _Parser::DATAGET_();
+/*
 				if (rv = Copy(&it, 3))
 				{
 					Data::data.iWrite(DATA_BINFILE, UCAST(d[0]), UCAST(d[1]), CAST(d[2]));
-				}
+				}*/
+
 				break;
 			case SCR_DATASETf:
+				rv = _Parser::DATAGETf_();
+/*
 				if (rv = Copy(&it, 3))
 				{
 					Data::data.fWrite(DATA_BINFILE, UCAST(d[0]), UCAST(d[1]), CAST(d[2]));
-				}
+				}*/
+
 				break;
 			case SCR_SETFLAG:
+				rv = _Parser::SETFLAG_();
+/*
 				if (rv = Copy(&it, 2))
 				{
 					Data::data.iWrite(DATA_BINFILE, DATAS_FLAG, UCAST(d[0]), CAST(d[1]));
-				}
+				}*/
+
 				break;
 
 			case SCR_TRYSTAGE:
+				rv = _Parser::TRYSTAGE_();
+/*
 				if (rv = true)
 				{
 					DataConnector::Try();
-				}
+				}*/
+
 				break;
 
 			case SCR_DEBUG_BREAKPOINT:
-#ifdef __DEBUG
+				rv = _Parser::DEBUG_BREAKPOINT_();
+/*
 				if(rv = true)
 				{
+#ifdef __DEBUG
 					LogOut();
-				}
 #endif
+				}*/
+
 				break;
 			}
 			break;
@@ -1737,7 +1829,7 @@ chatout:
 		{
 #ifdef __DEBUG
 			char strbuffer[M_STRMAX];
-			sprintf(strbuffer, "%s\nError in parsing %d. Point to 0x%x.", HGELOG_ERRSTR, it->value, it->pos);
+			sprintf(strbuffer, "%s\nError in parsing %d. %s. Line %d. Point to 0x%x.", HGELOG_ERRSTR, it->value, filelist[it->fileindex].filename, it->line, it->pos);
 			HGELOG(strbuffer);
 			MessageBox(NULL, strbuffer, HGELOG_ERRSTR, MB_OK);
 			LogOut();

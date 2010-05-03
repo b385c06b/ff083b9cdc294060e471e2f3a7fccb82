@@ -10,6 +10,7 @@ CALL $SceneOff POST@
 
 @ QUIT@
 
+DEBUG_BREAKPOINT
 CALL $SceneOff QUIT@
 
 @ 1

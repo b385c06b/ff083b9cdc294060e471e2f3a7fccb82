@@ -63,13 +63,14 @@ public:
 	BGLayer();
 	~BGLayer();
 
-	static void Init(HTEXTURE * tex);
+	static void Init();
 	static void KillOtherLayer();
 	static void Action(bool active);
 	static void ActionSpecial();
 	static void RenderBG();
 	static void RenderFG();
 	static void RenderFGPause();
+	static void BGLayerSetup(int setID, int sID, bool force, int quittime);
 
 	void Render();
 	void valueSet(int siID, float x, float y, float z, float w, float h, int rotx, int roty, int rotz, float paral, float speed = 0, int angle = 9000, bool move = false, bool rotate = false, DWORD col = 0xffffffff);
@@ -109,9 +110,6 @@ public:
 	static BGLayer ubg[UBGLAYERMAX];
 	static BGLayerSet bglayerset[BGLAYERSETMAX];
 	static WORD setindex;
-
-	static HTEXTURE * tex;
-
 };
 
 #endif

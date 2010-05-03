@@ -36,7 +36,7 @@ void BossInfo::Clear()
 //bossinfo
 bool BossInfo::Fill(int _sno)
 {
-	for(vector<spellData>::iterator i=BResource::res.spelldata.begin(); i!=BResource::res.spelldata.end(); i++)
+	for(vector<spellData>::iterator i=BResource::bres.spelldata.begin(); i!=BResource::bres.spelldata.end(); i++)
 	{
 		if(i->sno == _sno)
 		{

@@ -23,7 +23,6 @@ hgeSprite * Bullet::sprite[BULLETTYPECOLORMAX];
 VectorList<IzeZone> Bullet::izel;
 
 VectorList<Bullet> Bullet::bu;
-HTEXTURE Bullet::tex;
 
 WORD Bullet::index;
 
@@ -36,20 +35,19 @@ Bullet::~Bullet()
 {
 }
 
-void Bullet::Init(HTEXTURE _tex)
+void Bullet::Init()
 {
 	Release();
 
 	ZeroMemory(renderDepth, sizeof(RenderDepth) * BULLETTYPEMAX);
 	bu.init(BULLETMAX);
-	tex = _tex;
 	for (int i=0; i<BULLETTYPEMAX; i++)
 	{
-		bulletData * tbd = &BResource::res.bulletdata[i];
+		bulletData * tbd = &BResource::bres.bulletdata[i];
 		int tnum = tbd->nRoll;
 		if (tnum < 2)
 		{
-			tnum = BResource::res.bulletdata[i].nColor;
+			tnum = BResource::bres.bulletdata[i].nColor;
 		}
 		int j=0;
 		int index;
@@ -58,7 +56,7 @@ void Bullet::Init(HTEXTURE _tex)
 			index = i*BULLETCOLORMAX+j;
 			sprite[index] = SpriteItemManager::CreateSprite(tbd->siid+j);
 			sprite[index]->SetBlendMode(tbd->blendtype);
-			if (BResource::res.bulletdata[i].collisiontype != BULLET_COLLISION_ELLIPSE && tbd->collisionSub)
+			if (BResource::bres.bulletdata[i].collisiontype != BULLET_COLLISION_ELLIPSE && tbd->collisionSub)
 			{
 				float tex_w = SpriteItemManager::GetTexW(tbd->siid+j);
 				float tex_h = SpriteItemManager::GetTexH(tbd->siid+j);
@@ -69,7 +67,6 @@ void Bullet::Init(HTEXTURE _tex)
 		{
 			index = i*BULLETCOLORMAX+j;
 			sprite[index] = SpriteItemManager::CreateNullSprite();
-			SpriteItemManager::SetSpriteData(sprite[index], tex, 0, 0, 0, 0);
 		}
 	}
 
@@ -235,7 +232,7 @@ void Bullet::Render()
 	{
 		sprite[i]->SetColor(alpha<<24 | diffuse);
 		float arc = 0;
-		if (!(BResource::res.bulletdata[type].renderflag & _BULLETRENDERFLAG_ROUND))
+		if (!(BResource::bres.bulletdata[type].renderflag & _BULLETRENDERFLAG_ROUND))
 		{
 			arc = ARC(angle+headangle+BULLET_ANGLEOFFSET);
 		}
@@ -245,18 +242,18 @@ void Bullet::Render()
 
 BYTE Bullet::getRenderDepth()
 {
-	return BResource::res.bulletdata[type].renderdepth;
+	return BResource::bres.bulletdata[type].renderdepth;
 }
 
 void Bullet::matchFadeInColorType()
 {
-	if( BResource::res.bulletdata[type].fadecolor < BULLETCOLORMAX)
+	if( BResource::bres.bulletdata[type].fadecolor < BULLETCOLORMAX)
 	{
-		color = BResource::res.bulletdata[type].fadecolor;
+		color = BResource::bres.bulletdata[type].fadecolor;
 //		type = BULLET_FADEINTYPE;
 		changeType(BULLET_FADEINTYPE);
 	}
-	else if (BResource::res.bulletdata[type].fadecolor == BULLET_FADECOLOR_16)
+	else if (BResource::bres.bulletdata[type].fadecolor == BULLET_FADECOLOR_16)
 	{
 //		type = BULLET_FADEINTYPE;
 		changeType(BULLET_FADEINTYPE);
@@ -272,7 +269,7 @@ void Bullet::matchFadeInColorType()
 			color = (color-9)/3+5;
 		}
 	}
-	else if (BResource::res.bulletdata[type].fadecolor == BULLET_FADECOLOR_8)
+	else if (BResource::bres.bulletdata[type].fadecolor == BULLET_FADECOLOR_8)
 	{
 		changeType(BULLET_FADEINTYPE);
 //		type = BULLET_FADEINTYPE;
@@ -280,13 +277,13 @@ void Bullet::matchFadeInColorType()
 }
 void Bullet::matchFadeOutColorType()
 {
-	if (BResource::res.bulletdata[type].fadecolor < BULLETCOLORMAX)
+	if (BResource::bres.bulletdata[type].fadecolor < BULLETCOLORMAX)
 	{
-		color = BResource::res.bulletdata[type].fadecolor;
+		color = BResource::bres.bulletdata[type].fadecolor;
 		changeType(BULLET_FADEOUTTYPE);
 //		type = BULLET_FADEOUTTYPE;
 	}
-	else if (BResource::res.bulletdata[type].fadecolor == BULLET_FADECOLOR_16)
+	else if (BResource::bres.bulletdata[type].fadecolor == BULLET_FADECOLOR_16)
 	{
 		changeType(BULLET_FADEOUTTYPE);
 //		type = BULLET_FADEOUTTYPE;
@@ -302,7 +299,7 @@ void Bullet::matchFadeOutColorType()
 			color = (color-9)/3+5;
 		}
 	}
-	else if (BResource::res.bulletdata[type].fadecolor == BULLET_FADECOLOR_8)
+	else if (BResource::bres.bulletdata[type].fadecolor == BULLET_FADECOLOR_8)
 	{
 		changeType(BULLET_FADEOUTTYPE);
 //		type = BULLET_FADEOUTTYPE;
@@ -435,7 +432,7 @@ void Bullet::DoIze()
 
 void Bullet::DoGraze()
 {
-	if(!grazed && BResource::res.bulletdata[type].collisiontype != BULLET_COLLISION_NONE)
+	if(!grazed && BResource::bres.bulletdata[type].collisiontype != BULLET_COLLISION_NONE)
 	{
 		if((Player::p.x - x) * (Player::p.x - x) + (Player::p.y - y) * (Player::p.y - y) < Player::p.graze_r * Player::p.graze_r)
 		{
@@ -478,7 +475,7 @@ void Bullet::DoUpdateRenderDepth()
 
 bool Bullet::HaveGray()
 {
-	if (!(BResource::res.bulletdata[type].nColor % 8))
+	if (!(BResource::bres.bulletdata[type].nColor % 8))
 	{
 		return true;
 	}
@@ -603,7 +600,7 @@ void Bullet::action()
 			changeType(oldtype);
 			color = oldcolor;
 			alpha = 0xff;
-			SE::push(BResource::res.bulletdata[type].seID, x);
+			SE::push(BResource::bres.bulletdata[type].seID, x);
 		}
 		else
 		{
@@ -620,10 +617,10 @@ void Bullet::action()
 			{
 				ChangeAction();
 
-				if (BResource::res.bulletdata[type].nRoll && !(timer % BULLET_ANIMATIONSPEED))
+				if (BResource::bres.bulletdata[type].nRoll && !(timer % BULLET_ANIMATIONSPEED))
 				{
 					color++;
-					if (color >= BResource::res.bulletdata[type].nRoll)
+					if (color >= BResource::bres.bulletdata[type].nRoll)
 					{
 						color = 0;
 					}
@@ -656,7 +653,7 @@ void Bullet::action()
 		}
 
 		DoIze();
-		headangle += SIGN(color) * BResource::res.bulletdata[type].nTurnAngle;
+		headangle += SIGN(color) * BResource::bres.bulletdata[type].nTurnAngle;
 		if(tarID != 0xff)
 		{
 			Target::SetValue(tarID, x, y);
@@ -684,7 +681,7 @@ void Bullet::action()
 			}
 			else if(toafter == BULLETIZE_SCORE)
 			{
-				color = BResource::res.bulletdata[oldtype].bonuscolor;
+				color = BResource::bres.bulletdata[oldtype].bonuscolor;
 				switch(color)
 				{
 				case 0:
@@ -1473,7 +1470,7 @@ bool Bullet::ChangeAction()
 
 bool Bullet::isInRect(float r, float aimx, float aimy)
 {
-	bulletData * tbd = &(BResource::res.bulletdata[type]);
+	bulletData * tbd = &(BResource::bres.bulletdata[type]);
 	float _x = x;
 	float _y = y;
 	float collisionfactor = 1.0f;

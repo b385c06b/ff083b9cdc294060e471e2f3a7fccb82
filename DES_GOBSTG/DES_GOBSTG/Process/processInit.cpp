@@ -175,7 +175,7 @@ int Process::processInit()
 	}
 	else
 	{
-		if(!BResource::res.Fill())
+		if(!BResource::bres.Fill())
 		{
 #ifdef __DEBUG
 			HGELOG("Error in Filling Resource Data.");
@@ -188,7 +188,7 @@ int Process::processInit()
 			errorcode = PROC_ERROR_SCRIPT;
 			return PQUIT;
 		}
-		if(!BResource::res.Pack(Scripter::scr.strdesc, BResource::res.customconstdata))
+		if(!BResource::bres.Pack(Scripter::scr.strdesc, BResource::bres.customconstdata))
 		{
 #ifdef __DEBUG
 			HGELOG("Error in Packing Resource Data.");
@@ -196,13 +196,13 @@ int Process::processInit()
 			errorcode = PROC_ERROR_TRANSLATE;
 			return PQUIT;
 		}
-		if(!BResource::res.SetDataFile())
+		if(!BResource::bres.SetDataFile())
 		{
 			errorcode = PROC_ERROR_DATA;
 			return PQUIT;
 		}
 	}
-	if(!BResource::res.Gain(Scripter::scr.strdesc, binmode?BResource::res.customconstdata:NULL))
+	if(!BResource::bres.Gain(Scripter::scr.strdesc, binmode?BResource::bres.customconstdata:NULL))
 	{
 #ifdef __DEBUG
 		HGELOG("Error in Gaining Resource Data.");
@@ -214,8 +214,8 @@ int Process::processInit()
 	for (int i=0; i<TEXMAX; i++)
 	{
 		texinfo[i].tex = NULL;
-		texinfo[i].texw = BResource::res.texturedata[i].width;
-		texinfo[i].texh = BResource::res.texturedata[i].height;
+		texinfo[i].texw = BResource::bres.texturedata[i].width;
+		texinfo[i].texh = BResource::bres.texturedata[i].height;
 	}
 
 	if(Scripter::scr.binmode && !Scripter::scr.LoadAll())
@@ -232,13 +232,13 @@ int Process::processInit()
 		return PQUIT;
 	}
 
-	if(!BResource::res.LoadPackage())
+	if(!BResource::bres.LoadPackage())
 	{
 		errorcode = PROC_ERROR_PACKAGE;
 		return PQUIT;
 	}
 
-	BGLayer::Init(tex);
+	BGLayer::Init();
 
 	SE::vol = sevol;
 	if(!SE::Initial())
@@ -249,17 +249,17 @@ int Process::processInit()
 
 	char tnbuffer[M_STRMAX];
 
-	tex[TEX_WHITE] = hge->Texture_Load(BResource::res.texturedata[TEX_WHITE].texfilename);
+	tex[TEX_WHITE] = hge->Texture_Load(BResource::bres.texturedata[TEX_WHITE].texfilename);
 #ifdef __DEBUG
 	if(tex[TEX_WHITE].tex == NULL)
 	{
-		HGELOG("%s\nFailed in loading Texture File %s.(To be assigned to Index %d).", HGELOG_ERRSTR, BResource::res.texturedata[TEX_WHITE].texfilename, TEX_WHITE);
+		HGELOG("%s\nFailed in loading Texture File %s.(To be assigned to Index %d).", HGELOG_ERRSTR, BResource::bres.texturedata[TEX_WHITE].texfilename, TEX_WHITE);
 		errorcode = PROC_ERROR_TEXTURE;
 		return PQUIT;
 	}
 	else
 	{
-		HGELOG("Succeeded in loading Texture File %s.(Assigned to Index %d).", BResource::res.texturedata[TEX_WHITE].texfilename, TEX_WHITE);
+		HGELOG("Succeeded in loading Texture File %s.(Assigned to Index %d).", BResource::bres.texturedata[TEX_WHITE].texfilename, TEX_WHITE);
 	}
 #endif
 /*
@@ -305,10 +305,10 @@ int Process::processInit()
 	}
 	hge->Gfx_SetTextureInfo(TEXMAX, texinfo);
 
-	SpriteItemManager::Init(tex);
+	SpriteItemManager::Init();
 
 //	Fontsys::fontsys.Init(FrontDisplay::fdisp.info.normalfont);
-	if(!Effectsys::Init(tex, BResource::res.resdata.effectsysfoldername, BResource::res.resdata.effectsysfilename))
+	if(!Effectsys::Init(tex, BResource::bres.resdata.effectsysfoldername, BResource::bres.resdata.effectsysfilename))
 	{
 #ifdef __DEBUG
 		HGELOG("%s\nFailed in Initializing Effectsys.", HGELOG_ERRSTR);

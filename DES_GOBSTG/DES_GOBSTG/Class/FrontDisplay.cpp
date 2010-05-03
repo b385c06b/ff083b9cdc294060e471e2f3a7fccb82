@@ -735,8 +735,8 @@ bool FrontDisplay::Init()
 		info.bossasciifont->ChangeSprite(i, asciismall.ascii[i-FDISP_ASCII_BEGIN]);
 	}
 
-	info.normalfont = hge->Font_Load(BResource::res.resdata.widefontname, 20);
-	info.smallfont = hge->Font_Load(BResource::res.resdata.widefontname, 16);
+	info.normalfont = hge->Font_Load(BResource::bres.resdata.widefontname, 20);
+	info.smallfont = hge->Font_Load(BResource::bres.resdata.widefontname, 16);
 
 	return true;
 }

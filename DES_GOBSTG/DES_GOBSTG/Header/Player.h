@@ -133,6 +133,8 @@ public:
 	void SetPos(float x, float y);
 	void SetLife(int nLife);
 
+	WORD GetChara(int index);
+
 public:
 	WORD	ID_sub_1;
 	WORD	ID_sub_2;

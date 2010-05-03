@@ -358,6 +358,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Core\ParseFunction.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Core\Parser.cpp"
 					>
 				</File>

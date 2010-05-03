@@ -145,7 +145,7 @@ int Process::processResult()
 			InfoSelect::Clear();
 			tdiff = Selector::select;
 			int i = 0;
-			for (vector<spellData>::iterator it = BResource::res.spelldata.begin(); it!= BResource::res.spelldata.end(); it++)
+			for (vector<spellData>::iterator it = BResource::bres.spelldata.begin(); it!= BResource::bres.spelldata.end(); it++)
 			{
 				if ((it->spellflag) & BISF_NOTSPELL)
 				{

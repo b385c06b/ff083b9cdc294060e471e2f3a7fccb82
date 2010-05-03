@@ -51,6 +51,7 @@ enum{
 };
 
 enum{
+	SCR_FORCE_NONE		= 0x00,
 	SCR_FORCE_INT		= 0x01,
 	SCR_FORCE_FLOAT		= 0x02,
 };
@@ -69,6 +70,8 @@ typedef struct tagToken
 	DWORD value;
 	DWORD type;
 #ifdef __DEBUG
+	int fileindex;
+	int line;
 	DWORD pos;
 #endif
 }Token;
@@ -125,9 +128,9 @@ public:
 	{
 		return CINT(GetValue(index));
 	}
-	bool SetDWORDValue(int index, DWORD uval)
+	bool SetDWORDValue(int index, DWORD uval, bool setfloat=false)
 	{
-		return SetValue(index, &uval, false);
+		return SetValue(index, &uval, setfloat);
 	}
 	DWORD GetDWORDValue(int index)
 	{
@@ -193,13 +196,13 @@ public:
 		return Execute(&event, name, con);
 	}
 
-	bool PushScript(int varcount);
-	bool PopScript(int varcount);
+	bool PushScript(int varcount, vector<Script> ** psaved, int ** idescsaved, TData ** descsaved);
+	bool PopScript(int varcount, vector<Script> ** psaved, int ** idescsaved, TData ** descsaved);
 
 	bool Parse(int varcount);
 
 	bool Copy(vector<Script>::iterator * p, BYTE num, BYTE dstart = 0);
-	void * Value(vector<Script>::iterator * p, int i, BYTE force);
+	void * Value(vector<Script>::iterator * p, int i, BYTE force=SCR_FORCE_NONE);
 	void * ValueI(vector<Script>::iterator * p, int i){return Value(p, i, SCR_FORCE_INT);};
 	void * ValueF(vector<Script>::iterator * p, int i){return Value(p, i, SCR_FORCE_FLOAT);};
 
@@ -249,11 +252,17 @@ public:
 	int varIndex;
 	DWORD strdescIndex;
 
-	vector<Script> * psaved;
-	int * idescsaved;
-	TData * descsaved;
-
 	bool scriptpushed;
+
+#ifdef __DEBUG
+	typedef struct tag_FileList
+	{
+		char filename[M_PATHMAX];
+	}_FileList;
+	vector<_FileList> filelist;
+	int nowfileindex;
+	int nowline;
+#endif
 
 	static bool stopEdefScript;
 

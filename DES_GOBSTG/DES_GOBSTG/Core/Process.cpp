@@ -148,7 +148,7 @@ void Process::Realease()
 void Process::ClearAll()
 {
 	Selector::Clear();
-	BGLayer::Init(tex);
+	BGLayer::Init();
 	Beam::ClearAll();
 	Enemy::ClearAll();
 	Ghost::ClearAll();
@@ -185,11 +185,11 @@ bool Process::LoadTextureSet(int texset/* =-1 */)
 	bool bret = true;
 	for (int i=0; i<TEXMAX; i++)
 	{
-		if (!tex[i].tex && BResource::res.texturedata[i].texset > 0)
+		if (!tex[i].tex && BResource::bres.texturedata[i].texset > 0)
 		{
-			if (texset < 0 || BResource::res.texturedata[i].texset == texset)
+			if (texset < 0 || BResource::bres.texturedata[i].texset == texset)
 			{
-				tex[i] = BResource::res.LoadTexture(i);
+				tex[i] = BResource::bres.LoadTexture(i);
 				if (!tex[i].tex && bret)
 				{
 					bret = false;
@@ -208,7 +208,7 @@ bool Process::FreeTextureSet(int texset/* =-1 */)
 	{
 		if (tex[i].tex)
 		{
-			if (texset < 0 || BResource::res.texturedata[i].texset == texset)
+			if (texset < 0 || BResource::bres.texturedata[i].texset == texset)
 			{
 				hge->Texture_Free(tex[i]);
 				tex[i].tex = NULL;
@@ -293,16 +293,16 @@ void Process::musicChange(BYTE ID, bool force)
 	}
 	if(!hge->Channel_IsPlaying(channel) || musicID != ID-1 || force)
 	{
-		if (musicID < 0 || strcmp(BResource::res.musdata[ID-1].musicfilename, BResource::res.musdata[musicID].musicfilename))
+		if (musicID < 0 || strcmp(BResource::bres.musdata[ID-1].musicfilename, BResource::bres.musdata[musicID].musicfilename))
 		{
 			if(stream)
 				hge->Stream_Free(stream);
-			stream = hge->Stream_Load(BResource::res.musdata[ID-1].musicfilename, 0, false);
+			stream = hge->Stream_Load(BResource::bres.musdata[ID-1].musicfilename, 0, false);
 		}
 		musicID = ID-1;
-		channelsyncinfo.startPos = BResource::res.musdata[musicID].startpos;
-		channelsyncinfo.introLength = BResource::res.musdata[musicID].introlength;
-		channelsyncinfo.allLength = BResource::res.musdata[musicID].alllength;
+		channelsyncinfo.startPos = BResource::bres.musdata[musicID].startpos;
+		channelsyncinfo.introLength = BResource::bres.musdata[musicID].introlength;
+		channelsyncinfo.allLength = BResource::bres.musdata[musicID].alllength;
 		if (channel)
 		{
 			musicSlide(0, bgmvol);
@@ -323,7 +323,7 @@ void Process::SnapShot()
 	char snapshotfilename[M_PATHMAX];
 	strcpy(snapshotfilename, "");
 	sprintf(snapshotfilename, "%s%s_%04d_%02d_%02d_%02d_%02d_%02d_%04d.%s",
-		BResource::res.resdata.snapshotfoldername,
+		BResource::bres.resdata.snapshotfoldername,
 		SNAPSHOT_PRIFIX,
 		systime.wYear, systime.wMonth, systime.wDay, systime.wHour, systime.wMinute, systime.wSecond, systime.wMilliseconds,
 		SNAPSHOT_EXTENSION);

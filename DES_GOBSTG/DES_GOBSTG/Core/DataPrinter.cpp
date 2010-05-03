@@ -125,7 +125,7 @@ bool DataPrinter::PrintScore()
 		str += DPS_COMMENT;
 		str += DPS_COMMENTDOUBLELINE;
 		str += DPS_RETURN;
-		str += BResource::res.resdata.uistr.difflv;
+		str += BResource::bres.resdata.uistr.difflv;
 		str += DPS_SPACE;
 		switch (i)
 		{
@@ -188,7 +188,7 @@ bool DataPrinter::PrintScore()
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
-			str += BResource::res.resdata.uistr.usingchara;
+			str += BResource::bres.resdata.uistr.usingchara;
 			name = Data::data.nLinkType(DATAN_CHARA);
 			int chara[M_PL_ONESETPLAYER];
 			for (int k=0; k<M_PL_ONESETPLAYER; k++)
@@ -201,19 +201,19 @@ bool DataPrinter::PrintScore()
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
-			str += BResource::res.resdata.uistr.score;
+			str += BResource::bres.resdata.uistr.score;
 			str += DPS_TABLE_1;
 			str += _i64toa(_score, buffer, 10);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
-			str += BResource::res.resdata.uistr.username;
+			str += BResource::bres.resdata.uistr.username;
 			str += DPS_TABLE_1;
 			str += Data::data.sRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_USERNAME), RESCONFIGDEFAULT_USERNAME);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
-			str += BResource::res.resdata.uistr.laststage;
+			str += BResource::bres.resdata.uistr.laststage;
 			str += DPS_TABLE_1;
 			switch(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_LASTSTAGE), 0))
 			{
@@ -245,7 +245,7 @@ bool DataPrinter::PrintScore()
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
-			str += BResource::res.resdata.uistr.date;
+			str += BResource::bres.resdata.uistr.date;
 			str += DPS_TABLE_1;
 			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_TIME_YEAR), 0), buffer, 10);
 			str += DPS_SLASH;
@@ -259,7 +259,7 @@ bool DataPrinter::PrintScore()
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
-			str += BResource::res.resdata.uistr.lost;
+			str += BResource::bres.resdata.uistr.lost;
 			str += DPS_TABLE_1;
 			sprintf(buffer, "%f", Data::data.fRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_LOST), 0));
 			str += buffer;
@@ -267,7 +267,7 @@ bool DataPrinter::PrintScore()
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
-			str += BResource::res.resdata.uistr.alltime;
+			str += BResource::bres.resdata.uistr.alltime;
 			str += DPS_TABLE_1;
 			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_ALLTIME), 0), buffer, 10);
 			str += DPS_RETURN;
@@ -279,49 +279,49 @@ bool DataPrinter::PrintScore()
 			str += DPS_RETURN;
 */
 			str += DPS_TABLE_2;
-			str += BResource::res.resdata.uistr.point;
+			str += BResource::bres.resdata.uistr.point;
 			str += DPS_TABLE_1;
 			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_POINT), 0), buffer, 10);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
-			str += BResource::res.resdata.uistr.faith;
+			str += BResource::bres.resdata.uistr.faith;
 			str += DPS_TABLE_1;
 			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_FAITH), 0), buffer, 10);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
-			str += BResource::res.resdata.uistr.misstime;
+			str += BResource::bres.resdata.uistr.misstime;
 			str += DPS_TABLE_1;
 			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_MISS), 0), buffer, 10);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
-			str += BResource::res.resdata.uistr.bordertime;
+			str += BResource::bres.resdata.uistr.bordertime;
 			str += DPS_TABLE_1;
 			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_BOMB), 0), buffer, 10);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
-			str += BResource::res.resdata.uistr.gettime;
+			str += BResource::bres.resdata.uistr.gettime;
 			str += DPS_TABLE_1;
 			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_SPELLGET), 0), buffer, 10);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
-			str += BResource::res.resdata.uistr.pausetime;
+			str += BResource::bres.resdata.uistr.pausetime;
 			str += DPS_TABLE_1;
 			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_PAUSE), 0), buffer, 10);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
-			str += BResource::res.resdata.uistr.continuetime;
+			str += BResource::bres.resdata.uistr.continuetime;
 			str += DPS_TABLE_1;
 			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_CONTINUE), 0), buffer, 10);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
-			str += BResource::res.resdata.uistr.borderrate;
+			str += BResource::bres.resdata.uistr.borderrate;
 			str += DPS_TABLE_1;
 			sprintf(buffer, "%f", Data::data.fRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_BORDERRATE), 0) * 100);
 			str += buffer;
@@ -329,7 +329,7 @@ bool DataPrinter::PrintScore()
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
-			str += BResource::res.resdata.uistr.fastrate;
+			str += BResource::bres.resdata.uistr.fastrate;
 			str += DPS_TABLE_1;
 			sprintf(buffer, "%f", Data::data.fRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_FASTRATE), 0) * 100);
 			str += buffer;
@@ -392,7 +392,7 @@ bool DataPrinter::PrintScore()
 
 	WriteString(&str, hFile);
 
-	for (vector<spellData>::iterator it = BResource::res.spelldata.begin(); it!= BResource::res.spelldata.end(); it++)
+	for (vector<spellData>::iterator it = BResource::bres.spelldata.begin(); it!= BResource::bres.spelldata.end(); it++)
 	{
 		if (Data::data.raGetIndi(it->sno))
 		{
@@ -650,17 +650,17 @@ bool DataPrinter::PrintReplayData(const char * foldername, const char * filename
 	str += DPS_RETURN;
 	str += DPS_RETURN;
 
-	str += BResource::res.resdata.uistr.filename;
+	str += BResource::bres.resdata.uistr.filename;
 	str += DPS_TABLE_1;
 	str += filename;
 	str += DPS_RETURN;
 
-	str += BResource::res.resdata.uistr.username;
+	str += BResource::bres.resdata.uistr.username;
 	str += DPS_TABLE_1;
 	str += rpyinfo.username;
 	str += DPS_RETURN;
 
-	str += BResource::res.resdata.uistr.usingchara;
+	str += BResource::bres.resdata.uistr.usingchara;
 	str += DPS_RETURN;
 	for (int i=0; i<M_PL_ONESETPLAYER; i++)
 	{
@@ -669,7 +669,7 @@ bool DataPrinter::PrintReplayData(const char * foldername, const char * filename
 		str += DPS_RETURN;
 	}
 
-	str += BResource::res.resdata.uistr.laststage;
+	str += BResource::bres.resdata.uistr.laststage;
 	str += DPS_TABLE_1;
 	if (rpyinfo.modeflag & M_RPYMODE_SPELL)
 	{
@@ -710,27 +710,27 @@ bool DataPrinter::PrintReplayData(const char * foldername, const char * filename
 	}
 	str += DPS_RETURN;
 
-	str += BResource::res.resdata.uistr.score;
+	str += BResource::bres.resdata.uistr.score;
 	str += DPS_TABLE_1;
 	str += _i64toa(rpyinfo.score, buffer, 10);
 	str += DPS_RETURN;
 
-	str += BResource::res.resdata.uistr.point;
+	str += BResource::bres.resdata.uistr.point;
 	str += DPS_TABLE_1;
 	str += itoa(rpyinfo.point, buffer, 10);
 	str += DPS_RETURN;
 
-	str += BResource::res.resdata.uistr.faith;
+	str += BResource::bres.resdata.uistr.faith;
 	str += DPS_TABLE_1;
 	str += itoa(rpyinfo.faith, buffer, 10);
 	str += DPS_RETURN;
 
-	str += BResource::res.resdata.uistr.alltime;
+	str += BResource::bres.resdata.uistr.alltime;
 	str += DPS_TABLE_1;
 	str += itoa(rpyinfo.alltime, buffer, 10);
 	str += DPS_RETURN;
 
-	str += BResource::res.resdata.uistr.date;
+	str += BResource::bres.resdata.uistr.date;
 	str += DPS_TABLE_1;
 	str += itoa(rpyinfo.year, buffer, 10);
 	str += DPS_SLASH;
@@ -743,40 +743,40 @@ bool DataPrinter::PrintReplayData(const char * foldername, const char * filename
 	str += itoa(rpyinfo.minute, buffer, 10);
 	str += DPS_RETURN;
 
-	str += BResource::res.resdata.uistr.lost;
+	str += BResource::bres.resdata.uistr.lost;
 	str += DPS_TABLE_1;
 	sprintf(buffer, "%f", rpyinfo.lost);
 	str += buffer;
 	str += DPS_PERCENT;
 	str += DPS_RETURN;
 
-	str += BResource::res.resdata.uistr.borderrate;
+	str += BResource::bres.resdata.uistr.borderrate;
 	str += DPS_TABLE_1;
 	sprintf(buffer, "%f", rpyinfo.borderrate * 100);
 	str += buffer;
 	str += DPS_PERCENT;
 	str += DPS_RETURN;
 
-	str += BResource::res.resdata.uistr.fastrate;
+	str += BResource::bres.resdata.uistr.fastrate;
 	str += DPS_TABLE_1;
 	sprintf(buffer, "%f", rpyinfo.fastrate * 100);
 	str += buffer;
 	str += DPS_PERCENT;
 	str += DPS_RETURN;
 
-	str += BResource::res.resdata.uistr.modeflag;
+	str += BResource::bres.resdata.uistr.modeflag;
 	str += DPS_TABLE_1;
 	if (rpyinfo.modeflag & M_RPYMODE_SPELL)
 	{
-		str += BResource::res.resdata.uistr.mode_spell;
+		str += BResource::bres.resdata.uistr.mode_spell;
 	}
 	else if (rpyinfo.modeflag & M_RPYMODE_PRACTICE)
 	{
-		str += BResource::res.resdata.uistr.mode_practice;
+		str += BResource::bres.resdata.uistr.mode_practice;
 	}
 	else
 	{
-		str += BResource::res.resdata.uistr.mode_none;
+		str += BResource::bres.resdata.uistr.mode_none;
 	}
 	str += DPS_RETURN;
 /*
@@ -785,27 +785,27 @@ bool DataPrinter::PrintReplayData(const char * foldername, const char * filename
 	str += itoa(rpyinfo.maxplayer, buffer, 10);
 	str += DPS_RETURN;
 */
-	str += BResource::res.resdata.uistr.misstime;
+	str += BResource::bres.resdata.uistr.misstime;
 	str += DPS_TABLE_1;
 	str += itoa(rpyinfo.miss, buffer, 10);
 	str += DPS_RETURN;
 
-	str += BResource::res.resdata.uistr.bordertime;
+	str += BResource::bres.resdata.uistr.bordertime;
 	str += DPS_TABLE_1;
 	str += itoa(rpyinfo.border, buffer, 10);
 	str += DPS_RETURN;
 
-	str += BResource::res.resdata.uistr.gettime;
+	str += BResource::bres.resdata.uistr.gettime;
 	str += DPS_TABLE_1;
 	str += itoa(rpyinfo.get, buffer, 10);
 	str += DPS_RETURN;
 
-	str += BResource::res.resdata.uistr.continuetime;
+	str += BResource::bres.resdata.uistr.continuetime;
 	str += DPS_TABLE_1;
 	str += itoa(rpyinfo.cont, buffer, 10);
 	str += DPS_RETURN;
 
-	str += BResource::res.resdata.uistr.pausetime;
+	str += BResource::bres.resdata.uistr.pausetime;
 	str += DPS_TABLE_1;
 	str += itoa(rpyinfo.pause, buffer, 10);
 	str += DPS_RETURN;
@@ -880,25 +880,25 @@ bool DataPrinter::PrintReplayData(const char * foldername, const char * filename
 				str += DPS_RETURN;
 
 				str += DPS_TABLE_1;
-				str += BResource::res.resdata.uistr.score;
+				str += BResource::bres.resdata.uistr.score;
 				str += DPS_TABLE_1;
 				str += _i64toa(partinfo[index].nowscore, buffer, 10);
 				str += DPS_RETURN;
 
 				str += DPS_TABLE_1;
-				str += BResource::res.resdata.uistr.point;
+				str += BResource::bres.resdata.uistr.point;
 				str += DPS_TABLE_1;
 				str += itoa(partinfo[index].nowpoint, buffer, 10);
 				str += DPS_RETURN;
 
 				str += DPS_TABLE_1;
-				str += BResource::res.resdata.uistr.faith;
+				str += BResource::bres.resdata.uistr.faith;
 				str += DPS_TABLE_1;
 				str += itoa(partinfo[index].nowfaith, buffer, 10);
 				str += DPS_RETURN;
 
 				str += DPS_TABLE_1;
-				str += BResource::res.resdata.uistr.graze;
+				str += BResource::bres.resdata.uistr.graze;
 				str += DPS_TABLE_1;
 				str += itoa(partinfo[index].nowgraze, buffer, 10);
 				str += DPS_RETURN;

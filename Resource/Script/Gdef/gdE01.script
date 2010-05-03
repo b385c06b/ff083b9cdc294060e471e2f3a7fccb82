@@ -15,8 +15,7 @@ EDEFFILE
 
 @ @@] 80
 
-SD [toffset] GH@ * GH@ * 3
-SD [toffset] SINA toffset *f 900
+SD [toffset] GH@ * GH@ / 3
 IF GHAIMX
 {
 	SD [toffset] toffset * -1

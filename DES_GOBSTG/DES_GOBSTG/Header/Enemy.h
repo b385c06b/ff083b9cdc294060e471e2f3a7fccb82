@@ -76,7 +76,7 @@ public:
 	virtual ~Enemy();
 
 	static bool Build(WORD eID, BYTE index, BYTE tarID, float x, float y, int angle, float speed, BYTE type, float life, int infitimer, DWORD take);
-	static void Init(HTEXTURE texmain);
+	static void Init();
 	static void Action();
 	static void ClearAll();
 	static void RenderAll();
@@ -171,7 +171,6 @@ public:
 	BYTE	frameindex[ENEMY_FRAME_STATEMAX];
 
 	static VectorList<DamageZone> dmgz;
-	static HTEXTURE texmain;
 	static BYTE bossflag[ENEMY_BOSSMAX];
 	static BYTE spelluptimer[ENEMY_BOSSMAX];
 	static BYTE storetimer[ENEMY_BOSSMAX];

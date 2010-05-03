@@ -185,7 +185,7 @@ void Data::raSetIndi(int sno, WORD _indi)
 
 int Data::getSpellNumber(int sno)
 {
-	for (vector<spellData>::iterator i=BResource::res.spelldata.begin(); i!=BResource::res.spelldata.end(); i++)
+	for (vector<spellData>::iterator i=BResource::bres.spelldata.begin(); i!=BResource::bres.spelldata.end(); i++)
 	{
 		if (i->sno == sno)
 		{
@@ -197,7 +197,7 @@ int Data::getSpellNumber(int sno)
 
 int Data::getSpellUser(int sno)
 {
-	for (vector<spellData>::iterator i=BResource::res.spelldata.begin(); i!=BResource::res.spelldata.end(); i++)
+	for (vector<spellData>::iterator i=BResource::bres.spelldata.begin(); i!=BResource::bres.spelldata.end(); i++)
 	{
 		if (i->sno == sno)
 		{
@@ -210,7 +210,7 @@ int Data::getSpellUser(int sno)
 char * Data::getSpellName(int sno)
 {
 	strcpy(buf, DATA_DEFAULTSTR_WIDE);
-	for(vector<spellData>::iterator i=BResource::res.spelldata.begin(); i!=BResource::res.spelldata.end(); i++)
+	for(vector<spellData>::iterator i=BResource::bres.spelldata.begin(); i!=BResource::bres.spelldata.end(); i++)
 	{
 		if(i->sno == sno)
 		{
@@ -224,7 +224,7 @@ char * Data::getSpellName(int sno)
 char * Data::getSpellUserName(int sno)
 {
 	strcpy(buf, DATA_DEFAULTSTR_WIDE);
-	for(vector<spellData>::iterator i=BResource::res.spelldata.begin(); i!=BResource::res.spelldata.end(); i++)
+	for(vector<spellData>::iterator i=BResource::bres.spelldata.begin(); i!=BResource::bres.spelldata.end(); i++)
 	{
 		if(i->sno == sno)
 		{
@@ -238,7 +238,7 @@ char * Data::getSpellUserName(int sno)
 char * Data::getSpellUserEName(int sno)
 {
 	strcpy(buf, DATA_DEFAULTSTR_WIDE);
-	for(vector<spellData>::iterator i=BResource::res.spelldata.begin(); i!=BResource::res.spelldata.end(); i++)
+	for(vector<spellData>::iterator i=BResource::bres.spelldata.begin(); i!=BResource::bres.spelldata.end(); i++)
 	{
 		if(i->sno == sno)
 		{
@@ -255,7 +255,7 @@ char * Data::getEnemyName(int type)
 	{
 		return NULL;
 	}
-	return BResource::res.enemydata[type].name;
+	return BResource::bres.enemydata[type].name;
 }
 
 char * Data::getEnemyEName(int type)
@@ -264,7 +264,7 @@ char * Data::getEnemyEName(int type)
 	{
 		return NULL;
 	}
-	return BResource::res.enemydata[type].ename;
+	return BResource::bres.enemydata[type].ename;
 }
 
 char * Data::getPlayerName(int type)
@@ -273,7 +273,7 @@ char * Data::getPlayerName(int type)
 	{
 		return NULL;
 	}
-	return BResource::res.playerdata[type].name;
+	return BResource::bres.playerdata[type].name;
 }
 
 void Data::MoveDown(DWORD sec, BYTE i)
@@ -1077,7 +1077,7 @@ bool Data::SetEffectSystemResourceName(int effi, const char * filename)
 {
 	if(effi < 0 || effi >= EFFECTSYSTYPEMAX)
 		return false;
-	strcpy(BResource::res.resdata.effectsysfilename[effi], filename);
+	strcpy(BResource::bres.resdata.effectsysfilename[effi], filename);
 	FILE * file = checkTableFile(DATA_EFFECTTABLEDEFINE);
 	if (file == NULL)
 	{
@@ -1098,9 +1098,9 @@ bool Data::SetEffectSystemResourceName(int effi, const char * filename)
 	fprintf(file, "%s\t%s\r\n", comment[0], comment[1]);
 	for (int i=0; i<EFFECTSYSTYPEMAX; i++)
 	{
-		if (strlen(BResource::res.resdata.effectsysfilename[i]))
+		if (strlen(BResource::bres.resdata.effectsysfilename[i]))
 		{
-			fprintf(file, "%d\t%s\r\n", i, BResource::res.resdata.effectsysfilename[i]);
+			fprintf(file, "%d\t%s\r\n", i, BResource::bres.resdata.effectsysfilename[i]);
 		}
 	}
 	fclose(file);
@@ -1112,11 +1112,11 @@ bool Data::GetEffectSystemResourceName(int effi, char * filename)
 {
 	if(!filename || effi < 0 || effi >= EFFECTSYSTYPEMAX)
 		return false;
-	if (!strlen(BResource::res.resdata.effectsysfilename[effi]))
+	if (!strlen(BResource::bres.resdata.effectsysfilename[effi]))
 	{
 		return false;
 	}
-	strcpy(filename, BResource::res.resdata.effectsysfilename[effi]);
+	strcpy(filename, BResource::bres.resdata.effectsysfilename[effi]);
 	return true;
 }
 
@@ -1210,7 +1210,7 @@ BYTE Data::getStage(int sno)
 
 BYTE Data::getBattle(int sno)
 {
-	for (vector<spellData>::iterator it = BResource::res.spelldata.begin(); it!= BResource::res.spelldata.end(); it++)
+	for (vector<spellData>::iterator it = BResource::bres.spelldata.begin(); it!= BResource::bres.spelldata.end(); it++)
 	{
 		if (it->sno == sno)
 		{

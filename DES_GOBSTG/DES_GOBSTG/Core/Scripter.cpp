@@ -244,6 +244,12 @@ bool Scripter::LoadAll()
 	_eventsize = 0;
 #endif // __COUNT_SCRIPTSIZE
 
+#ifdef __DEBUG
+	nowfileindex = 0;
+	nowline = 0;
+	filelist.clear();
+#endif
+
 	binoffset = 0;
 
 	strdescIndex = 0;
@@ -291,13 +297,13 @@ bool Scripter::LoadAll()
 
 		for (int i=0; i<M_SCRIPTFOLDERMAX; i++)
 		{
-			if (strlen(BResource::res.resdata.scriptfoldername[i]))
+			if (strlen(BResource::bres.resdata.scriptfoldername[i]))
 			{
-				SetCurrentDirectory(hge->Resource_MakePath(BResource::res.resdata.scriptfoldername[i]));
+				SetCurrentDirectory(hge->Resource_MakePath(BResource::bres.resdata.scriptfoldername[i]));
 				char enumfile[M_PATHMAX];
-				strcpy(enumfile, BResource::res.resdata.scriptfoldername[i]);
+				strcpy(enumfile, BResource::bres.resdata.scriptfoldername[i]);
 				strcat(enumfile, "*.");
-				strcat(enumfile, BResource::res.resdata.scriptextensionname7);
+				strcat(enumfile, BResource::bres.resdata.scriptextensionname7);
 
 				char * buffer;
 				buffer = hge->Resource_EnumFiles(enumfile);
@@ -378,9 +384,18 @@ bool Scripter::LoadScript(const char * filename)
 		if(file)
 			fclose(file);
 		file = fopen(filename, "r");
+		nowline = 1;
 		if(!file)
 			return false;
 	}
+
+#ifdef __DEBUG
+	_FileList _filename;
+	strcpy(_filename.filename, filename);
+	filelist.push_back(_filename);
+	nowfileindex++;
+#endif
+
 addtype:
 	Token _tktag = GetToken();
 	if(_tktag.type & SCR_TOKEN_EOF)
@@ -528,12 +543,18 @@ addblock:
 					if(tk.type == SCR_TOKEN_ERROR)
 					{
 #ifdef __DEBUG
-						HGELOG("%s\nError in getting token at Block %d in File %d with Error-Code %d.", HGELOG_ERRSTR, j->con, i->name, tk.value);
+						char logbuffer[M_STRMAX*2];
+						HGELOG(HGELOG_ERRSTR);
+						sprintf(logbuffer, "Error in getting token at Block %d in File %d with Error-Code %d.", j->con, i->name, tk.value);
 
 						if(!binmode && file)
 						{
-							HGELOG("Point to 0x%x.", ftell(file));
+							char subbuffer[M_STRMAX];
+							sprintf(subbuffer, "\n%s. Line %d. Point to 0x%x.", filename, nowline, ftell(file));
+							strcat(logbuffer, subbuffer);
 						}
+						HGELOG(logbuffer);
+						MessageBox(NULL, logbuffer, HGELOG_ERRSTR, MB_OK);
 #endif
 						return false;
 					}
@@ -600,6 +621,12 @@ Token Scripter::GetToken()
 	{
 		if(!fread(&buffer[i], 1, 1, file))
 			buffer[i] = 0;
+#ifdef __DEBUG
+		if (buffer[i] == '\n')
+		{
+			nowline++;
+		}
+#endif
 		if (buffer[i] == '"')
 		{
 			quoted = !quoted;
@@ -625,7 +652,12 @@ Token Scripter::GetToken()
 						{
 							fread(&buffer[0], 1, 1, file);
 							if(buffer[0] == '\n' || buffer[0] == '\r')
+							{
+#ifdef __DEBUG
+								nowline++;
+#endif
 								break;
+							}
 						}
 					}
 					i = 0;
@@ -643,6 +675,12 @@ Token Scripter::GetToken()
 					while(!feof(file))
 					{
 						fread(&buffer[0], 1, 1, file);
+#ifdef __DEBUG
+						if (buffer[0] == '\n')
+						{
+							nowline++;
+						}
+#endif
 						if(buffer[0] == '*')
 						{
 							fread(&buffer[1], 1, 1, file);
@@ -754,9 +792,9 @@ Token Scripter::GetToken()
 		ret.value = 0;
 		for(int j=0; j<SCR_CUSTOMCONSTMAX; j++)
 		{
-			if(!strcmp(&buffer[1], BResource::res.customconstdata[j].name))
+			if(!strcmp(&buffer[1], BResource::bres.customconstdata[j].name))
 			{
-				ret.value = BResource::res.customconstdata[j].value;
+				ret.value = BResource::bres.customconstdata[j].value;
 				break;
 			}
 		}
@@ -768,7 +806,7 @@ Token Scripter::GetToken()
 		bool bIsSIItem = false;
 		for (int j=0; j<SPRITEITEMMAX; j++)
 		{
-			if (!strcmp(&buffer[3], &(BResource::res.spritedata[j].spritename[3])))
+			if (!strcmp(&buffer[3], &(BResource::bres.spritedata[j].spritename[3])))
 			{
 				ret.value = j;
 				bIsSIItem = true;
@@ -965,6 +1003,8 @@ exit:
 #ifdef __DEBUG
 		if (file)
 		{
+			ret.fileindex = nowfileindex;
+			ret.line = nowline;
 			ret.pos = ftell(file);
 		}
 #endif

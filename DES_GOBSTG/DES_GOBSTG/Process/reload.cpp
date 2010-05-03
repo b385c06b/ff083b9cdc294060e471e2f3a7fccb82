@@ -12,7 +12,7 @@ bool Process::reload()
 	Selector::Clear();
 	Player::p.exist = false;
 
-	BGLayer::Init(tex);
+	BGLayer::Init();
 
 	FrontDisplay::fdisp.SetState(FDISP_PANEL, FDISPSTATE_OFF);
 	Enemy::ClearAll();
@@ -41,14 +41,14 @@ bool Process::reload()
 	worldz = 0;
 	worldshaketimer = 0;
 
-	Bullet::Init(tex[TEX_BULLET]);
-	Enemy::Init(tex[TEX_ENEMY]);
+	Bullet::Init();
+	Enemy::Init();
 
 	Ghost::index = 0;
 	
 	Item::Init();
 	Beam::Init();
-	PlayerBullet::Init(tex);
+	PlayerBullet::Init();
 
 	BossInfo::bossinfo.Init();
 	InfoQuad::tex = tex[TEX_WHITE];

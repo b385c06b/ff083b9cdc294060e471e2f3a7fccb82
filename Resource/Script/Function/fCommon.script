@@ -88,6 +88,7 @@ BGOFF 1 + blBegin
 
 @ QUIT@
 
+DEBUG_BREAKPOINT
 SD [blBegin] BGSI * $BGLayerSplit
 BGFLAG 0 + blBegin BG_FADEOUT BGMT_FADE / 2
 BGFLAG 1 + blBegin BG_FADEOUT BGMT_FADE / 2

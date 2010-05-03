@@ -17,16 +17,22 @@ public:
 
 	static void SetFloat(int i, float fval);
 	static void SetInt(int i, int ival);
-	static void SetUInt(int i, DWORD uval);
-	static float FGet(){return GetFloat(-1);};
-	static int IGet(){return GetInt(-1);};
-	static DWORD UGet(){return GetUInt(-1);};
+	static void SetUInt(int i, DWORD uval, bool setfloat=false);
+
+	static float FGet(){return GetFloat();};
+	static int IGet(){return GetInt();};
+	static DWORD UGet(){return GetUInt();};
+	static char * SGet(){return GetString();};
+	static char * SSpGet(){return GetStringSp();};
+
 	static float GetFloat(int i=-1);
 	static int GetInt(int i=-1);
 	static DWORD GetUInt(int i=-1);
+	static char * GetString(int i=-1);
+	static char * GetStringSp(int i=-1);
 
-	static bool PushScript();
-	static bool PopScript();
+	static bool PushScript(_Parser ** _psaved, vector<Script> ** psaved, int ** idescsaved, TData ** descsaved);
+	static bool PopScript(_Parser ** _psaved, vector<Script> ** psaved, int ** idescsaved, TData ** descsaved);
 
 	static bool SD_();
 	static bool SDf_();
@@ -150,13 +156,6 @@ public:
 	static bool ISELFLAG_();
 	static bool ISELCOLOR_();
 
-	static bool IF_();
-	static bool ELSE_();
-	static bool ELSEIF_();
-
-	static bool LOOP_();
-	static bool SKIP_();
-
 	static bool CHATON_();
 	static bool CHATOFF_();
 
@@ -167,6 +166,31 @@ public:
 	static bool SETFLAG_();
 	static bool TRYSTAGE_();
 	static bool DEBUG_BREAKPOINT_();
+
+	bool rv;
+	vector<Script>::iterator * it;
+	int varcount;
+	int indexcount;
+
+	static _Parser _p;
+};
+
+class _ParserFunction
+{
+public:
+	_ParserFunction();
+	~_ParserFunction();
+
+	static void Init(vector<Script>::iterator * pscript, int index);
+
+	static void SetFloat(float fval);
+	static void SetInt(int ival);
+	static void SetUInt(DWORD uval);
+	static void SetString(char * sval);
+
+	static float FGet();
+	static int IGet();
+	static DWORD UGet();
 
 	static bool BUI_();
 	static bool BUANGLE_();
@@ -253,9 +277,9 @@ public:
 	static bool SPELLUSERNAME_();
 	static bool SPELLUSERENAME_();
 
-	static bool BGSat_();
 	static bool BGSI_();
 
+	static bool BGSat_();
 	static bool SELCOMPLETE_();
 	static bool SEL_();
 	static bool SELFIRSTID_();
@@ -279,13 +303,10 @@ public:
 	static bool PGY_();
 	static bool HAVEPLAYER_();
 
-	bool rv;
-	vector<Script>::iterator * it;
-	int varcount;
-	int indexcount;
+	vector<Script>::iterator * pscript;
+	int index;
 
-	static _Parser _p;
-	static _Parser _psaved;
+	static _ParserFunction _p;
 };
 
 #endif

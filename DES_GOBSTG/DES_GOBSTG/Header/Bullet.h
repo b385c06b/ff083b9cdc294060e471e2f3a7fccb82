@@ -63,7 +63,7 @@ public:
 	Bullet();
 	virtual ~Bullet();
 
-	static void Init(HTEXTURE tex);
+	static void Init();
 	static void Release();
 	static void Action();
 	static void IzelAction();
@@ -136,7 +136,6 @@ public:
 	static Bullet _bu;
 	static hgeSprite * sprite[BULLETTYPECOLORMAX];
 	static VectorList<IzeZone> izel;
-	static HTEXTURE tex;
 	static WORD index;
 
 	static VectorList<Bullet>bu;

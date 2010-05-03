@@ -66,8 +66,8 @@ BOOL CReplayViewDlg::OnInitDialog()
 	SetWindowText(hge->System_GetState(HGE_TITLE));
 	Data::data.GetIni();
 	Export::GetResourceFile(true);
-	BResource::res.CopyData();
-	BResource::res.Gain();
+	BResource::bres.CopyData();
+	BResource::bres.Gain();
 	checkButton.SetCheck(BST_CHECKED);
 	
 	return TRUE;  // 除非设置了控件的焦点，否则返回 TRUE

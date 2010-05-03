@@ -156,11 +156,11 @@ int Process::processOver()
 		InfoSelect::Clear();
 		InfoSelect _ifs[13];
 
-		strcpy(_ifs[0].info, BResource::res.resdata.uistr.score);
+		strcpy(_ifs[0].info, BResource::bres.resdata.uistr.score);
 		strcat(_ifs[0].info, "|010");
 		_ifs[0].linkl(NULL, Replay::rpy.rpyinfo.score);
 
-		strcpy(_ifs[1].info, BResource::res.resdata.uistr.usingchara);
+		strcpy(_ifs[1].info, BResource::bres.resdata.uistr.usingchara);
 
 		for (int i=0; i<M_PL_ONESETPLAYER;i ++)
 		{
@@ -168,7 +168,7 @@ int Process::processOver()
 			strcat(_ifs[2+i].info, Data::data.getPlayerName(Replay::rpy.rpyinfo.usingchara[i]));
 		}
 
-		strcpy(_ifs[5].info, BResource::res.resdata.uistr.date);
+		strcpy(_ifs[5].info, BResource::bres.resdata.uistr.date);
 		_ifs[5].linki("|21014", Replay::rpy.rpyinfo.year);
 		strcat(_ifs[5].info, "/");
 		_ifs[5].linki("|21517", Replay::rpy.rpyinfo.month);
@@ -179,35 +179,35 @@ int Process::processOver()
 		strcat(_ifs[5].info, ":");
 		_ifs[5].linki("|22426", Replay::rpy.rpyinfo.minute);
 
-		strcpy(_ifs[6].info, BResource::res.resdata.uistr.faith);
+		strcpy(_ifs[6].info, BResource::bres.resdata.uistr.faith);
 		_ifs[6].linki("|012", Replay::rpy.rpyinfo.faith);
 
-		strcpy(_ifs[7].info, BResource::res.resdata.uistr.lost);
+		strcpy(_ifs[7].info, BResource::bres.resdata.uistr.lost);
 		_ifs[7].linkf("|012", 0, Replay::rpy.rpyinfo.lost);
 		strcat(_ifs[7].info, "%");		
 
-		strcpy(_ifs[8].info, BResource::res.resdata.uistr.misstime);
+		strcpy(_ifs[8].info, BResource::bres.resdata.uistr.misstime);
 		_ifs[8].linki("|022", Replay::rpy.rpyinfo.miss);
 
-		strcpy(_ifs[9].info, BResource::res.resdata.uistr.bordertime);
+		strcpy(_ifs[9].info, BResource::bres.resdata.uistr.bordertime);
 		_ifs[9].linki("|022", Replay::rpy.rpyinfo.border);
 
-		strcpy(_ifs[10].info, BResource::res.resdata.uistr.gettime);
+		strcpy(_ifs[10].info, BResource::bres.resdata.uistr.gettime);
 		_ifs[10].linki("|022", Replay::rpy.rpyinfo.get);
 
-		strcpy(_ifs[11].info, BResource::res.resdata.uistr.modeflag);
+		strcpy(_ifs[11].info, BResource::bres.resdata.uistr.modeflag);
 		strcat(_ifs[11].info, "|010");
 		if(Replay::rpy.rpyinfo.modeflag & M_RPYMODE_SPELL)
 		{
-			strcat(_ifs[11].info, BResource::res.resdata.uistr.mode_spell);
+			strcat(_ifs[11].info, BResource::bres.resdata.uistr.mode_spell);
 		}
 		else if(Replay::rpy.rpyinfo.modeflag & M_RPYMODE_PRACTICE)
 		{
-			strcat(_ifs[11].info, BResource::res.resdata.uistr.mode_practice);
+			strcat(_ifs[11].info, BResource::bres.resdata.uistr.mode_practice);
 		}
 		else
 		{
-			strcat(_ifs[11].info, BResource::res.resdata.uistr.mode_none);
+			strcat(_ifs[11].info, BResource::bres.resdata.uistr.mode_none);
 		}
 
 		for(int i=0;i<11;i++)
@@ -228,11 +228,11 @@ int Process::processOver()
 					strcat(savefilename, buffer);
 				}
 				strcat(savefilename, ".");
-				strcat(savefilename, BResource::res.resdata.replayextensionname7);
+				strcat(savefilename, BResource::bres.resdata.replayextensionname7);
 			}while(_access(hge->Resource_MakePath(savefilename), 00) != -1);
 		}
 
-		_ifs[12].valueSet(2, BResource::res.resdata.uistr.confirm, 320, 410, INFO_GREEN);
+		_ifs[12].valueSet(2, BResource::bres.resdata.uistr.confirm, 320, 410, INFO_GREEN);
 		InfoSelect::infoselect.push_back(_ifs[12]);
 
 		InfoSelect::Setup(3, 0);
@@ -333,13 +333,13 @@ int Process::processOver()
 skip1:
 		InfoSelect _ifs[2];
 
-		strcpy(_ifs[0].info, BResource::res.resdata.uistr.username);
+		strcpy(_ifs[0].info, BResource::bres.resdata.uistr.username);
 		strcat(_ifs[0].info, "|006");
 		strcat(_ifs[0].info, username);
 		_ifs[0].valueSet(0, _ifs[0].info, 345, 90, INFO_RED);
 		InfoSelect::infoselect.push_back(_ifs[0]);
 
-		strcpy(_ifs[1].info, BResource::res.resdata.uistr.filename);
+		strcpy(_ifs[1].info, BResource::bres.resdata.uistr.filename);
 		strcat(_ifs[1].info, "|010");
 		strcat(_ifs[1].info, savefilename);
 		_ifs[1].valueSet(1, _ifs[1].info, 215, 380, INFO_RED);
@@ -351,12 +351,12 @@ skip1:
 			{
 				SE::push(SE_SYSTEM_OK);
 
-				SetCurrentDirectory(hge->Resource_MakePath(BResource::res.resdata.replayfoldername));
+				SetCurrentDirectory(hge->Resource_MakePath(BResource::bres.resdata.replayfoldername));
 				char * buffer;
 				char enumfile[M_STRMAX];
-				strcpy(enumfile, BResource::res.resdata.replayfoldername);
+				strcpy(enumfile, BResource::bres.resdata.replayfoldername);
 				strcat(enumfile, "*.");
-				strcat(enumfile, BResource::res.resdata.replayextensionname7);
+				strcat(enumfile, BResource::bres.resdata.replayextensionname7);
 				buffer = hge->Resource_EnumFiles(enumfile);
 				while(buffer != NULL)
 				{
@@ -469,7 +469,7 @@ skip1:
 			InfoSelect::Setup(0, 0);
 		else
 		{
-			_ifs[10].valueSet(1, BResource::res.resdata.uistr.confirm, 300, 380, INFO_GREEN);
+			_ifs[10].valueSet(1, BResource::bres.resdata.uistr.confirm, 300, 380, INFO_GREEN);
 			InfoSelect::infoselect.push_back(_ifs[10]);
 			InfoSelect::Setup(2, 0);
 		}
