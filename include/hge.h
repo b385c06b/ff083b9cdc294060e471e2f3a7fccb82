@@ -651,9 +651,16 @@ public:
 	inline int					System_GetState(hgeIntState    state) { return System_GetStateInt   (state); }
 	inline const char*			System_GetState(hgeStringState state) { return System_GetStateString(state); }
 
+	virtual char*		CALL	Math_itoa(int ival, char * buffer) = 0;
+	virtual int			CALL	Math_atoi(const char * buffer) = 0;
+	virtual char*		CALL	Math_ftoa(float fval, char * buffer) = 0;
+	virtual float		CALL	Math_atof(const char * buffer) = 0;
+
 	/************************************************************************/
 	/* This function is modified by h5nc (h5nc@yahoo.com.cn)                */
 	/************************************************************************/
+	virtual void		CALL	Resource_DeleteFile(const char *filename) = 0;
+	virtual void		CALL	Resource_SetCurrentDirectory(const char *filename) = 0;
 	virtual BYTE*		CALL	Resource_Load(const char *filename, DWORD *size=0) = 0;
 	virtual void		CALL	Resource_Free(void *res) = 0;
 	/************************************************************************/
@@ -672,6 +679,8 @@ public:
 	virtual char*		CALL	Resource_MakePath(const char *filename) = 0;
 	virtual char*		CALL	Resource_EnumFiles(const char *wildcard=0) = 0;
 	virtual char*		CALL	Resource_EnumFolders(const char *wildcard=0) = 0;
+	virtual bool		CALL	Resource_AccessFile(const char *filename) = 0;
+	virtual bool		CALL	Resource_CreateDirectory(const char *filename) = 0;
 	/************************************************************************/
 	/* These functions are added by h5nc (h5nc@yahoo.com.cn)                */
 	/************************************************************************/
@@ -687,12 +696,12 @@ public:
 	virtual char*		CALL	Resource_GetPackFirstFileName(const char * packfilename) = 0;
 	// end
 
-	virtual	void		CALL	Ini_SetInt(const char *section, const char *name, int value) = 0;
-	virtual	int			CALL	Ini_GetInt(const char *section, const char *name, int def_val) = 0;
-	virtual	void		CALL	Ini_SetFloat(const char *section, const char *name, float value) = 0;
-	virtual	float		CALL	Ini_GetFloat(const char *section, const char *name, float def_val) = 0;
-	virtual	void		CALL	Ini_SetString(const char *section, const char *name, const char *value) = 0;
-	virtual	char*		CALL	Ini_GetString(const char *section, const char *name, const char *def_val) = 0;
+	virtual	void		CALL	Ini_SetInt(const char *section, const char *name, int value, char * inifilename=NULL) = 0;
+	virtual	int			CALL	Ini_GetInt(const char *section, const char *name, int def_val, char * inifilename=NULL) = 0;
+	virtual	void		CALL	Ini_SetFloat(const char *section, const char *name, float value, char * inifilename=NULL) = 0;
+	virtual	float		CALL	Ini_GetFloat(const char *section, const char *name, float def_val, char * inifilename=NULL) = 0;
+	virtual	void		CALL	Ini_SetString(const char *section, const char *name, const char *value, char * inifilename=NULL) = 0;
+	virtual	char*		CALL	Ini_GetString(const char *section, const char *name, const char *def_val, char * inifilename=NULL) = 0;
 
 	/************************************************************************/
 	/* This function is modified by h5nc (h5nc@yahoo.com.cn)                */
@@ -701,6 +710,8 @@ public:
 	virtual int			CALL	Random_Int(int min, int max, bool bSelf=false) = 0;
 	virtual float		CALL	Random_Float(float min, float max, bool bSelf=false) = 0;
 
+	virtual void		CALL	Timer_GetSystemTime(WORD *wYear=NULL, WORD *wMonth=NULL, WORD *wDayOfWeek=NULL, WORD *wDay=NULL, WORD *wHour=NULL, WORD *wMinute=NULL, WORD *wSecond=NULL, WORD *wMilliseconds=NULL) = 0;
+	virtual LONGLONG	CALL	Timer_GetFileTime() = 0;
 	virtual float		CALL	Timer_GetTime() = 0;
 	virtual float		CALL	Timer_GetDelta() = 0;
 	/************************************************************************/
@@ -817,10 +828,12 @@ public:
 	virtual HTEXTURE	CALL	Texture_Create(int width, int height) = 0;
 	virtual HTEXTURE	CALL	Texture_Load(const char *filename, DWORD size=0, bool bMipmap=false) = 0;
 	virtual void		CALL	Texture_Free(HTEXTURE tex) = 0;
+	virtual DWORD		CALL	Texture_GetTexture(HTEXTURE tex) = 0;
 	virtual int			CALL	Texture_GetWidth(HTEXTURE tex, bool bOriginal=false) = 0;
 	virtual int			CALL	Texture_GetHeight(HTEXTURE tex, bool bOriginal=false) = 0;
 	virtual DWORD*		CALL	Texture_Lock(HTEXTURE tex, bool bReadOnly=true, int left=0, int top=0, int width=0, int height=0) = 0;
 	virtual void		CALL	Texture_Unlock(HTEXTURE tex) = 0;
+	virtual bool		CALL	Texture_Save(HTEXTURE tex, const char * filename, DWORD filetype) = 0;
 
 	/************************************************************************/
 	/* These functions are added by Yuki                                    */

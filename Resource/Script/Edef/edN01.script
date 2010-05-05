@@ -29,7 +29,7 @@ LOOP [i]
 	{
 		SDf [trmap] j * 80 - 80
 		B ENX ENY
-			ENRMAP trmap i *f 0.2f +f 1.0
+			ENRMAP trmap i *f 0.2 +f 1.0
 			21 2 8 0 0xff
 	}
 }

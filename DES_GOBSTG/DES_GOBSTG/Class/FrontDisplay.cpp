@@ -91,7 +91,7 @@ void FrontDisplay::PanelDisplay()
 			}
 			color = (alpha<<24)+0xffffff;
 			panel.pointindi->SetColor(color);
-			panel.pointindi->Render(38, 457);
+			SpriteItemManager::RenderSprite(panel.pointindi, 38, 457);
 			float tx, ty, tw, th;
 			panel.slot->GetTextureRect(&tx, &ty, &tw, &th);
 
@@ -114,51 +114,58 @@ void FrontDisplay::PanelDisplay()
 			}
 			color += (alpha<<24);
 			panel.slot->SetColor(color);
-			panel.slot->Render(44, 438);
+			SpriteItemManager::RenderSprite(panel.slot, 44, 438);
 			panel.slot->SetTextureRect(tx, ty, tw, th);
 //			panel.slotback->SetColor((alpha<<24)+0xffffff);
-			panel.slotback->Render(44, 438);
+			SpriteItemManager::RenderSprite(panel.slotback, 44, 438);
 
 			color = (alpha<<24)+0xffffff;
 			if (Player::p.bBorder)
 			{
 				panel.borderindi->SetColor(color);
-				panel.borderindi->RenderEx(80, 448, ARC(Player::p.esBorder.angle+Player::p.esBorder.headangle), Player::p.esBorder.hscale / 2.0f);
+				SpriteItemManager::RenderSpriteEx(panel.borderindi, 80, 448, ARC(Player::p.esBorder.angle+Player::p.esBorder.headangle), Player::p.esBorder.hscale / 2.0f);
 			}
 
 			if (info.smalldigitfont)
 			{
 				info.smalldigitfont->SetColor(color);
-				info.smalldigitfont->printf(48, 454, HGETEXT_LEFT | HGETEXT_TOP, "%06d*%.2f", Player::p.nFaith, (int)((Player::p.fPoprate+Player::p.fPopratebase)*100)/100.0f);
+				char buffer[M_STRITOAMAX];
+				sprintf(buffer, "%06d*%.2f", Player::p.nFaith, (int)((Player::p.fPoprate+Player::p.fPopratebase)*100)/100.0f);
+				SpriteItemManager::FontPrintf(info.smalldigitfont, 48, 454, HGETEXT_LEFT | HGETEXT_TOP, buffer);
 				info.smalldigitfont->SetColor(0xffffffff);
 			}
 
 		}
 
 		float ledge = panel.left->GetWidth();
-		panel.left->Render(M_ACTIVECLIENT_LEFT, M_ACTIVECLIENT_TOP);
-		panel.top->Render(M_ACTIVECLIENT_LEFT+ledge, M_ACTIVECLIENT_TOP);
-		panel.bottom->Render(M_ACTIVECLIENT_LEFT+ledge, M_ACTIVECLIENT_BOTTOM-panel.bottom->GetHeight());
-		panel.right->Render(M_ACTIVECLIENT_RIGHT-ledge, M_ACTIVECLIENT_TOP);
+		SpriteItemManager::RenderSprite(panel.left, M_ACTIVECLIENT_LEFT, M_ACTIVECLIENT_TOP);
+		SpriteItemManager::RenderSprite(panel.top, M_ACTIVECLIENT_LEFT+ledge, M_ACTIVECLIENT_TOP);
+		SpriteItemManager::RenderSprite(panel.bottom, M_ACTIVECLIENT_LEFT+ledge, M_ACTIVECLIENT_BOTTOM-panel.bottom->GetHeight());
+		SpriteItemManager::RenderSprite(panel.right, M_ACTIVECLIENT_RIGHT-ledge, M_ACTIVECLIENT_TOP);
 
 		if (panelcountup == 0xff)
 		{
-			panel.hiscore->Render(472, 54);
-			panel.score->Render(472, 80);
-			panel.player->Render(472, 111);
-			panel.power->Render(472, 135);
-			panel.graze->Render(472, 159);
+			SpriteItemManager::RenderSprite(panel.hiscore, 472, 54);
+			SpriteItemManager::RenderSprite(panel.score, 472, 80);
+			SpriteItemManager::RenderSprite(panel.player, 472, 111);
+			SpriteItemManager::RenderSprite(panel.power, 472, 135);
+			SpriteItemManager::RenderSprite(panel.graze, 472, 159);
 			if(info.normaldigitfont)
 			{
 				info.normaldigitfont->SetColor(0xffffffff);
-				info.normaldigitfont->printfb(0, 45, 630, 20, HGETEXT_MIDDLE | HGETEXT_RIGHT, "%I64d", (__int64)Player::p.nHiScore);
-				info.normaldigitfont->printfb(0, 71, 630, 20, HGETEXT_MIDDLE | HGETEXT_RIGHT, "%I64d", (__int64)Player::p.nScore);
+				char buffer[M_STRITOAMAX];
+				sprintf(buffer,"%I64d", (__int64)Player::p.nHiScore);
+				SpriteItemManager::FontPrintfb(info.normaldigitfont, 0, 45, 630, 20, HGETEXT_MIDDLE | HGETEXT_RIGHT, buffer);
+				sprintf(buffer,"%I64d", (__int64)Player::p.nScore);
+				SpriteItemManager::FontPrintfb(info.normaldigitfont, 0, 71, 630, 20, HGETEXT_MIDDLE | HGETEXT_RIGHT, buffer);
 
-				info.normaldigitfont->printf(520, 126, HGETEXT_LEFT, "%.3f", (float)Player::p.nPower / Player::p.bombperpower);
-				info.normaldigitfont->printf(520, 152, HGETEXT_LEFT, "%d", Player::p.nGraze);
+				sprintf(buffer, "%.3f", (float)Player::p.nPower / Player::p.bombperpower);
+				SpriteItemManager::FontPrintf(info.normaldigitfont, 520, 126, HGETEXT_LEFT, buffer);
+				sprintf(buffer, "%d", Player::p.nGraze);
+				SpriteItemManager::FontPrintf(info.normaldigitfont, 520, 152, HGETEXT_LEFT, buffer);
 				for (int i=0; i<Player::p.nLife; i++)
 				{
-					panel.lifeindi[5]->Render(530+i*panel.lifeindi[5]->GetWidth(), 110);
+					SpriteItemManager::RenderSprite(panel.lifeindi[5], 530+i*panel.lifeindi[5]->GetWidth(), 110);
 				}
 			}
 
@@ -166,33 +173,44 @@ void FrontDisplay::PanelDisplay()
 	}
 	if(info.asciifont)
 	{
+		char buffer[M_STRMAX];
 		if (Process::mp.replaymode)
 		{
-			info.smalldigitfont->printf(385, 450, 0, "%.2f", Process::mp.replayFPS);
+			sprintf(buffer, "%.2f", Process::mp.replayFPS);
+			SpriteItemManager::FontPrintf(info.smalldigitfont, 385, 450, 0, buffer);
 		}
-		info.asciifont->printf(
+		sprintf(buffer,
 #ifdef __DEBUG
-			520,
-			410,
-			0,
 			"%d  %d\n%f\n%f\n%f",
 			Process::mp.objcount,
 			hge->System_GetState(HGE_FRAMECOUNTER),
 			hge->Timer_GetWorstFPS(35)/M_DEFAULT_RENDERSKIP,
 			hge->Timer_GetFPS()/M_DEFAULT_RENDERSKIP,
+			hge->Timer_GetTime()
+#else
+			"%.2f\n%.2f",
+			hge->Timer_GetFPS(35)/M_DEFAULT_RENDERSKIP,
+			hge->Timer_GetTime()
+
+#endif
+			);
+			SpriteItemManager::FontPrintf(info.asciifont, 
+#ifdef __DEBUG
+			520,
+			410,
+			0,
 #else
 			540,
 			450,
 			0,
-			"%.2f\n%.2f",
-			hge->Timer_GetFPS(35)/M_DEFAULT_RENDERSKIP,
 #endif
-			hge->Timer_GetTime()
+			buffer
 			);
 #ifdef __DEBUG
 		if (Player::p.exist && info.smalldigitfont)
 		{
-			info.smalldigitfont->printf(8, 465, 0, "%d / %d", Process::mp.scene, gametime);
+			sprintf(buffer, "%d / %d", Process::mp.scene, gametime);
+			SpriteItemManager::FontPrintf(info.smalldigitfont, 8, 465, 0, buffer);
 		}
 #endif // __DEBUG
 	}
@@ -202,13 +220,15 @@ void FrontDisplay::NextStageDisplay()
 {
 	if (nextstagecount)
 	{
-		info.stageclear->Render(M_ACTIVECLIENT_CENTER_X, 160);
+		SpriteItemManager::RenderSprite(info.stageclear, M_ACTIVECLIENT_CENTER_X, 160);
 		if (bval)
 		{
-			info.nextstage->Render(M_ACTIVECLIENT_CENTER_X, 280);
+			SpriteItemManager::RenderSprite(info.nextstage, M_ACTIVECLIENT_CENTER_X, 280);
 		}
 		info.bossfont->SetColor(0xffffffff);
-		info.bossfont->printf(M_ACTIVECLIENT_CENTER_X, 220, HGETEXT_CENTER|HGETEXT_MIDDLE, "%d", llval);
+		char buffer[M_STRITOAMAX];
+		sprintf(buffer, "%d", llval);
+		SpriteItemManager::FontPrintf(info.bossfont, M_ACTIVECLIENT_CENTER_X, 220, HGETEXT_CENTER|HGETEXT_MIDDLE, buffer);
 	}
 }
 
@@ -401,10 +421,12 @@ void FrontDisplay::BossInfoDisplay()
 	DWORD bonus = BossInfo::bossinfo.bonus;
 //	exist = false;
 	infobody.effBossStore.Render();
+	char buffer[M_STRITOAMAX];
 	if(!BossInfo::bossinfo.bossout())
 	{
 		info.bossfont->SetScale(1.2f);
-		info.bossfont->printf(50, 20, HGETEXT_RIGHT|HGETEXT_MIDDLE, "%d", BossInfo::bossinfo.remain);
+		sprintf(buffer, "%d", BossInfo::bossinfo.remain);
+		SpriteItemManager::FontPrintf(info.bossfont, 50, 20, HGETEXT_RIGHT|HGETEXT_MIDDLE, buffer);
 
 		int ttime = BossInfo::bossinfo.limit-timer/60;
 		if (ttime < 4)
@@ -415,15 +437,19 @@ void FrontDisplay::BossInfoDisplay()
 		{
 			ttime = 99;
 		}
-		info.bossfont->printf(400, 20, HGETEXT_CENTER|HGETEXT_MIDDLE, "%d", ttime);
+		sprintf(buffer, "%d", ttime);
+		SpriteItemManager::FontPrintf(info.bossfont, 400, 20, HGETEXT_CENTER|HGETEXT_MIDDLE, buffer);
 
-		info.bossasciifont->printf(60, 20, HGETEXT_LEFT, "%s", BossInfo::bossinfo.enemyename);
+		sprintf(buffer, "%s", BossInfo::bossinfo.enemyename);
+		SpriteItemManager::FontPrintf(info.bossasciifont, 60, 20, HGETEXT_LEFT, buffer);
 
 		if(bSpell)
 		{
 			float yt;
 			if(Enemy::bossflag[ENEMY_MAINBOSSINDEX] & BOSS_SPELLUP)
-				info.cutin->Render(312, Enemy::spelluptimer[ENEMY_MAINBOSSINDEX]*2.4f);
+			{
+				SpriteItemManager::RenderSprite(info.cutin, 312, Enemy::spelluptimer[ENEMY_MAINBOSSINDEX]*2.4f);
+			}
 			if(timer < 30)
 			{
 				yt = 225;
@@ -437,7 +463,7 @@ void FrontDisplay::BossInfoDisplay()
 				yt = 45;
 			}
 
-			info.bossspellline->Render(296, yt);
+			SpriteItemManager::RenderSprite(info.bossspellline, 296, yt);
 
 			int tlenth = strlen(BossInfo::bossinfo.spellname);
 			float spellnamew = tlenth*8;
@@ -451,19 +477,21 @@ void FrontDisplay::BossInfoDisplay()
 				infobody.effBossUp.Render();
 			}
 
-			info.spellbonustext->Render(240, yt+20);
-			info.spellhistorytext->Render(345, yt+20);
+			SpriteItemManager::RenderSprite(info.spellbonustext, 240, yt+20);
+			SpriteItemManager::RenderSprite(info.spellhistorytext, 345, yt+20);
 			if (!failed)
 			{
-				info.bossasciifont->printf(320, yt+16, HGETEXT_RIGHT, "%09d", bonus);
+				sprintf(buffer, "%09d", bonus);
+				SpriteItemManager::FontPrintf(info.bossasciifont, 320, yt+16, HGETEXT_RIGHT, buffer);
 			}
 			else
 			{
-				info.spellfailedtext->Render(280, yt+20);
+				SpriteItemManager::RenderSprite(info.spellfailedtext, 280, yt+20);
 			}
-			info.bossasciifont->printf(410, yt+16, HGETEXT_RIGHT, "%03d/%03d", BossInfo::bossinfo.get, BossInfo::bossinfo.meet);
+			sprintf(buffer, "%03d/%03d", BossInfo::bossinfo.get, BossInfo::bossinfo.meet);
+			SpriteItemManager::FontPrintf(info.bossasciifont, 410, yt+16, HGETEXT_RIGHT, buffer);
 		}
-		hge->Gfx_RenderQuad(&infobody.iqBossBlood.quad);
+		SpriteItemManager::RenderQuad(&(infobody.iqBossBlood.quad));
 	}
 	else if(flag & BOSSINFO_COLLAPSE)
 	{
@@ -471,18 +499,19 @@ void FrontDisplay::BossInfoDisplay()
 		{
 			infobody.effBossCollapse.Render();
 			infobody.effBossItem.Render();
-			info.getbonus->Render(M_ACTIVECLIENT_CENTER_X, 80);
+			SpriteItemManager::RenderSprite(info.getbonus, M_ACTIVECLIENT_CENTER_X, 80);
 			info.bossfont->SetColor((((timer*8)%0x100)<<8)+0xffff007f);
 		}
 		else
 		{
 			if (failed)
 			{
-				info.failed->Render(M_ACTIVECLIENT_CENTER_X, 80);
+				SpriteItemManager::RenderSprite(info.failed, M_ACTIVECLIENT_CENTER_X, 80);
 				info.bossfont->SetColor((((timer*8)%0x100)<<16)+0xff00ffff);
 			}
 		}
-		info.bossfont->printf(M_ACTIVECLIENT_CENTER_X, 120, HGETEXT_CENTER|HGETEXT_MIDDLE, "%d", bonus);
+		sprintf(buffer, "%d", bonus);
+		SpriteItemManager::FontPrintf(info.bossfont, M_ACTIVECLIENT_CENTER_X, 120, HGETEXT_CENTER|HGETEXT_MIDDLE, buffer);
 	}
 }
 
@@ -503,24 +532,32 @@ void FrontDisplay::BossTimeCircleDisplay()
 			{
 				scale = (timer-60*limit)*0.8f / (30-15*limit);
 			}
-			info.timecircle->RenderEx(Enemy::en[ENEMY_MAINBOSSINDEX].x, Enemy::en[ENEMY_MAINBOSSINDEX].y, timer/15.0f, scale);
+			SpriteItemManager::RenderSpriteEx(info.timecircle, Enemy::en[ENEMY_MAINBOSSINDEX].x, Enemy::en[ENEMY_MAINBOSSINDEX].y, timer/15.0f, scale);
 		}
 	}
 }
 
 void FrontDisplay::EnemyXDisplay()
 {
-	info.enemyx->Render(Enemy::en[ENEMY_MAINBOSSINDEX].x, 472);
+	SpriteItemManager::RenderSprite(info.enemyx, Enemy::en[ENEMY_MAINBOSSINDEX].x, 472);
 }
 
 void FrontDisplay::ItemInfoDisplay(infoFont * item)
 {
 	if(item->yellow)
+	{
 		info.itemfont->SetColor(0xafffff00);
+	}
 	else
+	{
 		info.itemfont->SetColor(0xafffffff);
+	}
 	if(item->timer < 32)
-		info.itemfont->printf(item->x, item->y-10-item->timer, HGETEXT_CENTER, "%s", item->cScore);
+	{
+		char buffer[M_STRITOAMAX];
+		sprintf(buffer, "%s", item->cScore);
+		SpriteItemManager::FontPrintf(info.itemfont, item->x, item->y-10-item->timer, HGETEXT_CENTER, buffer);
+	}
 	else
 	{
 		Item::infofont.pop();

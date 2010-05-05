@@ -1819,7 +1819,9 @@ chatout:
 					LogOut();
 #endif
 				}*/
-
+				break;
+			case SCR_DEBUG_MB:
+				rv = _Parser::DEBUG_MB_();
 				break;
 			}
 			break;

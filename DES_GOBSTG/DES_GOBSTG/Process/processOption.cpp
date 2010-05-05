@@ -206,19 +206,19 @@ int Process::processOption()
 		{
 			int tjk = joyKey[(i->ID & 0x0f) >> 1];
 			if(i->ID & 1)
-				SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+tjk%10, i->sprite, tex);
+				SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+tjk%10, i->sprite);
 			else
-				SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+tjk/10, i->sprite, tex);
+				SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+tjk/10, i->sprite);
 		}
 		else if(i->ID == 0x90)
 		{
 			if (screenmode)
 			{
-				SpriteItemManager::SetSprite(SpriteItemManager::GetIndexByName(SI_OPTIONGRAPH_FULL), i->sprite, tex);
+				SpriteItemManager::SetSprite(SpriteItemManager::GetIndexByName(SI_OPTIONGRAPH_FULL), i->sprite);
 			}
 			else
 			{
-				SpriteItemManager::SetSprite(SpriteItemManager::GetIndexByName(SI_OPTIONGRAPH_WINDOW), i->sprite, tex);
+				SpriteItemManager::SetSprite(SpriteItemManager::GetIndexByName(SI_OPTIONGRAPH_WINDOW), i->sprite);
 			}
 		}
 		else if(i->ID == 0xA0)
@@ -239,21 +239,21 @@ int Process::processOption()
 			{
 			case 0x00:
 				if(tvol < 100)
-					SpriteItemManager::SetSprite(-1, i->sprite, tex);
+					SpriteItemManager::SetSprite(-1, i->sprite);
 				else
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+1, i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+1, i->sprite);
 				break;
 			case 0x01:
 				if(tvol < 10)
-					SpriteItemManager::SetSprite(-1, i->sprite, tex);
+					SpriteItemManager::SetSprite(-1, i->sprite);
 				else
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+((tvol / 10) % 10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+((tvol / 10) % 10), i->sprite);
 				break;
 			case 0x02:
-				SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(tvol % 10), i->sprite, tex);
+				SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(tvol % 10), i->sprite);
 				break;
 			case 0x03:
-				SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+SIDIGITUI_MODPLUS, i->sprite, tex);
+				SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+SIDIGITUI_MODPLUS, i->sprite);
 				break;
 			}
 		}

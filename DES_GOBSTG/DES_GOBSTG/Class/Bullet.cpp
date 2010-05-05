@@ -236,7 +236,7 @@ void Bullet::Render()
 		{
 			arc = ARC(angle+headangle+BULLET_ANGLEOFFSET);
 		}
-		sprite[i]->RenderEx(x, y, arc, hscale);
+		SpriteItemManager::RenderSpriteEx(sprite[i], x, y, arc, hscale);
 	}
 }
 

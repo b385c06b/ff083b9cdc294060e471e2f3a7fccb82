@@ -2,7 +2,7 @@
 Comment	Index	Texture	TextureSet	TexW	TexH
 #		System			
 -	0	Graphic/Other/white.png	1	1	1
--	1	Graphic/Other/word.png	2	1024	1024
+-	1	Graphic/Other/word_sub_title.png	2	512	512
 -	2	Graphic/Sprite/Bullet/bullet.png	4	512	512
 -	3	Graphic/Sprite/Ghost/ghost.png	4	128	128
 #		SystemOther			
@@ -131,9 +131,16 @@ Comment	Index	Texture	TextureSet	TexW	TexH
 -	162	Graphic/UI/battle.png	9	512	512
 -	163	Graphic/UI/musiclist.png	10	256	512
 #		Other			
--	170	Graphic/Other/playercomment_01.png	7	1024	1024
+-	170	Graphic/Other/playercomment_01.png	7	512	512
 -	171	Graphic/Other/playercomment_02.png	7	512	512
 -	172	Graphic/Other/playercomment_03.png	7	512	512
+-	173	Graphic/Other/playercomment_04.png	7	512	512
+-	174	Graphic/Other/playercomment_05.png	7	512	512
+-	175	Graphic/Other/playercomment_06.png	7	512	512
+-	176	Graphic/Other/word_sub_game.png	2	512	512
+-	177	Graphic/Other/word_sub_battle.png	20	512	512
+-	178	Graphic/Other/word_sub_namecard_1.png	21	512	512
+-	179	Graphic/Other/word_sub_namecard_2.png	21	512	512
 #		Stage			
 -	180	Graphic/Scene/s01.png	400	256	256
 -	181	Graphic/Scene/s02a.png	401	512	512

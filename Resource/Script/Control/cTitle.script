@@ -10,11 +10,8 @@ CONTROLFILE
 // Tex
 FREETEXTURESET -1
 
-LOADTEXTURESET 2
-LOADTEXTURESET 8
-
 // SetFlag
-SD [i] 22
+SD [i] $PlayerMax
 LOOP [i]
 {
 	SETFLAG $FLAG_PlayerUseable_01 + i true

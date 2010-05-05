@@ -26,7 +26,7 @@ public:
 	static bool SetSpriteTextureRect(hgeSprite * sprite, float texx, float texy, float texw, float texh);
 	static bool SetSpriteFlip(hgeSprite * sprite, bool flipx=false, bool flipy=false);
 	static bool SetSpriteHotSpot(hgeSprite * sprite, float hotx, float hoty);
-	static bool SetSprite(int index, hgeSprite * sprite, HTEXTURE * tex);
+	static bool SetSprite(int index, hgeSprite * sprite);
 
 	static HTEXTURE GetTexture(int index);
 	static float GetTexX(int index);
@@ -36,6 +36,14 @@ public:
 
 	static bool ptFace(int index, hgeSprite * sprite, bool enemy = true);
 	static bool ptName(int index, hgeSprite * sprite, bool enemy = true);
+
+	static bool LoadTextureSetWhenNeeded(HTEXTURE tex);
+	static void RenderSprite(hgeSprite * sprite, float x, float y);
+	static void RenderSpriteEx(hgeSprite * sprite, float x, float y, float rot, float hscale=1.0f, float vscale=0.0f);
+	static void FontPrintf(hgeFont * font, float x, float y, int align, const char * str);
+	static void FontPrintfb(hgeFont * font, float x, float y, float w, float h, int align, const char * str);
+	static void EffectSystemRender(hgeEffectSystem * eff);
+	static void RenderQuad(hgeQuad * quad);
 
 public:
 	static int digituiIndex;

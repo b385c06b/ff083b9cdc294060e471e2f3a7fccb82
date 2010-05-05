@@ -36,7 +36,7 @@ void InfoSelect::linki(const char * linkcode, int num)
 		return;
 
 	char buffer[M_STRITOAMAX];
-	itoa(num, buffer, 10);
+	hge->Math_itoa(num, buffer);
 	if(!linkcode)
 	{
 		strcat(info, buffer);
@@ -54,7 +54,7 @@ void InfoSelect::linkl(const char * linkcode, LONGLONG num)
 		return;
 
 	char buffer[M_STRMAX];
-	_i64toa(num, buffer, 10);
+	sprintf(buffer, "%d", num);
 	if(!linkcode)
 	{
 		strcat(info, buffer);
@@ -81,7 +81,7 @@ void InfoSelect::linkf(const char * linkcode, BYTE tail, float num)
 		char buff[M_STRMAX];
 		char tbuf[M_STRITOAMAX];
 		strcpy(buff, "%.");
-		strcat(buff, itoa(tail, tbuf, 10));
+		strcat(buff, hge->Math_itoa(tail, tbuf));
 		strcat(buff, "f");
 		sprintf(buffer, buff, num);
 	}
@@ -107,6 +107,7 @@ void InfoSelect::Setup(int _nselect, int _select, bool _updown/* =true */)
 	nselect = _nselect;
 	select = _select;
 	updown = _updown;
+	complete = false;
 	PushKey::SetPushEvent(PUSHKEY_ID_ISELUSE, updown?KS_UP_MP:KS_LEFT_MP, updown?KS_DOWN_MP:KS_RIGHT_MP);
 }
 
@@ -225,7 +226,9 @@ void InfoSelect::matchSelect()
 				{
 					j++;
 					if(j == infoselect.end())
-						j++;
+					{
+						j = infoselect.begin();
+					}
 				}
 				else
 				{

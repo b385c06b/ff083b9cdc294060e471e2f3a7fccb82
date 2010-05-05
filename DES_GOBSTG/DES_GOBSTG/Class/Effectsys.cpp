@@ -4,6 +4,7 @@
 #include "../Header/Player.h"
 #include "../Header/Target.h"
 #include "../Header/Process.h"
+#include "../Header/SpriteItemManager.h"
 
 Effectsys Effectsys::effsys[EFFECTSYSMAX];
 hgeEffectSystem Effectsys::efftype[EFFECTSYSTYPEMAX];
@@ -151,7 +152,7 @@ void Effectsys::SetValue(int _angle, float _speed, float _zSpeed)
 
 void Effectsys::Render()
 {
-	eff->Render();
+	SpriteItemManager::EffectSystemRender(eff);
 }
 
 void Effectsys::MoveTo(float _x, float _y, float _z, bool bForce)

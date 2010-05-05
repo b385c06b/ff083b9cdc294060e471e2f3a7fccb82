@@ -123,10 +123,10 @@ int Process::processResult()
 			sec = Data::data.sLinkDiff(sec, tdiff);
 
 			int tplaytime = Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_PLAYTIME), 0);
-			itoa(tplaytime, _ifs[10].info, 10);
+			hge->Math_itoa(tplaytime, _ifs[10].info);
 
 			int tcleartime = Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_CLEARTIME), 0);
-			itoa(tcleartime, _ifs[11].info, 10);
+			hge->Math_itoa(tcleartime, _ifs[11].info);
 
 			for (int i=0; i<3; i++)
 			{

@@ -115,7 +115,7 @@ void CReplayViewDlg::Release()
 	{
 		if (strlen(cOutputFilename))
 		{
-			DeleteFile(cOutputFilename);
+			hge->Resource_DeleteFile(cOutputFilename);
 		}
 	}
 }

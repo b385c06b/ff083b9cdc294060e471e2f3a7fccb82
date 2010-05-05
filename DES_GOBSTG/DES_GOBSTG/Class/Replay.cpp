@@ -25,8 +25,12 @@ void Replay::Free(char * filename)
 
 void Replay::Fill()
 {
-	SYSTEMTIME systime;
-	GetLocalTime(&systime);
+	WORD wYear;
+	WORD wMonth;
+	WORD wDay;
+	WORD wHour;
+	WORD wMinute;
+	hge->Timer_GetSystemTime(&wYear, &wMonth, NULL, &wDay, &wHour, &wMinute);
 
 	rpyinfo.modeflag = (Process::mp.spellmode?M_RPYMODE_SPELL:0)|(Process::mp.practicemode?M_RPYMODE_PRACTICE:0);
 
@@ -38,11 +42,11 @@ void Replay::Fill()
 	rpyinfo.endscene = Process::mp.endscene;
 
 	rpyinfo.alltime = Process::mp.alltime;
-	rpyinfo.year = systime.wYear;
-	rpyinfo.month = systime.wMonth;
-	rpyinfo.day = systime.wDay;
-	rpyinfo.hour = systime.wHour;
-	rpyinfo.minute = systime.wMinute;
+	rpyinfo.year = wYear;
+	rpyinfo.month = wMonth;
+	rpyinfo.day = wDay;
+	rpyinfo.hour = wHour;
+	rpyinfo.minute = wMinute;
 
 	rpyinfo.score = Player::p.nScore;
 	rpyinfo.miss = Player::p.ncMiss;
@@ -167,7 +171,7 @@ void Replay::Save(char * filename)
 
 	char crcfilename[M_PATHMAX];
 	strcpy(crcfilename, filename);
-	strcat(crcfilename, itoa(hge->Resource_GetCRC(_rpydata, _size), buffer, 10));
+	strcat(crcfilename, hge->Math_itoa(hge->Resource_GetCRC(_rpydata, _size), buffer));
 	hgeMemoryFile memfile;
 	memfile.filename = crcfilename;
 	memfile.data = _rpydata;

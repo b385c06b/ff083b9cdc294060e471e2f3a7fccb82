@@ -106,7 +106,7 @@ spriteData * SpriteItemManager::CastSprite(int index)
 	return NULL;
 }
 
-bool SpriteItemManager::SetSprite(int index, hgeSprite * sprite, HTEXTURE * tex)
+bool SpriteItemManager::SetSprite(int index, hgeSprite * sprite)
 {
 	if (!sprite)
 	{
@@ -122,9 +122,9 @@ bool SpriteItemManager::SetSprite(int index, hgeSprite * sprite, HTEXTURE * tex)
 	{
 		return false;
 	}
-	SetSpriteData(sprite, tex[_sd->tex], _sd->tex_x, _sd->tex_y, 
-		_sd->tex_w < 0 ? hge->Texture_GetWidth(tex[_sd->tex])-_sd->tex_x : _sd->tex_w, 
-		_sd->tex_h < 0 ? hge->Texture_GetHeight(tex[_sd->tex])-_sd->tex_y : _sd->tex_h);
+	SetSpriteData(sprite, BResource::bres.tex[_sd->tex], _sd->tex_x, _sd->tex_y, 
+		_sd->tex_w < 0 ? hge->Texture_GetWidth(BResource::bres.tex[_sd->tex])-_sd->tex_x : _sd->tex_w, 
+		_sd->tex_h < 0 ? hge->Texture_GetHeight(BResource::bres.tex[_sd->tex])-_sd->tex_y : _sd->tex_h);
 	return true;
 }
 
@@ -295,4 +295,72 @@ bool SpriteItemManager::ptName(int index, hgeSprite * sprite, bool enemy)
 	sprite->SetTexture(tex);
 	sprite->SetTextureRect(tsd->tex_x, tsd->tex_y, tsd->tex_w, tsd->tex_h);
 	return true;
+}
+
+bool SpriteItemManager::LoadTextureSetWhenNeeded(HTEXTURE tex)
+{
+	if (hge->Texture_GetTexture(tex) == NULL)
+	{
+		BResource::bres.LoadTextureSet(BResource::bres.texturedata[tex.texindex].texset);
+		return true;
+	}
+	return false;
+}
+
+void SpriteItemManager::RenderSprite( hgeSprite * sprite, float x, float y )
+{
+	if (!sprite)
+	{
+		return;
+	}
+	LoadTextureSetWhenNeeded(sprite->quad.tex);
+	sprite->Render(x, y);
+}
+
+void SpriteItemManager::RenderSpriteEx( hgeSprite * sprite, float x, float y, float rot, float hscale/*=1.0f*/, float vscale/*=0.0f*/ )
+{
+	if (!sprite)
+	{
+		return;
+	}
+	LoadTextureSetWhenNeeded(sprite->quad.tex);
+	sprite->RenderEx(x, y, rot, hscale, vscale);
+}
+
+void SpriteItemManager::FontPrintf( hgeFont * font, float x, float y, int align, const char * str)
+{
+	if (!font)
+	{
+		return;
+	}
+	font->printf(x, y, align, "%s", str);
+}
+
+void SpriteItemManager::FontPrintfb( hgeFont * font, float x, float y, float w, float h, int align, const char * str)
+{
+	if (!font)
+	{
+		return;
+	}
+	font->printfb(x, y, w, h, align, "%s", str);
+}
+
+void SpriteItemManager::EffectSystemRender( hgeEffectSystem * eff )
+{
+	if (!eff)
+	{
+		return;
+	}
+	LoadTextureSetWhenNeeded(eff->ebi.tex);
+	eff->Render();
+}
+
+void SpriteItemManager::RenderQuad( hgeQuad * quad )
+{
+	if (!quad)
+	{
+		return;
+	}
+	LoadTextureSetWhenNeeded(quad->tex);
+	hge->Gfx_RenderQuad(quad);
 }

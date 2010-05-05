@@ -37,7 +37,7 @@ LOOP [i]
 		TIMERLESS 80 ANGLESETADD i * 10 + 200 * ttimemod
 		TIMERLESS 160 SPEEDSETADD i / 3 + 2
 	BL 13 0 50 8
-		i * 1.2f +f ENX + trandx ENY + trandy -9000 0 i *f 0.15 0
+		i * 1.2 +f ENX + trandx ENY + trandy -9000 0 i *f 0.15 0
 		1 ttimemod * 2 + 4 8 0
 }
 A 0

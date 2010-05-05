@@ -88,7 +88,6 @@ BGOFF 1 + blBegin
 
 @ QUIT@
 
-DEBUG_BREAKPOINT
 SD [blBegin] BGSI * $BGLayerSplit
 BGFLAG 0 + blBegin BG_FADEOUT BGMT_FADE / 2
 BGFLAG 1 + blBegin BG_FADEOUT BGMT_FADE / 2
@@ -303,4 +302,78 @@ B tbasex tbasey
 IF ptanglesave > 0
 {
 	SD ptanglesave tbaseangle
+}
+
+// ////////// //	//读取纹理组
+# $LoadTextureSet
+
+@ @@[ 0
+
+IF NOW@ - 0xFFFF !
+{
+	LOADTEXTURESET -1
+}
+ELSE
+{
+	LOADTEXTURESET NOW@
+}
+
+// ////////// //	//释放纹理组
+# $FreeTextureSet
+
+@ @@[ 0
+
+IF NOW@ - 0xFFFF !
+{
+	FREETEXTURESET -1
+}
+ELSE
+{
+	SD [texset] NOW@ - $EnemyID_01
+	FREETEXTURESET 300 + texset
+	
+	SD [chara_0] CHARA 0
+	SD [chara_1] CHARA 1
+	SD [chara_2] CHARA 2
+	
+	SD [chara_0] GETPEID chara_0
+	SD [chara_1] GETPEID chara_1
+	SD [chara_2] GETPEID chara_2
+	
+	IF texset - chara_0
+	{
+		IF texset - chara_1
+		{
+			IF texset - chara_2
+			{
+				FREETEXTURESET 200 + texset
+				FREETEXTURESET 400 + texset
+			}
+		}
+	}
+	
+/*
+	IF texset - 99 > 0
+	{
+		IF texset - chara_0 - 100
+		{
+			IF texset - chara_1 - 100
+			{
+				IF texset - chara_2 - 100
+				{
+					IF texset - chara_0 - 200
+					{
+						IF texset - chara_1 - 200
+						{
+							IF texset - chara_2 - 200
+							{
+								FREETEXTURESET texset
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+*/
 }

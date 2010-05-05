@@ -280,7 +280,7 @@ void CALL HGE_Impl::Gfx_RenderTriple(const hgeTriple *triple)
 	if(VertArray)
 	{
 		HTEXTURE tex = triple->tex;
-		DWORD ttex = tex.GetTexture(nTexInfo, texInfo);
+		DWORD ttex = Texture_GetTexture(tex);
 		if(CurPrimType!=HGEPRIM_TRIPLES || nPrim>=VERTEX_BUFFER_SIZE/HGEPRIM_TRIPLES || CurTexture!=ttex || CurBlendMode!=triple->blend)
 		{
 			_render_batch();
@@ -309,7 +309,7 @@ void CALL HGE_Impl::Gfx_RenderQuad(const hgeQuad *quad)
 	if(VertArray)
 	{
 		HTEXTURE tex = quad->tex;
-		DWORD ttex = tex.GetTexture(nTexInfo, texInfo);
+		DWORD ttex = Texture_GetTexture(tex);
 		if(CurPrimType!=HGEPRIM_QUADS || nPrim>=VERTEX_BUFFER_SIZE/HGEPRIM_QUADS || CurTexture!=ttex || CurBlendMode!=quad->blend)
 		{
 			_render_batch();
@@ -342,7 +342,7 @@ hgeVertex* CALL HGE_Impl::Gfx_StartBatch(int prim_type, HTEXTURE tex, int blend,
 
 		CurPrimType=prim_type;
 		if(CurBlendMode != blend) _SetBlendMode(blend);
-		DWORD ttex = tex.GetTexture(nTexInfo, texInfo);
+		DWORD ttex = Texture_GetTexture(tex);
 		if(ttex != CurTexture)
 		{
 			pD3DDevice->SetTexture( 0, (LPDIRECT3DTEXTURE9)ttex );
@@ -526,7 +526,7 @@ HTEXTURE CALL HGE_Impl::Texture_Load(const char *filename, DWORD size, bool bMip
 
 void CALL HGE_Impl::Texture_Free(HTEXTURE tex)
 {
-	DWORD ttex = tex.GetTexture(nTexInfo, texInfo);
+	DWORD ttex = Texture_GetTexture(tex);
 	LPDIRECT3DTEXTURE9 pTex=(LPDIRECT3DTEXTURE9)ttex;
 	CTextureList *texItem=textures, *texPrev=0;
 
@@ -545,10 +545,15 @@ void CALL HGE_Impl::Texture_Free(HTEXTURE tex)
 	if(pTex != NULL) pTex->Release();
 }
 
+DWORD CALL HGE_Impl::Texture_GetTexture(HTEXTURE tex)
+{
+	return tex.GetTexture(nTexInfo, texInfo);
+}
+
 int CALL HGE_Impl::Texture_GetWidth(HTEXTURE tex, bool bOriginal)
 {
 	D3DSURFACE_DESC TDesc;
-	DWORD ttex = tex.GetTexture(nTexInfo, texInfo);
+	DWORD ttex = Texture_GetTexture(tex);
 	if (!ttex)
 	{
 		return tex.GetTextureWidthByInfo(nTexInfo, texInfo);
@@ -576,7 +581,7 @@ int CALL HGE_Impl::Texture_GetWidth(HTEXTURE tex, bool bOriginal)
 int CALL HGE_Impl::Texture_GetHeight(HTEXTURE tex, bool bOriginal)
 {
 	D3DSURFACE_DESC TDesc;
-	DWORD ttex = tex.GetTexture(nTexInfo, texInfo);
+	DWORD ttex = Texture_GetTexture(tex);
 	if (!ttex)
 	{
 		return tex.GetTextureHeightByInfo(nTexInfo, texInfo);
@@ -603,7 +608,7 @@ int CALL HGE_Impl::Texture_GetHeight(HTEXTURE tex, bool bOriginal)
 
 DWORD * CALL HGE_Impl::Texture_Lock(HTEXTURE tex, bool bReadOnly, int left, int top, int width, int height)
 {
-	DWORD ttex = tex.GetTexture(nTexInfo, texInfo);
+	DWORD ttex = Texture_GetTexture(tex);
 	LPDIRECT3DTEXTURE9 pTex=(LPDIRECT3DTEXTURE9)ttex;
 	D3DSURFACE_DESC TDesc;
 	D3DLOCKED_RECT TRect;
@@ -638,9 +643,25 @@ DWORD * CALL HGE_Impl::Texture_Lock(HTEXTURE tex, bool bReadOnly, int left, int 
 
 void CALL HGE_Impl::Texture_Unlock(HTEXTURE tex)
 {
-	DWORD ttex = tex.GetTexture(nTexInfo, texInfo);
+	DWORD ttex = Texture_GetTexture(tex);
 	LPDIRECT3DTEXTURE9 pTex=(LPDIRECT3DTEXTURE9)ttex;
 	pTex->UnlockRect(0);
+}
+
+bool CALL HGE_Impl::Texture_Save(HTEXTURE tex, const char * filename, DWORD filetype)
+{
+	DWORD ttex = Texture_GetTexture(tex);
+	LPDIRECT3DTEXTURE9 pTex=(LPDIRECT3DTEXTURE9)ttex;
+	if (!pTex)
+	{
+		return false;
+	}
+	HRESULT hr = D3DXSaveTextureToFile(filename, (D3DXIMAGE_FILEFORMAT)filetype, pTex, NULL);
+	if (FAILED(hr))
+	{
+		return false;
+	}
+	return true;
 }
 
 //////// Implementation ////////

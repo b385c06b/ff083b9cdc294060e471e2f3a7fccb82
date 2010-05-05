@@ -167,4 +167,5 @@ ELSEIF D ptdepth - 6 !
 */
 @ 1
 
+FREETEXTURESET -1
 SD RESERVEBEGIN + 1 0xff

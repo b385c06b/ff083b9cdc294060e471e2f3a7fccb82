@@ -57,9 +57,9 @@ int Process::processOver()
 	if(tdepth == 0)
 	{
 		char scorebuffer[M_STRITOAMAX];
-		_i64toa(Replay::rpy.rpyinfo.score, scorebuffer, 10);
-		char alivenessbuffer[M_STRITOAMAX];
-		_i64toa(Replay::rpy.rpyinfo.faith, alivenessbuffer, 10);
+		sprintf(scorebuffer, "%d", Replay::rpy.rpyinfo.score);
+		char faithbuffer[M_STRITOAMAX];
+		sprintf(faithbuffer, "%d", Replay::rpy.rpyinfo.faith);
 		char lostbuffer[M_STRITOAMAX];
 		sprintf(lostbuffer, "%.2f", Replay::rpy.rpyinfo.lost);
 		strcat(lostbuffer, "%");
@@ -72,14 +72,14 @@ int Process::processOver()
 				{
 					if(i->ID == 2)
 					{
-						SpriteItemManager::SetSprite(SpriteItemManager::GetIndexByName(SI_RESULT_CANNOTSAVE), i->sprite, tex);
+						SpriteItemManager::SetSprite(SpriteItemManager::GetIndexByName(SI_RESULT_CANNOTSAVE), i->sprite);
 						Selector::Setup(1, 1);
 					}
 					else
 					{
 						if(i->ID == 0)
 							i->flag |= SEL_NONACTIVE;
-						SpriteItemManager::SetSprite(-1, i->sprite, tex);
+						SpriteItemManager::SetSprite(-1, i->sprite);
 					}
 				}
 			}
@@ -87,37 +87,37 @@ int Process::processOver()
 			{
 				if(i->ID < strlen(scorebuffer) + 0x20)
 				{
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(scorebuffer[i->ID-0x20]-'0'), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(scorebuffer[i->ID-0x20]-'0'), i->sprite);
 				}
 				else
 				{
-					SpriteItemManager::SetSprite(-1, i->sprite, tex);
+					SpriteItemManager::SetSprite(-1, i->sprite);
 				}
 			}
 			else if((i->ID & 0xf0) == 0x30)
 			{
-				if(i->ID < strlen(alivenessbuffer) + 0x30)
+				if(i->ID < strlen(faithbuffer) + 0x30)
 				{
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(alivenessbuffer[i->ID-0x30]-'0'), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(faithbuffer[i->ID-0x30]-'0'), i->sprite);
 				}
 				else
 				{
-					SpriteItemManager::SetSprite(-1, i->sprite, tex);
+					SpriteItemManager::SetSprite(-1, i->sprite);
 				}
 			}
 			else if((i->ID & 0xf0) == 0x40)
 			{
 				if(i->ID & 1)
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.miss%10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.miss%10), i->sprite);
 				else
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.miss/10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.miss/10), i->sprite);
 			}
 			else if((i->ID & 0xf0) == 0x50)
 			{
 				if(i->ID & 1)
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.cont%10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.cont%10), i->sprite);
 				else
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.cont/10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.cont/10), i->sprite);
 			}
 			else if((i->ID & 0xf0) == 0x60)
 			{
@@ -127,26 +127,26 @@ int Process::processOver()
 						lostbuffer[i->ID-0x60] = '0' + SIDIGITUI_POINTPLUS;
 					else if(lostbuffer[i->ID-0x60] == '%')
 						lostbuffer[i->ID-0x60] = '0' + SIDIGITUI_MODPLUS;
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(lostbuffer[i->ID-0x60]-'0'), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(lostbuffer[i->ID-0x60]-'0'), i->sprite);
 				}
 				else
 				{
-					SpriteItemManager::SetSprite(-1, i->sprite, tex);
+					SpriteItemManager::SetSprite(-1, i->sprite);
 				}
 			}
 			else if((i->ID & 0xf0) == 0x70)
 			{
 				if(i->ID & 1)
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.border%10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.border%10), i->sprite);
 				else
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.border/10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.border/10), i->sprite);
 			}
 			else if((i->ID & 0xf0) == 0x80)
 			{
 				if(i->ID & 1)
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.get%10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.get%10), i->sprite);
 				else
-					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.get/10), i->sprite, tex);
+					SpriteItemManager::SetSprite(SpriteItemManager::digituiIndex+(Replay::rpy.rpyinfo.get/10), i->sprite);
 			}
 		}
 		tdepth = 1;
@@ -219,6 +219,7 @@ int Process::processOver()
 		if(!strcmp(savefilename, ""))
 		{
 			do{
+				strcpy(savefilename, "");
 				strcat(savefilename, M_REPLAY_SAVEFILEPRE);
 				char buffer[M_STRITOAMAX];
 				for(int i=0;i<RPYFILENAME_CONTENTMAX;i++)
@@ -229,7 +230,7 @@ int Process::processOver()
 				}
 				strcat(savefilename, ".");
 				strcat(savefilename, BResource::bres.resdata.replayextensionname7);
-			}while(_access(hge->Resource_MakePath(savefilename), 00) != -1);
+			}while (hge->Resource_AccessFile(savefilename));
 		}
 
 		_ifs[12].valueSet(2, BResource::bres.resdata.uistr.confirm, 320, 410, INFO_GREEN);
@@ -351,7 +352,7 @@ skip1:
 			{
 				SE::push(SE_SYSTEM_OK);
 
-				SetCurrentDirectory(hge->Resource_MakePath(BResource::bres.resdata.replayfoldername));
+				hge->Resource_SetCurrentDirectory(BResource::bres.resdata.replayfoldername);
 				char * buffer;
 				char enumfile[M_STRMAX];
 				strcpy(enumfile, BResource::bres.resdata.replayfoldername);
@@ -368,7 +369,7 @@ skip1:
 					if(!hge->Resource_EnumFiles())
 						break;
 				}
-				SetCurrentDirectory(hge->Resource_MakePath(""));
+				hge->Resource_SetCurrentDirectory("");
 
 				if(tdepth != 4)
 					tdepth = 6;

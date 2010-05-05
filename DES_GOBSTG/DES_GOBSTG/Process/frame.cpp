@@ -110,12 +110,7 @@ int Process::frame()
 
 	if(playing && !playtimeStart)
 	{
-		SYSTEMTIME tsystime;
-		FILETIME tfiletime;
-		GetLocalTime(&tsystime);
-		SystemTimeToFileTime(&tsystime, &tfiletime);
-
-		playtimeStart = (((LONGLONG)tfiletime.dwHighDateTime) << 32) | tfiletime.dwLowDateTime;
+		playtimeStart = hge->Timer_GetFileTime();
 	}
 	else if(!playing && playtimeStart)
 	{

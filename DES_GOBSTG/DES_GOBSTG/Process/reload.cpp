@@ -2,7 +2,7 @@
 
 bool Process::reload()
 {
-	SetCurrentDirectory(hge->Resource_MakePath(""));
+	hge->Resource_SetCurrentDirectory("");
 
 	frameskip = M_DEFAULT_FRAMESKIP;
 
@@ -51,7 +51,7 @@ bool Process::reload()
 	PlayerBullet::Init();
 
 	BossInfo::bossinfo.Init();
-	InfoQuad::tex = tex[TEX_WHITE];
+	InfoQuad::tex = BResource::bres.tex[TEX_WHITE];
 
 	FrontDisplay::fdisp.Init();
 	Fontsys::fontsys.Init(FrontDisplay::fdisp.info.normalfont);
@@ -63,7 +63,7 @@ bool Process::reload()
 	HGELOG("\nCleared up.\n");
 #endif
 
-	SetCurrentDirectory(hge->Resource_MakePath(""));
+	hge->Resource_SetCurrentDirectory("");
 
 	return true;
 }

@@ -129,7 +129,7 @@ void Beam::Render()
 		int tblend = Bullet::sprite[i]->GetBlendMode();
 		Bullet::sprite[i]->SetBlendMode(BLEND_ALPHAADD);
 		Bullet::sprite[i]->SetColor(alpha<<24|diffuse);
-		Bullet::sprite[i]->RenderEx(x, y, ARC(angle+headangle+BULLET_ANGLEOFFSET), hscale, vscale);
+		SpriteItemManager::RenderSpriteEx(Bullet::sprite[i], x, y, ARC(angle+headangle+BULLET_ANGLEOFFSET), hscale, vscale);
 		Bullet::sprite[i]->SetBlendMode(tblend);
 	}
 }

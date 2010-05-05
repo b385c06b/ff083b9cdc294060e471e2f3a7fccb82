@@ -3,7 +3,7 @@
 int Process::processPreInitial()
 {
 	bool rebuilddone = false;
-	if(_access(CONFIG_STR_FILENAME, 00) == -1)
+	if (!hge->Resource_AccessFile(CONFIG_STR_FILENAME))
 	{
 rebuild:
 		if (rebuilddone)
@@ -11,7 +11,7 @@ rebuild:
 			errorcode = PROC_ERROR_INIFILE;
 			return PQUIT;
 		}
-		DeleteFile(CONFIG_STR_FILENAME);
+		hge->Resource_DeleteFile(CONFIG_STR_FILENAME);
 
 		hge->	Ini_SetInt(Data::data.translateSection(Data::data.sLinkType(DATAS_HEADER)), Data::data.translateName(Data::data.nLinkType(DATAN_GAMEVERSION)), GAME_VERSION);
 		hge->	Ini_SetString(Data::data.translateSection(Data::data.sLinkType(DATAS_HEADER)), Data::data.translateName(Data::data.nLinkType(DATAN_SIGNATURE)), GAME_SIGNATURE);
@@ -211,12 +211,7 @@ int Process::processInit()
 		return PQUIT;
 	}
 
-	for (int i=0; i<TEXMAX; i++)
-	{
-		texinfo[i].tex = NULL;
-		texinfo[i].texw = BResource::bres.texturedata[i].width;
-		texinfo[i].texh = BResource::bres.texturedata[i].height;
-	}
+	BResource::bres.InitTexinfo();
 
 	if(Scripter::scr.binmode && !Scripter::scr.LoadAll())
 	{
@@ -249,6 +244,8 @@ int Process::processInit()
 
 	char tnbuffer[M_STRMAX];
 
+	BResource::bres.LoadTexture(TEX_WHITE);
+/*
 	tex[TEX_WHITE] = hge->Texture_Load(BResource::bres.texturedata[TEX_WHITE].texfilename);
 #ifdef __DEBUG
 	if(tex[TEX_WHITE].tex == NULL)
@@ -261,7 +258,8 @@ int Process::processInit()
 	{
 		HGELOG("Succeeded in loading Texture File %s.(Assigned to Index %d).", BResource::bres.texturedata[TEX_WHITE].texfilename, TEX_WHITE);
 	}
-#endif
+#endif*/
+
 /*
 	for(int i=1;i<TEXMAX;i++)
 	{
@@ -298,17 +296,19 @@ int Process::processInit()
 		texinfo[i].texh = hge->Texture_GetHeight(tex[i].tex);
 	}*/
 
+/*
 	for (int i=0; i<TEXMAX; i++)
 	{
 		tex[i].texindex = i;
 		texinfo[i].tex = &tex[i].tex;
 	}
-	hge->Gfx_SetTextureInfo(TEXMAX, texinfo);
+	hge->Gfx_SetTextureInfo(TEXMAX, texinfo);*/
+
 
 	SpriteItemManager::Init();
 
 //	Fontsys::fontsys.Init(FrontDisplay::fdisp.info.normalfont);
-	if(!Effectsys::Init(tex, BResource::bres.resdata.effectsysfoldername, BResource::bres.resdata.effectsysfilename))
+	if(!Effectsys::Init(BResource::bres.tex, BResource::bres.resdata.effectsysfoldername, BResource::bres.resdata.effectsysfilename))
 	{
 #ifdef __DEBUG
 		HGELOG("%s\nFailed in Initializing Effectsys.", HGELOG_ERRSTR);

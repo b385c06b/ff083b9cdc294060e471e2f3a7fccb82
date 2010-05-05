@@ -50,8 +50,10 @@ Comment	CustomConst	Name	Value
 -	48	Chat_TA0	48
 -	49	Chat_TB0	49
 -	50	Chat_TC0	50
--	52	TitleFade_Left	0
--	53	TitleFade_Right	1
+	51	LoadTextureSet	51
+	52	FreeTextureSet	52
+-	53	TitleFade_Left	0
+-	54	TitleFade_Right	1
 -	55	LayerNormal	0
 -	56	LayerBomb	1
 -	57	BGLayerSplit	6

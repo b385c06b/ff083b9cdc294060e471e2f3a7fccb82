@@ -109,6 +109,13 @@ public:
 	virtual bool		CALL	System_Launch(const char *url);
 	virtual void		CALL	System_Snapshot(const char *filename=0);
 
+	virtual char*		CALL	Math_itoa(int ival, char * buffer);
+	virtual int			CALL	Math_atoi(const char * buffer);
+	virtual char*		CALL	Math_ftoa(float fval, char * buffer);
+	virtual float		CALL	Math_atof(const char * buffer);
+
+	virtual void		CALL	Resource_DeleteFile(const char *filename);
+	virtual void		CALL	Resource_SetCurrentDirectory(const char *filename);
 	virtual BYTE*		CALL	Resource_Load(const char *filename, DWORD *size=0);
 	virtual void		CALL	Resource_Free(void *res);
 	virtual bool		CALL	Resource_AttachPack(const char *filename, int password=0);
@@ -118,6 +125,8 @@ public:
 	virtual char*		CALL	Resource_MakePath(const char *filename);
 	virtual char*		CALL	Resource_EnumFiles(const char *wildcard=0);
 	virtual char*		CALL	Resource_EnumFolders(const char *wildcard=0);
+	virtual bool		CALL	Resource_AccessFile(const char *filename);
+	virtual bool		CALL	Resource_CreateDirectory(const char *filename);
 	virtual bool		CALL	Resource_CreatePack(const char * filename, int password, hgeMemoryFile * first, ...);
 	virtual bool		CALL	Resource_AddFileInPack(const char * filename, int password, hgeMemoryFile * memfile);
 	virtual DWORD		CALL	Resource_GetCRC(const BYTE * content, DWORD size);
@@ -128,17 +137,19 @@ public:
 #endif // ZLIB_USEPSW
 	virtual char*		CALL	Resource_GetPackFirstFileName(const char * packfilename);
 
-	virtual	void		CALL	Ini_SetInt(const char *section, const char *name, int value);
-	virtual	int 		CALL	Ini_GetInt(const char *section, const char *name, int def_val);
-	virtual	void		CALL	Ini_SetFloat(const char *section, const char *name, float value);
-	virtual	float		CALL	Ini_GetFloat(const char *section, const char *name, float def_val);
-	virtual	void		CALL	Ini_SetString(const char *section, const char *name, const char *value);
-	virtual	char*		CALL	Ini_GetString(const char *section, const char *name, const char *def_val);
+	virtual	void		CALL	Ini_SetInt(const char *section, const char *name, int value, char * inifilename=NULL);
+	virtual	int 		CALL	Ini_GetInt(const char *section, const char *name, int def_val, char * inifilename=NULL);
+	virtual	void		CALL	Ini_SetFloat(const char *section, const char *name, float value, char * inifilename=NULL);
+	virtual	float		CALL	Ini_GetFloat(const char *section, const char *name, float def_val, char * inifilename=NULL);
+	virtual	void		CALL	Ini_SetString(const char *section, const char *name, const char *value, char * inifilename=NULL);
+	virtual	char*		CALL	Ini_GetString(const char *section, const char *name, const char *def_val, char * inifilename=NULL);
 
 	virtual int			CALL	Random_Seed(int seed=0);
 	virtual int			CALL	Random_Int(int min, int max, bool bSelf=false);
 	virtual float		CALL	Random_Float(float min, float max, bool bSelf=false);
 
+	virtual void		CALL	Timer_GetSystemTime(WORD *wYear=NULL, WORD *wMonth=NULL, WORD *wDayOfWeek=NULL, WORD *wDay=NULL, WORD *wHour=NULL, WORD *wMinute=NULL, WORD *wSecond=NULL, WORD *wMilliseconds=NULL);
+	virtual LONGLONG	CALL	Timer_GetFileTime();
 	virtual float		CALL	Timer_GetTime();
 	virtual float		CALL	Timer_GetDelta();
 	virtual float		CALL	Timer_GetFPS(int mod = 0);
@@ -226,10 +237,12 @@ public:
 	virtual HTEXTURE	CALL	Texture_Create(int width, int height);
 	virtual HTEXTURE	CALL	Texture_Load(const char *filename, DWORD size=0, bool bMipmap=false);
 	virtual void		CALL	Texture_Free(HTEXTURE tex);
+	virtual DWORD		CALL	Texture_GetTexture(HTEXTURE tex);
 	virtual int			CALL	Texture_GetWidth(HTEXTURE tex, bool bOriginal=false);
 	virtual int			CALL	Texture_GetHeight(HTEXTURE tex, bool bOriginal=false);
 	virtual DWORD*		CALL	Texture_Lock(HTEXTURE tex, bool bReadOnly=true, int left=0, int top=0, int width=0, int height=0);
 	virtual void		CALL	Texture_Unlock(HTEXTURE tex);
+	virtual bool		CALL	Texture_Save(HTEXTURE tex, const char * filename, DWORD filetype);
 
 	
 	/* font support 

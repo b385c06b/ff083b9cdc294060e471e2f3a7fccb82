@@ -99,9 +99,9 @@ void Selector::actionSet(BYTE setflag, float xadj, float yadj)
 
 void Selector::Render()
 {
-	for(list<Selector>::iterator i = sel.begin();i != sel.end(); i++)
+	for(list<Selector>::iterator it = sel.begin();it != sel.end(); it++)
 	{
-		(i->sprite)->RenderEx(i->x, i->y, 0, i->hscale, i->vscale);
+		SpriteItemManager::RenderSpriteEx(it->sprite, it->x, it->y, 0, it->hscale, it->vscale);
 	}
 }
 
@@ -269,7 +269,9 @@ void Selector::matchSelect()
 				{
 					jt++;
 					if(jt == sel.end())
-						jt++;
+					{
+						jt = sel.begin();
+					}
 				}
 				else
 				{
@@ -293,6 +295,7 @@ void Selector::Setup(int _nselect, int _select, bool _updown/* =true */)
 	nselect = _nselect;
 	select = _select;
 	updown = _updown;
+	complete = false;
 	PushKey::SetPushEvent(PUSHKEY_ID_SELUSE, updown?KS_UP_MP:KS_LEFT_MP, updown?KS_DOWN_MP:KS_RIGHT_MP);
 }
 

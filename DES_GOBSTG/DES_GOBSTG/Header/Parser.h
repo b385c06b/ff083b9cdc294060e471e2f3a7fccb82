@@ -166,6 +166,7 @@ public:
 	static bool SETFLAG_();
 	static bool TRYSTAGE_();
 	static bool DEBUG_BREAKPOINT_();
+	static bool DEBUG_MB_();
 
 	bool rv;
 	vector<Script>::iterator * it;

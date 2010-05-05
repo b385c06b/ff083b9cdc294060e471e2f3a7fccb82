@@ -91,7 +91,6 @@ public:
 	float		GetHeight() const { return fHeight; }
 	float		GetStringWidth(const char *string, bool bMultiline=true) const;
 
-private:
 	hgeFont(const hgeFont &fnt);
 	hgeFont&	operator= (const hgeFont &fnt);
 

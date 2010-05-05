@@ -9,6 +9,52 @@
 
 #include "hge_impl.h"
 
+void CALL HGE_Impl::Timer_GetSystemTime(WORD *wYear, WORD *wMonth, WORD *wDayOfWeek, WORD *wDay, WORD *wHour, WORD *wMinute, WORD *wSecond, WORD *wMilliseconds)
+{
+	SYSTEMTIME systime;
+	GetLocalTime(&systime);
+	if (wYear)
+	{
+		*wYear = systime.wYear;
+	}
+	if (wMonth)
+	{
+		*wMonth = systime.wMonth;
+	}
+	if (wDayOfWeek)
+	{
+		*wDayOfWeek = systime.wDayOfWeek;
+	}
+	if (wDay)
+	{
+		*wDay = systime.wDay;
+	}
+	if (wHour)
+	{
+		*wHour = systime.wHour;
+	}
+	if (wMinute)
+	{
+		*wMinute = systime.wMinute;
+	}
+	if (wSecond)
+	{
+		*wSecond = systime.wSecond;
+	}
+	if (wMilliseconds)
+	{
+		*wMilliseconds = systime.wMilliseconds;
+	}
+}
+
+LONGLONG CALL HGE_Impl::Timer_GetFileTime()
+{
+	FILETIME filetime;
+	SYSTEMTIME systime;
+	GetLocalTime(&systime);
+	SystemTimeToFileTime(&systime, &filetime);
+	return (((ULONGLONG)filetime.dwHighDateTime)<<32)|(filetime.dwLowDateTime);
+}
 
 float CALL HGE_Impl::Timer_GetTime()
 {

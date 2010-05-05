@@ -185,11 +185,7 @@ void DataConnector::addPlayTime()
 {
 	DWORD sec;
 
-	SYSTEMTIME tsystime;
-	FILETIME tfiletime;
-	GetLocalTime(&tsystime);
-	SystemTimeToFileTime(&tsystime, &tfiletime);
-	LONGLONG playtimeEnd = (((LONGLONG)tfiletime.dwHighDateTime) << 32) | tfiletime.dwLowDateTime;
+	LONGLONG playtimeEnd = hge->Timer_GetFileTime();
 
 	sec = Data::data.sLinkType(DATAS_TOTAL);
 	if(playtimeEnd > Process::mp.playtimeStart)

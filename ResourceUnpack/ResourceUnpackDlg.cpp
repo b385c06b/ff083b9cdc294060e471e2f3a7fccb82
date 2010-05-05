@@ -141,7 +141,7 @@ void CResourceUnpackDlg::OnBnClickedUnpack()
 	strncpy(upperfolder, szIniFilename, i);
 	upperfolder[i] = 0;
 	hge->Resource_SetPath(upperfolder);
-	SetCurrentDirectory(upperfolder);
+	hge->Resource_SetCurrentDirectory(upperfolder);
 
 	if (Export::unpackFromIni(szIniFilename))
 	{
@@ -167,7 +167,7 @@ void CResourceUnpackDlg::OnEnChangeFoldername()
 	{
 		unpackButton.EnableWindow(FALSE);
 	}
-	else if (!_access(hge->Resource_MakePath(szIniFilename), 00))
+	else if (!hge->Resource_AccessFile(szIniFilename))
 	{
 		unpackButton.EnableWindow(TRUE);
 	}

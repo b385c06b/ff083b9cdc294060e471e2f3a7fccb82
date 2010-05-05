@@ -232,6 +232,16 @@ char * CALL HGE_Impl::Resource_GetPackFirstFileName(const char * packfilename)
 }
 // end
 
+void CALL HGE_Impl::Resource_DeleteFile(const char *filename)
+{
+	DeleteFile(Resource_MakePath(filename));
+}
+
+void CALL HGE_Impl::Resource_SetCurrentDirectory(const char *filename)
+{
+	SetCurrentDirectory(Resource_MakePath(filename));
+}
+
 /************************************************************************/
 /* This function is modified by h5nc (h5nc@yahoo.com.cn)                */
 /************************************************************************/
@@ -482,4 +492,18 @@ char* CALL HGE_Impl::Resource_EnumFolders(const char *wildcard)
 					return SearchData.cFileName;
 		}
 	}
+}
+
+bool CALL HGE_Impl::Resource_AccessFile(const char *filename)
+{
+	if (_access(Resource_MakePath(filename), 00) == -1)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool CALL HGE_Impl::Resource_CreateDirectory(const char *filename)
+{
+	return CreateDirectory(Resource_MakePath(filename), NULL);
 }

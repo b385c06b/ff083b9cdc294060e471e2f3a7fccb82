@@ -128,10 +128,6 @@ public:
 	int debug_joySpeedUp;
 #endif
 
-	//texture
-	HTEXTURE	tex[TEXMAX];
-	hgeTextureInfo texinfo[TEXMAX];
-
 	//read ini
 	char	username[RPYINFO_USERNAMEMAX];
 	int		screenmode;

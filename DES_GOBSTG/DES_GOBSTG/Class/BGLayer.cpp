@@ -374,6 +374,7 @@ void BGLayer::BGLayerSetup(int setID, int sID, bool force, int quittime)
 	{
 		if (bglayerset[setID].sID != BGLAYERSET_NONE && bglayerset[setID].sID != sID)
 		{
+			setindex = setID;
 			Scripter::scr.sceneExecute(BGLayer::bglayerset[setID].sID, SCRIPT_CON_POST);
 		}
 		bglayerset[setID].sID = sID;
@@ -428,7 +429,7 @@ void BGLayer::Render()
 	*/
 	if (sprite)
 	{
-		hge->Gfx_RenderQuad(&(sprite->quad));
+		SpriteItemManager::RenderQuad(&(sprite->quad));
 	}
 	//}
 }

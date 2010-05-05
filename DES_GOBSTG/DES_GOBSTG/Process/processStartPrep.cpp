@@ -27,7 +27,7 @@ void Process::startPrep(bool callinit)
 	replayend = false;
 	Replay::rpy.replayIndex = 0;
 
-	SetCurrentDirectory(hge->Resource_MakePath(""));
+	hge->Resource_SetCurrentDirectory("");
 
 	if(replaymode)
 	{

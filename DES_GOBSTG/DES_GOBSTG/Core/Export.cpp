@@ -25,11 +25,11 @@ bool Export::clientInitial(bool usesound /* = false */, bool extuse /* = false *
 	hge->Resource_SetPath(DEFAULT_RESOURCEPATH);
 	char respath[_MAX_PATH];
 	strcpy(respath, hge->Resource_MakePath(""));
-	if(_access(respath, 00) == -1)
+	if (!hge->Resource_AccessFile(respath))
 	{
-		CreateDirectory(respath, NULL);
+		hge->Resource_CreateDirectory(respath);
 	}
-	SetCurrentDirectory(hge->Resource_MakePath(""));
+	hge->Resource_SetCurrentDirectory("");
 	
 	hge->System_SetState(HGE_FPS, M_DEFAULT_FPS);
 	hge->System_SetState(HGE_FRAMESKIP, M_DEFAULT_FRAMESKIP);
@@ -45,7 +45,7 @@ bool Export::clientInitial(bool usesound /* = false */, bool extuse /* = false *
 	hge->System_SetState(HGE_USESOUND, usesound);
 	hge->System_SetState(HGE_HIDEMOUSE, false);
 
-	SetCurrentDirectory(hge->Resource_MakePath(""));
+	hge->Resource_SetCurrentDirectory("");
 	bool bret = SetIni(extuse);
 	if (bret)
 	{
@@ -131,7 +131,7 @@ bool Export::clientSet3DMode()
 
 bool Export::SetIni(bool extuse)
 {
-	if (extuse && _access(hge->Resource_MakePath(CONFIG_STR_FILENAME), 00) == -1)
+	if (extuse && !hge->Resource_AccessFile(CONFIG_STR_FILENAME))
 	{
 		hge->System_SetState(HGE_INIFILE, CONFIG_STR_DEFAULTFILENAME);
 		return false;
@@ -255,7 +255,7 @@ bool Export::packFile(const char * zipname, const char * filename)
 	}
 	return ret;
 }
-
+#ifdef WIN32
 bool Export::packFolder(const char * zipname, const char * foldername, const char * filterstr, int * initcount)
 {
 	bool ret = true;
@@ -318,7 +318,8 @@ bool Export::packFolder(const char * zipname, const char * foldername, const cha
 	while (true)
 	{
 		sprintf(sec, "%s%d", UNPACK_SECTION, packagenum);
-		GetPrivateProfileString(sec, name, "", packnamebuffer, M_STRMAX, inifilename);
+		strcpy(packnamebuffer, hge->Ini_GetString(sec, name, "", inifilename));
+//		GetPrivateProfileString(sec, name, "", packnamebuffer, M_STRMAX, inifilename);
 		if (strlen(packnamebuffer) == 0)
 		{
 			break;
@@ -328,14 +329,16 @@ bool Export::packFolder(const char * zipname, const char * foldername, const cha
 			while (true)
 			{
 				sprintf(name, "%s%d", UNPACK_TYPE, typecount);
-				GetPrivateProfileString(sec, name, "", packnamebuffer, M_STRMAX, inifilename);
+				strcpy(packnamebuffer, hge->Ini_GetString(sec, name, "", inifilename));
+//				GetPrivateProfileString(sec, name, "", packnamebuffer, M_STRMAX, inifilename);
 				if (!strlen(packnamebuffer))
 				{
 					break;
 				}
 				if (initcount && !(*initcount))
 				{
-					WritePrivateProfileString(sec, name, "", inifilename);
+					hge->Ini_SetString(sec, name, "", inifilename);
+//					WritePrivateProfileString(sec, name, "", inifilename);
 				}
 				typecount++;
 			}
@@ -425,7 +428,8 @@ bool Export::packFolder(const char * zipname, const char * foldername, const cha
 					}
 #ifdef __UNPACK
 					sprintf(name, "%s%d", UNPACK_TYPE, typecount);
-					WritePrivateProfileString(sec, name, buffer, inifilename);
+					hge->Ini_SetString(sec, name, buffer, inifilename);
+//					WritePrivateProfileString(sec, name, buffer, inifilename);
 					typecount++;
 #endif
 					hge->Resource_Free(_content);
@@ -444,11 +448,13 @@ bool Export::packFolder(const char * zipname, const char * foldername, const cha
 			*initcount = typecount;
 		}
 		strcpy(name, UNPACK_PACKNAME);
-		WritePrivateProfileString(sec, name, zipname, inifilename);
+		hge->Ini_SetString(sec, name, zipname, inifilename);
+//		WritePrivateProfileString(sec, name, zipname, inifilename);
 	}
 #endif
 	return ret;
 }
+#endif
 
 bool Export::effSave(const char * filename, hgeEffectSystem * eff, int texnum)
 {
@@ -489,11 +495,11 @@ bool Export::unpackFile(const char * zipname, const char * filename)
 				strncpy(pathbuffer, filename, i);
 				pathbuffer[i] = 0;
 
-				if (!_access(hge->Resource_MakePath(pathbuffer), 00))
+				if (!hge->Resource_AccessFile(pathbuffer))
 				{
 					continue;
 				}
-				CreateDirectory(hge->Resource_MakePath(pathbuffer), NULL);
+				hge->Resource_CreateDirectory(hge->Resource_MakePath(pathbuffer));
 			}
 		}
 		FILE * file = fopen(hge->Resource_MakePath(filename), "wb");
@@ -523,7 +529,8 @@ bool Export::unpackFromIni(const char * inifilename)
 	{
 		sprintf(sec, "%s%d", UNPACK_SECTION, packagecount);
 		strcpy(name, UNPACK_PACKNAME);
-		GetPrivateProfileString(sec, name, "", zipname, M_STRMAX, fullinifilename);
+		strcpy(zipname, hge->Ini_GetString(sec, name, "", fullinifilename));
+//		GetPrivateProfileString(sec, name, "", zipname, M_STRMAX, fullinifilename);
 		if (!strlen(zipname))
 		{
 			if (packagecount > 0)
@@ -543,7 +550,8 @@ bool Export::unpackFromIni(const char * inifilename)
 		while (true)
 		{
 			sprintf(name, "%s%d", UNPACK_TYPE, typecount);
-			GetPrivateProfileString(sec, name, "", eachfilename, M_STRMAX, fullinifilename);
+			strcpy(eachfilename, hge->Ini_GetString(sec, name, "", fullinifilename));
+//			GetPrivateProfileString(sec, name, "", eachfilename, M_STRMAX, fullinifilename);
 			typecount++;
 			if (!strcmp(eachfilename, ""))
 			{

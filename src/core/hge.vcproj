@@ -328,6 +328,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\math.cpp"
+				>
+			</File>
+			<File
 				RelativePath="random.cpp"
 				>
 				<FileConfiguration

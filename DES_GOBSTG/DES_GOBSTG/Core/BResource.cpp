@@ -30,6 +30,62 @@ void BResource::MallocCustomConst()
 	customconstdata = (customconstData *)malloc(RSIZE_CUSTOMCONST);
 }
 
+void BResource::Init()
+{
+	for (int i=0; i<TEXMAX; i++)
+	{
+		tex[i] = NULL;
+	}
+}
+
+bool BResource::LoadTextureSet( int texset/*=-1*/ )
+{
+	bool bret = true;
+	for (int i=0; i<TEXMAX; i++)
+	{
+		if (!tex[i].tex && texturedata[i].texset > 0)
+		{
+			if (texset < 0 || texturedata[i].texset == texset)
+			{
+				tex[i] = LoadTexture(i);
+				if (!tex[i].tex && bret)
+				{
+					bret = false;
+				}
+			}
+		}
+	}
+	return bret;
+}
+
+bool BResource::FreeTextureSet( int texset/*=-1*/ )
+{
+	for (int i=TEX_WHITE+1; i<TEXMAX; i++)
+	{
+		if (tex[i].tex)
+		{
+			if (texset < 0 || texturedata[i].texset == texset)
+			{
+				hge->Texture_Free(tex[i]);
+				tex[i].texindex = i;
+				tex[i].tex = NULL;
+			}
+		}
+	}
+	return true;
+}
+
+void BResource::Release()
+{
+	for(int i=0;i<TEXMAX;i++)
+	{
+		if(tex[i].tex)
+		{
+			hge->Texture_Free(tex[i]);
+		}
+		tex[i] = NULL;
+	}
+}
 
 //Scripter::LoadAll
 bool BResource::Fill()
@@ -48,30 +104,30 @@ bool BResource::Fill()
 		{
 			continue;
 		}
-		if(_access(resdata.scriptfoldername[i], 00) == -1)
+		if (!hge->Resource_AccessFile(resdata.scriptfoldername[i]))
 		{
-			CreateDirectory(resdata.scriptfoldername[i], NULL);
+			hge->Resource_CreateDirectory(resdata.scriptfoldername[i]);
 		}
 	}
 	strcpy(resdata.snapshotfoldername, Data::data.sRead(DATA_RESOURCEFILE, sec, Data::data.nLinkType(RESDATAN_SNAPSHOTFOLDER), RESDEFAULT_SNAPSHOTFOLDER));
-	if(_access(resdata.snapshotfoldername, 00) == -1)
+	if (!hge->Resource_AccessFile(resdata.snapshotfoldername))
 	{
-		CreateDirectory(resdata.snapshotfoldername, NULL);
+		hge->Resource_CreateDirectory(resdata.snapshotfoldername);
 	}
 	strcpy(resdata.replayfoldername, Data::data.sRead(DATA_RESOURCEFILE, sec, Data::data.nLinkType(RESDATAN_REPLAYFOLDER), RESDEFAULT_REPLAYFOLDER));
-	if(_access(resdata.replayfoldername, 00) == -1)
+	if (!hge->Resource_AccessFile(resdata.replayfoldername))
 	{
-		CreateDirectory(resdata.replayfoldername, NULL);
+		hge->Resource_CreateDirectory(resdata.replayfoldername);
 	}
 	strcpy(resdata.datafoldername, Data::data.sRead(DATA_RESOURCEFILE, sec, Data::data.nLinkType(RESDATAN_DATAFOLDER), RESDEFAULT_DATAFOLDER));
-	if(_access(resdata.datafoldername, 00) == -1)
+	if (!hge->Resource_AccessFile(resdata.datafoldername))
 	{
-		CreateDirectory(resdata.datafoldername, NULL);
+		hge->Resource_CreateDirectory(resdata.datafoldername);
 	}
 	strcpy(resdata.effectsysfoldername, Data::data.sRead(DATA_RESOURCEFILE, sec, Data::data.nLinkType(RESDATAN_EFFECTSYSFOLDER), RESDEFAULT_DATAFOLDER));
-	if(_access(resdata.effectsysfoldername, 00) == -1)
+	if (!hge->Resource_AccessFile(resdata.effectsysfoldername))
 	{
-		CreateDirectory(resdata.effectsysfoldername, NULL);
+		hge->Resource_CreateDirectory(resdata.effectsysfoldername);
 	}
 
 	char buffer[M_STRMAX];
@@ -387,13 +443,13 @@ bool BResource::Gain(void * pStrdesc, void * pCustomConstData)
 	}
 	hge->Resource_Free(content);
 
-	if(_access(resdata.snapshotfoldername, 00) == -1)
+	if (!hge->Resource_AccessFile(resdata.snapshotfoldername))
 	{
-		CreateDirectory(resdata.snapshotfoldername, NULL);
+		hge->Resource_CreateDirectory(resdata.snapshotfoldername);
 	}
-	if(_access(resdata.replayfoldername, 00) == -1)
+	if (!hge->Resource_AccessFile(resdata.replayfoldername))
 	{
-		CreateDirectory(resdata.replayfoldername, NULL);
+		hge->Resource_CreateDirectory(resdata.replayfoldername);
 	}
 	return ret;
 }
@@ -508,7 +564,24 @@ HTEXTURE BResource::LoadTexture( int i )
 		HGELOG("Succeeded in loading Texture File %s.(Assigned to Index %d).", texturedata[i].texfilename, i);
 	}
 #endif
+	texret.texindex = i;
 	return texret;
+}
+
+void BResource::InitTexinfo()
+{
+	for (int i=0; i<TEXMAX; i++)
+	{
+		texinfo[i].tex = NULL;
+		texinfo[i].texw = texturedata[i].width;
+		texinfo[i].texh = texturedata[i].height;
+	}
+	for (int i=0; i<TEXMAX; i++)
+	{
+		tex[i].texindex = i;
+		texinfo[i].tex = &tex[i].tex;
+	}
+	hge->Gfx_SetTextureInfo(TEXMAX, texinfo);
 }
 /*
 int BResource::SplitString(const char * str)

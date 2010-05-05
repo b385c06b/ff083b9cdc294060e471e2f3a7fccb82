@@ -133,6 +133,11 @@ CALL $Chat_T16 D $GlobalValue_Chat
 
 MUSICSLIDE 3.0 0 -101 -1
 
+@ POST@
+
+BGSETUP $LayerNormal 0 true 0xffff
+CALL $FreeTextureSet $EnemyID_08
+
 @ 1
 
 IF MODE - MODE_SPELL !
@@ -195,6 +200,11 @@ BOSSUP
 @ QUIT@
 
 MUSICSLIDE 3.0 0 -101 -1
+
+@ POST@
+
+BGSETUP $LayerNormal 0 true 0xffff
+CALL $FreeTextureSet $EnemyID_15
 
 @ 1
 

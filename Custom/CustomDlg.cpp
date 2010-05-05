@@ -421,7 +421,7 @@ void CCustomDlg::SetDisplay()
 	}
 	for (int i=0; i<5; i++)
 	{
-		SetDlgItemText(IDC_JOY_FIRE + i, itoa(joyKey[i], buffer, 10));
+		SetDlgItemText(IDC_JOY_FIRE + i, hge->Math_itoa(joyKey[i], buffer));
 	}
 
 	CheckRadioButton(IDC_FULLSCREEN, IDC_WINDOW, screenmode ? IDC_FULLSCREEN : IDC_WINDOW);
@@ -457,10 +457,10 @@ void CCustomDlg::SetDisplay()
 	}
 
 	CheckDlgButton(IDC_TOPMOST, windowtopmost ? BST_CHECKED : BST_UNCHECKED);
-	SetDlgItemText(IDC_LEFTX, itoa(windowleftx, buffer, 10));
-	SetDlgItemText(IDC_TOPY, itoa(windowtopy, buffer, 10));
-	SetDlgItemText(IDC_WINDOWW, itoa(windoww, buffer, 10));
-	SetDlgItemText(IDC_WINDOWH, itoa(windowh, buffer, 10));
+	SetDlgItemText(IDC_LEFTX, hge->Math_itoa(windowleftx, buffer));
+	SetDlgItemText(IDC_TOPY, hge->Math_itoa(windowtopy, buffer));
+	SetDlgItemText(IDC_WINDOWW, hge->Math_itoa(windoww, buffer));
+	SetDlgItemText(IDC_WINDOWH, hge->Math_itoa(windowh, buffer));
 }
 
 // CCustomDlg 消息处理程序
@@ -752,35 +752,35 @@ void CCustomDlg::OnEnChangeJoyFire()
 {
 	TCHAR buffer[M_STRMAX];
 	GetDlgItemText(IDC_JOY_FIRE, buffer, M_STRITOAMAX);
-	joyFire = atoi(buffer);
+	joyFire = hge->Math_atoi(buffer);
 }
 
 void CCustomDlg::OnEnChangeJoySpecial()
 {
 	TCHAR buffer[M_STRMAX];
 	GetDlgItemText(IDC_JOY_SPECIAL, buffer, M_STRITOAMAX);
-	joySpecial = atoi(buffer);
+	joySpecial = hge->Math_atoi(buffer);
 }
 
 void CCustomDlg::OnEnChangeJoySlow()
 {
 	TCHAR buffer[M_STRMAX];
 	GetDlgItemText(IDC_JOY_SLOW, buffer, M_STRITOAMAX);
-	joySlow = atoi(buffer);
+	joySlow = hge->Math_atoi(buffer);
 }
 
 void CCustomDlg::OnEnChangeJoyBorder()
 {
 	TCHAR buffer[M_STRMAX];
 	GetDlgItemText(IDC_JOY_CHANGE, buffer, M_STRITOAMAX);
-	joyChange = atoi(buffer);
+	joyChange = hge->Math_atoi(buffer);
 }
 
 void CCustomDlg::OnEnChangeJoyPause()
 {
 	TCHAR buffer[M_STRMAX];
 	GetDlgItemText(IDC_JOY_PAUSE, buffer, M_STRITOAMAX);
-	joyPause = atoi(buffer);
+	joyPause = hge->Math_atoi(buffer);
 }
 
 void CCustomDlg::OnBnClickedCheck1()
@@ -788,7 +788,7 @@ void CCustomDlg::OnBnClickedCheck1()
 	// TODO: 在此添加控件通知处理程序代码
 	TCHAR buffer[M_STRMAX];
 	GetDlgItemText(IDC_JOY_PAUSE, buffer, M_STRITOAMAX);
-	joyPause = atoi(buffer);
+	joyPause = hge->Math_atoi(buffer);
 }
 
 

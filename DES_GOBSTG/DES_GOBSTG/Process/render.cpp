@@ -88,7 +88,7 @@ int Process::renderInit()
 		quad.v[1].x = M_CLIENT_RIGHT;	quad.v[1].y = M_CLIENT_TOP;	quad.v[1].z = 0;
 		quad.v[2].x = M_CLIENT_RIGHT;	quad.v[2].y = M_CLIENT_BOTTOM;	quad.v[2].z = 0;
 		quad.v[3].x = M_CLIENT_LEFT;	quad.v[3].y = M_CLIENT_BOTTOM;	quad.v[3].z = 0;
-		hge->Gfx_RenderQuad(&quad);
+		SpriteItemManager::RenderQuad(&quad);
 	}
 	return PGO;
 }

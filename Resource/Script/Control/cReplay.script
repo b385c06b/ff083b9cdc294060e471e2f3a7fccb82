@@ -8,6 +8,7 @@ CONTROLFILE
 // Init
 @ 1
 
+ISELCLEAR
 MUSICCHANGE $MusicOP false
 
 BGVALUE 0 SI_SelectScene

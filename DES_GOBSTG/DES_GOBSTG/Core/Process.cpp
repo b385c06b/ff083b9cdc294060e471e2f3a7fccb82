@@ -10,10 +10,13 @@ Process::Process()
 	ZeroMemory(&channelsyncinfo, sizeof(hgeChannelSyncInfo));
 	retvalue	= PGO;
 	errorcode	= PROC_ERROR_INIFILE;
+	BResource::bres.Init();
+/*
 	for(int i=0;i<TEXMAX;i++)
 	{
 		tex[i] = NULL;
-	}
+	}*/
+
 	keyUp		= RESCONFIGDEFAULT_KEYUP;
 	keyDown		= RESCONFIGDEFAULT_KEYDOWN;
 	keyLeft		= RESCONFIGDEFAULT_KEYLEFT;
@@ -131,12 +134,15 @@ void Process::Realease()
 	Chat::chatitem.Release();
 	FrontDisplay::fdisp.Release();
 
+	BResource::bres.Release();
+/*
 	for(int i=0;i<TEXMAX;i++)
 	{
 		if(tex[i].tex)
 			hge->Texture_Free(tex[i]);
 		tex[i] = NULL;
-	}
+	}*/
+
 	if (texInit.tex)
 	{
 		hge->Texture_Free(texInit);
@@ -182,40 +188,12 @@ void Process::ClearAll()
 
 bool Process::LoadTextureSet(int texset/* =-1 */)
 {
-	bool bret = true;
-	for (int i=0; i<TEXMAX; i++)
-	{
-		if (!tex[i].tex && BResource::bres.texturedata[i].texset > 0)
-		{
-			if (texset < 0 || BResource::bres.texturedata[i].texset == texset)
-			{
-				tex[i] = BResource::bres.LoadTexture(i);
-				if (!tex[i].tex && bret)
-				{
-					bret = false;
-				}
-//				texinfo[i].texw = hge->Texture_GetWidth(i);
-//				texinfo[i].texh = hge->Texture_GetHeight(i);
-			}
-		}
-	}
-	return bret;
+	return BResource::bres.LoadTextureSet(texset);
 }
 
 bool Process::FreeTextureSet(int texset/* =-1 */)
 {
-	for (int i=TEX_WHITE+1; i<TEXMAX; i++)
-	{
-		if (tex[i].tex)
-		{
-			if (texset < 0 || BResource::bres.texturedata[i].texset == texset)
-			{
-				hge->Texture_Free(tex[i]);
-				tex[i].tex = NULL;
-			}
-		}
-	}
-	return true;
+	return BResource::bres.FreeTextureSet(texset);
 }
 
 void Process::SetDiffLv(int difflv)
@@ -317,15 +295,21 @@ void Process::musicChange(BYTE ID, bool force)
 
 void Process::SnapShot()
 {
-	SYSTEMTIME systime;
-	GetLocalTime(&systime);
+	WORD wYear;
+	WORD wMonth;
+	WORD wDay;
+	WORD wHour;
+	WORD wMinute;
+	WORD wSecond;
+	WORD wMilliseconds;
+	hge->Timer_GetSystemTime(&wYear, &wMonth, NULL, &wDay, &wHour, &wMinute, &wSecond, &wMilliseconds);
 	
 	char snapshotfilename[M_PATHMAX];
 	strcpy(snapshotfilename, "");
 	sprintf(snapshotfilename, "%s%s_%04d_%02d_%02d_%02d_%02d_%02d_%04d.%s",
 		BResource::bres.resdata.snapshotfoldername,
 		SNAPSHOT_PRIFIX,
-		systime.wYear, systime.wMonth, systime.wDay, systime.wHour, systime.wMinute, systime.wSecond, systime.wMilliseconds,
+		wYear, wMonth, wDay, wHour, wMinute, wSecond, wMilliseconds,
 		SNAPSHOT_EXTENSION);
 	hge->System_Snapshot(snapshotfilename);
 }

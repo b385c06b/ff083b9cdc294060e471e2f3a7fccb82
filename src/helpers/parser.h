@@ -54,8 +54,8 @@ public:
 	char*	get_name()	 { return scriptname;}
 
 	char*	tkn_string() { return tokenvalue; }
-	int		tkn_int()    { return atoi(tokenvalue); }
-	float	tkn_float()  { return (float)atof(tokenvalue); }
+	int		tkn_int()    { return hge->Math_atoi(tokenvalue); }
+	float	tkn_float()  { return (float)hge->Math_atof(tokenvalue); }
 	bool	tkn_bool()   { return (tokenvalue[0]=='t' || tokenvalue[0]=='T') ? true : false; }
 	DWORD	tkn_hex();
 

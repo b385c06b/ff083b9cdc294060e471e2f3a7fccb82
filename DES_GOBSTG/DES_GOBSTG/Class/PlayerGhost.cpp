@@ -72,14 +72,17 @@ void PlayerGhost::valueSet(WORD _ID, bool move)
 	}
 	else
 	{
-		SpriteItemManager::SetSprite(_pgd->siID, sprite, Process::mp.tex);
+		SpriteItemManager::SetSprite(_pgd->siID, sprite);
 	}
 }
 
 void PlayerGhost::Render()
 {
-	sprite->SetColor((alpha<<24)|diffuse);
-	sprite->RenderEx(x, y, ARC(headangle), scale);
+	if (sprite)
+	{
+		sprite->SetColor((alpha<<24)|diffuse);
+		SpriteItemManager::RenderSpriteEx(sprite, x, y, ARC(headangle), scale);
+	}
 }
 
 void PlayerGhost::AntiShooter(float aimx, float aimy)
@@ -300,7 +303,7 @@ void PlayerGhost::action()
 		headangle = 0;
 	}
 
-	SpriteItemManager::SetSprite(_pgd->siID, sprite, Process::mp.tex);
+	SpriteItemManager::SetSprite(_pgd->siID, sprite);
 	if (flag & PGFLAG_SYNCPLAYER)
 	{
 		float tex_x, tex_y, tex_w, tex_h;

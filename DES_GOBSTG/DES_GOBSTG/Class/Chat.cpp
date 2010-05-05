@@ -74,9 +74,9 @@ void Chat::Render()
 	{
 		for(int i = 0; i < CHATTERMAX-1; i++)
 		{
-			chatter[i]->RenderEx(x[i], y[i], 0, 0.8f);
+			SpriteItemManager::RenderSpriteEx(chatter[i], x[i], y[i], 0, 0.8f);
 		}
-		textbox->RenderEx(x[CHATTER_TEXTBOX], y[CHATTER_TEXTBOX], ARC(9000), 1.5f, 1.0f);
+		SpriteItemManager::RenderSpriteEx(textbox, x[CHATTER_TEXTBOX], y[CHATTER_TEXTBOX], ARC(9000), 1.5f, 1.0f);
 		Fontsys::fontsys.Render(FONTSYS_CHATUSE, M_ACTIVECLIENT_LEFT+70, M_ACTIVECLIENT_CENTER_Y+138, 0xffffffff, col, 0.4f);
 	}
 }
@@ -198,8 +198,8 @@ bool Chat::chatOn(BYTE leftID, BYTE rightID, BYTE chatsprite)
 		Bullet::IzeBuild(BULLETIZE_FAITH, Player::p.x, Player::p.y);
 
 		chatting = true;
-		SpriteItemManager::SetSprite(-1, leftname, Process::mp.tex);
-		SpriteItemManager::SetSprite(-1, rightname, Process::mp.tex);
+		SpriteItemManager::SetSprite(-1, leftname);
+		SpriteItemManager::SetSprite(-1, rightname);
 		if (leftID != 0xff)
 		{
 			SpriteItemManager::ptFace(leftID, left, false);

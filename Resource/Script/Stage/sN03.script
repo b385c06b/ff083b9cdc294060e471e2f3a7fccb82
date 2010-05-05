@@ -35,6 +35,11 @@ BOSSUP
 
 MUSICSLIDE 3.0 0 -101 -1
 
+@ POST@
+
+BGSETUP $LayerNormal 0 true 0xffff
+CALL $FreeTextureSet $EnemyID_16
+
 @ 1
 
 IF MODE - MODE_SPELL !
@@ -100,6 +105,11 @@ BOSSUP
 
 MUSICSLIDE 3.0 0 -101 -1
 
+@ POST@
+
+BGSETUP $LayerNormal 0 true 0xffff
+CALL $FreeTextureSet $EnemyID_23
+
 @ 1
 
 IF MODE - MODE_SPELL !
@@ -164,6 +174,11 @@ BOSSUP
 @ QUIT@
 
 MUSICSLIDE 3.0 0 -101 -1
+
+@ POST@
+
+BGSETUP $LayerNormal 0 true 0xffff
+CALL $FreeTextureSet $EnemyID_31
 
 @ 1
 
@@ -247,6 +262,11 @@ BOSSUP
 @ QUIT@
 
 MUSICSLIDE 3.0 0 -101 -1
+
+@ POST@
+
+BGSETUP $LayerNormal 0 true 0xffff
+CALL $FreeTextureSet $EnemyID_32
 
 @ 1
 

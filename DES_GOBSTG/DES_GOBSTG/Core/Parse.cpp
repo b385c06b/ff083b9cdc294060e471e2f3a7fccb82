@@ -35,12 +35,20 @@ bool _Parser::IsFloat(int i)
 
 void _Parser::IntToFloat(int i)
 {
+	SetFloat(i, GetInt(i));
+/*
 	CFLOAT(Scripter::scr.d[i].value) = (float)(CINT(Scripter::scr.d[i].value));
+	Scripter::scr.d[i].bfloat = true;*/
+
 }
 
 void _Parser::FloatToInt(int i)
 {
+	SetInt(i, GetFloat(i));
+/*
 	CINT(Scripter::scr.d[i].value) = (float)(CFLOAT(Scripter::scr.d[i].value));
+	Scripter::scr.d[i].bfloat = false;*/
+
 }
 
 void _Parser::SetFloat(int i, float fval)
@@ -1025,10 +1033,13 @@ bool _Parser::SPELLUP_()
 {
 	_ENTER_PARSE(3);
 
-	int _tdi = IGet();
-	float _x = FGet();
-	float _y = FGet();
-	Target::SetValue(_tdi, _x, _y);
+	if(Process::mp.spellmode)
+	{
+		int _tdi = IGet();
+		float _x = FGet();
+		float _y = FGet();
+		Target::SetValue(_tdi, _x, _y);
+	}
 
 	_LEAVE_PARSE();
 }
@@ -1925,6 +1936,21 @@ bool _Parser::DEBUG_BREAKPOINT_()
 
 #ifdef __DEBUG
 	Scripter::scr.LogOut();
+#endif
+
+	_LEAVE_PARSE();
+}
+
+bool _Parser::DEBUG_MB_()
+{
+	_ENTER_PARSE(2);
+
+#ifdef __DEBUG
+	int ival = IGet();
+	float fval = FGet();
+	char buffer[M_STRMAX];
+	sprintf(buffer, "IVal : %d, FVal : %f", ival, fval);
+	MessageBox(NULL, buffer, "", MB_OK);
 #endif
 
 	_LEAVE_PARSE();

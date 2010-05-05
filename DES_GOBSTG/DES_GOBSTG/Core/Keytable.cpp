@@ -181,6 +181,7 @@ scrKeyWord scrKeyTable[] =
 	{"SETFLAG",					SCR_SETFLAG},
 	{"TRYSTAGE",				SCR_TRYSTAGE},
 	{"DEBUG_BREAKPOINT",		SCR_DEBUG_BREAKPOINT},
+	{"DEBUG_MB",				SCR_DEBUG_MB},
 
 	/************************************************************************/
 	/* Expression                                                           */

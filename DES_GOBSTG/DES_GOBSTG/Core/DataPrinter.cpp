@@ -18,8 +18,13 @@ DataPrinter::~DataPrinter()
 
 void DataPrinter::getHeader()
 {
-	SYSTEMTIME systime;
-	GetLocalTime(&systime);
+	WORD wYear;
+	WORD wMonth;
+	WORD wDay;
+	WORD wHour;
+	WORD wMinute;
+	WORD wSecond;
+	hge->Timer_GetSystemTime(&wYear, &wMonth, NULL, &wDay, &wHour, &wMinute, &wSecond);
 
 	char buffer[M_STRMAX];
 
@@ -53,12 +58,12 @@ void DataPrinter::getHeader()
 	str += DPS_LEFTANGLEBRACKET;
 
 	sprintf(buffer, "%04d%s%02d%s%02d%s%02d%s%02d%s%02d",
-		systime.wYear, DPS_SLASH,
-		systime.wMonth, DPS_SLASH,
-		systime.wDay, DPS_SPACE,
-		systime.wHour, DPS_COLON,
-		systime.wMinute, DPS_COLON,
-		systime.wSecond);
+		wYear, DPS_SLASH,
+		wMonth, DPS_SLASH,
+		wDay, DPS_SPACE,
+		wHour, DPS_COLON,
+		wMinute, DPS_COLON,
+		wSecond);
 	str += buffer;
 
 	str += DPS_RIGHTANGLEBRACKET;
@@ -184,7 +189,7 @@ bool DataPrinter::PrintScore()
 
 			str = DPS_TABLE_1;
 			str += DPS_TAG_TOPNUM;
-			str += itoa(j+1, buffer, 10);
+			str += hge->Math_itoa(j+1, buffer);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
@@ -203,7 +208,8 @@ bool DataPrinter::PrintScore()
 			str += DPS_TABLE_2;
 			str += BResource::bres.resdata.uistr.score;
 			str += DPS_TABLE_1;
-			str += _i64toa(_score, buffer, 10);
+			sprintf(buffer, "%d", _score);
+			str += buffer;
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
@@ -247,15 +253,15 @@ bool DataPrinter::PrintScore()
 			str += DPS_TABLE_2;
 			str += BResource::bres.resdata.uistr.date;
 			str += DPS_TABLE_1;
-			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_TIME_YEAR), 0), buffer, 10);
+			str += hge->Math_itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_TIME_YEAR), 0), buffer);
 			str += DPS_SLASH;
-			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_TIME_MONTH), 0), buffer, 10);
+			str += hge->Math_itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_TIME_MONTH), 0), buffer);
 			str += DPS_SLASH;
-			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_TIME_DAY), 0), buffer, 10);
+			str += hge->Math_itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_TIME_DAY), 0), buffer);
 			str += DPS_SPACE;
-			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_TIME_HOUR), 0), buffer, 10);
+			str += hge->Math_itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_TIME_HOUR), 0), buffer);
 			str += DPS_COLON;
-			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_TIME_MINUTE), 0), buffer, 10);
+			str += hge->Math_itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_TIME_MINUTE), 0), buffer);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
@@ -269,7 +275,7 @@ bool DataPrinter::PrintScore()
 			str += DPS_TABLE_2;
 			str += BResource::bres.resdata.uistr.alltime;
 			str += DPS_TABLE_1;
-			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_ALLTIME), 0), buffer, 10);
+			str += hge->Math_itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_ALLTIME), 0), buffer);
 			str += DPS_RETURN;
 /*
 			str += DPS_TABLE_2;
@@ -281,43 +287,43 @@ bool DataPrinter::PrintScore()
 			str += DPS_TABLE_2;
 			str += BResource::bres.resdata.uistr.point;
 			str += DPS_TABLE_1;
-			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_POINT), 0), buffer, 10);
+			str += hge->Math_itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_POINT), 0), buffer);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
 			str += BResource::bres.resdata.uistr.faith;
 			str += DPS_TABLE_1;
-			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_FAITH), 0), buffer, 10);
+			str += hge->Math_itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_FAITH), 0), buffer);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
 			str += BResource::bres.resdata.uistr.misstime;
 			str += DPS_TABLE_1;
-			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_MISS), 0), buffer, 10);
+			str += hge->Math_itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_MISS), 0), buffer);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
 			str += BResource::bres.resdata.uistr.bordertime;
 			str += DPS_TABLE_1;
-			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_BOMB), 0), buffer, 10);
+			str += hge->Math_itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_BOMB), 0), buffer);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
 			str += BResource::bres.resdata.uistr.gettime;
 			str += DPS_TABLE_1;
-			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_SPELLGET), 0), buffer, 10);
+			str += hge->Math_itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_SPELLGET), 0), buffer);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
 			str += BResource::bres.resdata.uistr.pausetime;
 			str += DPS_TABLE_1;
-			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_PAUSE), 0), buffer, 10);
+			str += hge->Math_itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_PAUSE), 0), buffer);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
 			str += BResource::bres.resdata.uistr.continuetime;
 			str += DPS_TABLE_1;
-			str += itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_CONTINUE), 0), buffer, 10);
+			str += hge->Math_itoa(Data::data.iRead(DATA_BINFILE, sec, Data::data.nLinkType(DATAN_CONTINUE), 0), buffer);
 			str += DPS_RETURN;
 
 			str += DPS_TABLE_2;
@@ -358,7 +364,7 @@ bool DataPrinter::PrintScore()
 
 				str = DPS_TABLE_2;
 				str += DPS_TAG_SPELLPRIFIX;
-				str += itoa(Data::data.getSpellNumber(_sno), buffer, 10);
+				str += hge->Math_itoa(Data::data.getSpellNumber(_sno), buffer);
 				str += DPS_SPACE;
 				str += Data::data.getSpellName(_sno);
 				while (strlen(str.data()) < DPS_SPELLNAME_NFORMAT)
@@ -366,9 +372,9 @@ bool DataPrinter::PrintScore()
 					str += DPS_SPACE;
 				}
 				str += DPS_LEFTBRACKET;
-				str += itoa(Data::data.nGet(_sno), buffer, 10);
+				str += hge->Math_itoa(Data::data.nGet(_sno), buffer);
 				str += DPS_SLASH;
-				str += itoa(Data::data.nMeet(_sno), buffer, 10);
+				str += hge->Math_itoa(Data::data.nMeet(_sno), buffer);
 				str += DPS_RIGHTBRACKET;
 				str += DPS_RETURN;
 
@@ -397,23 +403,23 @@ bool DataPrinter::PrintScore()
 		if (Data::data.raGetIndi(it->sno))
 		{
 			str = DPS_TAG_SPELLPRIFIX;
-			str += itoa(Data::data.getSpellNumber(it->sno), buffer, 10);
+			str += hge->Math_itoa(Data::data.getSpellNumber(it->sno), buffer);
 			str += DPS_SPACE;
 			str += Data::data.getSpellName(it->sno);
 			while (strlen(str.data()) < DPS_SPELLNAME_NFORMAT)
 			{
 				str += DPS_SPACE;
 			}
-			str += itoa(Data::data.nGet(it->sno), buffer, 10);
+			str += hge->Math_itoa(Data::data.nGet(it->sno), buffer);
 			str += DPS_SLASH;
 			str += DPS_TABLE_1;
-			str += itoa(Data::data.nMeet(it->sno), buffer, 10);
+			str += hge->Math_itoa(Data::data.nMeet(it->sno), buffer);
 			str += DPS_SLASH;
 			str += DPS_TABLE_1;
-			str += itoa(Data::data.nGet(it->sno, true), buffer, 10);
+			str += hge->Math_itoa(Data::data.nGet(it->sno, true), buffer);
 			str += DPS_SLASH;
 			str += DPS_TABLE_1;
-			str += itoa(Data::data.nMeet(it->sno, true), buffer, 10);
+			str += hge->Math_itoa(Data::data.nMeet(it->sno, true), buffer);
 			str += DPS_TABLE_1;
 			str += DPS_LEFTBRACKET;
 			switch (Data::data.getDiffi(it->sno))
@@ -450,7 +456,7 @@ bool DataPrinter::PrintScore()
 				break;
 			}
 			str += DPS_SPACE;
-			str += _i64toa(Data::data.nHighScore(it->sno, 0, true), buffer, 10);
+			sprintf(buffer, "%d", Data::data.nHighScore(it->sno, 0, true));
 			str += DPS_RIGHTBRACKET;
 			str += DPS_RETURN;
 
@@ -473,11 +479,11 @@ bool DataPrinter::PrintScore()
 	int trunhour = tldiffruntime / 3600;
 	int trunminute = (tldiffruntime / 60) % 60;
 	int trunsecond = tldiffruntime % 60;
-	str += itoa(trunhour, buffer, 10);
+	str += hge->Math_itoa(trunhour, buffer);
 	str += DPS_COLON;
-	str += itoa(trunminute, buffer, 10);
+	str += hge->Math_itoa(trunminute, buffer);
 	str += DPS_COLON;
-	str += itoa(trunsecond, buffer, 10);
+	str += hge->Math_itoa(trunsecond, buffer);
 	str += DPS_RETURN;
 
 	str += DPS_TOTAL_GAMETIME;
@@ -486,11 +492,11 @@ bool DataPrinter::PrintScore()
 	int tplayhour = tltotalplaytime / 3600;
 	int tplayminute = (tltotalplaytime / 60) % 60;
 	int tplaysecond = tltotalplaytime % 60;
-	str += itoa(tplayhour, buffer, 10);
+	str += hge->Math_itoa(tplayhour, buffer);
 	str += DPS_COLON;
-	str += itoa(tplayminute, buffer, 10);
+	str += hge->Math_itoa(tplayminute, buffer);
 	str += DPS_COLON;
-	str += itoa(tplaysecond, buffer, 10);
+	str += hge->Math_itoa(tplaysecond, buffer);
 	str += DPS_RETURN;
 
 	str += DPS_TOTAL_PLAYTIME;
@@ -572,7 +578,7 @@ bool DataPrinter::PrintScore()
 		for (int j=0; j<M_NSTAGEDIFFI+1; j++)
 		{
 			str += DPS_TABLE_1;
-			str += itoa(tplaytime[i][j], buffer, 10);
+			str += hge->Math_itoa(tplaytime[i][j], buffer);
 		}
 		str += DPS_RETURN;
 	}
@@ -581,7 +587,7 @@ bool DataPrinter::PrintScore()
 	for (int i=0; i<M_NSTAGEDIFFI+1; i++)
 	{
 		str += DPS_TABLE_1;
-		str += itoa(tplaytime[tplayerIDmax][i], buffer, 10);
+		str += hge->Math_itoa(tplaytime[tplayerIDmax][i], buffer);
 	}
 	str += DPS_RETURN;
 	
@@ -589,7 +595,7 @@ bool DataPrinter::PrintScore()
 	for (int i=0; i<M_NSTAGEDIFFI+1; i++)
 	{
 		str += DPS_TABLE_1;
-		str += itoa(tcleartime[i], buffer, 10);
+		str += hge->Math_itoa(tcleartime[i], buffer);
 	}
 	str += DPS_RETURN;
 
@@ -597,7 +603,7 @@ bool DataPrinter::PrintScore()
 	for (int i=0; i<M_NSTAGEDIFFI+1; i++)
 	{
 		str += DPS_TABLE_1;
-		str += itoa(tpracticetime[i], buffer, 10);
+		str += hge->Math_itoa(tpracticetime[i], buffer);
 	}
 
 	WriteString(&str, hFile);
@@ -674,7 +680,7 @@ bool DataPrinter::PrintReplayData(const char * foldername, const char * filename
 	if (rpyinfo.modeflag & M_RPYMODE_SPELL)
 	{
 		str += DPS_TAG_SPELLPRIFIX;
-		str += itoa(rpyinfo.startscene, buffer, 10);
+		str += hge->Math_itoa(rpyinfo.startscene, buffer);
 		str += DPS_SPACE;
 		str += Data::data.getSpellName(rpyinfo.startscene);
 	}
@@ -712,35 +718,35 @@ bool DataPrinter::PrintReplayData(const char * foldername, const char * filename
 
 	str += BResource::bres.resdata.uistr.score;
 	str += DPS_TABLE_1;
-	str += _i64toa(rpyinfo.score, buffer, 10);
+	sprintf(buffer, "%d", rpyinfo.score);
 	str += DPS_RETURN;
 
 	str += BResource::bres.resdata.uistr.point;
 	str += DPS_TABLE_1;
-	str += itoa(rpyinfo.point, buffer, 10);
+	str += hge->Math_itoa(rpyinfo.point, buffer);
 	str += DPS_RETURN;
 
 	str += BResource::bres.resdata.uistr.faith;
 	str += DPS_TABLE_1;
-	str += itoa(rpyinfo.faith, buffer, 10);
+	str += hge->Math_itoa(rpyinfo.faith, buffer);
 	str += DPS_RETURN;
 
 	str += BResource::bres.resdata.uistr.alltime;
 	str += DPS_TABLE_1;
-	str += itoa(rpyinfo.alltime, buffer, 10);
+	str += hge->Math_itoa(rpyinfo.alltime, buffer);
 	str += DPS_RETURN;
 
 	str += BResource::bres.resdata.uistr.date;
 	str += DPS_TABLE_1;
-	str += itoa(rpyinfo.year, buffer, 10);
+	str += hge->Math_itoa(rpyinfo.year, buffer);
 	str += DPS_SLASH;
-	str += itoa(rpyinfo.month, buffer, 10);
+	str += hge->Math_itoa(rpyinfo.month, buffer);
 	str += DPS_SLASH;
-	str += itoa(rpyinfo.day, buffer, 10);
+	str += hge->Math_itoa(rpyinfo.day, buffer);
 	str += DPS_SPACE;
-	str += itoa(rpyinfo.hour, buffer, 10);
+	str += hge->Math_itoa(rpyinfo.hour, buffer);
 	str += DPS_COLON;
-	str += itoa(rpyinfo.minute, buffer, 10);
+	str += hge->Math_itoa(rpyinfo.minute, buffer);
 	str += DPS_RETURN;
 
 	str += BResource::bres.resdata.uistr.lost;
@@ -787,27 +793,27 @@ bool DataPrinter::PrintReplayData(const char * foldername, const char * filename
 */
 	str += BResource::bres.resdata.uistr.misstime;
 	str += DPS_TABLE_1;
-	str += itoa(rpyinfo.miss, buffer, 10);
+	str += hge->Math_itoa(rpyinfo.miss, buffer);
 	str += DPS_RETURN;
 
 	str += BResource::bres.resdata.uistr.bordertime;
 	str += DPS_TABLE_1;
-	str += itoa(rpyinfo.border, buffer, 10);
+	str += hge->Math_itoa(rpyinfo.border, buffer);
 	str += DPS_RETURN;
 
 	str += BResource::bres.resdata.uistr.gettime;
 	str += DPS_TABLE_1;
-	str += itoa(rpyinfo.get, buffer, 10);
+	str += hge->Math_itoa(rpyinfo.get, buffer);
 	str += DPS_RETURN;
 
 	str += BResource::bres.resdata.uistr.continuetime;
 	str += DPS_TABLE_1;
-	str += itoa(rpyinfo.cont, buffer, 10);
+	str += hge->Math_itoa(rpyinfo.cont, buffer);
 	str += DPS_RETURN;
 
 	str += BResource::bres.resdata.uistr.pausetime;
 	str += DPS_TABLE_1;
-	str += itoa(rpyinfo.pause, buffer, 10);
+	str += hge->Math_itoa(rpyinfo.pause, buffer);
 	str += DPS_RETURN;
 	str += DPS_RETURN;
 
@@ -882,25 +888,25 @@ bool DataPrinter::PrintReplayData(const char * foldername, const char * filename
 				str += DPS_TABLE_1;
 				str += BResource::bres.resdata.uistr.score;
 				str += DPS_TABLE_1;
-				str += _i64toa(partinfo[index].nowscore, buffer, 10);
+				sprintf(buffer, "%d", partinfo[index].nowscore);
 				str += DPS_RETURN;
 
 				str += DPS_TABLE_1;
 				str += BResource::bres.resdata.uistr.point;
 				str += DPS_TABLE_1;
-				str += itoa(partinfo[index].nowpoint, buffer, 10);
+				str += hge->Math_itoa(partinfo[index].nowpoint, buffer);
 				str += DPS_RETURN;
 
 				str += DPS_TABLE_1;
 				str += BResource::bres.resdata.uistr.faith;
 				str += DPS_TABLE_1;
-				str += itoa(partinfo[index].nowfaith, buffer, 10);
+				str += hge->Math_itoa(partinfo[index].nowfaith, buffer);
 				str += DPS_RETURN;
 
 				str += DPS_TABLE_1;
 				str += BResource::bres.resdata.uistr.graze;
 				str += DPS_TABLE_1;
-				str += itoa(partinfo[index].nowgraze, buffer, 10);
+				str += hge->Math_itoa(partinfo[index].nowgraze, buffer);
 				str += DPS_RETURN;
 			}
 		}
@@ -935,7 +941,7 @@ bool DataPrinter::PrintReplayData(const char * foldername, const char * filename
 				str += DPS_COLON;
 				str += DPS_RETURN;
 			}
-			str += itoa(index / DPS_REPLAYFRAME_AVERAGE_INTERVAL, buffer, 10);
+			str += hge->Math_itoa(index / DPS_REPLAYFRAME_AVERAGE_INTERVAL, buffer);
 			str += DPS_TABLE_1;
 			sumsub /= DPS_REPLAYFRAME_AVERAGE_INTERVAL;
 			sprintf(buffer, "%f", (float)sumsub);

@@ -2,6 +2,7 @@
 #include "../Header/Main.h"
 #include "../Header/Scripter.h"
 #include "../Header/Data.h"
+#include "../Header/SpriteItemManager.h"
 
 Fontsys Fontsys::fontsys;
 int Fontsys::changeID = -1;
@@ -194,7 +195,7 @@ void Fontsys::Render(BYTE ID, float x, float y, DWORD ucol, DWORD dcol, float sh
 	quad[ID].v[2].x = x + w + hext;	quad[ID].v[2].y = y + h + vext;
 	quad[ID].v[3].x = x - hext;		quad[ID].v[3].y = y + h + vext;
 
-	hge->Gfx_RenderQuad(&quad[ID]);
+	SpriteItemManager::RenderQuad(&quad[ID]);
 
 	quad[ID].v[0].x = x;		quad[ID].v[0].y = y;
 	quad[ID].v[1].x = x + w;	quad[ID].v[1].y = y;

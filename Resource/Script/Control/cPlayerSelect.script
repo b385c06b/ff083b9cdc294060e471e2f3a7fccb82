@@ -26,10 +26,10 @@ IF D ptfirst + 1
 SELCLEAR
 ISELCLEAR
 
-SD [i] 22
+SD [i] $PlayerMax
 LOOP [i]
 {
-	SD [j] 21 - i
+	SD [j] $PlayerMax - 1 - i
 	IF D ptfirst - j !
 	{
 		SD [unuseable] 1
@@ -69,10 +69,10 @@ SD [yplus] 20
 
 SD [tflag] SEL_NONACTIVE + SEL_GRAY
 
-SD [i] 22
+SD [i] $PlayerMax
 LOOP [i]
 {
-	SD [j] 21 - i
+	SD [j] $PlayerMax - 1 - i
 	SD [flagConst] $FLAG_PlayerUseable_01 + j
 	SD [unuseable] GETFLAG flagConst ! * tflag
 	ISELBUILD nowisel PLAYERNAME j
@@ -119,14 +119,6 @@ ISELSET nowisel nowpt true 9 ystart - 30 yplus D ptiselfirstID
 
 // Init
 @ 1
-
-// Tex
-LOADTEXTURESET 7
-SD [i] 35
-LOOP [i]
-{
-	LOADTEXTURESET 200 + i
-}
 
 // Music
 MUSICCHANGE $MusicOP false
@@ -256,7 +248,7 @@ IF ISELCOMPLETE !
 		SD [starInRange] ISELFIRSTID + 10 > D ptfirst * starInRange
 		IF starInRange
 		{
-			BGVALUE 8 SI_FrontInfo_Star
+			BGVALUE 8 SI_Select_Right
 				368 D ptfirst - ISELFIRSTID * 20 + 95 -1 -1
 				0xffffffff
 		}
@@ -275,7 +267,7 @@ IF ISELCOMPLETE !
 		SD [starInRange] ISELFIRSTID + 10 > D ptsecond * starInRange
 		IF starInRange
 		{
-			BGVALUE 9 SI_FrontInfo_Star
+			BGVALUE 9 SI_Select_Right
 				368 D ptsecond - ISELFIRSTID * 20 + 95 -1 -1
 				0xffffffff
 		}
@@ -310,20 +302,28 @@ ELSE
 		{
 			SETTIME 0
 			STARTPREP
-			FREETEXTURESET -1
-			LOADTEXTURESET 2
-			LOADTEXTURESET 4
-			LOADTEXTURESET 9
-			LOADTEXTURESET 10
+			CALL $FreeTextureSet 0xffff
+			CALL $LoadTextureSet 2
+			CALL $LoadTextureSet 4
+			CALL $LoadTextureSet 9
+			CALL $LoadTextureSet 10
+			
 			SD [chara_0] D ptfirst
 			SD [chara_1] D ptsecond
 			SD [chara_2] D ptthird
-			LOADTEXTURESET 100 + chara_0
-			LOADTEXTURESET 100 + chara_1
-			LOADTEXTURESET 100 + chara_2
-			LOADTEXTURESET 200 + chara_0
-			LOADTEXTURESET 200 + chara_1
-			LOADTEXTURESET 200 + chara_2
+			CALL $LoadTextureSet 100 + chara_0
+			CALL $LoadTextureSet 100 + chara_1
+			CALL $LoadTextureSet 100 + chara_2
+			
+			SD [chara_0] GETPEID chara_0
+			SD [chara_1] GETPEID chara_1
+			SD [chara_2] GETPEID chara_2
+			CALL $LoadTextureSet 200 + chara_0
+			CALL $LoadTextureSet 200 + chara_1
+			CALL $LoadTextureSet 200 + chara_2
+			CALL $LoadTextureSet 400 + chara_0
+			CALL $LoadTextureSet 400 + chara_1
+			CALL $LoadTextureSet 400 + chara_2
 			
 			SETSTATE STATE_START
 			EXECUTE CT_STAGE POST@ CT_SCENE

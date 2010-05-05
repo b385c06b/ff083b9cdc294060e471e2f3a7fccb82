@@ -111,14 +111,16 @@ public:
 	static bool rpySetBias(replayFrame * _replayframe);
 	static float rpyGetReplayFPS(replayFrame _replayframe);
 	static bool packFile(const char * zipname, const char * filename);
+#ifdef WIN32
 	static bool packFolder(const char * zipname, const char * foldername, const char * filterstr, int * initcount = 0);
-#ifdef __UNPACK
+	#ifdef __UNPACK
 	#define UNPACK_INIFILENAME	"Unpack.ini"
 	#define UNPACK_SECTION	"Package_"
 	#define UNPACK_PACKNAME	"FileName"
 	#define UNPACK_TYPE		"Type_"
 	static bool unpackFile(const char * zipname, const char * filename);
 	static bool unpackFromIni(const char * inifilename);
+	#endif
 #endif
 	static bool effSave(const char * filename, hgeEffectSystem * eff, int texnum);
 	static int effLoad(const char * filename, hgeEffectSystem * eff, HTEXTURE * tex);

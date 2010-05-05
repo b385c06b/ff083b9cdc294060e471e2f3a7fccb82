@@ -227,7 +227,7 @@ void PlayerBullet::Render()
 	if (sprite[ID][animation])
 	{
 		sprite[ID][animation]->SetColor((alpha<<24)|diffuse);
-		sprite[ID][animation]->RenderEx(x, y, ARC(angle+headangle), hscale, vscale);
+		SpriteItemManager::RenderSpriteEx(sprite[ID][animation], x, y, ARC(angle+headangle), hscale, vscale);
 	}
 }
 

@@ -156,7 +156,7 @@ void CResourcePackDlg::OnBnClickedPack()
 	strncpy(upperfolder, szPath, i);
 	upperfolder[i] = 0;
 	hge->Resource_SetPath(upperfolder);
-	SetCurrentDirectory(upperfolder);
+	hge->Resource_SetCurrentDirectory(upperfolder);
 	strcpy(foldername, &szPath[i]);
 	strcpy(packname, &szPath[i]);
 	strcat(packname, M_PACKEXTENSION);
@@ -187,7 +187,7 @@ void CResourcePackDlg::OnEnChangeFoldername()
 	{
 		packButton.EnableWindow(FALSE);
 	}
-	else if (!_access(hge->Resource_MakePath(szPath), 00))
+	else if (!hge->Resource_AccessFile(szPath))
 	{
 		packButton.EnableWindow(TRUE);
 	}

@@ -134,10 +134,10 @@ ELSEIF MODE - MODE_STAGE !
 }
 ELSEIF D ptspmode
 {
-	SD [i] 35
+	SD [i] $BossMax
 	LOOP [i]
 	{
-		SD [j] 34 - i
+		SD [j] $BossMax - 1 - i
 		SD [tnamecard] j + SI_NameCard_01
 		SELBUILD j tnamecard
 			TotalCenterX TotalCenterY 0.8 0 8
@@ -160,7 +160,7 @@ ELSEIF D ptspmode
 	{
 		SD [tosel] 0
 	}
-	SELSET 35 tosel true 7 57.5 45 0
+	SELSET $BossMax tosel true 7 57.5 45 0
 }
 ELSE
 {

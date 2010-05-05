@@ -24,7 +24,7 @@ int Process::processReplay()
 		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+1, 0);
 		Scripter::scr.SetIntValue(SCR_RESERVEBEGIN+2, 0);
 
-		SetCurrentDirectory(hge->Resource_MakePath(BResource::bres.resdata.replayfoldername));
+		hge->Resource_SetCurrentDirectory(BResource::bres.resdata.replayfoldername);
 		char * buffer;
 		char enumfile[M_STRMAX];
 		strcpy(enumfile, BResource::bres.resdata.replayfoldername);
@@ -67,7 +67,7 @@ int Process::processReplay()
 		{
 			Replay::Free(_rpyfilename[i]);
 		}
-		SetCurrentDirectory(hge->Resource_MakePath(""));
+		hge->Resource_SetCurrentDirectory("");
 		gametime = 0;
 		state = STATE_TITLE;
 		return PTURN;

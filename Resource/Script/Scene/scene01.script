@@ -14,10 +14,6 @@ CALL $SceneOff QUIT@
 
 @ 1
 
-LOADTEXTURESET 200 + $EnemyID_01 - $EnemyID_01
-LOADTEXTURESET 300 + $EnemyID_01 - $EnemyID_01
-LOADTEXTURESET 400 + $EnemyID_01 - $EnemyID_01
-
 SD [blBegin] BGSI * $BGLayerSplit
 
 IF BGSI !

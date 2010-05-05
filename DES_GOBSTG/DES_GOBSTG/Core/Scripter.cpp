@@ -299,7 +299,7 @@ bool Scripter::LoadAll()
 		{
 			if (strlen(BResource::bres.resdata.scriptfoldername[i]))
 			{
-				SetCurrentDirectory(hge->Resource_MakePath(BResource::bres.resdata.scriptfoldername[i]));
+				hge->Resource_SetCurrentDirectory(BResource::bres.resdata.scriptfoldername[i]);
 				char enumfile[M_PATHMAX];
 				strcpy(enumfile, BResource::bres.resdata.scriptfoldername[i]);
 				strcat(enumfile, "*.");
@@ -369,7 +369,7 @@ bool Scripter::LoadAll()
 	HGELOG("\nSucceeded in loading all Script File.\n");
 #endif
 	
-	SetCurrentDirectory(hge->Resource_MakePath(""));
+	hge->Resource_SetCurrentDirectory("");
 
 	ReleaseVarName();
 	bincontent = NULL;
@@ -746,7 +746,7 @@ Token Scripter::GetToken()
 			{
 				if(buffer[i] == '.')
 				{
-					float tf = (float)atof(buffer);
+					float tf = (float)hge->Math_atof(buffer);
 					void * tp = &tf;
 					DWORD * tpint = (DWORD *)tp;
 					ret.type |= SCR_TOKEN_FLOAT;
@@ -756,7 +756,7 @@ Token Scripter::GetToken()
 			}
 			if(!(ret.type & SCR_TOKEN_FLOAT))
 			{
-				ret.value |= atoi(buffer);
+				ret.value |= hge->Math_atoi(buffer);
 			}
 		}
 		goto exit;
@@ -837,7 +837,7 @@ Token Scripter::GetToken()
 	{
 		if(buffer[0] == '_' && iswdigit(buffer[1]))
 		{
-			int toffset = atoi(&buffer[1]);
+			int toffset = hge->Math_atoi(&buffer[1]);
 			if(toffset >= SCR_RESERVEBEGIN - SCR_FREEBEGIN)
 			{
 				ret.type = SCR_TOKEN_ERROR;

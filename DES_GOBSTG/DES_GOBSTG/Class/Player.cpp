@@ -1458,8 +1458,11 @@ void Player::RenderAll()
 
 void Player::Render()
 {
-	sprite->SetColor(alpha<<24|diffuse);
-	sprite->RenderEx(x, y, 0, hscale, vscale);
+	if (sprite)
+	{
+		sprite->SetColor(alpha<<24|diffuse);
+		SpriteItemManager::RenderSpriteEx(sprite, x, y, 0, hscale, vscale);
+	}
 }
 
 void Player::RenderEffect()

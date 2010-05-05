@@ -210,10 +210,6 @@
 #define TEXMAX				0x100
 
 #define TEX_WHITE		0
-#define TEX_WORD		1
-#define TEX_BULLET		2//7
-#define TEX_GHOST		3//8
-#define TEX_ENEMY		4//14
 
 #define M_SCRIPTFOLDERMAX	8
 

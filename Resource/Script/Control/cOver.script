@@ -7,6 +7,8 @@ CONTROLFILE
 
 @ 1
 
+FREETEXTURESET -1
+
 BGVALUE 0 SI_SelectScene
 	TotalCenterX TotalCenterY TotalW TotalH
 	0xffffffff

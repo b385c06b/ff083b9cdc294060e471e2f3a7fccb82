@@ -148,10 +148,16 @@ void Item::Render()
 {
 	if(y < 0)
 	{
-		spItem[ID + ITEMTYPEMAX]->SetColor((BYTE)((int)y + 0xff)<<24 | 0xffffff);
-		spItem[ID + ITEMTYPEMAX]->Render(x, 24);
+		if (spItem[ID + ITEMTYPEMAX])
+		{
+			spItem[ID + ITEMTYPEMAX]->SetColor((BYTE)((int)y + 0xff)<<24 | 0xffffff);
+			SpriteItemManager::RenderSprite(spItem[ID + ITEMTYPEMAX], x, 24);
+		}
 	}
-	spItem[ID]->RenderEx(x, y, ARC(headangle));
+	if (spItem[ID])
+	{
+		SpriteItemManager::RenderSpriteEx(spItem[ID], x, y, ARC(headangle));
+	}
 }
 
 void Item::drainAll()
@@ -312,7 +318,7 @@ void Item::action()
 		Player::p.nScore += score;
 
 		struct infoFont info;
-		itoa(score, info.cScore, 10);
+		hge->Math_itoa(score, info.cScore);
 
 		info.timer = 0;
 		info.x = x;

@@ -24,6 +24,10 @@ public:
 	BResource();
 	~BResource();
 
+	void Init();
+	void InitTexinfo();
+	void Release();
+
 	bool Fill();
 	bool Pack(void * pStrdesc, void * pCustomConstName);
 	bool Gain(void * pStrdesc = NULL, void * pCustomConstName = NULL);
@@ -32,6 +36,8 @@ public:
 	bool SetDataFile();
 	bool LoadPackage();
 
+	bool LoadTextureSet(int texset=-1);
+	bool FreeTextureSet(int texset=-1);
 	HTEXTURE LoadTexture(int i);
 
 	void ReleaseCustomConst();
@@ -53,6 +59,10 @@ public:
 	textureData texturedata[TEXMAX];
 
 	static BResource bres;
+
+	//texture
+	HTEXTURE	tex[TEXMAX];
+	hgeTextureInfo texinfo[TEXMAX];
 };
 
 extern HGE * hge;
