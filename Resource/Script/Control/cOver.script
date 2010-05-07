@@ -159,10 +159,10 @@ ELSEIF D ptdepth - 3 !
 {
 	IF D ptsec - 2
 	{
-		SD [xOffset] D ptsec * -42
+		SD [xOffset] D ptsec * -48
 
 		BGVALUE 5 0
-			D ptnowchar * 11 + 411 + xOffset D ptsec * 291 + 108 11 4
+			D ptnowchar * 10 + 408 + xOffset D ptsec * 291 + 108 10 4
 			0xffffffff
 	}
 	ELSE
@@ -205,7 +205,7 @@ ELSEIF D ptdepth - 7 !
 ELSEIF D ptdepth - 8 !
 {
 	BGVALUE 5 0
-		D ptnowchar * 11 + 76 D ptinsert * 24 + 116 11 4
+		D ptnowchar * 10 + 72 D ptinsert * 24 + 116 10 4
 		0xffffffff
 	IF D ptsec - 1 !
 	{

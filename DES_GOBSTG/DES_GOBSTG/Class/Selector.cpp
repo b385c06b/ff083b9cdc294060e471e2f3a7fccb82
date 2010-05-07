@@ -47,6 +47,7 @@ void Selector::Clear()
 	complete = false;
 	confirminit = false;
 	plus = true;
+	nPageNum = 0;
 }
 
 void Selector::valueSet(BYTE _ID, int siID, float cenx, float ceny, float _hscale, float _vscale, BYTE _maxtime)

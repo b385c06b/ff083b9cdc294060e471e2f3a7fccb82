@@ -85,6 +85,7 @@ void CALL HGE_Impl::Input_SetMousePos(float x, float y)
 	POINT pt;
 	pt.x=(long)x; pt.y=(long)y;
 	ClientToScreen(hwnd, &pt);
+
 	SetCursorPos(pt.x,pt.y);
 }
 
@@ -378,10 +379,15 @@ void HGE_Impl::_BuildEvent(int type, int key, int scan, int flags, int x, int y)
 	if(pt.x==-1) { eptr->event.x=Xpos;eptr->event.y=Ypos; }
 	else
 	{
+		WINDOWPLACEMENT wndpl;
+		GetWindowPlacement(hwnd, &wndpl);
+		float windoww = wndpl.rcNormalPosition.right - wndpl.rcNormalPosition.left;
+		float windowh = wndpl.rcNormalPosition.bottom - wndpl.rcNormalPosition.top;
+
 		if(pt.x<0) pt.x=0;
 		if(pt.y<0) pt.y=0;
-		if(pt.x>=nScreenWidth) pt.x=nScreenWidth-1;
-		if(pt.y>=nScreenHeight) pt.y=nScreenHeight-1;
+		if(pt.x>=windoww) pt.x=windoww-1;
+		if(pt.y>=windowh) pt.y=windowh-1;
 
 		eptr->event.x=(float)pt.x;
 		eptr->event.y=(float)pt.y;
@@ -404,6 +410,7 @@ void HGE_Impl::_BuildEvent(int type, int key, int scan, int flags, int x, int y)
 	else if(eptr->event.type==INPUT_MOUSEMOVE)
 	{
 		Xpos=eptr->event.x;Ypos=eptr->event.y;
+
 	}
 	else if(eptr->event.type==INPUT_MOUSEWHEEL)
 	{

@@ -86,7 +86,7 @@ void BossInfo::bossUp()
 	{
 		BGLayer::ubg[UBGID_BGMASK].SetFlag(BG_WHITEFLASH, BGMT_FLASH);
 		Enemy::bossflag[ENEMY_MAINBOSSINDEX] = BOSS_SPELLUP;
-		Fontsys::fontsys.SignUp(FONTSYS_SPELLNAMEUSE, spellname, FrontDisplay::fdisp.info.smallfont);
+		Fontsys::fontsys.SignUp(FONTSYS_SPELLNAMEUSE, spellname);
 		get = DataConnector::nGet();
 		meet = DataConnector::nMeet() - 1;
 		if(meet < 0)

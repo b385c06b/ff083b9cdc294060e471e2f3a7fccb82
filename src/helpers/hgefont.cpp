@@ -12,18 +12,26 @@
 #include <stdio.h>
 
 const char FNTHEADERTAG[]="[HGEFONT]";
+const char FNTBITMAPNUMTAG[]="BitmapNum";
 const char FNTBITMAPTAG[]="Bitmap";
+const char FNTSIZETAG[]="Size";
 const char FNTCHARTAG[]="Char";
+const char FNTWCHARTAG[]="WChar";
+
+#define _FNTCOMMAND_BITMAPNUM	0x00
+#define _FNTCOMMAND_BITMAP		0x01
+#define _FNTCOMMAND_SIZE		0x02
+#define _FNTCOMMAND_CHAR		0x10
+#define _FNTCOMMAND_WCHAR		0x20
 
 
 HGE *hgeFont::hge=0;
-char hgeFont::buffer[1024];
 
 
 /************************************************************************/
 /* This function is added by h5nc (h5nc@yahoo.com.cn)                   */
 /************************************************************************/
-void hgeFont::_FontInit()
+void hgeFont::_FontInit(int _size)
 {
 	hge=hgeCreate(HGE_VERSION);
 
@@ -33,7 +41,8 @@ void hgeFont::_FontInit()
 	fRot=0.0f;
 	fTracking=0.0f;
 	fSpacing=1.0f;
-	hTexture=0;
+	hTexture=NULL;
+	texnum = 0;
 
 	fZ=0;
 	nBlend=BLEND_DEFAULT;
@@ -42,9 +51,87 @@ void hgeFont::_FontInit()
 		col[i] = 0xFFFFFFFF;
 	}
 
+	letters = NULL;
+	pre = NULL;
+	post = NULL;
+	wCh = NULL;
+	bWide = false;
+	size = 0;
+
+	_FontResize(_size);
+
+/*
 	ZeroMemory( &letters, sizeof(letters) );
 	ZeroMemory( &pre, sizeof(letters) );
-	ZeroMemory( &post, sizeof(letters) );
+	ZeroMemory( &post, sizeof(letters) );*/
+
+}
+
+void hgeFont::_FontResize(int _size/* =256 */)
+{
+	if (size || letters || pre || post || wCh)
+	{
+		_FontFree();
+	}
+	size = _size;
+	if (size > 0)
+	{
+		letters = (hgeSprite**)malloc(sizeof(hgeSprite *) * size);
+		pre = (float *)malloc(sizeof(float) * size);
+		post = (float *)malloc(sizeof(float) * size);
+		wCh = (int *)malloc(sizeof(int) * size);
+
+		ZeroMemory( letters, sizeof(hgeSprite *) * size );
+		ZeroMemory( pre, sizeof(float) * size );
+		ZeroMemory( post, sizeof(float) * size );
+		ZeroMemory( wCh, sizeof(int) * size );
+	}
+	if (size > 256)
+	{
+		bWide = true;
+	}
+}
+
+void hgeFont::_FontFree()
+{
+	if (letters)
+	{
+		for(int i=0; i<256; i++)
+		{
+			if(letters[i]) delete letters[i];
+		}
+		free(letters);
+		letters = NULL;
+	}
+	if (pre)
+	{
+		free(pre);
+		pre = NULL;
+	}
+	if (post)
+	{
+		free(post);
+		post = NULL;
+	}
+	if (wCh)
+	{
+		free(wCh);
+		wCh = NULL;
+	}
+	for (int i=0; i<texnum; i++)
+	{
+		if(hTexture[i].tex)
+		{
+			hge->Texture_Free(hTexture[i]);
+		}
+	}
+	if (hTexture)
+	{
+		free(hTexture);
+		hTexture = NULL;
+	}
+	texnum = 0;
+	size = 0;
 }
 
 /************************************************************************/
@@ -53,23 +140,28 @@ void hgeFont::_FontInit()
 void hgeFont::NewFont(const char *szFont, bool bMipmap/* =false */)
 {
 	void	*data;
-	DWORD	size;
+	DWORD	datasize;
 	char	*desc, *pdesc;
 	char	linebuf[256];
 	char	buf[MAX_PATH], *pbuf;
 	char	chr;
 	int		i, x, y, w, h, a, c;
+	int		_wCh = 0;
+	int		_nTex = 0;
+	int		_texnum = 0;
+	int		_size = 0;
+	int		nowtexnum = 0;
 
 	// Setup variables
 	
 	// Load font description
 
-	data=hge->Resource_Load(szFont, &size);
+	data=hge->Resource_Load(szFont, &datasize);
 	if(!data) return;
 
-	desc = new char[size+1];
-	memcpy(desc,data,size);
-	desc[size]=0;
+	desc = new char[datasize+1];
+	memcpy(desc,data,datasize);
+	desc[datasize]=0;
 	hge->Resource_Free(data);
 
 	pdesc=_get_line(desc,linebuf);
@@ -84,7 +176,61 @@ void hgeFont::NewFont(const char *szFont, bool bMipmap/* =false */)
 
 	while(pdesc = _get_line(pdesc,linebuf))
 	{
-		if(!strncmp(linebuf, FNTBITMAPTAG, sizeof(FNTBITMAPTAG)-1 ))
+		_wCh = -1;
+		_nTex = 0;
+		BYTE command;
+		if (!strncmp(linebuf, FNTBITMAPNUMTAG, sizeof(FNTBITMAPNUMTAG)-1 ))
+		{
+			command = _FNTCOMMAND_BITMAPNUM;
+		}
+		else if (!strncmp(linebuf, FNTBITMAPTAG, sizeof(FNTBITMAPTAG)-1 ))
+		{
+			command = _FNTCOMMAND_BITMAP;
+		}
+		else if (!strncmp(linebuf, FNTSIZETAG, sizeof(FNTSIZETAG)-1 ))
+		{
+			command = _FNTCOMMAND_SIZE;
+		}
+		else if (!strncmp(linebuf, FNTCHARTAG, sizeof(FNTCHARTAG)-1 ))
+		{
+			command = _FNTCOMMAND_CHAR;
+		}
+		else if (!strncmp(linebuf, FNTWCHARTAG, sizeof(FNTWCHARTAG)-1 ))
+		{
+			command = _FNTCOMMAND_WCHAR;
+		}
+
+		if (command == _FNTCOMMAND_BITMAPNUM)
+		{
+			if (!sscanf(linebuf, "BitmapNum = %d", &_texnum))
+			{
+				continue;
+			}
+			if (texnum)
+			{
+				for (int i=0; i<texnum; i++)
+				{
+					if (hTexture)
+					{
+						if (hTexture[i].tex)
+						{
+							hge->Texture_Free(hTexture[i]);
+						}
+					}
+				}
+			}
+			if (hTexture)
+			{
+				free(hTexture);
+				hTexture = NULL;
+			}
+			texnum = _texnum;
+			if (texnum > 0)
+			{
+				hTexture = (HTEXTURE *)malloc(sizeof(HTEXTURE) * texnum);
+			}
+		}
+		else if(command == _FNTCOMMAND_BITMAP)
 		{
 			strcpy(buf,szFont);
 			pbuf=strrchr(buf,'\\');
@@ -93,15 +239,28 @@ void hgeFont::NewFont(const char *szFont, bool bMipmap/* =false */)
 			else pbuf++;
 			if(!sscanf(linebuf, "Bitmap = %s", pbuf)) continue;
 
-			hTexture=hge->Texture_Load(buf, 0, bMipmap);
-			if(!hTexture.tex)
+			if (nowtexnum < texnum && hTexture)
 			{
-				delete[] desc;	
-				return;
+				hTexture[nowtexnum]=hge->Texture_Load(buf, 0, bMipmap);
+				if(!hTexture[nowtexnum].tex)
+				{
+					delete[] desc;	
+					return;
+				}
+				nowtexnum++;
 			}
 		}
 
-		else if(!strncmp(linebuf, FNTCHARTAG, sizeof(FNTCHARTAG)-1 ))
+		else if (command == _FNTCOMMAND_SIZE)
+		{
+			if (!sscanf(linebuf, "Size = %d", &_size))
+			{
+				continue;
+			}
+			_FontResize(_size);
+		}
+
+		else if(command == _FNTCOMMAND_CHAR || command == _FNTCOMMAND_WCHAR)
 		{
 			pbuf=strchr(linebuf,'=');
 			if(!pbuf) continue;
@@ -126,11 +285,21 @@ void hgeFont::NewFont(const char *szFont, bool bMipmap/* =false */)
 					i=(i << 4) | chr;
 					pbuf++;
 				}
-				if(i<0 || i>255) continue;
+				if(i<0 || i>=size) continue;
 			}
-			sscanf(pbuf, " , %d , %d , %d , %d , %d , %d", &x, &y, &w, &h, &a, &c);
+			if (command == _FNTCOMMAND_CHAR)
+			{
+				sscanf(pbuf, " , %d , %d , %d , %d , %d , %d", &x, &y, &w, &h, &a, &c);
+			}
+			else if (command == _FNTCOMMAND_WCHAR)
+			{
+				sscanf(pbuf, " , %d , %d , %d , %d , %d , %d, %x, %d", &x, &y, &w, &h, &a, &c, &_wCh, &_nTex);
+			}
 
-			ChangeSprite(i, hTexture, (float)x, (float)y, (float)w, (float)h, (float)a, (float)c);
+			if (hTexture && _nTex < _texnum)
+			{
+				ChangeSprite(i, hTexture[_nTex], (float)x, (float)y, (float)w, (float)h, (float)a, (float)c, _wCh);
+			}
 			/*
 			letters[i] = new hgeSprite(hTexture, (float)x, (float)y, (float)w, (float)h);
 			letters[i] -> SetHotSpot(0, 0);
@@ -147,9 +316,9 @@ void hgeFont::NewFont(const char *szFont, bool bMipmap/* =false */)
 /************************************************************************/
 /* This function is modified by h5nc (h5nc@yahoo.com.cn)                */
 /************************************************************************/
-hgeFont::hgeFont()
+hgeFont::hgeFont(int _size)
 {
-	_FontInit();
+	_FontInit(_size);
 }
 
 /************************************************************************/
@@ -157,7 +326,7 @@ hgeFont::hgeFont()
 /************************************************************************/
 hgeFont::hgeFont(const char *szFont, bool bMipmap)
 {
-	_FontInit();
+	_FontInit(0);
 	NewFont(szFont, bMipmap);
 }
 
@@ -225,9 +394,7 @@ hgeFont& hgeFont::operator= (const hgeFont &fnt)
 
 hgeFont::~hgeFont()
 {
-	for(int i=0; i<256; i++)
-		if(letters[i]) delete letters[i];
-	if(hTexture.tex) hge->Texture_Free(hTexture);
+	_FontFree();
 	hge->Release();
 }
 
@@ -235,9 +402,9 @@ hgeFont::~hgeFont()
 /* These functions are added by h5nc (h5nc@yahoo.com.cn)                */
 /************************************************************************/
 // begin
-void hgeFont::ChangeSprite(BYTE chr, hgeSprite * sprite, float pre_a, float post_c)
+void hgeFont::ChangeSprite(int chr, hgeSprite * sprite, float pre_a, float post_c)
 {
-	if (!sprite)
+	if (!sprite || chr < 0 || chr >= size)
 	{
 		return;
 	}
@@ -249,8 +416,12 @@ void hgeFont::ChangeSprite(BYTE chr, hgeSprite * sprite, float pre_a, float post
 	ChangeSprite(chr, sprite->GetTexture(), tex_x, tex_y, tex_w, tex_h, pre_a, post_c);
 }
 
-void hgeFont::ChangeSprite(BYTE chr, HTEXTURE tex, float tex_x, float tex_y, float tex_w, float tex_h, float pre_a, float post_c)
+void hgeFont::ChangeSprite(int chr, HTEXTURE tex, float tex_x, float tex_y, float tex_w, float tex_h, float pre_a, float post_c, int _wCh)
 {
+	if (chr < 0 || chr >= size)
+	{
+		return;
+	}
 	if (!letters[chr])
 	{
 		letters[chr] = new hgeSprite(tex, tex_x, tex_y, tex_w, tex_h);
@@ -263,6 +434,11 @@ void hgeFont::ChangeSprite(BYTE chr, HTEXTURE tex, float tex_x, float tex_y, flo
 	letters[chr]->SetHotSpot(0, 0);
 	pre[chr]=pre_a;
 	post[chr]=post_c;
+	wCh[chr]=_wCh;
+	if (wCh[chr] >= 0)
+	{
+		bWide = true;
+	}
 	if(tex_h>fHeight) fHeight=tex_h;
 }
 // end
@@ -316,26 +492,57 @@ void hgeFont::Render(float x, float y, int align, const char *string)
 		else
 		{
 			i=(unsigned char)*string;
-			if(!letters[i]) i='?';
-			if(letters[i])
+			if (bWide)
 			{
-				fx += pre[i]*fScale*fProportion;
-				letters[i]->SetColor(col[0], col[1], col[2], col[3]);
-				letters[i]->RenderEx(fx, y, fRot, fScale*fProportion, fScale);
-				fx += (letters[i]->GetWidth()+post[i]+fTracking)*fScale*fProportion;
+				if (i > 0x7f)
+				{
+					i = i << 8;
+					string++;
+					i = i | ((unsigned char)*string);
+					i = ChangeWideChar(i);
+				}
+			}
+			if (i >= 0 && i < size)
+			{
+				if(!letters[i]) i='?';
+				if(letters[i])
+				{
+					fx += pre[i]*fScale*fProportion;
+					letters[i]->SetColor(col[0], col[1], col[2], col[3]);
+					letters[i]->RenderEx(fx, y, fRot, fScale*fProportion, fScale);
+					fx += (letters[i]->GetWidth()+post[i]+fTracking)*fScale*fProportion;
+				}
 			}
 		}
 		string++;
 	}
 }
 
-void hgeFont::printf(float x, float y, int align, const char *format, ...)
+int hgeFont::ChangeWideChar(int wchr)
 {
+	for (int i=0; i<size; i++)
+	{
+		if (wCh[i] == wchr)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+void hgeFont::printf(float x, float y, int align, const char *buffer)
+{
+	if (!letters)
+	{
+		return;
+	}
+/*
 	char	*pArg=(char *) &format+sizeof(format);
 
 	_vsnprintf(buffer, sizeof(buffer)-1, format, pArg);
 	buffer[sizeof(buffer)-1]=0;
-	//vsprintf(buffer, format, pArg);
+	//vsprintf(buffer, format, pArg);*/
+
 
 	Render(x,y,align,buffer);
 }
@@ -343,19 +550,26 @@ void hgeFont::printf(float x, float y, int align, const char *format, ...)
 /************************************************************************/
 /* This function is modified by h5nc (h5nc@yahoo.com.cn)                */
 /************************************************************************/
-void hgeFont::printfb(float x, float y, float w, float h, int align, const char *format, ...)
+void hgeFont::printfb(float x, float y, float w, float h, int align, const char *buffer)
 {
 	char	chr, *pbuf, *prevword, *linestart;
 	int		i,lines=0;
 	float	tx, ty, hh, ww;
+
+	if (!letters)
+	{
+		return;
+	}
+/*
 	char	*pArg=(char *) &format+sizeof(format);
 
 	_vsnprintf(buffer, sizeof(buffer)-1, format, pArg);
 	buffer[sizeof(buffer)-1]=0;
-	//vsprintf(buffer, format, pArg);
+	//vsprintf(buffer, format, pArg);*/
 
-	linestart=buffer;
-	pbuf=buffer;
+
+	linestart=(char *)buffer;
+	pbuf=(char *)buffer;
 	prevword=0;
 
 	for(;;)
@@ -426,6 +640,10 @@ void hgeFont::printfb(float x, float y, float w, float h, int align, const char 
 
 float hgeFont::GetStringWidth(const char *string, bool bMultiline) const
 {
+	if (!letters)
+	{
+		return;
+	}
 	int i;
 	float linew, w = 0;
 
@@ -542,4 +760,112 @@ char *hgeFont::_get_line(char *file, char *line)
 	else return 0;
 }
 
+#ifdef WIN32
+bool hgeFont::CreateFontFileByInfo( int * charcode, int num, const char * fontfilename, HD3DFONT d3dfont )
+{
+	if (num < 1 || !charcode || !fontfilename)
+	{
+		return false;
+	}
 
+	int fonttexnum = (num-1) / 256 + 1 + 1;
+	FILE * fontfile = fopen(hge->Resource_MakePath(fontfilename), "w");
+	if (!fontfile)
+	{
+		return false;
+	}
+
+	HTARGET tar = hge->Target_Create(256, 256, false);
+	if (!hge->Gfx_BeginScene(tar))
+	{
+		hge->Target_Free(tar);
+		return false;
+	}
+	hge->Gfx_Clear(0x00000000);
+
+	char savefilenamebase[256];
+	char buffer[256];
+	char textbuffer[16];
+	strcpy(buffer, "[HGEFONT]\n\n");
+	fwrite(buffer, strlen(buffer), 1, fontfile);
+	sprintf(buffer, "BitmapNum=%d\n", fonttexnum);
+	fwrite(buffer, strlen(buffer), 1, fontfile);
+
+	strcpy(savefilenamebase, hge->Resource_MakePath(fontfilename));
+	int filenamelen = strlen(savefilenamebase);
+	while (filenamelen > 1)
+	{
+		filenamelen--;
+		if (savefilenamebase[filenamelen] != '/' && savefilenamebase[filenamelen] != '\\')
+		{
+			savefilenamebase[filenamelen] = 0;
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	for (int i=0; i<fonttexnum; i++)
+	{
+		sprintf(buffer, "Bitmap=font_%02d.png\n", i);
+		fwrite(buffer, strlen(buffer), 1, fontfile);
+	}
+	sprintf(buffer, "Size=%d\n\n", num + 0x100);
+	fwrite(buffer, strlen(buffer), 1, fontfile);
+
+	int i=0x10;
+	for (; i<0x80; i++)
+	{
+		int x = i % 0x20 * 0x08;
+		int y = i / 0x20 * 0x10;
+		sprintf(buffer, "Char=\"%c\", %d, %d, %d, %d, 0, 0\n", i, x, y, 8, 16);
+		fwrite(buffer, strlen(buffer), 1, fontfile);
+		sprintf(textbuffer, "%c", i);
+		hge->Gfx_RenderText(d3dfont, textbuffer, x, y, 8, 16);
+	}
+
+	int nowtexnum = 0;
+
+	i = 0x100;
+	for (int j=0; j<num; j++, i++)
+	{
+		int texnum = (i) / 0x100;
+		int x = (i) % 0x10 * 0x10;
+		int y = ((i) / 0x10) % 0x10 * 0x10;
+		if (nowtexnum != texnum)
+		{
+			hge->Gfx_EndScene();
+			HTEXTURE tex = hge->Target_GetTexture(tar);
+			sprintf(buffer, "%sfont_%02d.png", savefilenamebase, nowtexnum);
+			hge->Texture_Save(tex, buffer, D3DXIFF_PNG);
+
+			if (!hge->Gfx_BeginScene(tar))
+			{
+				hge->Target_Free(tar);
+				return false;
+			}
+			hge->Gfx_Clear(0x00000000);
+			nowtexnum = texnum;
+		}
+		sprintf(buffer, "WChar=%x, %d, %d, %d, %d, 0, 0, %x, %d\n", i, x, y, 16, 16, charcode[j], texnum);
+		fwrite(buffer, strlen(buffer), 1, fontfile);
+
+		textbuffer[0] = (charcode[j] & 0xff00) >> 8;
+		textbuffer[1] = charcode[j] & 0xff;
+		textbuffer[2] = 0;
+		hge->Gfx_RenderText(d3dfont, textbuffer, x, y, 8, 16);
+	}
+
+	hge->Gfx_EndScene();
+	HTEXTURE tex = hge->Target_GetTexture(tar);
+	sprintf(buffer, "%sfont_%02d.png", savefilenamebase, nowtexnum);
+	hge->Texture_Save(tex, buffer, D3DXIFF_PNG);
+
+	hge->Target_Free(tar);
+
+	fclose(fontfile);
+
+	return true;
+}
+#endif

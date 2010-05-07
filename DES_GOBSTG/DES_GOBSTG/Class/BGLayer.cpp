@@ -77,6 +77,10 @@ void BGLayer::valueSet(int siID, float cenx, float ceny, float w, float h, DWORD
 	zSpeed = 0;
 
 	spriteData * _sd = SpriteItemManager::CastSprite(siID);
+	if (!_sd)
+	{
+		return;
+	}
 	HTEXTURE _tex(_sd->tex, NULL);/* = tex[_sd->tex];*/
 
 	float _x = cenx;

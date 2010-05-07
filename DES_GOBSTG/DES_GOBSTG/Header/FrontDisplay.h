@@ -53,7 +53,6 @@ struct ftInfoSet
 	hgeFont * asciifont;
 	hgeFont * itemfont;
 	HD3DFONT normalfont;
-	HD3DFONT smallfont;
 
 	hgeSprite * cutin;
 	hgeSprite * plchat_1;

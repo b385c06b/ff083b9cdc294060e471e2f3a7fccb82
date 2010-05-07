@@ -94,6 +94,7 @@ bool BResource::Fill()
 	DWORD name;
 
 	//resource
+	strcpy(resdata.fontfilename, Data::data.sRead(DATA_RESOURCEFILE, Data::data.sLinkType(RESDATAS_FONT), Data::data.nLinkType(RESDATAN_FILENAME), RESDEFAULT_FONTFILE));
 	strcpy(resdata.widefontname, Data::data.sRead(DATA_RESOURCEFILE, Data::data.sLinkType(RESDATAS_FONT), Data::data.nLinkType(RESDATAN_FONT), RESDEFAULT_FONTFONT));
 
 	sec = Data::data.sLinkType(RESDATAS_FOLDER);

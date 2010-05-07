@@ -46,16 +46,18 @@ void Process::frameEnd()
 	{
 		i->action();
 	}
-	Fontsys::changeID = -1;
+//	Fontsys::changeID = -1;
 	for(list<InfoSelect>::iterator i=InfoSelect::infoselect.begin();i!=InfoSelect::infoselect.end();i++)
 	{
 		if(!InfoSelect::complete)
 		{
 			i->action();
+/*
 			if (Fontsys::changeID < i->ID)
 			{
 				Fontsys::changeID = i->ID;
-			}
+			}*/
+
 		}
 		else
 		{

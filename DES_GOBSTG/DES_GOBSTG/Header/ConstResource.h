@@ -13,6 +13,7 @@
 #define CONFIG_STR_FILENAME				"TH_tamaokiba_CONFIG.ini"
 #define CONFIG_STR_DEFAULTFILENAME		"hge.ini"
 
+#define RESDEFAULT_FONTFILE				"Graphic/font.fnt"
 #define RESDEFAULT_FONTFONT				"MS Gothic"
 
 #define RESDEFAULT_DATARESOURCE			"TH_tamaokiba_RESOURCE.res"

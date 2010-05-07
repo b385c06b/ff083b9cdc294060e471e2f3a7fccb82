@@ -34,9 +34,12 @@ public:
 	/************************************************************************/
 	/* This function is added by h5nc (h5nc@yahoo.com.cn)                   */
 	/************************************************************************/
-	hgeFont();
+	hgeFont(int size=256);
 	hgeFont(const char *filename, bool bMipmap=false);
 	~hgeFont();
+#ifdef WIN32
+	static bool CreateFontFileByInfo(int * charcode, int num, const char * fontfilename, HD3DFONT d3dfont);
+#endif
 
 	/************************************************************************/
 	/* This function is added by h5nc (h5nc@yahoo.com.cn)                   */
@@ -47,8 +50,8 @@ public:
 	/* This function is added by h5nc (h5nc@yahoo.com.cn)                   */
 	/************************************************************************/
 	void		RenderEx(float x, float y, int align, const char *string, float scale=1.0f, float properation=1.0f, float rotation=0, float tracking=0, float spacing=1.0f);
-	void		printf(float x, float y, int align, const char *format, ...);
-	void		printfb(float x, float y, float w, float h, int align, const char *format, ...);
+	void		printf(float x, float y, int align, const char *buffer);
+	void		printfb(float x, float y, float w, float h, int align, const char *buffer);
 
 	/************************************************************************/
 	/* This function is modified by h5nc (h5nc@yahoo.com.cn)                */
@@ -82,15 +85,16 @@ public:
 	/* These functions are added by h5nc (h5nc@yahoo.com.cn)                */
 	/************************************************************************/
 	// begin
-	void		ChangeSprite(BYTE chr, HTEXTURE tex, float tex_x, float tex_y, float tex_w, float tex_h, float pre_a=-1, float post_c=-1);
-	void		ChangeSprite(BYTE chr, hgeSprite * sprite, float pre_a=-1, float post_c=-1);
+	void		ChangeSprite(int chr, HTEXTURE tex, float tex_x, float tex_y, float tex_w, float tex_h, float pre_a=-1, float post_c=-1, int wCh=-1);
+	void		ChangeSprite(int chr, hgeSprite * sprite, float pre_a=-1, float post_c=-1);
 	// end
-	hgeSprite*	GetSprite(BYTE chr) const { return letters[chr]; }
-	float		GetPreWidth(BYTE chr) const { return pre[chr]; }
-	float		GetPostWidth(BYTE chr) const { return post[chr]; }
+	hgeSprite*	GetSprite(int chr) const { return letters[chr]; }
+	float		GetPreWidth(int chr) const { return pre[chr]; }
+	float		GetPostWidth(int chr) const { return post[chr]; }
 	float		GetHeight() const { return fHeight; }
 	float		GetStringWidth(const char *string, bool bMultiline=true) const;
-
+	int			ChangeWideChar(int wchr);
+private:
 	hgeFont(const hgeFont &fnt);
 	hgeFont&	operator= (const hgeFont &fnt);
 
@@ -98,35 +102,40 @@ public:
 	/************************************************************************/
 	/* These functions are added by h5nc (h5nc@yahoo.com.cn)                */
 	/************************************************************************/
-	void		_FontInit();
+	void		_FontInit(int size=256);
+	void		_FontFree();
+	void		_FontResize(int size=256);
 
 	static HGE	*hge;
 
-	static char	buffer[1024];
-
-	HTEXTURE	hTexture;
 public:
-	hgeSprite*	letters[256];
+	HTEXTURE *	hTexture;
+	int			texnum;
+	int			size;
+
+	hgeSprite**	letters;
 	/************************************************************************/
 	/* These members are added by h5nc (h5nc@yahoo.com.cn)                  */
 	/************************************************************************/
 	DWORD		col[4];
 private:
-	float		pre[256];
-	float		post[256];
+	float *		pre;
+	float *		post;
+	int	*		wCh;
+
 	float		fHeight;
 	float		fScale;
 	float		fProportion;
 	float		fRot;
 	float		fTracking;
 	float		fSpacing;
-
 	/************************************************************************/
 	/* This member is deleted by h5nc (h5nc@yahoo.com.cn)                   */
 	/************************************************************************/
 //	DWORD		dwCol;
 	float		fZ;
 	int			nBlend;
+	bool		bWide;
 };
 
 

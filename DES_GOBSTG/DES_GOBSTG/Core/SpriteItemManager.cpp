@@ -333,7 +333,7 @@ void SpriteItemManager::FontPrintf( hgeFont * font, float x, float y, int align,
 	{
 		return;
 	}
-	font->printf(x, y, align, "%s", str);
+	font->printf(x, y, align, str);
 }
 
 void SpriteItemManager::FontPrintfb( hgeFont * font, float x, float y, float w, float h, int align, const char * str)
@@ -342,7 +342,7 @@ void SpriteItemManager::FontPrintfb( hgeFont * font, float x, float y, float w, 
 	{
 		return;
 	}
-	font->printfb(x, y, w, h, align, "%s", str);
+	font->printfb(x, y, w, h, align, str);
 }
 
 void SpriteItemManager::EffectSystemRender( hgeEffectSystem * eff )

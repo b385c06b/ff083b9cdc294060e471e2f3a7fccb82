@@ -147,7 +147,7 @@ bool Chat::chat(BYTE ID, BYTE chatsprite, const char * _text)
 			}
 			text[i+line] = _text[i];
 		}
-		Fontsys::fontsys.SignUp(FONTSYS_CHATUSE, text, FrontDisplay::fdisp.info.smallfont);
+		Fontsys::fontsys.SignUp(FONTSYS_CHATUSE, text);
 		if(chatsprite & CHATSPRITE_LEFT)
 		{
 			col = 0xff6699ff;
@@ -193,7 +193,7 @@ bool Chat::chatOn(BYTE leftID, BYTE rightID, BYTE chatsprite)
 		pushtimer = 0xff;
 
 		strcpy(text, "");
-		Fontsys::fontsys.SignUp(FONTSYS_CHATUSE, text);
+		Fontsys::fontsys.SignUp(FONTSYS_CHATUSE, text, 1.25f);
 		
 		Bullet::IzeBuild(BULLETIZE_FAITH, Player::p.x, Player::p.y);
 
@@ -277,7 +277,7 @@ bool Chat::chatOff()
 	if(timer == 1)
 	{
 		strcpy(text, "");
-		Fontsys::fontsys.SignUp(FONTSYS_CHATUSE, text);
+		Fontsys::fontsys.SignUp(FONTSYS_CHATUSE, text, 1.25f);
 		SpriteItemManager::ptName(-1, leftname);
 		SpriteItemManager::ptName(-1, rightname);
 	}

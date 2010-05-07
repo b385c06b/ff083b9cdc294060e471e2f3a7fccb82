@@ -772,8 +772,7 @@ bool FrontDisplay::Init()
 		info.bossasciifont->ChangeSprite(i, asciismall.ascii[i-FDISP_ASCII_BEGIN]);
 	}
 
-	info.normalfont = hge->Font_Load(BResource::bres.resdata.widefontname, 20);
-	info.smallfont = hge->Font_Load(BResource::bres.resdata.widefontname, 16);
+	info.normalfont = hge->Font_Load(BResource::bres.resdata.widefontname, 16);
 
 	return true;
 }
@@ -833,11 +832,6 @@ void FrontDisplay::Release()
 	{
 		hge->Font_Free(info.normalfont);
 		info.normalfont = NULL;
-	}
-	if (info.smallfont)
-	{
-		hge->Font_Free(info.smallfont);
-		info.smallfont = NULL;
 	}
 	SpriteItemManager::FreeSprite(&info.cutin);
 	SpriteItemManager::FreeSprite(&info.namecard);

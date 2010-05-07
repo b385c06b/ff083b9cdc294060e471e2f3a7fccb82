@@ -84,6 +84,7 @@ struct resourceData
 	char packagefilename[PACKAGEMAX][M_PATHMAX];
 
 	//font
+	char fontfilename[M_STRMAX];
 	char widefontname[M_STRMAX];
 
 	//datafile

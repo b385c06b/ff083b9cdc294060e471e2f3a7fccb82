@@ -99,6 +99,8 @@ void InfoSelect::linkf(const char * linkcode, BYTE tail, float num)
 void InfoSelect::Clear()
 {
 	infoselect.clear();
+//	complete = false;
+	plus = true;
 	nPageNum = 0;
 }
 
@@ -179,7 +181,7 @@ void InfoSelect::valueSet(BYTE _ID, const char * _info, float _x, float _y, BYTE
 {
 	ID = _ID;
 	strcpy(info, _info);
-	Fontsys::fontsys.SignUp(ID, info);
+	Fontsys::fontsys.SignUp(ID, info, 1.25f);
 	x = _x;
 	y = _y;
 	coltype = _coltype;

@@ -786,6 +786,14 @@ void EditorUI::Update()
 		SetupEB(true);
 	}
 	hge->Input_GetMousePos(&mx, &my);
+
+	WINDOWPLACEMENT wndpl;
+	GetWindowPlacement(hge->System_GetState(HGE_HWND), &wndpl);
+	float windoww = wndpl.rcNormalPosition.right - wndpl.rcNormalPosition.left;
+	float windowh = wndpl.rcNormalPosition.bottom - wndpl.rcNormalPosition.top;
+	mx = mx * hge->System_GetState(HGE_SCREENWIDTH) / windoww;
+	my = my * hge->System_GetState(HGE_SCREENHEIGHT) / windowh;
+
 	wheel = 0;
 	clickdown = false;
 	clickup = false;
@@ -2128,13 +2136,16 @@ void EditorUI::Render()
 	{
 		if(eres.iteminfo[i].state)
 		{
-			eres.font->printfb(eres.iteminfo[i].x, eres.iteminfo[i].y, eres.iteminfo[i].w, eres.iteminfo[i].h, HGETEXT_MIDDLE | HGETEXT_CENTER, "%s", eres.iteminfo[i].info);
+			eres.font->printfb(eres.iteminfo[i].x, eres.iteminfo[i].y, eres.iteminfo[i].w, eres.iteminfo[i].h, HGETEXT_MIDDLE | HGETEXT_CENTER, eres.iteminfo[i].info);
 		}
 	}
 
 	if(eres.font)
 	{
-		eres.font->printf(M_ACTIVECLIENT_RIGHT, M_ACTIVECLIENT_BOTTOM - UIITEM_FONT, HGETEXT_RIGHT, "%f", hge->Timer_GetFPS(35));
-		eres.font->printf(M_ACTIVECLIENT_LEFT, M_ACTIVECLIENT_BOTTOM - UIITEM_FONT, HGETEXT_LEFT, "(%d, %d, %d) nLives=%d", (int)mx, (int)my, (int)zpos, nlives);
+		char buffer[M_STRMAX];
+		sprintf(buffer, "%f", hge->Timer_GetFPS(35));
+		eres.font->printf(M_ACTIVECLIENT_RIGHT, M_ACTIVECLIENT_BOTTOM - UIITEM_FONT, HGETEXT_RIGHT, buffer);
+		sprintf(buffer, "(%d, %d, %d) nLives=%d", (int)mx, (int)my, (int)zpos, nlives);
+		eres.font->printf(M_ACTIVECLIENT_LEFT, M_ACTIVECLIENT_BOTTOM - UIITEM_FONT, HGETEXT_LEFT, buffer);
 	}
 }

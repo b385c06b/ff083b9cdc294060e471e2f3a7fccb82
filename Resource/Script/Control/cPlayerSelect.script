@@ -114,6 +114,10 @@ ELSE
 {
 	SD [nowpt] D ptsecond
 }
+IF nowpt + 1 > $PlayerMax
+{
+	SD [nowpt] 0
+}
 SELSET nowisel nowpt true 0 0 0 0
 ISELSET nowisel nowpt true 9 ystart - 30 yplus D ptiselfirstID
 
