@@ -111,7 +111,7 @@ public:
 	static bool rpySetBias(replayFrame * _replayframe);
 	static float rpyGetReplayFPS(replayFrame _replayframe);
 	static bool packFile(const char * zipname, const char * filename);
-#ifdef WIN32
+#ifdef __WIN32
 	static bool packFolder(const char * zipname, const char * foldername, const char * filterstr, int * initcount = 0);
 	#ifdef __UNPACK
 	#define UNPACK_INIFILENAME	"Unpack.ini"

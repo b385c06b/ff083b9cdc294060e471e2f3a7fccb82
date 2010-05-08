@@ -37,7 +37,7 @@ public:
 	hgeFont(int size=256);
 	hgeFont(const char *filename, bool bMipmap=false);
 	~hgeFont();
-#ifdef WIN32
+#ifdef __WIN32
 	static bool CreateFontFileByInfo(int * charcode, int num, const char * fontfilename, HD3DFONT d3dfont);
 #endif
 
@@ -104,6 +104,7 @@ private:
 	/************************************************************************/
 	void		_FontInit(int size=256);
 	void		_FontFree();
+	void		_FontTexResize(int texnum=0);
 	void		_FontResize(int size=256);
 
 	static HGE	*hge;

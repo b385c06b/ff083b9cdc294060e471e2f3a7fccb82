@@ -10,6 +10,8 @@
 #ifndef HGE_H
 #define HGE_H
 
+#include "hge_defines.h"
+
 /************************************************************************/
 /* This header is added by h5nc (h5nc@yahoo.com.cn)                     */
 /************************************************************************/
@@ -24,21 +26,19 @@
 /************************************************************************/
 #define ZLIB_USEPSW
 
+#ifdef __WIN32
+
 #include <math.h>
 
 #include <windows.h>
-
-/************************************************************************/
-/* These lines is added by h5nc (h5nc@yahoo.com.cn)                     */
-/************************************************************************/
-// begin
 #define DIRECTINPUT_VERSION 0x0800
 
 #include <dinput.h>			//add by Thor/h5nc
 #include <d3d9.h>			//add by Thor/h5nc
 #include <d3dx9.h>			//add by Thor/h5nc
 #pragma comment(lib,"dinput8.lib")
-// end
+
+#endif
 
 #define HGE_VERSION 0x180
 
@@ -69,16 +69,26 @@
 ** Common data types
 */
 #ifndef DWORD
+#ifdef __WIN32
 typedef unsigned long       DWORD;
 typedef unsigned short      WORD;
 typedef unsigned char       BYTE;
+#else
+#define DWORD unsigned long
+#define WORD unsigned short
+#define BYTE unsigned char
+#endif
 #endif
 
 /************************************************************************/
 /* This define is added by h5nc (h5nc@yahoo.com.cn)                     */
 /************************************************************************/
 #ifndef QWORD
+#ifdef __WIN32
 typedef unsigned __int64	QWORD;
+#else
+#define QWORD (unsigned __int64)
+#endif
 #endif
 
 /*
@@ -116,11 +126,19 @@ typedef unsigned __int64	QWORD;
 ** HGE Handle types
 */
 //typedef DWORD HTEXTURE;
+#ifdef __WIN32
 typedef DWORD HTARGET;
 typedef DWORD HEFFECT;
 typedef DWORD HMUSIC;
 typedef DWORD HSTREAM;
 typedef DWORD HCHANNEL;
+#else
+#define HTARGET DWORD
+#define HEFFECT DWORD
+#define HMUSIC DWORD
+#define HSTREAM DWORD
+#define HCHANNEL DWORD
+#endif
 
 typedef struct tagHgeTextureInfo
 {
@@ -655,6 +673,7 @@ public:
 	virtual int			CALL	Math_atoi(const char * buffer) = 0;
 	virtual char*		CALL	Math_ftoa(float fval, char * buffer) = 0;
 	virtual float		CALL	Math_atof(const char * buffer) = 0;
+	virtual D3DMATRIX*	CALL	Math_MatrixMakeIdentity(D3DMATRIX * mat) = 0;
 
 	/************************************************************************/
 	/* This function is modified by h5nc (h5nc@yahoo.com.cn)                */
@@ -723,7 +742,8 @@ public:
 	/************************************************************************/
 	// begin
 	virtual float		CALL	Timer_GetWorstFPS(int mod) = 0;
-	inline	LONGLONG			Timer_GetCurrentSystemTime(){LARGE_INTEGER Counter; QueryPerformanceCounter(&Counter); return Counter.QuadPart;}
+	virtual	LONGLONG	CALL	Timer_GetCurrentSystemTime() = 0;
+	virtual LONGLONG	CALL	Timer_GetPerformanceFrequency() = 0;
 	//end
 
 	virtual HEFFECT		CALL	Effect_Load(const char *filename, DWORD size=0) = 0;

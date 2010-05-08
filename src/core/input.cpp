@@ -379,10 +379,10 @@ void HGE_Impl::_BuildEvent(int type, int key, int scan, int flags, int x, int y)
 	if(pt.x==-1) { eptr->event.x=Xpos;eptr->event.y=Ypos; }
 	else
 	{
-		WINDOWPLACEMENT wndpl;
-		GetWindowPlacement(hwnd, &wndpl);
-		float windoww = wndpl.rcNormalPosition.right - wndpl.rcNormalPosition.left;
-		float windowh = wndpl.rcNormalPosition.bottom - wndpl.rcNormalPosition.top;
+		RECT rect;
+		GetClientRect(hwnd, &rect);
+		float windoww = rect.right - rect.left;
+		float windowh = rect.bottom - rect.top;
 
 		if(pt.x<0) pt.x=0;
 		if(pt.y<0) pt.y=0;

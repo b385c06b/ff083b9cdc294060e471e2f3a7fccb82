@@ -134,6 +134,33 @@ void hgeFont::_FontFree()
 	size = 0;
 }
 
+void hgeFont::_FontTexResize(int _texnum/* =0 */)
+{
+	if (texnum)
+	{
+		for (int i=0; i<texnum; i++)
+		{
+			if (hTexture)
+			{
+				if (hTexture[i].tex)
+				{
+					hge->Texture_Free(hTexture[i]);
+				}
+			}
+		}
+	}
+	if (hTexture)
+	{
+		free(hTexture);
+		hTexture = NULL;
+	}
+	texnum = _texnum;
+	if (texnum > 0)
+	{
+		hTexture = (HTEXTURE *)malloc(sizeof(HTEXTURE) * texnum);
+	}
+}
+
 /************************************************************************/
 /* This function is added by h5nc (h5nc@yahoo.com.cn)                   */
 /************************************************************************/
@@ -206,29 +233,7 @@ void hgeFont::NewFont(const char *szFont, bool bMipmap/* =false */)
 			{
 				continue;
 			}
-			if (texnum)
-			{
-				for (int i=0; i<texnum; i++)
-				{
-					if (hTexture)
-					{
-						if (hTexture[i].tex)
-						{
-							hge->Texture_Free(hTexture[i]);
-						}
-					}
-				}
-			}
-			if (hTexture)
-			{
-				free(hTexture);
-				hTexture = NULL;
-			}
-			texnum = _texnum;
-			if (texnum > 0)
-			{
-				hTexture = (HTEXTURE *)malloc(sizeof(HTEXTURE) * texnum);
-			}
+			_FontTexResize(_texnum);
 		}
 		else if(command == _FNTCOMMAND_BITMAP)
 		{
@@ -238,6 +243,11 @@ void hgeFont::NewFont(const char *szFont, bool bMipmap/* =false */)
 			if(!pbuf) pbuf=buf;
 			else pbuf++;
 			if(!sscanf(linebuf, "Bitmap = %s", pbuf)) continue;
+
+			if (!texnum || !hTexture)
+			{
+				_FontTexResize(1);
+			}
 
 			if (nowtexnum < texnum && hTexture)
 			{
@@ -262,6 +272,10 @@ void hgeFont::NewFont(const char *szFont, bool bMipmap/* =false */)
 
 		else if(command == _FNTCOMMAND_CHAR || command == _FNTCOMMAND_WCHAR)
 		{
+			if (!size)
+			{
+				_FontResize();
+			}
 			pbuf=strchr(linebuf,'=');
 			if(!pbuf) continue;
 			pbuf++;
@@ -296,7 +310,7 @@ void hgeFont::NewFont(const char *szFont, bool bMipmap/* =false */)
 				sscanf(pbuf, " , %d , %d , %d , %d , %d , %d, %x, %d", &x, &y, &w, &h, &a, &c, &_wCh, &_nTex);
 			}
 
-			if (hTexture && _nTex < _texnum)
+			if (hTexture && _nTex < texnum)
 			{
 				ChangeSprite(i, hTexture[_nTex], (float)x, (float)y, (float)w, (float)h, (float)a, (float)c, _wCh);
 			}
@@ -760,7 +774,7 @@ char *hgeFont::_get_line(char *file, char *line)
 	else return 0;
 }
 
-#ifdef WIN32
+#ifdef __WIN32
 bool hgeFont::CreateFontFileByInfo( int * charcode, int num, const char * fontfilename, HD3DFONT d3dfont )
 {
 	if (num < 1 || !charcode || !fontfilename)

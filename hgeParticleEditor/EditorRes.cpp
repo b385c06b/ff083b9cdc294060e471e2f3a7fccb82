@@ -53,13 +53,18 @@ bool EditorRes::Load()
 
 	for(int i=0; i<TEXMAX; i++)
 	{
+		texinfo[i].tex = &((DWORD)tex[i].tex);
 		if(strlen(BResource::bres.texturedata[i].texfilename))
 		{
 			tex[i] = hge->Texture_Load(BResource::bres.texturedata[i].texfilename);
 			if(!tex[i].tex)
 				return false;
 		}
+		tex[i].texindex = i;
+		texinfo[i].texw = hge->Texture_GetWidth(tex[i]);
+		texinfo[i].texh = hge->Texture_GetHeight(tex[i]);
 	}
+	hge->Gfx_SetTextureInfo(TEXMAX, texinfo);
 
 	bg = new hgeSprite(tex[TEX_WHITE], 0, 0, 1, 1);
 	bg->SetColor(0x60ffffff);

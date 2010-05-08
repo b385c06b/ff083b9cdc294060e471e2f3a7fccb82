@@ -149,6 +149,14 @@ void Export::clientAdjustWindow()
 		int windowwidth = hge->Ini_GetInt(RESCONFIGS_CUSTOMWINDOW, RESCONFIGN_WINDOWWIDTH, RESCONFIGDEFAULT_WINDOWWIDTH);
 		int windowheight = hge->Ini_GetInt(RESCONFIGS_CUSTOMWINDOW, RESCONFIGN_WINDOWHEIGHT, RESCONFIGDEFAULT_WINDOWHEIGHT);
 		HWND windowtopmost = hge->Ini_GetInt(RESCONFIGS_CUSTOMWINDOW, RESCONFIGN_WINDOWTOPMOST, RESCONFIGDEFAULT_WINDOWTOPMOST) ? HWND_TOPMOST: HWND_NOTOPMOST;
+
+		WINDOWPLACEMENT wndpl;
+		GetWindowPlacement(hge->System_GetState(HGE_HWND), &wndpl);
+		RECT rect;
+		GetClientRect(hge->System_GetState(HGE_HWND), &rect);
+		windowwidth += (wndpl.rcNormalPosition.right - wndpl.rcNormalPosition.left) - (rect.right - rect.left);
+		windowheight += (wndpl.rcNormalPosition.bottom - wndpl.rcNormalPosition.top) - (rect.bottom - rect.top);
+
 		SetWindowPos(hge->System_GetState(HGE_HWND), windowtopmost, windowleft, windowtop, windowwidth, windowheight, SWP_FRAMECHANGED);
 	}
 }
@@ -255,7 +263,7 @@ bool Export::packFile(const char * zipname, const char * filename)
 	}
 	return ret;
 }
-#ifdef WIN32
+#ifdef __WIN32
 bool Export::packFolder(const char * zipname, const char * foldername, const char * filterstr, int * initcount)
 {
 	bool ret = true;

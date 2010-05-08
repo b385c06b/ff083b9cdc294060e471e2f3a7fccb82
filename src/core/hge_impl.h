@@ -12,8 +12,6 @@
 
 #include "..\..\include\hge.h"
 #include <stdio.h>
-#include <d3d9.h>
-#include <d3dx9.h>
 
 #define D3DFVF_HGEVERTEX (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 #define VERTEX_BUFFER_SIZE 4000
@@ -113,6 +111,7 @@ public:
 	virtual int			CALL	Math_atoi(const char * buffer);
 	virtual char*		CALL	Math_ftoa(float fval, char * buffer);
 	virtual float		CALL	Math_atof(const char * buffer);
+	virtual D3DMATRIX*	CALL	Math_MatrixMakeIdentity(D3DMATRIX * mat);
 
 	virtual void		CALL	Resource_DeleteFile(const char *filename);
 	virtual void		CALL	Resource_SetCurrentDirectory(const char *filename);
@@ -154,6 +153,8 @@ public:
 	virtual float		CALL	Timer_GetDelta();
 	virtual float		CALL	Timer_GetFPS(int mod = 0);
 	virtual float		CALL	Timer_GetWorstFPS(int mod);
+	virtual	LONGLONG	CALL	Timer_GetCurrentSystemTime();
+	virtual LONGLONG	CALL	Timer_GetPerformanceFrequency();
 
 	virtual HEFFECT		CALL	Effect_Load(const char *filename, DWORD size=0);
 	virtual void		CALL	Effect_Free(HEFFECT eff);
@@ -315,6 +316,7 @@ public:
 	// end
 	HWND				hwndParent;
 
+#ifdef __WIN32
 	// Graphics
 	D3DPRESENT_PARAMETERS*  d3dpp;
 	IDirect3D9*				pD3D;
@@ -333,6 +335,8 @@ public:
 
 	IDirect3DSurface9*	pScreenSurf;
 	IDirect3DSurface9*	pScreenDepth;
+#endif
+
 	CRenderTargetList*	pTargets;
 	CRenderTargetList*	pCurTarget;
 
@@ -397,6 +401,7 @@ public:
 
 	BYTE				keyState[256];
 	BYTE				lastKeyState[256];
+#ifdef __WIN32
 	LPDIRECTINPUT8		lpDInput;
 	LPDIRECTINPUTDEVICE8 lpDIKDevice;
 	LPDIRECTINPUTDEVICE8 lpDIJDevice[DIJOY_MAXDEVICE];
@@ -404,11 +409,14 @@ public:
 	DIJOYSTATE          lastJoyState[DIJOY_MAXDEVICE];
 	bool				haveJoy[DIJOY_MAXDEVICE];
 	static GUID			joyGuid[DIJOY_MAXDEVICE];
+#endif
 
 	int					_DIInit();
 	void				_DIRelease();
 	int					_DIUpdate();
+#ifdef __WIN32
 	static BOOL CALLBACK _EnumJoysticksCallback (const DIDEVICEINSTANCE * pdidInstance, VOID* pContext);
+#endif
 	// end
 
 
@@ -419,8 +427,10 @@ public:
 	/************************************************************************/
 	char				szPackFirstFilename[_MAX_PATH];
 	CResourceList*		res;
+#ifdef __WIN32
 	HANDLE				hSearch;
 	WIN32_FIND_DATA		SearchData;
+#endif
 
 
 	// Timer

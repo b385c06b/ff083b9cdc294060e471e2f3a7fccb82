@@ -1,5 +1,15 @@
 #include "hge_impl.h"
 
+D3DMATRIX * CALL HGE_Impl::Math_MatrixMakeIdentity(D3DMATRIX * mat)
+{
+	if (!mat)
+	{
+		return NULL;
+	}
+	Math_MatrixMakeIdentity(mat);
+	return mat;
+}
+
 char * CALL HGE_Impl::Math_itoa(int ival, char * buffer)
 {
 	if (!buffer)

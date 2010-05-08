@@ -12,8 +12,10 @@
 /************************************************************************/
 
 #include "hge_impl.h"
+#ifdef __WIN32
 #include <d3d9.h>
 #include <d3dx9.h>
+#endif
 
 
 void CALL HGE_Impl::Gfx_Clear(DWORD color)
@@ -90,7 +92,7 @@ void CALL HGE_Impl::Gfx_SetTransform(float x, float y, float dx, float dy, float
 {
 	D3DXMATRIX tmp;
 
-	if(vscale==0.0f) D3DXMatrixIdentity(&matView);
+	if(vscale==0.0f) Math_MatrixMakeIdentity(&matView);
 	else
 	{
 		D3DXMatrixTranslation(&matView, -x, -y, 0.0f);
@@ -733,6 +735,7 @@ void HGE_Impl::_SetProjectionMatrix(int width, int height)
 
 bool HGE_Impl::_GfxInit()
 {
+#ifdef __WIN32
 	static const char *szFormats[]={"UNKNOWN", "R5G6B5", "X1R5G5B5", "A1R5G5B5", "X8R8G8B8", "A8R8G8B8"};
 	D3DADAPTER_IDENTIFIER9 AdID;
 	D3DDISPLAYMODE Mode;
@@ -889,11 +892,11 @@ bool HGE_Impl::_GfxInit()
 	}
 
 	Gfx_SetTextureInfo(0);
-
+#endif
 	_AdjustWindow();
-
+#ifdef __WIN32
 	System_Log("Mode: %d x %d x %s\n",nScreenWidth,nScreenHeight,szFormats[_format_id(Format)]);
-
+#endif
 // Create vertex batch buffer
 
 	VertArray=0;
@@ -902,7 +905,7 @@ bool HGE_Impl::_GfxInit()
 // Init all stuff that can be lost
 
 	_SetProjectionMatrix(nScreenWidth, nScreenHeight);
-	D3DXMatrixIdentity(&matView);
+	Math_MatrixMakeIdentity(&matView);
 	
 	if(!_init_lost()) return false;
 

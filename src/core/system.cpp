@@ -346,10 +346,8 @@ bool CALL HGE_Impl::System_Start()
 			int bPriorityRaised = 0;
 		    LONGLONG TimeInterval, TimePrecision, NowTime;
 			static LONGLONG lastTime = Timer_GetCurrentSystemTime();
+			TimePrecision = Timer_GetPerformanceFrequency();
 
-			LARGE_INTEGER Frequency;
-		    QueryPerformanceFrequency(&Frequency);
-			TimePrecision =  Frequency.QuadPart;
 			if (nHGEFPS > 0)
 			{
 				TimeInterval = TimePrecision / nHGEFPS;

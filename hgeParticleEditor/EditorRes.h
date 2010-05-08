@@ -156,6 +156,7 @@ public:
 	hgeSprite * panel;
 	hgeSprite * button;
 
+	hgeTextureInfo texinfo[TEXMAX];
 	HTEXTURE tex[TEXMAX];
 	hgeFont * font;
 

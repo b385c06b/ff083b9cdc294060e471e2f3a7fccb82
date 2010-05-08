@@ -787,10 +787,10 @@ void EditorUI::Update()
 	}
 	hge->Input_GetMousePos(&mx, &my);
 
-	WINDOWPLACEMENT wndpl;
-	GetWindowPlacement(hge->System_GetState(HGE_HWND), &wndpl);
-	float windoww = wndpl.rcNormalPosition.right - wndpl.rcNormalPosition.left;
-	float windowh = wndpl.rcNormalPosition.bottom - wndpl.rcNormalPosition.top;
+	RECT rect;
+	GetClientRect(hge->System_GetState(HGE_HWND), &rect);
+	float windoww = rect.right - rect.left;
+	float windowh = rect.bottom - rect.top;
 	mx = mx * hge->System_GetState(HGE_SCREENWIDTH) / windoww;
 	my = my * hge->System_GetState(HGE_SCREENHEIGHT) / windowh;
 

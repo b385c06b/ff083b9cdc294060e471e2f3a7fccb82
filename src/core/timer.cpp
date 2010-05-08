@@ -9,6 +9,20 @@
 
 #include "hge_impl.h"
 
+LONGLONG CALL HGE_Impl::Timer_GetCurrentSystemTime()
+{
+	LARGE_INTEGER Counter;
+	QueryPerformanceCounter(&Counter);
+	return Counter.QuadPart;
+}
+
+LONGLONG CALL HGE_Impl::Timer_GetPerformanceFrequency()
+{
+	LARGE_INTEGER Frequency;
+	QueryPerformanceFrequency(&Frequency);
+	return Frequency.QuadPart;
+}
+
 void CALL HGE_Impl::Timer_GetSystemTime(WORD *wYear, WORD *wMonth, WORD *wDayOfWeek, WORD *wDay, WORD *wHour, WORD *wMinute, WORD *wSecond, WORD *wMilliseconds)
 {
 	SYSTEMTIME systime;

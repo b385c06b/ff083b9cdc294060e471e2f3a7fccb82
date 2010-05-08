@@ -509,6 +509,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\hge_defines.h"
+				>
+			</File>
+			<File
 				RelativePath="hge_impl.h"
 				>
 			</File>
