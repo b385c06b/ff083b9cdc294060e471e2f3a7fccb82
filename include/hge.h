@@ -26,9 +26,12 @@
 /************************************************************************/
 #define ZLIB_USEPSW
 
-#ifdef __WIN32
-
 #include <math.h>
+#include <stdarg.h>
+#include <stdlib.h>
+#include <string.h>
+
+#ifdef __WIN32
 
 #include <windows.h>
 #define DIRECTINPUT_VERSION 0x0800
@@ -64,31 +67,40 @@
  #define max(x,y) ((x) > (y)) ? (x) : (y)
 #endif
 
+#ifndef ZeroMemory
+#define ZeroMemory(Destination,Length) memset((Destination),0,(Length))
+#endif
+
+#ifndef __WIN32
+typedef void *	LPDIRECTINPUT8;
+#endif
+
+#ifndef _MAX_PATH
+#define _MAX_PATH   260
+#endif
 
 /*
 ** Common data types
 */
 #ifndef DWORD
-#ifdef __WIN32
 typedef unsigned long       DWORD;
 typedef unsigned short      WORD;
 typedef unsigned char       BYTE;
-#else
-#define DWORD unsigned long
-#define WORD unsigned short
-#define BYTE unsigned char
-#endif
 #endif
 
 /************************************************************************/
 /* This define is added by h5nc (h5nc@yahoo.com.cn)                     */
 /************************************************************************/
 #ifndef QWORD
-#ifdef __WIN32
 typedef unsigned __int64	QWORD;
-#else
-#define QWORD (unsigned __int64)
 #endif
+
+#ifndef LONGLONG
+typedef __int64			LONGLONG;
+#endif
+
+#ifndef NULL
+#define NULL	(0)
 #endif
 
 /*
@@ -126,19 +138,11 @@ typedef unsigned __int64	QWORD;
 ** HGE Handle types
 */
 //typedef DWORD HTEXTURE;
-#ifdef __WIN32
 typedef DWORD HTARGET;
 typedef DWORD HEFFECT;
 typedef DWORD HMUSIC;
 typedef DWORD HSTREAM;
 typedef DWORD HCHANNEL;
-#else
-#define HTARGET DWORD
-#define HEFFECT DWORD
-#define HMUSIC DWORD
-#define HSTREAM DWORD
-#define HCHANNEL DWORD
-#endif
 
 typedef struct tagHgeTextureInfo
 {
@@ -673,12 +677,20 @@ public:
 	virtual int			CALL	Math_atoi(const char * buffer) = 0;
 	virtual char*		CALL	Math_ftoa(float fval, char * buffer) = 0;
 	virtual float		CALL	Math_atof(const char * buffer) = 0;
-	virtual D3DMATRIX*	CALL	Math_MatrixMakeIdentity(D3DMATRIX * mat) = 0;
+	virtual D3DXMATRIX*	CALL	Math_MatrixIdentity( D3DXMATRIX * pOut ) = 0;
+	virtual D3DXMATRIX*	CALL	Math_MatrixTranslation( D3DXMATRIX *pOut, float x, float y, float z ) = 0;
+	virtual D3DXMATRIX*	CALL	Math_MatrixRotationX( D3DXMATRIX *pOut, float angle ) = 0;
+	virtual D3DXMATRIX*	CALL	Math_MatrixRotationY( D3DXMATRIX *pOut, float angle ) = 0;
+	virtual D3DXMATRIX*	CALL	Math_MatrixRotationZ( D3DXMATRIX *pOut, float angle ) = 0;
+	virtual D3DXMATRIX*	CALL	Math_MatrixScaling( D3DXMATRIX *pOut, float sx, float sy, float sz ) = 0;
+	virtual D3DXMATRIX*	CALL	Math_MatrixMultiply( D3DXMATRIX *pOut, const D3DXMATRIX *pM1, const D3DXMATRIX *pM2 ) = 0;
+	virtual D3DXMATRIX*	CALL	Math_MatrixOrthoOffCenterLH(D3DXMATRIX *pOut, float l, float r, float b, float t, float zn, float zf) = 0;
 
 	/************************************************************************/
 	/* This function is modified by h5nc (h5nc@yahoo.com.cn)                */
 	/************************************************************************/
 	virtual void		CALL	Resource_DeleteFile(const char *filename) = 0;
+	virtual DWORD		CALL	Resource_FileSize(const char *filename) = 0;
 	virtual void		CALL	Resource_SetCurrentDirectory(const char *filename) = 0;
 	virtual BYTE*		CALL	Resource_Load(const char *filename, DWORD *size=0) = 0;
 	virtual void		CALL	Resource_Free(void *res) = 0;
@@ -836,8 +848,8 @@ public:
 	/************************************************************************/
 	/* These functions are added by h5nc (h5nc@yahoo.com.cn)                */
 	/************************************************************************/
-	virtual void		CALL	Gfx_SetTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX * pMatrix) = 0;
-	virtual D3DMATRIX	CALL	Gfx_GetTransform(D3DTRANSFORMSTATETYPE State) = 0;
+	virtual void		CALL	Gfx_SetTransform(D3DTRANSFORMSTATETYPE State, const D3DXMATRIX * pMatrix) = 0;
+	virtual D3DXMATRIX	CALL	Gfx_GetTransform(D3DTRANSFORMSTATETYPE State) = 0;
 
 	virtual void	CALL	Gfx_SetTextureInfo(int nTexInfo, hgeTextureInfo * texInfo=NULL) = 0;
 

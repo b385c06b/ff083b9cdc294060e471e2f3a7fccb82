@@ -21,8 +21,10 @@ struct CRenderTargetList
 {
 	int					width;
 	int					height;
+#ifdef __WIN32
 	IDirect3DTexture9*	pTex;
 	IDirect3DSurface9*	pDepth;
+#endif
 	CRenderTargetList*	next;
 };
 
@@ -111,9 +113,17 @@ public:
 	virtual int			CALL	Math_atoi(const char * buffer);
 	virtual char*		CALL	Math_ftoa(float fval, char * buffer);
 	virtual float		CALL	Math_atof(const char * buffer);
-	virtual D3DMATRIX*	CALL	Math_MatrixMakeIdentity(D3DMATRIX * mat);
+	virtual D3DXMATRIX*	CALL	Math_MatrixIdentity(D3DXMATRIX * pOut);
+	virtual D3DXMATRIX*	CALL	Math_MatrixTranslation( D3DXMATRIX *pOut, float x, float y, float z );
+	virtual D3DXMATRIX*	CALL	Math_MatrixRotationX( D3DXMATRIX *pOut, float angle );
+	virtual D3DXMATRIX*	CALL	Math_MatrixRotationY( D3DXMATRIX *pOut, float angle );
+	virtual D3DXMATRIX*	CALL	Math_MatrixRotationZ( D3DXMATRIX *pOut, float angle );
+	virtual D3DXMATRIX*	CALL	Math_MatrixScaling( D3DXMATRIX *pOut, float sx, float sy, float sz );
+	virtual D3DXMATRIX*	CALL	Math_MatrixMultiply( D3DXMATRIX *pOut, const D3DXMATRIX *pM1, const D3DXMATRIX *pM2 );
+	virtual D3DXMATRIX*	CALL	Math_MatrixOrthoOffCenterLH(D3DXMATRIX *pOut, float l, float r, float b, float t, float zn, float zf);
 
 	virtual void		CALL	Resource_DeleteFile(const char *filename);
+	virtual DWORD		CALL	Resource_FileSize(const char *filename);
 	virtual void		CALL	Resource_SetCurrentDirectory(const char *filename);
 	virtual BYTE*		CALL	Resource_Load(const char *filename, DWORD *size=0);
 	virtual void		CALL	Resource_Free(void *res);
@@ -227,8 +237,8 @@ public:
 	virtual void		CALL	Gfx_FinishBatch(int nprim);
 	virtual void		CALL	Gfx_SetClipping(int x=0, int y=0, int w=0, int h=0);
 	virtual void		CALL	Gfx_SetTransform(float x=0, float y=0, float dx=0, float dy=0, float rot=0, float hscale=0, float vscale=0); 
-	virtual void		CALL	Gfx_SetTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX * pMatrix);
-	virtual D3DMATRIX	CALL	Gfx_GetTransform(D3DTRANSFORMSTATETYPE State);
+	virtual void		CALL	Gfx_SetTransform(D3DTRANSFORMSTATETYPE State, const D3DXMATRIX * pMatrix);
+	virtual D3DXMATRIX	CALL	Gfx_GetTransform(D3DTRANSFORMSTATETYPE State);
 	virtual void		CALL	Gfx_SetTextureInfo(int nTexInfo, hgeTextureInfo * texinfo=NULL);
 
 	virtual HTARGET		CALL	Target_Create(int width, int height, bool zbuffer);
@@ -361,7 +371,9 @@ public:
 	void				_Resize(int width, int height);
 	bool				_init_lost();
 	void				_render_batch(bool bEndScene=false);
+#ifdef __WIN32
 	int					_format_id(D3DFORMAT fmt);
+#endif
 	void				_SetBlendMode(int blend);
 	void				_SetProjectionMatrix(int width, int height);
 	

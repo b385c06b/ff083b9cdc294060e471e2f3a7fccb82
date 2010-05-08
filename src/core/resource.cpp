@@ -237,6 +237,21 @@ void CALL HGE_Impl::Resource_DeleteFile(const char *filename)
 	DeleteFile(Resource_MakePath(filename));
 }
 
+DWORD CALL HGE_Impl::Resource_FileSize(const char *filename)
+{
+	if (!filename)
+	{
+		return 0;
+	}
+	FILE * file = fopen(Resource_MakePath(filename), "rb");
+	if (!file)
+	{
+		return 0;
+	}
+	fseek(file, 0, SEEK_END);
+	return ftell(file);
+}
+
 void CALL HGE_Impl::Resource_SetCurrentDirectory(const char *filename)
 {
 	SetCurrentDirectory(Resource_MakePath(filename));
@@ -256,7 +271,11 @@ BYTE * CALL HGE_Impl::Resource_Load(const char *filename, DWORD *size)
 	unz_file_info file_info;
 	int done, i;
 	BYTE * ptr;
+#ifdef __WIN32
 	HANDLE hF;
+#else
+	FILE * hF;
+#endif
 
 	if(size)
 		*size = 0;
@@ -322,33 +341,57 @@ BYTE * CALL HGE_Impl::Resource_Load(const char *filename, DWORD *size)
 
 	// Load from file
 _fromfile:
-
+#ifdef __WIN32
 	hF = CreateFile(Resource_MakePath(filename), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS, NULL);
-	if(hF == INVALID_HANDLE_VALUE)
+	if (hF == INVALID_HANDLE_VALUE)
+#else
+	hF = fopen(Resource_MakePath(filename), "rb");
+	if (!hF)
+#endif
 	{
 		sprintf(szName, res_err, filename);
 		_PostError(szName);
 		return 0;
 	}
+#ifdef __WIN32
 	file_info.uncompressed_size = GetFileSize(hF, NULL);
+#else
+	file_info.uncompressed_size = Resource_FileSize(filename);
+#endif
 	ptr = (BYTE *)malloc(file_info.uncompressed_size);
 	if(!ptr)
 	{
+#ifdef __WIN32
 		CloseHandle(hF);
+#else
+		fclose(hF);
+#endif
 		sprintf(szName, res_err, filename);
 		_PostError(szName);
 		return 0;
 	}
-	if(ReadFile(hF, ptr, file_info.uncompressed_size, &file_info.uncompressed_size, NULL ) == 0)
+#ifdef __WIN32
+	if (ReadFile(hF, ptr, file_info.uncompressed_size, &file_info.uncompressed_size, NULL ) == 0)
+#else
+	if (fread(ptr, file_info.uncompressed_size, 1, hF) == 0)
+#endif
 	{
+#ifdef __WIN32
 		CloseHandle(hF);
+#else
+		fclose(hF);
+#endif
 		free(ptr);
 		sprintf(szName, res_err, filename);
 		_PostError(szName);
 		return 0;
 	}
-	
+
+#ifdef __WIN32
 	CloseHandle(hF);
+#else
+	fclose(hF);
+#endif
 	if(size) *size=file_info.uncompressed_size;
 	return ptr;
 }
@@ -448,6 +491,7 @@ char* CALL HGE_Impl::Resource_MakePath(const char *filename)
 
 char* CALL HGE_Impl::Resource_EnumFiles(const char *wildcard)
 {
+#ifdef __WIN32
 	if(wildcard)
 	{
 		if(hSearch) { FindClose(hSearch); hSearch=0; }
@@ -466,10 +510,13 @@ char* CALL HGE_Impl::Resource_EnumFiles(const char *wildcard)
 			if(!(SearchData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) return SearchData.cFileName;
 		}
 	}
+#endif
+	return NULL;
 }
 
 char* CALL HGE_Impl::Resource_EnumFolders(const char *wildcard)
 {
+#ifdef __WIN32
 	if(wildcard)
 	{
 		if(hSearch) { FindClose(hSearch); hSearch=0; }
@@ -492,6 +539,8 @@ char* CALL HGE_Impl::Resource_EnumFolders(const char *wildcard)
 					return SearchData.cFileName;
 		}
 	}
+#endif
+	return NULL;
 }
 
 bool CALL HGE_Impl::Resource_AccessFile(const char *filename)

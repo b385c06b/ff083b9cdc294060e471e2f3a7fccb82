@@ -67,7 +67,7 @@ bool Export::clientInitial(bool usesound /* = false */, bool extuse /* = false *
 void Export::clientSetMatrix(float _worldx, float _worldy, float _worldz)
 {
 	D3DXMATRIXA16 matWorld;
-	D3DXMatrixTranslation(&matWorld, _worldx, _worldy, _worldz);	
+	hge->Math_MatrixTranslation(&matWorld, _worldx, _worldy, _worldz);	
 	hge->Gfx_SetTransform( D3DTS_WORLD, &matWorld );
 
 //	if (hge->System_Is2DMode())

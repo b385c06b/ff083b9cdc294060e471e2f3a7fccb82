@@ -12,21 +12,23 @@
 #define LOWORDINT(n) ((int)((signed short)(LOWORD(n))))
 #define HIWORDINT(n) ((int)((signed short)(HIWORD(n))))
 
-
+#ifdef __WIN32
 const char *WINDOW_CLASS_NAME = "HGE__WNDCLASS";
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+#endif
 
 
 int			nRef=0;
 HGE_Impl*	pHGE=0;
 
 
-
+#ifdef __WIN32
 BOOL APIENTRY DllMain(HANDLE, DWORD, LPVOID)
 {
-    return TRUE;
+	return TRUE;
 }
+#endif
 
 
 HGE* CALL hgeCreate(int ver)
@@ -64,6 +66,7 @@ void CALL HGE_Impl::Release()
 
 bool CALL HGE_Impl::System_Initiate()
 {
+#ifdef __WIN32
 	OSVERSIONINFO	os_ver;
 	SYSTEMTIME		tm;
 	MEMORYSTATUS	mem_st;
@@ -157,6 +160,9 @@ bool CALL HGE_Impl::System_Initiate()
 	// Init subsystems
 
 	timeBeginPeriod(1);
+#else
+	hwnd = 1;
+#endif
 	Random_Seed();
 	_InputInit();
 
@@ -164,6 +170,7 @@ bool CALL HGE_Impl::System_Initiate()
 	/* These lines are added by h5nc (h5nc@yahoo.com.cn)                    */
 	/************************************************************************/
 	// begin
+#ifdef __WIN32
 	for (int i=0; i<DIJOY_MAXDEVICE; i++)
 	{
 		haveJoy[i] = true;
@@ -171,7 +178,7 @@ bool CALL HGE_Impl::System_Initiate()
 	
 	ZeroMemory(joyState, sizeof(DIJOYSTATE)*DIJOY_MAXDEVICE);
 	ZeroMemory(lastJoyState, sizeof(DIJOYSTATE)*DIJOY_MAXDEVICE);
-
+#endif
 	int diinitret = _DIInit();
 	switch(diinitret)
 	{
@@ -202,9 +209,10 @@ bool CALL HGE_Impl::System_Initiate()
 void CALL HGE_Impl::System_Shutdown()
 {
 	System_Log("\nFinishing..");
-
+#ifdef __WIN32
 	timeEndPeriod(1);
 	if(hSearch) { FindClose(hSearch); hSearch=0; }
+#endif
 	_ClearQueue();
 	_SoundDone();
 
@@ -229,16 +237,21 @@ void CALL HGE_Impl::System_Shutdown()
 		//ShowWindow(hwnd, SW_HIDE);
 		//SetWindowLong(hwnd, GWL_EXSTYLE, GetWindowLong(hwnd, GWL_EXSTYLE) | WS_EX_TOOLWINDOW);
 		//ShowWindow(hwnd, SW_SHOW);
+#ifdef __WIN32
 		DestroyWindow(hwnd);
+#endif
 		hwnd=0;
 	}
+#ifdef __WIN32
 	if(hInstance) UnregisterClass(WINDOW_CLASS_NAME, hInstance);
+#endif
 
 	System_Log("The End.");
 }
 
 bool CALL HGE_Impl::System_Start()
 {
+#ifdef __WIN32
 	MSG		msg;
 
 	/************************************************************************/
@@ -246,6 +259,7 @@ bool CALL HGE_Impl::System_Start()
 	/************************************************************************/
 	POINT	pt;
 	RECT	rc;
+#endif
 
 	if(!hwnd)
 	{
@@ -268,6 +282,7 @@ bool CALL HGE_Impl::System_Start()
 		// Process window messages if not in "child mode"
 		// (if in "child mode" the parent application will do this for us)
 
+#ifdef __WIN32
 		if(!hwndParent)
 		{
 			if (PeekMessage(&msg,NULL,0,0,PM_REMOVE))
@@ -281,6 +296,7 @@ bool CALL HGE_Impl::System_Start()
 
 		if(IsIconic(hwnd))
 			continue;
+#endif
 
 		// Check if mouse is over HGE window for Input_IsMouseOver
 
@@ -295,11 +311,15 @@ bool CALL HGE_Impl::System_Start()
 		/* h5nc copied his codes with his permission                            */
 		/************************************************************************/
 		// begin
+#ifdef __WIN32
 		GetCursorPos(&pt);
 		GetClientRect(hwnd, &rc);
 		MapWindowPoints(hwnd, NULL, (LPPOINT)&rc, 2);
 		if(bCaptured || (PtInRect(&rc, pt) && WindowFromPoint(pt)==hwnd)) bMouseOver=true;
 		else bMouseOver=false;
+#else
+		bMouseOver = true;
+#endif
 
 		if(bActive || bDontSuspend) {
 			int DI_retv = 0;
@@ -368,8 +388,10 @@ bool CALL HGE_Impl::System_Start()
 		        {
 		            if (Timer_GetCurrentSystemTime() - lastTime >= (TimeInterval - (TimePrecision / (1000 * 2))))
 		            {
-		                if (!bPriorityRaised && GetThreadPriority(GetCurrentThread()) > THREAD_PRIORITY_NORMAL)
-		                    SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
+#ifdef __WIN32
+						if (!bPriorityRaised && GetThreadPriority(GetCurrentThread()) > THREAD_PRIORITY_NORMAL)
+							SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
+#endif
 						for (;;)
 						{
 						    if (Timer_GetCurrentSystemTime() - lastTime >= TimeInterval)
@@ -379,13 +401,15 @@ bool CALL HGE_Impl::System_Start()
 					}
 		            else
 		            {
-		                if (!bPriorityRaised)
-		                {
-		                    if (GetThreadPriority(GetCurrentThread()) < THREAD_PRIORITY_HIGHEST)
+#ifdef __WIN32
+						if (!bPriorityRaised)
+						{
+							if (GetThreadPriority(GetCurrentThread()) < THREAD_PRIORITY_HIGHEST)
 								SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
-		                    bPriorityRaised = 1;
-		                }
-		                Sleep(1);
+							bPriorityRaised = 1;
+						}
+						Sleep(1);
+#endif
 		            }
 		        }
 		    }
@@ -413,7 +437,12 @@ bool CALL HGE_Impl::System_Start()
 		// (though not too much to allow instant window
 		// redraw if requested by OS)
 
-		else Sleep(1);
+		else
+		{
+#ifdef __WIN32
+			Sleep(1);
+#endif
+		}
 	}
 
 	_ClearQueue();
@@ -444,7 +473,9 @@ void CALL HGE_Impl::System_SetStateBool(hgeBoolState state, bool value)
 {
 	switch(state)
 	{
-		case HGE_WINDOWED:		if(VertArray || hwndParent) break;
+		case HGE_WINDOWED:
+#ifdef __WIN32
+								if(VertArray || hwndParent) break;
 								if(pD3DDevice && bWindowed != value)
 								{
 									if(d3dppW.BackBufferFormat==D3DFMT_UNKNOWN || d3dppFS.BackBufferFormat==D3DFMT_UNKNOWN) break;
@@ -464,13 +495,23 @@ void CALL HGE_Impl::System_SetStateBool(hgeBoolState state, bool value)
 
 //									if(procFocusGainFunc) procFocusGainFunc();
 								}
-								else bWindowed=value;
+								else
+								{
+									bWindowed=value;
+								}
+#else
+								bWindowed = value;
+#endif
 								break;
-
-		case HGE_ZBUFFER:		if(!pD3DDevice)	bZBuffer=value;
+		case HGE_ZBUFFER:	
+#ifdef __WIN32
+								if(!pD3DDevice)	
+#endif
+									bZBuffer=value;
 								break;
 
 		case HGE_TEXTUREFILTER: bTextureFilter=value;
+#ifdef __WIN32
 								if(pD3DDevice)
 								{
 									_render_batch();
@@ -489,6 +530,7 @@ void CALL HGE_Impl::System_SetStateBool(hgeBoolState state, bool value)
 										pD3DDevice->SetSamplerState(0,D3DSAMP_MINFILTER,D3DTEXF_POINT);
 									}
 								}
+#endif
 								break;
 
 		case HGE_USESOUND:		if(bUseSound!=value)
@@ -536,11 +578,23 @@ void CALL HGE_Impl::System_SetStateInt(hgeIntState state, int value)
 {
 	switch(state)
 	{
-		case HGE_SCREENWIDTH:	if(!pD3DDevice) nScreenWidth=value; break;
+		case HGE_SCREENWIDTH:	
+#ifdef __WIN32
+								if(!pD3DDevice) 
+#endif
+									nScreenWidth=value; break;
 
-		case HGE_SCREENHEIGHT:	if(!pD3DDevice) nScreenHeight=value; break;
+		case HGE_SCREENHEIGHT:	
+#ifdef __WIN32
+								if(!pD3DDevice) 
+#endif
+									nScreenHeight=value; break;
 
-		case HGE_SCREENBPP:		if(!pD3DDevice) nScreenBPP=value; break;
+		case HGE_SCREENBPP:		
+#ifdef __WIN32
+								if(!pD3DDevice) 
+#endif
+									nScreenBPP=value; break;
 
 		case HGE_SAMPLERATE:	if(!hBass) nSampleRate=value;
 								break;
@@ -559,6 +613,7 @@ void CALL HGE_Impl::System_SetStateInt(hgeIntState state, int value)
 
 		case HGE_FPS:			if(VertArray) break;
 
+#ifdef __WIN32
 								if(pD3DDevice)
 								{
 									if((nHGEFPS>=0 && value <0) || (nHGEFPS<0 && value>=0))
@@ -587,6 +642,7 @@ void CALL HGE_Impl::System_SetStateInt(hgeIntState state, int value)
 										_DIInit();
 									}
 								}
+#endif
 								nHGEFPS=value;
 								break;
 
@@ -607,10 +663,14 @@ void CALL HGE_Impl::System_SetStateString(hgeStringState state, const char *valu
 	switch(state)
 	{
 		case HGE_ICON:			szIcon=value;
+#ifdef __WIN32
 								if(pHGE->hwnd) SetClassLong(pHGE->hwnd, GCL_HICON, (LONG)LoadIcon(pHGE->hInstance, szIcon));
+#endif
 								break;
 		case HGE_TITLE:			strcpy(szWinTitle,value);
+#ifdef __WIN32
 								if(pHGE->hwnd) SetWindowText(pHGE->hwnd, szWinTitle);
+#endif
 								break;
 		case HGE_INIFILE:		if(value) strcpy(szIniFile,Resource_MakePath(value));
 								else szIniFile[0]=0;
@@ -743,12 +803,17 @@ void CALL HGE_Impl::System_Log(const char *szFormat, ...)
 
 bool CALL HGE_Impl::System_Launch(const char *url)
 {
+#ifdef __WIN32
 	if((DWORD)ShellExecute(pHGE->hwnd, NULL, url, NULL, NULL, SW_SHOWMAXIMIZED)>32) return true;
 	else return false;
+#else
+	return true;
+#endif
 }
 
 void CALL HGE_Impl::System_Snapshot(const char *filename)
 {
+#ifdef __WIN32
 	LPDIRECT3DSURFACE9 pSurf;
 	char *shotname, tempname[_MAX_PATH];
 	int i;
@@ -773,6 +838,7 @@ void CALL HGE_Impl::System_Snapshot(const char *filename)
 		D3DXSaveSurfaceToFile(filename, D3DXIFF_BMP, pSurf, NULL, NULL);
 		pSurf->Release();
 	}
+#endif
 }
 
 //////// Implementation ////////
@@ -780,7 +846,11 @@ void CALL HGE_Impl::System_Snapshot(const char *filename)
 
 HGE_Impl::HGE_Impl()
 {
+#ifdef __WIN32
 	hInstance=GetModuleHandle(0);
+#else
+	hInstance=1;
+#endif
 	hwnd=0;
 
 	/************************************************************************/
@@ -788,16 +858,19 @@ HGE_Impl::HGE_Impl()
 	/************************************************************************/
 	bActive=true;
 	szError[0]=0;
-
+#ifdef __WIN32
 	pD3D=0;
 	pD3DDevice=0;
 	d3dpp=0;
+#endif
 	pTargets=0;
 	pCurTarget=0;
+#ifdef __WIN32
 	pScreenSurf=0;
 	pScreenDepth=0;
 	pVB=NULL;
 	pIB=NULL;
+#endif
 	VertArray=0;
 	textures=0;
 
@@ -805,7 +878,9 @@ HGE_Impl::HGE_Impl()
 	bSilent=false;
 	streams=0;
 
+#ifdef __WIN32
 	hSearch=0;
+#endif
 	res=0;
 
 	queue=0;
@@ -857,8 +932,11 @@ HGE_Impl::HGE_Impl()
 	bDontSuspend=false;
 	hwndParent=0;
 
-
+#ifdef __WIN32
 	GetModuleFileName(GetModuleHandle(NULL), szAppPath, sizeof(szAppPath));
+#else
+	strcpy(szAppPath, "");
+#endif
 	
 	int i;
 	for(i=strlen(szAppPath)-1; i>0; i--) if(szAppPath[i]=='\\') break;
@@ -900,7 +978,7 @@ void HGE_Impl::_FocusChange(bool bAct)
 		_DIRelease();
 	}
 }
-
+#ifdef __WIN32
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	bool bActivating;
@@ -1020,8 +1098,4 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
 	return DefWindowProc(hwnd, msg, wparam, lparam);
 }
-
-
-
-
-
+#endif

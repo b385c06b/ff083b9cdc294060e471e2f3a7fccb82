@@ -20,24 +20,32 @@
 
 void CALL HGE_Impl::Gfx_Clear(DWORD color)
 {
+	/************************************************************************/
+	/* TODO                                                                 */
+	/************************************************************************/
 	if(pCurTarget)
 	{
+#ifdef __WIN32
 		if(pCurTarget->pDepth)
 			pD3DDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, color, 1.0f, 0 );
 		else
 			pD3DDevice->Clear( 0, NULL, D3DCLEAR_TARGET, color, 1.0f, 0 );
+#endif
 	}
 	else
 	{
+#ifdef __WIN32
 		if(bZBuffer)
 			pD3DDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, color, 1.0f, 0 );
 		else
 			pD3DDevice->Clear( 0, NULL, D3DCLEAR_TARGET, color, 1.0f, 0 );
+#endif
 	}
 }
 
 void CALL HGE_Impl::Gfx_SetClipping(int x, int y, int w, int h)
 {
+#ifdef __WIN32
 	D3DVIEWPORT9 vp;
 	int scr_width, scr_height;
 
@@ -77,12 +85,13 @@ void CALL HGE_Impl::Gfx_SetClipping(int x, int y, int w, int h)
 	pD3DDevice->SetViewport(&vp);
 
 	D3DXMATRIX tmp;
-	D3DXMatrixScaling(&matProj, 1.0f, -1.0f, 1.0f);
-	D3DXMatrixTranslation(&tmp, -0.5f, +0.5f, 0.0f);
-	D3DXMatrixMultiply(&matProj, &matProj, &tmp);
-	D3DXMatrixOrthoOffCenterLH(&tmp, (float)vp.X, (float)(vp.X+vp.Width), -((float)(vp.Y+vp.Height)), -((float)vp.Y), vp.MinZ, vp.MaxZ);
-	D3DXMatrixMultiply(&matProj, &matProj, &tmp);
+	Math_MatrixScaling(&matProj, 1.0f, -1.0f, 1.0f);
+	Math_MatrixTranslation(&tmp, -0.5f, +0.5f, 0.0f);
+	Math_MatrixMultiply(&matProj, &matProj, &tmp);
+	Math_MatrixOrthoOffCenterLH(&tmp, (float)vp.X, (float)(vp.X+vp.Width), -((float)(vp.Y+vp.Height)), -((float)vp.Y), vp.MinZ, vp.MaxZ);
+	Math_MatrixMultiply(&matProj, &matProj, &tmp);
 	pD3DDevice->SetTransform(D3DTS_PROJECTION, &matProj);
+#endif
 }
 
 /************************************************************************/
@@ -92,31 +101,39 @@ void CALL HGE_Impl::Gfx_SetTransform(float x, float y, float dx, float dy, float
 {
 	D3DXMATRIX tmp;
 
-	if(vscale==0.0f) Math_MatrixMakeIdentity(&matView);
+	if(vscale==0.0f) Math_MatrixIdentity(&matView);
 	else
 	{
-		D3DXMatrixTranslation(&matView, -x, -y, 0.0f);
-		D3DXMatrixScaling(&tmp, hscale, vscale, 1.0f);
-		D3DXMatrixMultiply(&matView, &matView, &tmp);
-		D3DXMatrixRotationZ(&tmp, -rot);
-		D3DXMatrixMultiply(&matView, &matView, &tmp);
-		D3DXMatrixTranslation(&tmp, x+dx, y+dy, 0.0f);
-		D3DXMatrixMultiply(&matView, &matView, &tmp);
+		Math_MatrixTranslation(&matView, -x, -y, 0.0f);
+		Math_MatrixScaling(&tmp, hscale, vscale, 1.0f);
+		Math_MatrixMultiply(&matView, &matView, &tmp);
+		Math_MatrixRotationZ(&tmp, -rot);
+		Math_MatrixMultiply(&matView, &matView, &tmp);
+		Math_MatrixTranslation(&tmp, x+dx, y+dy, 0.0f);
+		Math_MatrixMultiply(&matView, &matView, &tmp);
 	}
 
 	_render_batch();
+#ifdef __WIN32
 	pD3DDevice->SetTransform(D3DTS_VIEW, &matView);
+#endif
 }
 
-void CALL HGE_Impl::Gfx_SetTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX * pMatrix)
+void CALL HGE_Impl::Gfx_SetTransform(D3DTRANSFORMSTATETYPE State, const D3DMATRIX * pMatrix)
 {
+#ifdef __WIN32
 	pD3DDevice->SetTransform(State, pMatrix);
+#endif
 }
 
 D3DMATRIX CALL HGE_Impl::Gfx_GetTransform(D3DTRANSFORMSTATETYPE State)
 {
 	D3DMATRIX mat;
+#ifdef __WIN32
 	pD3DDevice->GetTransform(State, &mat);
+#else
+	Math_MatrixIdentity(&mat);
+#endif
 	return mat;
 }
 
@@ -128,6 +145,7 @@ void CALL HGE_Impl::Gfx_SetTextureInfo(int _nTexInfo, hgeTextureInfo * _texInfo)
 
 bool CALL HGE_Impl::Gfx_BeginScene(HTARGET targ)
 {
+#ifdef __WIN32
 	LPDIRECT3DSURFACE9 pSurf=0, pDepth=0;
 	CRenderTargetList *target=(CRenderTargetList *)targ;
 	D3DDISPLAYMODE Mode;
@@ -208,6 +226,10 @@ bool CALL HGE_Impl::Gfx_BeginScene(HTARGET targ)
 	}
 	pD3DDevice->BeginScene();
 	pVB->Lock( 0, 0, (void**)&VertArray, 0 );
+#endif
+	/************************************************************************/
+	/* TODO                                                                 */
+	/************************************************************************/
 
 	return true;
 }
@@ -215,12 +237,18 @@ bool CALL HGE_Impl::Gfx_BeginScene(HTARGET targ)
 void CALL HGE_Impl::Gfx_EndScene()
 {
 	_render_batch(true);
+#ifdef __WIN32
 	pD3DDevice->EndScene();
 	if(!pCurTarget) pD3DDevice->Present( NULL, NULL, NULL, NULL );
+#endif
+	/************************************************************************/
+	/* TODO                                                                 */
+	/************************************************************************/
 }
 
 void CALL HGE_Impl::Gfx_RenderLine(float x1, float y1, float x2, float y2, DWORD color, float z)
 {
+#ifdef __WIN32
 	if(VertArray)
 	{
 		if(CurPrimType!=HGEPRIM_LINES || nPrim>=VERTEX_BUFFER_SIZE/HGEPRIM_LINES || CurTexture || CurBlendMode!=BLEND_DEFAULT)
@@ -242,6 +270,7 @@ void CALL HGE_Impl::Gfx_RenderLine(float x1, float y1, float x2, float y2, DWORD
 
 		nPrim++;
 	}
+#endif
 }
 
 /************************************************************************/
@@ -279,6 +308,7 @@ void CALL HGE_Impl::Gfx_3DRenderEnd()
 
 void CALL HGE_Impl::Gfx_RenderTriple(const hgeTriple *triple)
 {
+#ifdef __WIN32
 	if(VertArray)
 	{
 		HTEXTURE tex = triple->tex;
@@ -304,10 +334,12 @@ void CALL HGE_Impl::Gfx_RenderTriple(const hgeTriple *triple)
 		memcpy(&VertArray[nPrim*HGEPRIM_TRIPLES], triple->v, sizeof(hgeVertex)*HGEPRIM_TRIPLES);
 		nPrim++;
 	}
+#endif
 }
 
 void CALL HGE_Impl::Gfx_RenderQuad(const hgeQuad *quad)
 {
+#ifdef __WIN32
 	if(VertArray)
 	{
 		HTEXTURE tex = quad->tex;
@@ -334,10 +366,15 @@ void CALL HGE_Impl::Gfx_RenderQuad(const hgeQuad *quad)
 		memcpy(&VertArray[nPrim*HGEPRIM_QUADS], quad->v, sizeof(hgeVertex)*HGEPRIM_QUADS);
 		nPrim++;
 	}
+#endif
+	/************************************************************************/
+	/* TODO                                                                 */
+	/************************************************************************/
 }
 
 hgeVertex* CALL HGE_Impl::Gfx_StartBatch(int prim_type, HTEXTURE tex, int blend, int *max_prim)
 {
+#ifdef __WIN32
 	if(VertArray)
 	{
 		_render_batch();
@@ -354,7 +391,10 @@ hgeVertex* CALL HGE_Impl::Gfx_StartBatch(int prim_type, HTEXTURE tex, int blend,
 		*max_prim=VERTEX_BUFFER_SIZE / prim_type;
 		return VertArray;
 	}
-	else return 0;
+	else return NULL;
+#else
+	return NULL;
+#endif
 }
 
 void CALL HGE_Impl::Gfx_FinishBatch(int nprim)
@@ -364,6 +404,7 @@ void CALL HGE_Impl::Gfx_FinishBatch(int nprim)
 
 HTARGET CALL HGE_Impl::Target_Create(int width, int height, bool zbuffer)
 {
+#ifdef __WIN32
 	CRenderTargetList *pTarget;
 	D3DSURFACE_DESC TDesc;
 
@@ -404,10 +445,14 @@ HTARGET CALL HGE_Impl::Target_Create(int width, int height, bool zbuffer)
 	pTargets=pTarget;
 
 	return (HTARGET)pTarget;
+#else
+	return NULL;
+#endif
 }
 
 void CALL HGE_Impl::Target_Free(HTARGET target)
 {
+#ifdef __WIN32
 	CRenderTargetList *pTarget=pTargets, *pPrevTarget=NULL;
 
 	while(pTarget)
@@ -429,17 +474,23 @@ void CALL HGE_Impl::Target_Free(HTARGET target)
 		pPrevTarget=pTarget;
 		pTarget=pTarget->next;
 	}
+#endif
 }
 
 HTEXTURE CALL HGE_Impl::Target_GetTexture(HTARGET target)
 {
+#ifdef __WIN32
 	CRenderTargetList *targ=(CRenderTargetList *)target;
 	if(target) return (HTEXTURE)((DWORD)targ->pTex);
-	else return 0;
+	else return NULL;
+#else
+	return NULL;
+#endif
 }
 
 HTEXTURE CALL HGE_Impl::Texture_Create(int width, int height)
 {
+#ifdef __WIN32
 	LPDIRECT3DTEXTURE9 pTex;
 
 	if( FAILED( D3DXCreateTexture( pD3DDevice, width, height,
@@ -454,15 +505,23 @@ HTEXTURE CALL HGE_Impl::Texture_Create(int width, int height)
 	}
 
 	return (HTEXTURE)((DWORD)pTex);
+#else
+	/************************************************************************/
+	/* TODO                                                                 */
+	/************************************************************************/
+	return NULL;
+#endif
 }
 
 HTEXTURE CALL HGE_Impl::Texture_Load(const char *filename, DWORD size, bool bMipmap)
 {
 	void *data;
 	DWORD _size;
+#ifdef __WIN32
 	D3DFORMAT fmt1, fmt2;
 	LPDIRECT3DTEXTURE9 pTex;
 	D3DXIMAGE_INFO info;
+#endif
 	CTextureList *texItem;
 
 	if(size) { data=(void *)filename; _size=size; }
@@ -471,7 +530,7 @@ HTEXTURE CALL HGE_Impl::Texture_Load(const char *filename, DWORD size, bool bMip
 		data=pHGE->Resource_Load(filename, &_size);
 		if(!data) return NULL;
 	}
-
+#ifdef __WIN32
 	if(*(DWORD*)data == 0x20534444) // Compressed DDS format magic number
 	{
 		fmt1=D3DFMT_UNKNOWN;
@@ -513,13 +572,27 @@ HTEXTURE CALL HGE_Impl::Texture_Load(const char *filename, DWORD size, bool bMip
 		if(!size) Resource_Free(data);
 		return NULL;
 	}
+#else
+	/************************************************************************/
+	/* TODO                                                                 */
+	/************************************************************************/
+	DWORD pTex = NULL;
+#endif
 
 	if(!size) Resource_Free(data);
 	
 	texItem=new CTextureList;
 	texItem->tex=(HTEXTURE)((DWORD)pTex);
+#ifdef __WIN32
 	texItem->width=info.Width;
 	texItem->height=info.Height;
+#else
+	/************************************************************************/
+	/* TODO                                                                 */
+	/************************************************************************/
+	texItem->width=0;
+	texItem->height=0;
+#endif
 	texItem->next=textures;
 	textures=texItem;
 
@@ -529,7 +602,9 @@ HTEXTURE CALL HGE_Impl::Texture_Load(const char *filename, DWORD size, bool bMip
 void CALL HGE_Impl::Texture_Free(HTEXTURE tex)
 {
 	DWORD ttex = Texture_GetTexture(tex);
+#ifdef __WIN32
 	LPDIRECT3DTEXTURE9 pTex=(LPDIRECT3DTEXTURE9)ttex;
+#endif
 	CTextureList *texItem=textures, *texPrev=0;
 
 	while(texItem)
@@ -544,7 +619,12 @@ void CALL HGE_Impl::Texture_Free(HTEXTURE tex)
 		texPrev=texItem;
 		texItem=texItem->next;
 	}
+#ifdef __WIN32
 	if(pTex != NULL) pTex->Release();
+#endif
+	/************************************************************************/
+	/* TODO                                                                 */
+	/************************************************************************/
 }
 
 DWORD CALL HGE_Impl::Texture_GetTexture(HTEXTURE tex)
@@ -554,13 +634,15 @@ DWORD CALL HGE_Impl::Texture_GetTexture(HTEXTURE tex)
 
 int CALL HGE_Impl::Texture_GetWidth(HTEXTURE tex, bool bOriginal)
 {
-	D3DSURFACE_DESC TDesc;
 	DWORD ttex = Texture_GetTexture(tex);
 	if (!ttex)
 	{
 		return tex.GetTextureWidthByInfo(nTexInfo, texInfo);
 	}
+#ifdef __WIN32
+	D3DSURFACE_DESC TDesc;
 	LPDIRECT3DTEXTURE9 pTex=(LPDIRECT3DTEXTURE9)ttex;
+#endif
 	CTextureList *texItem=textures;
 
 	if(bOriginal)
@@ -572,23 +654,29 @@ int CALL HGE_Impl::Texture_GetWidth(HTEXTURE tex, bool bOriginal)
 		}
 		return 0;
 	}
+#ifdef __WIN32
 	else
 	{
 		if(FAILED(pTex->GetLevelDesc(0, &TDesc))) return 0;
 		else return TDesc.Width;
 	}
+#else
+	return NULL;
+#endif
 }
 
 
 int CALL HGE_Impl::Texture_GetHeight(HTEXTURE tex, bool bOriginal)
 {
-	D3DSURFACE_DESC TDesc;
 	DWORD ttex = Texture_GetTexture(tex);
 	if (!ttex)
 	{
 		return tex.GetTextureHeightByInfo(nTexInfo, texInfo);
 	}
+#ifdef __WIN32
+	D3DSURFACE_DESC TDesc;
 	LPDIRECT3DTEXTURE9 pTex=(LPDIRECT3DTEXTURE9)ttex;
+#endif
 	CTextureList *texItem=textures;
 
 	if(bOriginal)
@@ -600,16 +688,21 @@ int CALL HGE_Impl::Texture_GetHeight(HTEXTURE tex, bool bOriginal)
 		}
 		return 0;
 	}
+#ifdef __WIN32
 	else
 	{
 		if(FAILED(pTex->GetLevelDesc(0, &TDesc))) return 0;
 		else return TDesc.Height;
 	}
+#else
+	return NULL;
+#endif
 }
 
 
 DWORD * CALL HGE_Impl::Texture_Lock(HTEXTURE tex, bool bReadOnly, int left, int top, int width, int height)
 {
+#ifdef __WIN32
 	DWORD ttex = Texture_GetTexture(tex);
 	LPDIRECT3DTEXTURE9 pTex=(LPDIRECT3DTEXTURE9)ttex;
 	D3DSURFACE_DESC TDesc;
@@ -636,22 +729,28 @@ DWORD * CALL HGE_Impl::Texture_Lock(HTEXTURE tex, bool bReadOnly, int left, int 
 	if(FAILED(pTex->LockRect(0, &TRect, prec, flags)))
 	{
 		_PostError("Can't lock texture");
-		return 0;
+		return NULL;
 	}
 
 	return (DWORD *)TRect.pBits;
+#else
+	return NULL;
+#endif
 }
 
 
 void CALL HGE_Impl::Texture_Unlock(HTEXTURE tex)
 {
+#ifdef __WIN32
 	DWORD ttex = Texture_GetTexture(tex);
 	LPDIRECT3DTEXTURE9 pTex=(LPDIRECT3DTEXTURE9)ttex;
 	pTex->UnlockRect(0);
+#endif
 }
 
 bool CALL HGE_Impl::Texture_Save(HTEXTURE tex, const char * filename, DWORD filetype)
 {
+#ifdef __WIN32
 	DWORD ttex = Texture_GetTexture(tex);
 	LPDIRECT3DTEXTURE9 pTex=(LPDIRECT3DTEXTURE9)ttex;
 	if (!pTex)
@@ -663,6 +762,7 @@ bool CALL HGE_Impl::Texture_Save(HTEXTURE tex, const char * filename, DWORD file
 	{
 		return false;
 	}
+#endif
 	return true;
 }
 
@@ -670,6 +770,7 @@ bool CALL HGE_Impl::Texture_Save(HTEXTURE tex, const char * filename, DWORD file
 
 void HGE_Impl::_render_batch(bool bEndScene)
 {
+#ifdef __WIN32
 	if(VertArray)
 	{
 		pVB->Unlock();
@@ -698,10 +799,12 @@ void HGE_Impl::_render_batch(bool bEndScene)
 		if(bEndScene) VertArray = 0;
 		else pVB->Lock( 0, 0, (void**)&VertArray, 0 );
 	}
+#endif
 }
 
 void HGE_Impl::_SetBlendMode(int blend)
 {
+#ifdef __WIN32
 	if((blend & BLEND_ALPHABLEND) != (CurBlendMode & BLEND_ALPHABLEND))
 	{
 		if(blend & BLEND_ALPHABLEND) pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
@@ -721,16 +824,21 @@ void HGE_Impl::_SetBlendMode(int blend)
 	}
 
 	CurBlendMode = blend;
+#else
+	/************************************************************************/
+	/* TODO                                                                 */
+	/************************************************************************/
+#endif
 }
 
 void HGE_Impl::_SetProjectionMatrix(int width, int height)
 {
 	D3DXMATRIX tmp;
-	D3DXMatrixScaling(&matProj, 1.0f, -1.0f, 1.0f);
-	D3DXMatrixTranslation(&tmp, -0.5f, height+0.5f, 0.0f);
-	D3DXMatrixMultiply(&matProj, &matProj, &tmp);
-	D3DXMatrixOrthoOffCenterLH(&tmp, 0, (float)width, 0, (float)height, 0.0f, 1.0f);
-	D3DXMatrixMultiply(&matProj, &matProj, &tmp);
+	Math_MatrixScaling(&matProj, 1.0f, -1.0f, 1.0f);
+	Math_MatrixTranslation(&tmp, -0.5f, height+0.5f, 0.0f);
+	Math_MatrixMultiply(&matProj, &matProj, &tmp);
+	Math_MatrixOrthoOffCenterLH(&tmp, 0, (float)width, 0, (float)height, 0.0f, 1.0f);
+	Math_MatrixMultiply(&matProj, &matProj, &tmp);
 }
 
 bool HGE_Impl::_GfxInit()
@@ -905,7 +1013,7 @@ bool HGE_Impl::_GfxInit()
 // Init all stuff that can be lost
 
 	_SetProjectionMatrix(nScreenWidth, nScreenHeight);
-	Math_MatrixMakeIdentity(&matView);
+	Math_MatrixIdentity(&matView);
 	
 	if(!_init_lost()) return false;
 
@@ -913,7 +1021,7 @@ bool HGE_Impl::_GfxInit()
 
 	return true;
 }
-
+#ifdef __WIN32
 int HGE_Impl::_format_id(D3DFORMAT fmt)
 {
 	switch(fmt) {
@@ -925,9 +1033,11 @@ int HGE_Impl::_format_id(D3DFORMAT fmt)
 		default:				return 0;
 	}
 }
+#endif
 
 void HGE_Impl::_AdjustWindow()
 {
+#ifdef __WIN32
 	RECT *rc;
 	LONG style;
 
@@ -946,6 +1056,7 @@ void HGE_Impl::_AdjustWindow()
 		SetWindowLong(hwnd, GWL_EXSTYLE, style | WS_EX_TOPMOST);
 	    SetWindowPos(hwnd, HWND_TOPMOST, rc->left, rc->top, rc->right-rc->left, rc->bottom-rc->top, SWP_FRAMECHANGED);
 	}
+#endif
 }
 
 void HGE_Impl::_Resize(int width, int height)
@@ -953,9 +1064,10 @@ void HGE_Impl::_Resize(int width, int height)
 	if(hwndParent)
 	{
 		//if(procFocusLostFunc) procFocusLostFunc();
-
+#ifdef __WIN32
 		d3dppW.BackBufferWidth=width;
 		d3dppW.BackBufferHeight=height;
+#endif
 		nScreenWidth=width;
 		nScreenHeight=height;
 
@@ -971,20 +1083,23 @@ void HGE_Impl::_GfxDone()
 	CRenderTargetList *target=pTargets, *next_target;
 	
 	while(textures)	Texture_Free(textures->tex);
-
+#ifdef __WIN32
 	if(pScreenSurf) { pScreenSurf->Release(); pScreenSurf=0; }
 	if(pScreenDepth) { pScreenDepth->Release(); pScreenDepth=0; }
+#endif
 
 	while(target)
 	{
+#ifdef __WIN32
 		if(target->pTex) target->pTex->Release();
 		if(target->pDepth) target->pDepth->Release();
+#endif
 		next_target=target->next;
 		delete target;
 		target=next_target;
 	}
 	pTargets=0;
-
+#ifdef __WIN32
 	if(pIB)
 	{
 		//-2nd
@@ -1002,11 +1117,13 @@ void HGE_Impl::_GfxDone()
 	}
 	if(pD3DDevice) { pD3DDevice->Release(); pD3DDevice=0; }
 	if(pD3D) { pD3D->Release(); pD3D=0; }
+#endif
 }
 
 
 bool HGE_Impl::_GfxRestore()
 {
+#ifdef __WIN32
 	CRenderTargetList *target=pTargets;
 
 	//if(!pD3DDevice) return false;
@@ -1069,12 +1186,14 @@ bool HGE_Impl::_GfxRestore()
 
 	if(procGfxRestoreFunc) return procGfxRestoreFunc();
 
+#endif
 	return true;
 }
 
 
 bool HGE_Impl::_init_lost()
 {
+#ifdef __WIN32
 	CRenderTargetList *target=pTargets;
 
 // Store render target
@@ -1190,6 +1309,10 @@ bool HGE_Impl::_init_lost()
 	pD3DDevice->SetTransform(D3DTS_VIEW, &matView);
 	pD3DDevice->SetTransform(D3DTS_PROJECTION, &matProj);
 
+#endif
+	/************************************************************************/
+	/* TODO                                                                    */
+	/************************************************************************/
 	return true;
 }
 

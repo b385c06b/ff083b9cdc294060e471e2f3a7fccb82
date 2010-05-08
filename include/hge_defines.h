@@ -1,18 +1,32 @@
 #ifndef HGE_DEFINES_H
 #define HGE_DEFINES_H
 
-#define __WIN32
+//#define __WIN32
 
 #ifndef __WIN32
 
+/************************************************************************/
+/* TO DO                                                                */
+/************************************************************************/
 //typedef unsigned __int64	QWORD;
+//typedef __int64			LONGLONG;
+#define timeGetTime()	(0)
+#define WritePrivateProfileString(A, B, C, D)	(1)
+#define GetPrivateProfileString(A, B, C, D, E, F)	(0)
+#define DeleteFile(A)	(0)
+#define SetCurrentDirectory(A)	(0)
+#define _access(A, B)	(0)
+#define CreateDirectory(A)	(0)
+/************************************************************************/
+/*                                                                      */
+/************************************************************************/
 
 #ifndef HINSTANCE
-#define unsigned long		HINSTANCE
+typedef unsigned long		HINSTANCE;
 #endif
 
 #ifndef HWND
-#define unsigned long		HWND
+typedef	unsigned long		HWND;
 #endif
 
 // Flexible vertex format bits
@@ -77,6 +91,7 @@ typedef struct _D3DMATRIX {
 		float m[4][4];
 	};
 } D3DMATRIX;
+typedef D3DMATRIX	D3DXMATRIX;
 #define D3DMATRIX_DEFINED
 #endif
 
