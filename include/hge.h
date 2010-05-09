@@ -32,6 +32,17 @@
 #include <string.h>
 
 #ifdef __WIN32
+#ifdef WIN32
+#ifdef _DEBUG
+extern "C"
+{
+#include "../mmgr/mmgr.h"
+};
+#endif // _DEBUG
+#endif // WIN32
+#endif // __WIN32
+
+#ifdef __WIN32
 
 #include <windows.h>
 #define DIRECTINPUT_VERSION 0x0800
@@ -63,8 +74,12 @@
  #define powf (float)pow
  #define fabsf (float)fabs
 
- #define min(x,y) ((x) < (y)) ? (x) : (y)
- #define max(x,y) ((x) > (y)) ? (x) : (y)
+#endif
+#ifndef min
+#define min(x,y) ((x) < (y)) ? (x) : (y)
+#endif
+#ifndef max
+#define max(x,y) ((x) > (y)) ? (x) : (y)
 #endif
 
 #ifndef ZeroMemory
@@ -88,15 +103,13 @@ typedef unsigned short      WORD;
 typedef unsigned char       BYTE;
 #endif
 
-/************************************************************************/
-/* This define is added by h5nc (h5nc@yahoo.com.cn)                     */
-/************************************************************************/
 #ifndef QWORD
 typedef unsigned __int64	QWORD;
 #endif
 
 #ifndef LONGLONG
 typedef __int64			LONGLONG;
+typedef unsigned __int64 ULONGLONG;
 #endif
 
 #ifndef NULL
@@ -139,6 +152,7 @@ typedef __int64			LONGLONG;
 */
 //typedef DWORD HTEXTURE;
 typedef DWORD HTARGET;
+typedef DWORD HSAMPLE;
 typedef DWORD HEFFECT;
 typedef DWORD HMUSIC;
 typedef DWORD HSTREAM;
@@ -848,8 +862,8 @@ public:
 	/************************************************************************/
 	/* These functions are added by h5nc (h5nc@yahoo.com.cn)                */
 	/************************************************************************/
-	virtual void		CALL	Gfx_SetTransform(D3DTRANSFORMSTATETYPE State, const D3DXMATRIX * pMatrix) = 0;
-	virtual D3DXMATRIX	CALL	Gfx_GetTransform(D3DTRANSFORMSTATETYPE State) = 0;
+	virtual void		CALL	Gfx_SetTransform(D3DTRANSFORMSTATETYPE State, const D3DMATRIX * pMatrix) = 0;
+	virtual D3DMATRIX	CALL	Gfx_GetTransform(D3DTRANSFORMSTATETYPE State) = 0;
 
 	virtual void	CALL	Gfx_SetTextureInfo(int nTexInfo, hgeTextureInfo * texInfo=NULL) = 0;
 

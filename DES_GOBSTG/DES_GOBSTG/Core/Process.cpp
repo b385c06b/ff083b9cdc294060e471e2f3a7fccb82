@@ -134,7 +134,12 @@ void Process::Realease()
 	Chat::chatitem.Release();
 	FrontDisplay::fdisp.Release();
 
+	Enemy::ClearAll();
+	Ghost::ClearAll();
+	Player::p.Release();
 	BResource::bres.Release();
+	Effectsys::Release();
+	BResource::bres.ReleaseCustomConst();
 /*
 	for(int i=0;i<TEXMAX;i++)
 	{

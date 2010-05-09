@@ -17,12 +17,30 @@ Effectsys::Effectsys()
 
 Effectsys::~Effectsys()
 {
+	Free();
+}
+
+void Effectsys::Free()
+{
 	if(eff)
 	{
 		eff->Stop(true);
+		eff->FreeList();
 		delete eff;
 	}
 	eff = NULL;
+}
+
+void Effectsys::Release()
+{
+	for (int i=0; i<EFFECTSYSTYPEMAX; i++)
+	{
+		efftype[i].FreeList();
+	}
+	for (int i=0; i<EFFECTSYSMAX; i++)
+	{
+		effsys[i].Free();
+	}
 }
 
 bool Effectsys::Init(HTEXTURE * tex, const char * foldername, char name[][M_PATHMAX])

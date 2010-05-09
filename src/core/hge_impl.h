@@ -237,8 +237,8 @@ public:
 	virtual void		CALL	Gfx_FinishBatch(int nprim);
 	virtual void		CALL	Gfx_SetClipping(int x=0, int y=0, int w=0, int h=0);
 	virtual void		CALL	Gfx_SetTransform(float x=0, float y=0, float dx=0, float dy=0, float rot=0, float hscale=0, float vscale=0); 
-	virtual void		CALL	Gfx_SetTransform(D3DTRANSFORMSTATETYPE State, const D3DXMATRIX * pMatrix);
-	virtual D3DXMATRIX	CALL	Gfx_GetTransform(D3DTRANSFORMSTATETYPE State);
+	virtual void		CALL	Gfx_SetTransform(D3DTRANSFORMSTATETYPE State, const D3DMATRIX * pMatrix);
+	virtual D3DMATRIX	CALL	Gfx_GetTransform(D3DTRANSFORMSTATETYPE State);
 	virtual void		CALL	Gfx_SetTextureInfo(int nTexInfo, hgeTextureInfo * texinfo=NULL);
 
 	virtual HTARGET		CALL	Target_Create(int width, int height, bool zbuffer);

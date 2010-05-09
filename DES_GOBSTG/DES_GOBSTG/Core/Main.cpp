@@ -1,4 +1,4 @@
-#include "vld.h"
+//#include "vld.h"
 
 #include "../Header/Process.h"
 #include "../Header/Fontsys.h"
@@ -44,8 +44,11 @@ bool FocusGainFunc()
 	Fontsys::fontsys.FocusChanged();
 	return false;
 }
-
+#ifdef __WIN32
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+#else
+int main()
+#endif
 {
 	hge = hgeCreate(HGE_VERSION);
 	
@@ -66,7 +69,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Process::mp.Realease();
 
 //	hge->System_Shutdown();
-	hge->Release();
-	
+	Export::Release();
+
+
+#ifdef __WIN32
+#ifdef WIN32
+#ifdef _DEBUG
+	m_dumpMemoryReport();
+#endif // _DEBUG
+#endif // WIN32
+#endif // __WIN32
 	return 0;
 }

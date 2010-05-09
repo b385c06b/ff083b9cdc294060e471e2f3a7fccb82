@@ -786,13 +786,14 @@ void EditorUI::Update()
 		SetupEB(true);
 	}
 	hge->Input_GetMousePos(&mx, &my);
-
+#ifdef __WIN32
 	RECT rect;
 	GetClientRect(hge->System_GetState(HGE_HWND), &rect);
 	float windoww = rect.right - rect.left;
 	float windowh = rect.bottom - rect.top;
 	mx = mx * hge->System_GetState(HGE_SCREENWIDTH) / windoww;
 	my = my * hge->System_GetState(HGE_SCREENHEIGHT) / windowh;
+#endif
 
 	wheel = 0;
 	clickdown = false;

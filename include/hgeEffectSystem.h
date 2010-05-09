@@ -57,8 +57,8 @@ struct hgeEffectObject{
 	float	fScaleXBuffer;
 	float	fScaleY;
 	float	fScaleYBuffer;
-	float	color;
-	float	colorBuffer;
+	DWORD	color;
+	DWORD	colorBuffer;
 };
 
 struct hgeEffectBasicInfo{
@@ -202,7 +202,7 @@ public:
 
 	void Affect(hgeEffectObject * obj, hgeEffectAffector * affector);
 	void UpdateValue(float * value, float * bufferValue, hgeEffectAffectorInfo * eai, int nAge);
-	void UpdateColorValue(float * value, float * bufferValue, hgeEffectAffectorInfo * eai, int nAge);
+	void UpdateColorValue(DWORD * value, DWORD * bufferValue, hgeEffectAffectorInfo * eai, int nAge);
 
 	bool SetBasicInfo(hgeEffectBasicInfo * ebi);
 	bool AddEmitter(hgeEffectEmitter * emitter);

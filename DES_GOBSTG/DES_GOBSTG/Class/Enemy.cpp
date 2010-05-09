@@ -89,6 +89,8 @@ void Enemy::Clear()
 	exist = false;
 	able = false;
 	timer = 0;
+	effCollapse.Free();
+	effShot.Free();
 }
 
 void Enemy::DamageZoneBuild(float _x, float _y, float _r, float _power)

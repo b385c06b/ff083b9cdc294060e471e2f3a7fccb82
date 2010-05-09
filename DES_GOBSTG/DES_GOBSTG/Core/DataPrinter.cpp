@@ -74,15 +74,16 @@ void DataPrinter::getHeader()
 	str += DPS_RETURN;
 }
 
-bool DataPrinter::WriteString(string * str, HANDLE hFile)
+bool DataPrinter::WriteString(string * str, FILE * hFile)
 {
-	if (hFile == INVALID_HANDLE_VALUE)
+	if (hFile == NULL/*INVALID_HANDLE_VALUE*/)
 	{
 		return false;
 	}
 	DWORD byteswritten = 0;
 	DWORD bytestowrite = strlen(str->data());
-	WriteFile(hFile, str->data(), bytestowrite, &byteswritten, NULL);
+	byteswritten = fwrite(str->data(), bytestowrite, 1, hFile);
+//	WriteFile(hFile, str->data(), bytestowrite, &byteswritten, NULL);
 	if (bytestowrite == byteswritten)
 	{
 		return true;
@@ -97,8 +98,10 @@ bool DataPrinter::PrintScore()
 	strcpy(filename, DPS_SCOREFILENAME);
 	strcat(filename, ".");
 	strcat(filename, DPS_EXTENSION);
-	HANDLE hFile = CreateFile(hge->Resource_MakePath(filename), GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (hFile == INVALID_HANDLE_VALUE)
+//	HANDLE hFile = CreateFile(hge->Resource_MakePath(filename), GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+//	if (hFile == INVALID_HANDLE_VALUE)
+	FILE * hFile = fopen(hge->Resource_MakePath(filename), "wb");
+	if (!hFile)
 	{
 		HGELOG("Failed in creating Score Data File %s!", filename);
 		return false;
@@ -608,7 +611,8 @@ bool DataPrinter::PrintScore()
 
 	WriteString(&str, hFile);
 
-	CloseHandle(hFile);
+	fclose(hFile);
+//	CloseHandle(hFile);
 	
 	return true;
 }
@@ -629,8 +633,10 @@ bool DataPrinter::PrintReplayData(const char * foldername, const char * filename
 		ofilename[strlen(ofilename)-1] = 0;
 	}
 	strcat(ofilename, DPS_EXTENSION);
-	HANDLE hFile = CreateFile(hge->Resource_MakePath(ofilename), GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (hFile == INVALID_HANDLE_VALUE)
+//	HANDLE hFile = CreateFile(hge->Resource_MakePath(ofilename), GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+//	if (hFile == INVALID_HANDLE_VALUE)
+	FILE * hFile = fopen(hge->Resource_MakePath(filename), "wb");
+	if (!hFile)
 	{
 		HGELOG("Failed in creating Replay Data File %s!", ofilename);
 		return false;
@@ -962,7 +968,8 @@ bool DataPrinter::PrintReplayData(const char * foldername, const char * filename
 	WriteString(&str, hFile);
 	
 
-	CloseHandle(hFile);
+	fclose(hFile);
+//	CloseHandle(hFile);
 
 	hge->Resource_SetPath("../");
 	

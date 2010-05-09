@@ -1,5 +1,5 @@
 #include "../Header/MainDependency.h"
-
+#ifdef __WIN32
 #pragma init_seg(lib)
 
 static class InitDllLoader {
@@ -19,3 +19,5 @@ private:
 	HMODULE module;
 
 } _initDllLoader;
+
+#endif

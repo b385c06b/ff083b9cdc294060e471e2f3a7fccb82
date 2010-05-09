@@ -5,7 +5,7 @@
 #include "../include/hgeEffectSystem.h"
 #include "EditorRes.h"
 #include "EditorUI.h"
-#include "vld.h"
+//#include "vld.h"
 
 HGE * hge = hgeCreate(HGE_VERSION);
 
@@ -37,7 +37,11 @@ bool RenderFunc()
 	return false;
 }
 
+#ifdef __WIN32
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+#else
+void main()
+#endif // __WIN32
 {
 	hge->System_SetState(HGE_FRAMEFUNC, FrameFunc);
 	hge->System_SetState(HGE_RENDERFUNC, RenderFunc);
@@ -58,4 +62,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 //	hge->System_Shutdown();
 	hge->Release();
+
+#ifdef __WIN32
+#ifdef WIN32
+#ifdef _DEBUG
+	m_dumpMemoryReport();
+#endif // _DEBUG
+#endif // WIN32
+#endif // __WIN32
+
 }

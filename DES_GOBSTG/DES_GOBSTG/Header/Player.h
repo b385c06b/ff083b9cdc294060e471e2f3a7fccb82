@@ -72,6 +72,7 @@ public:
 	void UpdatePlayerData();
 
 	void action();
+	void Release();
 
 	void RenderEffect();
 

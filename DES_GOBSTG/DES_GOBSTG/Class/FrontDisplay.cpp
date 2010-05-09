@@ -907,4 +907,9 @@ void FrontDisplay::Release()
 	SpriteItemManager::FreeSprite(&first.face);
 	SpriteItemManager::FreeSprite(&first.namecard);
 
+	infobody.effBossCollapse.Free();
+	infobody.effBossItem.Free();
+	infobody.effBossUp.Free();
+	infobody.effBossStore.Free();
+	infobody.effLoading.Free();
 }

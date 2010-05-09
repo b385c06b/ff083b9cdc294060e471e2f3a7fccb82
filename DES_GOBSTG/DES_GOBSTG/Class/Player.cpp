@@ -1517,3 +1517,15 @@ WORD Player::GetChara( int index )
 	}
 	return nowID;
 }
+
+void Player::Release()
+{
+	effGraze.Free();
+	effChange.Free();
+	effInfi.Free();
+	effCollapse.Free();
+	effMerge.Free();
+	effBorder.Free();
+	effBorderOn.Free();
+	effBorderOff.Free();
+}

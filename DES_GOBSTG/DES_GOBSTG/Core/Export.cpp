@@ -66,7 +66,7 @@ bool Export::clientInitial(bool usesound /* = false */, bool extuse /* = false *
 
 void Export::clientSetMatrix(float _worldx, float _worldy, float _worldz)
 {
-	D3DXMATRIXA16 matWorld;
+	D3DXMATRIX matWorld;
 	hge->Math_MatrixTranslation(&matWorld, _worldx, _worldy, _worldz);	
 	hge->Gfx_SetTransform( D3DTS_WORLD, &matWorld );
 
@@ -81,13 +81,32 @@ void Export::clientSetMatrix(float _worldx, float _worldy, float _worldz)
 	D3DXVECTOR3 vUpVec( 0.0f, -1.0f, 0.0f );
 	D3DXMatrixLookAtLH( &matView, &vEyePt, &vLookatPt, &vUpVec );
 	*/
-
+#ifdef __WIN32
 	D3DXMATRIX matView(
 		1.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, -1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, -1.0f, 0.0f,
 		-M_ACTIVECLIENT_CENTER_X, M_ACTIVECLIENT_CENTER_Y, M_ACTIVECLIENT_HEIGHT/2.0f, 1.0f
 		);
+#else
+	D3DXMATRIX matView;
+	matView.m[0][0] = 1.0f;
+	matView.m[0][1] = 0.0f;
+	matView.m[0][2] = 0.0f;
+	matView.m[0][3] = 0.0f;
+	matView.m[1][0] = 0.0f;
+	matView.m[1][1] = -1.0f;
+	matView.m[1][2] = 0.0f;
+	matView.m[1][3] = 0.0f;
+	matView.m[2][0] = 0.0f;
+	matView.m[2][1] = 0.0f;
+	matView.m[2][2] = -1.0f;
+	matView.m[2][3] = 0.0f;
+	matView.m[3][0] = -M_ACTIVECLIENT_CENTER_X;
+	matView.m[3][1] = M_ACTIVECLIENT_CENTER_Y;
+	matView.m[3][2] = M_ACTIVECLIENT_HEIGHT/2.0f;
+	matView.m[3][3] = 1.0f;
+#endif
 	
 	hge->Gfx_SetTransform( D3DTS_VIEW, &matView );
 
@@ -101,13 +120,32 @@ void Export::clientSetMatrix(float _worldx, float _worldy, float _worldz)
 	D3DXMatrixMultiply(&matProj, &matProj, &tmat);
 	*/
 
-	
+#ifdef __WIN32
 	D3DXMATRIX matProj(
 		M_CLIENT_HEIGHT/M_CLIENT_WIDTH, 0.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f, 0.0f,
 		(M_ACTIVECLIENT_WIDTH-M_CLIENT_WIDTH)/M_CLIENT_WIDTH, 0.0f, 0.0f, 1.0f,
 		-M_PROJECTIONMATRIX_OFFSET/*-M_PROJECTIONMATRIX_OFFSET*(M_CLIENT_HEIGHT/M_CLIENT_HEIGHT)*/, M_PROJECTIONMATRIX_OFFSET, 0.0f, -0.55f
 		);
+#else
+	D3DXMATRIX matProj;
+	matProj.m[0][0] = M_CLIENT_HEIGHT/M_CLIENT_WIDTH;
+	matProj.m[0][1] = 0.0f;
+	matProj.m[0][2] = 0.0f;
+	matProj.m[0][3] = 0.0f;
+	matProj.m[1][0] = 0.0f;
+	matProj.m[1][1] = 1.0f;
+	matProj.m[1][2] = 0.0f;
+	matProj.m[1][3] = 0.0f;
+	matProj.m[2][0] = (M_ACTIVECLIENT_WIDTH-M_CLIENT_WIDTH)/M_CLIENT_WIDTH;
+	matProj.m[2][1] = 0.0f;
+	matProj.m[2][2] = 0.0f;
+	matProj.m[2][3] = 1.0f;
+	matProj.m[3][0] = -M_PROJECTIONMATRIX_OFFSET;
+	matProj.m[3][1] = M_PROJECTIONMATRIX_OFFSET;
+	matProj.m[3][2] = 0.0f;
+	matProj.m[3][3] = 0.55f;
+#endif
 
 	hge->Gfx_SetTransform(D3DTS_PROJECTION, &matProj);
 	
@@ -149,7 +187,7 @@ void Export::clientAdjustWindow()
 		int windowwidth = hge->Ini_GetInt(RESCONFIGS_CUSTOMWINDOW, RESCONFIGN_WINDOWWIDTH, RESCONFIGDEFAULT_WINDOWWIDTH);
 		int windowheight = hge->Ini_GetInt(RESCONFIGS_CUSTOMWINDOW, RESCONFIGN_WINDOWHEIGHT, RESCONFIGDEFAULT_WINDOWHEIGHT);
 		HWND windowtopmost = hge->Ini_GetInt(RESCONFIGS_CUSTOMWINDOW, RESCONFIGN_WINDOWTOPMOST, RESCONFIGDEFAULT_WINDOWTOPMOST) ? HWND_TOPMOST: HWND_NOTOPMOST;
-
+#ifdef __WIN32
 		WINDOWPLACEMENT wndpl;
 		GetWindowPlacement(hge->System_GetState(HGE_HWND), &wndpl);
 		RECT rect;
@@ -158,6 +196,7 @@ void Export::clientAdjustWindow()
 		windowheight += (wndpl.rcNormalPosition.bottom - wndpl.rcNormalPosition.top) - (rect.bottom - rect.top);
 
 		SetWindowPos(hge->System_GetState(HGE_HWND), windowtopmost, windowleft, windowtop, windowwidth, windowheight, SWP_FRAMECHANGED);
+#endif
 	}
 }
 
@@ -480,6 +519,7 @@ int Export::effLoad(const char * filename, hgeEffectSystem * eff, HTEXTURE * tex
 	return eff->Load(filename, 0, tex);
 }
 
+#ifdef __WIN32
 #ifdef __UNPACK
 bool Export::unpackFile(const char * zipname, const char * filename)
 {
@@ -574,3 +614,4 @@ bool Export::unpackFromIni(const char * inifilename)
 	return true;
 }
 #endif
+#endif // __WIN32

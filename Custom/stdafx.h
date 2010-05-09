@@ -38,6 +38,8 @@
 #ifndef _AFX_NO_AFXCMN_SUPPORT
 #include <afxcmn.h>			// Windows 公共控件的 MFC 支持
 
+#define __WIN32
+
 #include <Mmsystem.h>
 #include <WinBase.h>
 #pragma comment(lib, "winmm.lib")

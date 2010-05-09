@@ -77,7 +77,7 @@ public:
 	~DataPrinter();
 
 	static bool PrintScore();
-	static bool WriteString(string * str, HANDLE hFile);
+	static bool WriteString(string * str, FILE * hFile);
 	static bool PrintReplayData(const char * foldername, const char * filename);
 	static void getHeader();
 

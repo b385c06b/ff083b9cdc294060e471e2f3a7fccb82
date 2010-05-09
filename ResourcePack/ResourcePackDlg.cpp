@@ -1,6 +1,6 @@
 // ResourcePackDlg.cpp : 实现文件
 //
-#include "vld.h"
+//#include "vld.h"
 #include "stdafx.h"
 #include "ResourcePack.h"
 #include "ResourcePackDlg.h"

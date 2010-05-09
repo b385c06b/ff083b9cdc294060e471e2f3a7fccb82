@@ -170,7 +170,7 @@ void hgeFont::NewFont(const char *szFont, bool bMipmap/* =false */)
 	DWORD	datasize;
 	char	*desc, *pdesc;
 	char	linebuf[256];
-	char	buf[MAX_PATH], *pbuf;
+	char	buf[_MAX_PATH], *pbuf;
 	char	chr;
 	int		i, x, y, w, h, a, c;
 	int		_wCh = 0;
@@ -656,7 +656,7 @@ float hgeFont::GetStringWidth(const char *string, bool bMultiline) const
 {
 	if (!letters)
 	{
-		return;
+		return 0;
 	}
 	int i;
 	float linew, w = 0;

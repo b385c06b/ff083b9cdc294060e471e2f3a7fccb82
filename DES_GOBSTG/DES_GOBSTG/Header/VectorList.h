@@ -1,7 +1,20 @@
 #ifndef _VECTORLIST_H
 #define _VECTORLIST_H
 
+#include <memory.h>
+#ifdef __WIN32
 #include <windows.h>
+#else
+#ifndef DWORD
+typedef unsigned long	DWORD;
+#endif
+#ifndef NULL
+#define NULL	(0)
+#endif
+#ifndef ZeroMemory
+#define ZeroMemory(Destination,Length) memset((Destination),0,(Length))
+#endif
+#endif
 
 #define VECLST_INDEXERROR	0xffffffff
 

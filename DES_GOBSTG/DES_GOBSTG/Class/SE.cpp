@@ -1,6 +1,5 @@
 #include "../Header/SE.h"
 #include "../Header/BResource.h"
-#include "../../../src/core/BASS/bass.h"
 
 seStruct SE::se[SEMAX];
 BYTE SE::vol;

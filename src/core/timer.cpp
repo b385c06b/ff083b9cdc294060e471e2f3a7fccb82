@@ -25,6 +25,7 @@ LONGLONG CALL HGE_Impl::Timer_GetPerformanceFrequency()
 
 void CALL HGE_Impl::Timer_GetSystemTime(WORD *wYear, WORD *wMonth, WORD *wDayOfWeek, WORD *wDay, WORD *wHour, WORD *wMinute, WORD *wSecond, WORD *wMilliseconds)
 {
+#ifdef __WIN32
 	SYSTEMTIME systime;
 	GetLocalTime(&systime);
 	if (wYear)
@@ -59,15 +60,20 @@ void CALL HGE_Impl::Timer_GetSystemTime(WORD *wYear, WORD *wMonth, WORD *wDayOfW
 	{
 		*wMilliseconds = systime.wMilliseconds;
 	}
+#endif
 }
 
 LONGLONG CALL HGE_Impl::Timer_GetFileTime()
 {
+#ifdef __WIN32
 	FILETIME filetime;
 	SYSTEMTIME systime;
 	GetLocalTime(&systime);
 	SystemTimeToFileTime(&systime, &filetime);
 	return (((ULONGLONG)filetime.dwHighDateTime)<<32)|(filetime.dwLowDateTime);
+#else
+	return 0;
+#endif
 }
 
 float CALL HGE_Impl::Timer_GetTime()

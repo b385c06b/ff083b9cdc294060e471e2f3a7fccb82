@@ -344,6 +344,22 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<Filter
+				Name="MMGR"
+				>
+				<File
+					RelativePath="..\mmgr\mmgr.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\mmgr\mmgr.h"
+					>
+				</File>
+				<File
+					RelativePath="..\mmgr\nommgr.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Í·ÎÄ¼þ"

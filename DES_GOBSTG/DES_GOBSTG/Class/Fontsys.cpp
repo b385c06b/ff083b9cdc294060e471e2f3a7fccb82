@@ -91,6 +91,7 @@ void Fontsys::HeatUp(bool rebuildfont)
 {
 	if (rebuildfont)
 	{
+#ifdef __WIN32
 		if (!d3dfont)
 		{
 			return;
@@ -134,6 +135,7 @@ void Fontsys::HeatUp(bool rebuildfont)
 		{
 		}
 		free(charcodes);
+#endif // __WIN32
 	}
 
 	if (font)

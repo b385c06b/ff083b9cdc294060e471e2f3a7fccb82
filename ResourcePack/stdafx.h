@@ -37,7 +37,7 @@
 #include <afxdtctl.h>		// Internet Explorer 4 公共控件的 MFC 支持
 #ifndef _AFX_NO_AFXCMN_SUPPORT
 #include <afxcmn.h>			// Windows 公共控件的 MFC 支持
-
+#define __WIN32
 #include "../DES_GOBSTG/DES_GOBSTG/Header/Export.h"
 
 #endif // _AFX_NO_AFXCMN_SUPPORT

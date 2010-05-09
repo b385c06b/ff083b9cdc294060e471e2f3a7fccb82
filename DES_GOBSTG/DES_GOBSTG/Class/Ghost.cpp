@@ -90,6 +90,7 @@ void Ghost::Clear()
 	exist = false;
 	able = false;
 	timer = 0;
+	effghost.Free();
 }
 
 void Ghost::valueSet(WORD _ID, float _x, float _y, int _angle, float _speed, BYTE _type, float _life, int _ac)
