@@ -8,6 +8,14 @@
 
 #include "hge_impl.h"
 
+#ifdef __PSP
+#include <pspkernel.h>
+#include <pspdebug.h>
+#include <pspsdk.h>
+#include <pspthreadman.h>
+#include <pspaudiocodec.h> 
+#include <pspmpeg.h>
+#endif // __PSP
 
 #define LOWORDINT(n) ((int)((signed short)(LOWORD(n))))
 #define HIWORDINT(n) ((int)((signed short)(HIWORD(n))))
@@ -60,8 +68,41 @@ void CALL HGE_Impl::Release()
 		Resource_RemoveAllPacks();
 		delete pHGE;
 		pHGE=0;
+
+#ifdef __WIN32
+#ifdef WIN32
+#ifdef _DEBUG
+		m_dumpMemoryReport();
+#endif // _DEBUG
+#endif // WIN32
+#endif // __WIN32
+
+#ifdef __PSP
+		sceKernelDelayThread(500000);
+		sceKernelExitGame();
+#endif // __PSP
 	}
 }
+
+#ifdef __PSP
+/* Exit callback */
+int exit_callback(int arg1, int arg2, void *common) {
+	sceKernelExitGame();
+	return 0;
+}
+
+/* Callback thread */
+int CallbackThread(SceSize args, void *argp) {
+	int cbid;
+
+	cbid = sceKernelCreateCallback("Exit Callback", exit_callback, NULL);
+	sceKernelRegisterExitCallback(cbid);
+
+	sceKernelSleepThreadCB();
+
+	return 0;
+}
+#endif // __PSP
 
 
 bool CALL HGE_Impl::System_Initiate()
@@ -162,7 +203,18 @@ bool CALL HGE_Impl::System_Initiate()
 	timeBeginPeriod(1);
 #else
 	hwnd = 1;
-#endif
+
+#ifdef __PSP
+	pspDebugScreenInit();
+	int thid = 0;
+	thid = sceKernelCreateThread("update_thread", CallbackThread, 0x11, 0xFA0, 0, 0);
+	if(thid >= 0)
+	{
+		sceKernelStartThread(thid, 0, 0);
+	}
+#endif // __PSP
+
+#endif //__WIN32
 	Random_Seed();
 	_InputInit();
 

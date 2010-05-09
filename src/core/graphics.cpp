@@ -15,6 +15,19 @@
 #ifdef __WIN32
 #include <d3d9.h>
 #include <d3dx9.h>
+#else
+
+#ifdef __PSP
+#include <pspkernel.h>
+#include <pspdisplay.h>
+#include <pspdebug.h>
+#include <pspctrl.h>
+#include <pspgu.h>
+#include <pspgum.h>
+#include <psprtc.h>
+static unsigned int __attribute__((aligned(16))) gulist[262144];
+#endif // __PSP
+
 #endif
 
 
@@ -39,24 +52,36 @@ void CALL HGE_Impl::Gfx_Clear(DWORD color)
 			pD3DDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, color, 1.0f, 0 );
 		else
 			pD3DDevice->Clear( 0, NULL, D3DCLEAR_TARGET, color, 1.0f, 0 );
+#else
+
+#ifdef __PSP
+		sceGuDisable(GU_SCISSOR_TEST);
+		sceGuClearColor(color);
+		sceGuClear(GU_COLOR_BUFFER_BIT);
+		sceGuEnable(GU_SCISSOR_TEST);
+#endif // __PSP
+
 #endif
 	}
 }
 
 void CALL HGE_Impl::Gfx_SetClipping(int x, int y, int w, int h)
 {
-#ifdef __WIN32
-	D3DVIEWPORT9 vp;
-	int scr_width, scr_height;
+	int scr_width = 0;
+	int	scr_height = 0;
 
 	if(!pCurTarget) {
 		scr_width=pHGE->System_GetStateInt(HGE_SCREENWIDTH);
 		scr_height=pHGE->System_GetStateInt(HGE_SCREENHEIGHT);
 	}
 	else {
+#ifdef __WIN32
 		scr_width=Texture_GetWidth((HTEXTURE)((DWORD)pCurTarget->pTex));
 		scr_height=Texture_GetHeight((HTEXTURE)((DWORD)pCurTarget->pTex));
+#endif // __WIN32
 	}
+#ifdef __WIN32
+	D3DVIEWPORT9 vp;
 
 	if(!w) {
 		vp.X=0;
@@ -91,6 +116,18 @@ void CALL HGE_Impl::Gfx_SetClipping(int x, int y, int w, int h)
 	Math_MatrixOrthoOffCenterLH(&tmp, (float)vp.X, (float)(vp.X+vp.Width), -((float)(vp.Y+vp.Height)), -((float)vp.Y), vp.MinZ, vp.MaxZ);
 	Math_MatrixMultiply(&matProj, &matProj, &tmp);
 	pD3DDevice->SetTransform(D3DTS_PROJECTION, &matProj);
+#else
+
+#ifdef __PSP
+	if (!w)
+	{
+		w = scr_width;
+		h = scr_height;
+	}
+	sceGuEnable(GU_SCISSOR_TEST);
+	sceGuScissor(x,y,x+w,y+h);
+#endif // __PSP
+
 #endif
 }
 
@@ -226,11 +263,40 @@ bool CALL HGE_Impl::Gfx_BeginScene(HTARGET targ)
 	}
 	pD3DDevice->BeginScene();
 	pVB->Lock( 0, 0, (void**)&VertArray, 0 );
-#endif
+#else
 	/************************************************************************/
 	/* TODO                                                                 */
 	/************************************************************************/
 
+#ifdef __PSP
+	D3DXMATRIX ProjectionMatrix;
+	sceGuStart(GU_DIRECT, gulist);
+	ProjectionMatrix[0] = SCREEN_HEIGHT/SCREEN_WIDTH;
+	ProjectionMatrix[1] = 0.0f;
+	ProjectionMatrix[2] = 0.0f;
+	ProjectionMatrix[3] = 0.0f;
+	ProjectionMatrix[4] = 0.0f;
+	ProjectionMatrix[5] = -1.0f;
+	ProjectionMatrix[6] = 0.0f;
+	ProjectionMatrix[7] = 0.0f;
+	ProjectionMatrix[8] = 0.0f;
+	ProjectionMatrix[9] = 0.0f;
+	ProjectionMatrix[10] = -1.0f;
+	ProjectionMatrix[11] = -1.0f;
+	ProjectionMatrix[12] = -SCREEN_HEIGHT/2;
+	ProjectionMatrix[13] = SCREEN_HEIGHT/2;
+	ProjectionMatrix[14] = SCREEN_HEIGHT/2;
+	ProjectionMatrix[15] = SCREEN_HEIGHT/2;
+
+	sceGumMatrixMode(GU_PROJECTION);
+	sceGumLoadIdentity();
+	sceGumMultMatrix((ScePspFMatrix4*)ProjectionMatrix);
+
+	sceGumMatrixMode(GU_VIEW);
+	sceGumLoadIdentity();
+#endif // __PSP
+
+#endif //__WIN32
 	return true;
 }
 
@@ -240,11 +306,19 @@ void CALL HGE_Impl::Gfx_EndScene()
 #ifdef __WIN32
 	pD3DDevice->EndScene();
 	if(!pCurTarget) pD3DDevice->Present( NULL, NULL, NULL, NULL );
-#endif
+#else
 	/************************************************************************/
 	/* TODO                                                                 */
 	/************************************************************************/
+
+#ifdef __PSP
+	sceGuFinish();
+	sceGuSync(0,0);
+	sceGuSwapBuffers();
+#endif // __PSP
+
 }
+#endif
 
 void CALL HGE_Impl::Gfx_RenderLine(float x1, float y1, float x2, float y2, DWORD color, float z)
 {
@@ -270,7 +344,33 @@ void CALL HGE_Impl::Gfx_RenderLine(float x1, float y1, float x2, float y2, DWORD
 
 		nPrim++;
 	}
-#endif
+#else
+
+#ifdef __PSP
+	struct Vertex* vertices = (struct Vertex*)sceGuGetMemory(2 * sizeof(struct Vertex));
+	if (!vertices)
+	{
+		return;
+	}
+	vertices[0].color = color;
+	vertices[0].x = x1; 
+	vertices[0].y = y1; 
+	vertices[0].z = z;
+
+	vertices[1].color = color;
+	vertices[1].x = x2; 
+	vertices[1].y = y2; 
+	vertices[1].z = z;
+
+	sceGuDisable(GU_TEXTURE_2D);
+	sceGuShadeModel(GU_FLAT);
+	sceGuShadeModel(GU_SMOOTH);
+	sceGuAmbientColor(0xffffffff);
+	sceGumDrawArray(GU_LINES, DISPLAY_PIXEL_FORMAT_8888|GU_VERTEX_32BITF|GU_TRANSFORM_3D, 1*2, 0, vertices);
+	sceGuEnable(GU_TEXTURE_2D);
+#endif // __PSP
+
+#endif // __WIN32
 }
 
 /************************************************************************/
@@ -1001,6 +1101,91 @@ bool HGE_Impl::_GfxInit()
 
 	Gfx_SetTextureInfo(0);
 #endif
+
+#ifdef __PSP
+	// Setup GU
+ 	//pspDebugScreenInit();
+	// Setup GU
+ 	m_drawbuf = getStaticVramBuffer(BUF_WIDTH,SCR_HEIGHT,GU_PSM_8888);
+	m_displaybuf = getStaticVramBuffer(BUF_WIDTH,SCR_HEIGHT,GU_PSM_8888);
+	m_zbuf = getStaticVramBuffer(BUF_WIDTH,SCR_HEIGHT,GU_PSM_4444);
+	// setup GU
+	sceGuInit();
+	sceGuStart(GU_DIRECT,list);
+	sceGuDrawBuffer(GU_PSM_8888,m_drawbuf,BUF_WIDTH);
+	sceGuDispBuffer(SCR_WIDTH,SCR_HEIGHT,m_displaybuf,BUF_WIDTH);
+	sceGuDepthBuffer(m_zbuf,BUF_WIDTH);
+	sceGuOffset(2048 - (SCREEN_WIDTH/2), 2048 - (SCREEN_HEIGHT/2));
+	sceGuViewport(2048, 2048, SCREEN_WIDTH, SCREEN_HEIGHT);
+	// Scissoring
+	sceGuEnable(GU_SCISSOR_TEST);
+	sceGuScissor(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	// Backface culling
+	sceGuFrontFace(GU_CCW);
+	sceGuDisable(GU_CULL_FACE);		// no culling in 2D
+	// Depth test
+	sceGuDisable(GU_DEPTH_TEST);
+	sceGuDepthMask(GU_TRUE);		// disable z-writes
+	// Color keying
+	sceGuDisable(GU_COLOR_TEST);
+	sceGuDisable(GU_ALPHA_TEST);
+	sceGuDisable(GU_CLIP_PLANES);
+	// Texturing
+	sceGuEnable(GU_TEXTURE_2D);
+	sceGuShadeModel(GU_SMOOTH);
+	sceGuTexWrap(GU_REPEAT, GU_REPEAT);
+	sceGuTexFilter(GU_LINEAR,GU_LINEAR);
+	//sceGuTexFunc(GU_TFX_REPLACE, GU_TCC_RGBA);
+	sceGuTexEnvColor(0xFFFFFFFF);
+	sceGuColor(0xFFFFFFFF);
+	sceGuAmbientColor(0xFFFFFFFF);
+	sceGuTexOffset(0.0f, 0.0f);
+	sceGuTexScale(1.0f, 1.0f);
+	// Blending
+	sceGuEnable(GU_BLEND);
+	sceGuBlendFunc(GU_ADD, GU_SRC_ALPHA, GU_ONE_MINUS_SRC_ALPHA, 0, 0);
+	sceGuTexFunc(GU_TFX_MODULATE,GU_TCC_RGBA);
+	sceGuTexFilter(GU_LINEAR,GU_LINEAR);
+	sceGuDisable(GU_DITHER);
+	
+	// Projection
+
+	ProjectionMatrix[0] = SCREEN_HEIGHT/SCREEN_WIDTH;
+	ProjectionMatrix[1] = 0.0f;
+	ProjectionMatrix[2] = 0.0f;
+	ProjectionMatrix[3] = 0.0f;
+	ProjectionMatrix[4] = 0.0f;
+	ProjectionMatrix[5] = -1.0f;
+	ProjectionMatrix[6] = 0.0f;
+	ProjectionMatrix[7] = 0.0f;
+	ProjectionMatrix[8] = 0.0f;
+	ProjectionMatrix[9] = 0.0f;
+	ProjectionMatrix[10] = -1.0f;
+	ProjectionMatrix[11] = -1.0f;
+	ProjectionMatrix[12] = -SCREEN_HEIGHT/2;
+	ProjectionMatrix[13] = SCREEN_HEIGHT/2;
+	ProjectionMatrix[14] = SCREEN_HEIGHT/2;
+	ProjectionMatrix[15] = SCREEN_HEIGHT/2;
+
+	sceGumMatrixMode(GU_PROJECTION);
+	sceGumLoadIdentity();
+	sceGumMultMatrix((ScePspFMatrix4*)ProjectionMatrix);
+
+	sceGumMatrixMode(GU_VIEW);
+	sceGumLoadIdentity();
+	
+	sceGumMatrixMode(GU_MODEL);
+	sceGumLoadIdentity();
+	
+	sceGuClearColor( 0x0 );
+	sceGuClear(GU_COLOR_BUFFER_BIT|GU_FAST_CLEAR_BIT);
+	sceGuFinish();
+	sceGuSync(0,0);
+
+	sceDisplayWaitVblankStart();
+	sceGuDisplay(1);
+#endif // __PSP
+
 	_AdjustWindow();
 #ifdef __WIN32
 	System_Log("Mode: %d x %d x %s\n",nScreenWidth,nScreenHeight,szFormats[_format_id(Format)]);
@@ -1117,6 +1302,12 @@ void HGE_Impl::_GfxDone()
 	}
 	if(pD3DDevice) { pD3DDevice->Release(); pD3DDevice=0; }
 	if(pD3D) { pD3D->Release(); pD3D=0; }
+#else
+
+#ifdef __PSP
+	sceGuTerm();
+#endif // __PSP
+
 #endif
 }
 

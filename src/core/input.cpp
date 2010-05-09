@@ -12,6 +12,13 @@
 #define INITGUID
 
 #include "hge_impl.h"
+
+#ifdef __PSP
+#include <pspkernel.h>
+#include <pspdebug.h>
+#include <pspctrl.h>
+#endif // __PSP
+
 /************************************************************************/
 /* These header files are added by h5nc (h5nc@yahoo.com.cn)             */
 /************************************************************************/
@@ -619,6 +626,12 @@ int HGE_Impl::_DIInit()
 		}
 	}
 #endif
+
+#ifdef __PSP
+	sceCtrlSetSamplingCycle(0);
+	sceCtrlSetSamplingMode(PSP_CTRL_MODE_ANALOG);
+#endif // __PSP
+
 	return ((!nojoy)?0:ERROR_NOJOYSTICK) | (keyable?0:ERROR_NOKEYBOARD);
 }
 
@@ -694,7 +707,21 @@ int HGE_Impl::_DIUpdate()
 		/* TODO                                                                 */
 		/************************************************************************/
 		ZeroMemory(&keyState, sizeof(keyState));
-#endif
+
+#ifdef __PSP
+		SceCtrlData pad;
+		sceCtrlPeekBufferPositive(&pad, 1);
+		//Analog pad.Lx, Pad.Ly
+		for (int i=0; i<32; i++)
+		{
+			if (pad.Buttons & (1<<i))
+			{
+				keyState[i] = 1<<7;
+			}
+		}
+#endif // __PSP
+
+#endif // __WIN32
 	}
 
 	bool nojoy = true;

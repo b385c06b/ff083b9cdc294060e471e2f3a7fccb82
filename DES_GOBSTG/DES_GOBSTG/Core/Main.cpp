@@ -47,7 +47,7 @@ bool FocusGainFunc()
 #ifdef __WIN32
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #else
-int main()
+int main(int argc, char* argv[])
 #endif
 {
 	hge = hgeCreate(HGE_VERSION);
@@ -71,13 +71,5 @@ int main()
 //	hge->System_Shutdown();
 	Export::Release();
 
-
-#ifdef __WIN32
-#ifdef WIN32
-#ifdef _DEBUG
-	m_dumpMemoryReport();
-#endif // _DEBUG
-#endif // WIN32
-#endif // __WIN32
 	return 0;
 }
