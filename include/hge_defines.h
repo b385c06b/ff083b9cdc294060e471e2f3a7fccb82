@@ -1,7 +1,9 @@
 #ifndef HGE_DEFINES_H
 #define HGE_DEFINES_H
 
-//#define __WIN32
+#ifndef __PSP
+#define __WIN32
+#endif // __PSP
 
 #ifndef __WIN32
 
@@ -10,24 +12,13 @@
 /************************************************************************/
 //typedef unsigned __int64	QWORD;
 //typedef __int64			LONGLONG;
-#define timeGetTime()	(0)
-#define WritePrivateProfileString(A, B, C, D)	(1)
-#define GetPrivateProfileString(A, B, C, D, E, F)	(0)
-#define DeleteFile(A)	(0)
-#define SetCurrentDirectory(A)	(0)
-#define _access(A, B)	(0)
-#define CreateDirectory(A, B)	(0)
-#define QueryPerformanceCounter(A)	(0)
-#define QueryPerformanceFrequency(A)	(0)
-#define D3DXMatrixIdentity(A)		(0)
-#define D3DXMatrixRotationX(A, B)	(0)
-#define D3DXMatrixRotationY(A, B)	(0)
-#define D3DXMatrixRotationZ(A, B)	(0)
-#define D3DXMatrixTranslation(A, B, C, D)	(0)
-#define D3DXMatrixScaling(A, B, C, D)	(0)
-#define D3DXMatrixMultiply(A, B, C)	(0)
-#define D3DXMatrixOrthoOffCenterLH(A, B, C, D, E, F, G)	(0)
-#define MessageBox(A, B, C, D)	(1)
+
+#ifdef __PSP
+#include <psptypes.h>
+typedef s64	__int64;
+#define SCREEN_WIDTH 480.0f
+#define SCREEN_HEIGHT 272.0f
+#endif // __PSP
 
 /************************************************************************/
 /*                                                                      */
@@ -40,12 +31,16 @@ typedef unsigned char       BYTE;
 #endif
 
 #ifndef QWORD
+#ifdef __PSP
+typedef u64		QWORD;
+#else
 typedef unsigned __int64	QWORD;
+#endif // __PSP
 #endif
 
 #ifndef LONGLONG
 typedef __int64			LONGLONG;
-typedef unsigned __int64 ULONGLONG;
+typedef QWORD ULONGLONG;
 #endif
 
 #ifndef NULL

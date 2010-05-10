@@ -388,7 +388,7 @@ bool hgeSprite::SetZ(float z0, float z1, float z2, float z3, hge3DPoint *ptfar)
 		for (int i=0; i<4; i++)
 		{
 			//use z0
-			float zscale = hge->System_Transform3DPoint(quad.v[i].x, quad.v[i].y, quad.v[0].z, ptfar);
+			float zscale = hge->Math_Transform3DPoint(quad.v[i].x, quad.v[i].y, quad.v[0].z, ptfar);
 			if (i == 0)
 			{
 				scale3d = zscale;

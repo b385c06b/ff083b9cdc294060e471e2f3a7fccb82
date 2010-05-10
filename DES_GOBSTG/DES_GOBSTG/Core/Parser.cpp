@@ -1833,7 +1833,7 @@ chatout:
 			char strbuffer[M_STRMAX];
 			sprintf(strbuffer, "%s\nError in parsing %d. %s. Line %d. Point to 0x%x.", HGELOG_ERRSTR, it->value, filelist[it->fileindex].filename, it->line, it->pos);
 			HGELOG(strbuffer);
-			MessageBox(NULL, strbuffer, HGELOG_ERRSTR, MB_OK);
+			hge->System_MessageBox(strbuffer, HGELOG_ERRSTR, MB_OK);
 			LogOut();
 #endif
 			return false;

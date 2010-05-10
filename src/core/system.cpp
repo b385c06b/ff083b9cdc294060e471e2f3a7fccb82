@@ -503,23 +503,6 @@ bool CALL HGE_Impl::System_Start()
 
 	return true;
 }
-/************************************************************************/
-/* These functions are added by h5nc (h5nc@yahoo.com.cn)                */
-/************************************************************************/
-// begin
-float CALL HGE_Impl::System_Transform3DPoint(float &x, float &y, float &z, hge3DPoint *ptfar)
-{
-	if (!ptfar || ptfar->z == 0.0f)
-	{
-		return 1.0f;
-	}
-	float scale = (ptfar->z - z) / ptfar->z;
-	x = (x - ptfar->x) * scale + ptfar->x;
-	y = (y - ptfar->y) * scale + ptfar->y;
-	z = 0;
-	return scale;
-}
-// end
 
 void CALL HGE_Impl::System_SetStateBool(hgeBoolState state, bool value)
 {
@@ -891,6 +874,20 @@ void CALL HGE_Impl::System_Snapshot(const char *filename)
 		pSurf->Release();
 	}
 #endif
+}
+
+int CALL HGE_Impl::System_MessageBox(const char * text, const char * title, DWORD type)
+{
+#ifdef __WIN32
+	return MessageBox(hwnd, text, title, type);
+#else
+
+#ifdef __PSP
+	pspDebugScreenPrintf("%s\n%s", title, text);
+	return IDOK;
+#endif // __PSP
+
+#endif // __WIN32
 }
 
 //////// Implementation ////////

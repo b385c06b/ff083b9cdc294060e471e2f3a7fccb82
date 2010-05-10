@@ -1950,7 +1950,7 @@ bool _Parser::DEBUG_MB_()
 	float fval = FGet();
 	char buffer[M_STRMAX];
 	sprintf(buffer, "IVal : %d, FVal : %f", ival, fval);
-	MessageBox(NULL, buffer, "", MB_OK);
+	hge->System_MessageBox(buffer, "", MB_OK);
 #endif
 
 	_LEAVE_PARSE();

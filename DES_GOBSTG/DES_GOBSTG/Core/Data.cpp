@@ -981,7 +981,7 @@ LONGLONG Data::lRead(BYTE type, DWORD section, DWORD name, LONGLONG def_val)
 		else
 		{
 			strcpy(buf, hge->Ini_GetString(translateSection(section), translateName(name), "", nowfilename));
-			return _atoi64(buf);
+			return hge->Math_atoll(buf);
 		}
 	}
 	return def_val;

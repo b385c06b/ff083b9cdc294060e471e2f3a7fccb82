@@ -269,28 +269,27 @@ bool CALL HGE_Impl::Gfx_BeginScene(HTARGET targ)
 	/************************************************************************/
 
 #ifdef __PSP
-	D3DXMATRIX ProjectionMatrix;
 	sceGuStart(GU_DIRECT, gulist);
-	ProjectionMatrix[0] = SCREEN_HEIGHT/SCREEN_WIDTH;
-	ProjectionMatrix[1] = 0.0f;
-	ProjectionMatrix[2] = 0.0f;
-	ProjectionMatrix[3] = 0.0f;
-	ProjectionMatrix[4] = 0.0f;
-	ProjectionMatrix[5] = -1.0f;
-	ProjectionMatrix[6] = 0.0f;
-	ProjectionMatrix[7] = 0.0f;
-	ProjectionMatrix[8] = 0.0f;
-	ProjectionMatrix[9] = 0.0f;
-	ProjectionMatrix[10] = -1.0f;
-	ProjectionMatrix[11] = -1.0f;
-	ProjectionMatrix[12] = -SCREEN_HEIGHT/2;
-	ProjectionMatrix[13] = SCREEN_HEIGHT/2;
-	ProjectionMatrix[14] = SCREEN_HEIGHT/2;
-	ProjectionMatrix[15] = SCREEN_HEIGHT/2;
+	matProj.m[0][0] = SCREEN_HEIGHT/SCREEN_WIDTH;
+	matProj.m[0][1] = 0.0f;
+	matProj.m[0][2] = 0.0f;
+	matProj.m[0][3] = 0.0f;
+	matProj.m[1][0] = 0.0f;
+	matProj.m[1][1] = -1.0f;
+	matProj.m[1][2] = 0.0f;
+	matProj.m[1][3] = 0.0f;
+	matProj.m[2][0] = 0.0f;
+	matProj.m[2][1] = 0.0f;
+	matProj.m[2][2] = -1.0f;
+	matProj.m[2][3] = -1.0f;
+	matProj.m[3][0] = -SCREEN_HEIGHT/2;
+	matProj.m[3][1] = SCREEN_HEIGHT/2;
+	matProj.m[3][2] = SCREEN_HEIGHT/2;
+	matProj.m[3][3] = SCREEN_HEIGHT/2;
 
 	sceGumMatrixMode(GU_PROJECTION);
 	sceGumLoadIdentity();
-	sceGumMultMatrix((ScePspFMatrix4*)ProjectionMatrix);
+	sceGumMultMatrix((ScePspFMatrix4*)&matProj);
 
 	sceGumMatrixMode(GU_VIEW);
 	sceGumLoadIdentity();
@@ -317,8 +316,8 @@ void CALL HGE_Impl::Gfx_EndScene()
 	sceGuSwapBuffers();
 #endif // __PSP
 
-}
 #endif
+}
 
 void CALL HGE_Impl::Gfx_RenderLine(float x1, float y1, float x2, float y2, DWORD color, float z)
 {
@@ -347,7 +346,7 @@ void CALL HGE_Impl::Gfx_RenderLine(float x1, float y1, float x2, float y2, DWORD
 #else
 
 #ifdef __PSP
-	struct Vertex* vertices = (struct Vertex*)sceGuGetMemory(2 * sizeof(struct Vertex));
+	struct pspVertex* vertices = (struct pspVertex*)sceGuGetMemory(2 * sizeof(struct pspVertex));
 	if (!vertices)
 	{
 		return;
@@ -366,7 +365,7 @@ void CALL HGE_Impl::Gfx_RenderLine(float x1, float y1, float x2, float y2, DWORD
 	sceGuShadeModel(GU_FLAT);
 	sceGuShadeModel(GU_SMOOTH);
 	sceGuAmbientColor(0xffffffff);
-	sceGumDrawArray(GU_LINES, DISPLAY_PIXEL_FORMAT_8888|GU_VERTEX_32BITF|GU_TRANSFORM_3D, 1*2, 0, vertices);
+	sceGumDrawArray(GU_LINES, GU_COLOR_8888|GU_VERTEX_32BITF|GU_TRANSFORM_3D, 1*2, 0, vertices);
 	sceGuEnable(GU_TEXTURE_2D);
 #endif // __PSP
 
@@ -941,6 +940,50 @@ void HGE_Impl::_SetProjectionMatrix(int width, int height)
 	Math_MatrixMultiply(&matProj, &matProj, &tmp);
 }
 
+#ifdef __PSP
+
+static unsigned int staticOffset = 0;
+static unsigned int getMemorySize(unsigned int width, unsigned int height, unsigned int psm)
+{
+	switch (psm)
+	{
+	case GU_PSM_T4:
+		return (width * height) >> 1;
+
+	case GU_PSM_T8:
+		return width * height;
+
+	case GU_PSM_5650:
+	case GU_PSM_5551:
+	case GU_PSM_4444:
+	case GU_PSM_T16:
+		return 2 * width * height;
+
+	case GU_PSM_8888:
+	case GU_PSM_T32:
+		return 4 * width * height;
+
+	default:
+		return 0;
+	}
+}
+void* getStaticVramBuffer(unsigned int width, unsigned int height, unsigned int psm)
+{
+	unsigned int memSize = getMemorySize(width,height,psm);
+	void* result = (void*)staticOffset;
+	staticOffset += memSize;
+
+	return result;
+}
+void* getStaticVramTexture(unsigned int width, unsigned int height, unsigned int psm)
+{
+	void* result = getStaticVramBuffer(width,height,psm);
+	return (void*)(((unsigned int)result) + ((unsigned int)sceGeEdramGetAddr()));
+}
+
+
+#endif // __PSP
+
 bool HGE_Impl::_GfxInit()
 {
 #ifdef __WIN32
@@ -1103,17 +1146,18 @@ bool HGE_Impl::_GfxInit()
 #endif
 
 #ifdef __PSP
+	#define BUF_WIDTH (512)
 	// Setup GU
  	//pspDebugScreenInit();
 	// Setup GU
- 	m_drawbuf = getStaticVramBuffer(BUF_WIDTH,SCR_HEIGHT,GU_PSM_8888);
-	m_displaybuf = getStaticVramBuffer(BUF_WIDTH,SCR_HEIGHT,GU_PSM_8888);
-	m_zbuf = getStaticVramBuffer(BUF_WIDTH,SCR_HEIGHT,GU_PSM_4444);
+	void * m_drawbuf = getStaticVramBuffer(BUF_WIDTH,SCREEN_HEIGHT,GU_PSM_8888);
+	void * m_displaybuf = getStaticVramBuffer(BUF_WIDTH,SCREEN_HEIGHT,GU_PSM_8888);
+	void * m_zbuf = getStaticVramBuffer(BUF_WIDTH,SCREEN_HEIGHT,GU_PSM_4444);
 	// setup GU
 	sceGuInit();
-	sceGuStart(GU_DIRECT,list);
+	sceGuStart(GU_DIRECT, gulist);
 	sceGuDrawBuffer(GU_PSM_8888,m_drawbuf,BUF_WIDTH);
-	sceGuDispBuffer(SCR_WIDTH,SCR_HEIGHT,m_displaybuf,BUF_WIDTH);
+	sceGuDispBuffer(SCREEN_WIDTH,SCREEN_HEIGHT,m_displaybuf,BUF_WIDTH);
 	sceGuDepthBuffer(m_zbuf,BUF_WIDTH);
 	sceGuOffset(2048 - (SCREEN_WIDTH/2), 2048 - (SCREEN_HEIGHT/2));
 	sceGuViewport(2048, 2048, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -1150,26 +1194,26 @@ bool HGE_Impl::_GfxInit()
 	
 	// Projection
 
-	ProjectionMatrix[0] = SCREEN_HEIGHT/SCREEN_WIDTH;
-	ProjectionMatrix[1] = 0.0f;
-	ProjectionMatrix[2] = 0.0f;
-	ProjectionMatrix[3] = 0.0f;
-	ProjectionMatrix[4] = 0.0f;
-	ProjectionMatrix[5] = -1.0f;
-	ProjectionMatrix[6] = 0.0f;
-	ProjectionMatrix[7] = 0.0f;
-	ProjectionMatrix[8] = 0.0f;
-	ProjectionMatrix[9] = 0.0f;
-	ProjectionMatrix[10] = -1.0f;
-	ProjectionMatrix[11] = -1.0f;
-	ProjectionMatrix[12] = -SCREEN_HEIGHT/2;
-	ProjectionMatrix[13] = SCREEN_HEIGHT/2;
-	ProjectionMatrix[14] = SCREEN_HEIGHT/2;
-	ProjectionMatrix[15] = SCREEN_HEIGHT/2;
+	matProj.m[0][0] = SCREEN_HEIGHT/SCREEN_WIDTH;
+	matProj.m[0][1] = 0.0f;
+	matProj.m[0][2] = 0.0f;
+	matProj.m[0][3] = 0.0f;
+	matProj.m[1][0] = 0.0f;
+	matProj.m[1][1] = -1.0f;
+	matProj.m[1][2] = 0.0f;
+	matProj.m[1][3] = 0.0f;
+	matProj.m[2][0] = 0.0f;
+	matProj.m[2][1] = 0.0f;
+	matProj.m[2][2] = -1.0f;
+	matProj.m[2][3] = -1.0f;
+	matProj.m[3][0] = -SCREEN_HEIGHT/2;
+	matProj.m[3][1] = SCREEN_HEIGHT/2;
+	matProj.m[3][2] = SCREEN_HEIGHT/2;
+	matProj.m[3][3] = SCREEN_HEIGHT/2;
 
 	sceGumMatrixMode(GU_PROJECTION);
 	sceGumLoadIdentity();
-	sceGumMultMatrix((ScePspFMatrix4*)ProjectionMatrix);
+	sceGumMultMatrix((ScePspFMatrix4*)&matProj);
 
 	sceGumMatrixMode(GU_VIEW);
 	sceGumLoadIdentity();

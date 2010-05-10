@@ -48,7 +48,7 @@ void Process::startPrep(bool callinit)
 	}
 	else
 	{
-		seed = timeGetTime();
+		seed = hge->Timer_GetCurrentSystemTime();
 	}
 	clearPrep();
 

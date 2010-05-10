@@ -4,6 +4,16 @@
 #include "../Header/Main.h"
 #include "../Header/keytable.h"
 
+#ifndef iswspace
+#define iswspace(X) ((X)==0x20 || (X)>=0x09&&(X)<=0x0D)
+#endif
+#ifndef iswdigit
+#define iswdigit(X) ((X)>='0' && (X)<='9')
+#endif
+#ifndef iswlower
+#define iswlower(X) ((X)>='a' && (X)<='z')
+#endif
+
 Scripter Scripter::scr;
 
 bool Scripter::stopEdefScript = false;
@@ -554,7 +564,7 @@ addblock:
 							strcat(logbuffer, subbuffer);
 						}
 						HGELOG(logbuffer);
-						MessageBox(NULL, logbuffer, HGELOG_ERRSTR, MB_OK);
+						hge->System_MessageBox(logbuffer, HGELOG_ERRSTR, MB_OK);
 #endif
 						return false;
 					}

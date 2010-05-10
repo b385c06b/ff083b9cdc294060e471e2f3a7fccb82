@@ -41,7 +41,7 @@ bool EditorRes::Load()
 
 	if(Export::GetResourceFile())
 	{
-		MessageBox(hge->System_GetState(HGE_HWND), "Failed in Loading Resource File.", "Error", MB_OK);
+		hge->System_MessageBox("Failed in Loading Resource File.", "Error", MB_OK);
 		return false;
 	}
 	Data::data.GetIni();
@@ -159,14 +159,14 @@ bool EditorRes::Save(int savei)
 {
 	if(!eff[savei] || texnum[savei] < 0 ||!tex[texnum[savei]].tex)
 	{
-		MessageBox(NULL, "Failed in Saving Effectsystem.", "Error", MB_OK);
+		hge->System_MessageBox("Failed in Saving Effectsystem.", "Error", MB_OK);
 		return false;
 	}
 	char buffer[M_STRMAX];
 	strcpy(buffer, "Are you sure to save EffectSystem as ");
 	strcat(buffer, GetFullFilename(savei));
 	strcat(buffer, " ?");
-	if(MessageBox(NULL, buffer, "", MB_OKCANCEL) == IDCANCEL)
+	if(hge->System_MessageBox(buffer, "", MB_OKCANCEL) == IDCANCEL)
 		return false;
 
 	return Export::effSave(fullfilename, eff[savei], texnum[savei]);

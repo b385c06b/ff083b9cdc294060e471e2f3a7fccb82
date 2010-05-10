@@ -7,6 +7,7 @@
 #include <list>
 #include <vector>
 #include "../Header/VectorList.h"
+#include <stdio.h>
 #ifdef __WIN32
 #include <io.h>
 #include <assert.h>

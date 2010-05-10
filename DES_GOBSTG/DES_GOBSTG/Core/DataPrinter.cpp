@@ -3,18 +3,12 @@
 #include "../Header/BResource.h"
 #include "../Header/ConstResource.h"
 
+#ifdef __WIN32
+
 replayFrame DataPrinter::rpyframe[M_SAVEINPUTMAX];
 partInfo DataPrinter::partinfo[RPYPARTMAX];
 replayInfo DataPrinter::rpyinfo;
 string DataPrinter::str;
-
-DataPrinter::DataPrinter()
-{
-}
-
-DataPrinter::~DataPrinter()
-{
-}
 
 void DataPrinter::getHeader()
 {
@@ -975,3 +969,4 @@ bool DataPrinter::PrintReplayData(const char * foldername, const char * filename
 	
 	return true;
 }
+#endif // __WIN32

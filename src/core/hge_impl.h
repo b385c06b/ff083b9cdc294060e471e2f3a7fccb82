@@ -91,9 +91,6 @@ public:
 	virtual void		CALL	System_Shutdown();
 	virtual bool		CALL	System_Start();
 
-	virtual float		CALL	System_Transform3DPoint(hge3DPoint * pt, hge3DPoint *ptfar=NULL){return pt->scale = System_Transform3DPoint(pt->x, pt->y, pt->z, ptfar);};
-	virtual float		CALL	System_Transform3DPoint(float &x, float &y, float &z, hge3DPoint *ptfar=NULL);
-
 	virtual void		CALL	System_SetStateBool  (hgeBoolState   state, bool        value);
 	virtual void		CALL	System_SetStateFunc  (hgeFuncState   state, hgeCallback value);
 	virtual void		CALL	System_SetStateHwnd  (hgeHwndState   state, HWND        value);
@@ -108,11 +105,15 @@ public:
 	virtual	void		CALL	System_Log(const char *format, ...);
 	virtual bool		CALL	System_Launch(const char *url);
 	virtual void		CALL	System_Snapshot(const char *filename=0);
+	virtual int			CALL	System_MessageBox(const char * text, const char * title, DWORD type);
 
+	virtual float		CALL	Math_Transform3DPoint(hge3DPoint * pt, hge3DPoint *ptfar=NULL){return pt->scale = Math_Transform3DPoint(pt->x, pt->y, pt->z, ptfar);};
+	virtual float		CALL	Math_Transform3DPoint(float &x, float &y, float &z, hge3DPoint *ptfar=NULL);
 	virtual char*		CALL	Math_itoa(int ival, char * buffer);
 	virtual int			CALL	Math_atoi(const char * buffer);
 	virtual char*		CALL	Math_ftoa(float fval, char * buffer);
 	virtual float		CALL	Math_atof(const char * buffer);
+	virtual LONGLONG	CALL	Math_atoll(const char * buffer);
 	virtual D3DXMATRIX*	CALL	Math_MatrixIdentity(D3DXMATRIX * pOut);
 	virtual D3DXMATRIX*	CALL	Math_MatrixTranslation( D3DXMATRIX *pOut, float x, float y, float z );
 	virtual D3DXMATRIX*	CALL	Math_MatrixRotationX( D3DXMATRIX *pOut, float angle );
@@ -387,6 +388,9 @@ public:
 	void				_SetSampleVolume(int vol);
 	void				_SetStreamVolume(int vol);
 	void				_SetFXVolume(int vol);
+
+	DWORD				_IniGetPrivateProfileString(const char * appname, const char * keyname, const char * defval, char * retstr, DWORD size, const char * filename);
+	bool				_IniWritePrivateProfileString(const char * appname, const char * keyname, const char * val, const char * filename);
 
 
 	// Input

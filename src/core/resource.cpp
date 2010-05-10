@@ -17,6 +17,9 @@
 /************************************************************************/
 #include "ZLIB\zip.h"
 
+#ifdef __PSP
+#include <pspiofilemgr.h>
+#endif // __PSP
 
 /************************************************************************/
 /* This function is modified by h5nc (h5nc@yahoo.com.cn)                */
@@ -234,7 +237,15 @@ char * CALL HGE_Impl::Resource_GetPackFirstFileName(const char * packfilename)
 
 void CALL HGE_Impl::Resource_DeleteFile(const char *filename)
 {
+#ifdef __WIN32
 	DeleteFile(Resource_MakePath(filename));
+#else
+
+#ifdef __PSP
+	sceIoRemove(Resource_MakePath(filename));
+#endif // __PSP
+
+#endif // __WIN32
 }
 
 DWORD CALL HGE_Impl::Resource_FileSize(const char *filename)
@@ -254,7 +265,9 @@ DWORD CALL HGE_Impl::Resource_FileSize(const char *filename)
 
 void CALL HGE_Impl::Resource_SetCurrentDirectory(const char *filename)
 {
+#ifdef __WIN32
 	SetCurrentDirectory(Resource_MakePath(filename));
+#endif // __WIN32
 }
 
 /************************************************************************/
@@ -545,14 +558,33 @@ char* CALL HGE_Impl::Resource_EnumFolders(const char *wildcard)
 
 bool CALL HGE_Impl::Resource_AccessFile(const char *filename)
 {
+#ifdef __WIN32
 	if (_access(Resource_MakePath(filename), 00) == -1)
 	{
 		return false;
 	}
+#else
+
+	FILE * file = fopen(Resource_MakePath(filename), "rb");
+	if (!file)
+	{
+		return false;
+	}
+	fclose(file);
+
+#endif // __WIN32
 	return true;
 }
 
 bool CALL HGE_Impl::Resource_CreateDirectory(const char *filename)
 {
+#ifdef __WIN32
 	return CreateDirectory(Resource_MakePath(filename), NULL);
+#else
+
+#ifdef __PSP
+	sceIoMkdir(Resource_MakePath(filename), 0777);
+#endif // __PSP
+
+#endif // __WIN32
 }

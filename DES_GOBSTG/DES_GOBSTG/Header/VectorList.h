@@ -1,7 +1,7 @@
 #ifndef _VECTORLIST_H
 #define _VECTORLIST_H
 
-#include <memory.h>
+#include <string.h>
 #ifdef __WIN32
 #include <windows.h>
 #else

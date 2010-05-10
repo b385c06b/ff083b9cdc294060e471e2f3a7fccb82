@@ -9,18 +9,40 @@
 
 #include "hge_impl.h"
 
+#ifdef __PSP
+#include <psprtc.h>
+#endif // __PSP
+
 LONGLONG CALL HGE_Impl::Timer_GetCurrentSystemTime()
 {
+#ifdef __WIN32
 	LARGE_INTEGER Counter;
 	QueryPerformanceCounter(&Counter);
 	return Counter.QuadPart;
+#else
+
+#ifdef __PSP
+	u64 ticks;
+	sceRtcGetCurrentTick(&ticks);
+	return ticks;
+#endif // __PSP
+
+#endif // __WIN32
 }
 
 LONGLONG CALL HGE_Impl::Timer_GetPerformanceFrequency()
 {
+#ifdef __WIN32
 	LARGE_INTEGER Frequency;
 	QueryPerformanceFrequency(&Frequency);
 	return Frequency.QuadPart;
+#else
+
+#ifdef __PSP
+	return sceRtcGetTickResolution();
+#endif // __PSP
+
+#endif // __WIN32
 }
 
 void CALL HGE_Impl::Timer_GetSystemTime(WORD *wYear, WORD *wMonth, WORD *wDayOfWeek, WORD *wDay, WORD *wHour, WORD *wMinute, WORD *wSecond, WORD *wMilliseconds)
@@ -60,6 +82,46 @@ void CALL HGE_Impl::Timer_GetSystemTime(WORD *wYear, WORD *wMonth, WORD *wDayOfW
 	{
 		*wMilliseconds = systime.wMilliseconds;
 	}
+#else
+
+#ifdef __PSP
+	pspTime psptime;
+	u64 filetime;
+	sceRtcGetWin32FileTime(&psptime, &filetime);
+	if (wYear)
+	{
+		*wYear = psptime.year;
+	}
+	if (wMonth)
+	{
+		*wMonth = psptime.month;
+	}
+	if (wDayOfWeek)
+	{
+		*wDayOfWeek = 0;
+	}
+	if (wDay)
+	{
+		*wDay = psptime.day;
+	}
+	if (wHour)
+	{
+		*wHour = psptime.hour;
+	}
+	if (wMinute)
+	{
+		*wMinute = psptime.minutes;
+	}
+	if (wSecond)
+	{
+		*wSecond = psptime.seconds;
+	}
+	if (wMilliseconds)
+	{
+		*wMilliseconds = psptime.microseconds;
+	}
+#endif // __PSP
+
 #endif
 }
 
@@ -72,7 +134,14 @@ LONGLONG CALL HGE_Impl::Timer_GetFileTime()
 	SystemTimeToFileTime(&systime, &filetime);
 	return (((ULONGLONG)filetime.dwHighDateTime)<<32)|(filetime.dwLowDateTime);
 #else
-	return 0;
+
+#ifdef __PSP
+	pspTime psptime;
+	u64 filetime;
+	sceRtcGetWin32FileTime(&psptime, &filetime);
+	return filetime;
+#endif // __PSP
+
 #endif
 }
 

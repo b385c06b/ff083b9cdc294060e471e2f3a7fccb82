@@ -73,18 +73,43 @@
 class DataPrinter
 {
 public:
-	DataPrinter();
-	~DataPrinter();
+	DataPrinter(){};
+	~DataPrinter(){};
 
-	static bool PrintScore();
+	static bool PrintScore()
+#ifndef __WIN32
+	{
+		return true;
+	}
+#endif
+		;
+
+#ifdef __WIN32
 	static bool WriteString(string * str, FILE * hFile);
-	static bool PrintReplayData(const char * foldername, const char * filename);
-	static void getHeader();
+#endif
 
+	static bool PrintReplayData(const char * foldername, const char * filename)
+#ifndef __WIN32
+	{
+		return true;
+	}
+#endif
+	;
+
+	static void getHeader()
+#ifndef __WIN32
+	{
+		return;
+	}
+#endif
+	;
+
+#ifdef __WIN32
 	static string str;
 	static replayInfo rpyinfo;
 	static partInfo partinfo[RPYPARTMAX];
 	static replayFrame rpyframe[M_SAVEINPUTMAX];
+#endif // __WIN32
 };
 
 extern HGE * hge;

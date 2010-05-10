@@ -1381,7 +1381,7 @@ bool EditorUI::Delete()
 		strcpy(buffer, "Delete ");
 		strcat(buffer, eres.GetFullFilename(ebnum));
 		strcat(buffer, " ?");
-		if(MessageBox(NULL, buffer, "", MB_OKCANCEL) == IDOK)
+		if (hge->System_MessageBox(buffer, "", MB_OKCANCEL) == IDOK)
 		{
 			Data::data.SetEffectSystemResourceName(ebnum, "");
 			hge->Resource_DeleteFile(eres.fullfilename);
@@ -1405,7 +1405,7 @@ bool EditorUI::Delete()
 			strcat(buffer, " ? (");
 			strcat(buffer, eres.GetFullFilename(ebnum));
 			strcat(buffer, ")");
-			if(MessageBox(NULL, buffer, "", MB_OKCANCEL) == IDOK)
+			if (hge->System_MessageBox(buffer, "", MB_OKCANCEL) == IDOK)
 			{
 				int delID = emitter->ID;
 
@@ -1444,7 +1444,7 @@ bool EditorUI::Delete()
 			strcat(buffer, " ? (");
 			strcat(buffer, eres.GetFullFilename(ebnum));
 			strcat(buffer, ")");
-			if(MessageBox(NULL, buffer, "", MB_OKCANCEL) == IDOK)
+			if (hge->System_MessageBox(buffer, "", MB_OKCANCEL) == IDOK)
 			{
 				int delID = affector->ID;
 

@@ -5,6 +5,18 @@
 
 #include "../Header/Main.h"
 
+
+#ifdef __PSP
+#include <pspkernel.h>
+PSP_MODULE_INFO("h5nc", 0, 1, 1);
+PSP_MAIN_THREAD_ATTR(0);
+PSP_HEAP_SIZE_KB(-256);
+extern "C"
+{
+#include "../../../include/exception.h"
+};
+#endif // __PSP
+
 HGE *hge = NULL;
 
 int gametime = 0;
@@ -18,6 +30,10 @@ bool RenderFunc()
 	hge->Gfx_BeginScene();
 	hge->Gfx_Clear(0x00000000);
 
+#ifdef __PSP
+	pspDebugScreenSetXY(0,0);
+	pspDebugScreenPrintf("%f", hge->Timer_GetFPS());
+#endif // __PSP
 	Process::mp.render();
 	hge->Gfx_EndScene();
 	
@@ -50,6 +66,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 int main(int argc, char* argv[])
 #endif
 {
+#ifdef __PSP
+	initExceptionHandler();
+#endif
 	hge = hgeCreate(HGE_VERSION);
 	
 	hge->System_SetState(HGE_FRAMEFUNC, FrameFunc);
@@ -66,7 +85,8 @@ int main(int argc, char* argv[])
 	}
 
 	//
-	Process::mp.Realease();
+	//////////////////////////////////////////////////////////////////////////
+//	Process::mp.Realease();
 
 //	hge->System_Shutdown();
 	Export::Release();

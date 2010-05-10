@@ -20,7 +20,7 @@ int CALL HGE_Impl::Random_Seed(int seed)
 {
 	if (!seed)
 	{
-		g_seed=timeGetTime();
+		g_seed=Timer_GetCurrentSystemTime();
 		g_seed_self=g_seed;
 	}
 	else

@@ -62,7 +62,15 @@ extern "C"
 #define EXPORT
 #endif
 
+#ifdef __WIN32
 #define CALL  __stdcall
+#else
+
+#ifdef __PSP
+#define CALL
+#endif // __PSP
+
+#endif // __WIN32
 
 #ifdef __BORLANDC__
  #define floorf (float)floor
@@ -104,12 +112,28 @@ typedef unsigned char       BYTE;
 #endif
 
 #ifndef QWORD
+#ifdef __WIN32
 typedef unsigned __int64	QWORD;
+#else
+
+#ifdef __PSP
+typedef u64	QWORD;
+#endif // __PSP
+
+#endif // __WIN32
 #endif
 
 #ifndef LONGLONG
+#ifdef __WIN32
 typedef __int64			LONGLONG;
-typedef unsigned __int64 ULONGLONG;
+#else
+
+#ifdef __PSP
+typedef s64	LONGLONG;
+#endif // __PSP
+
+#endif // __WIN32
+typedef QWORD ULONGLONG;
 #endif
 
 #ifndef NULL
@@ -395,6 +419,14 @@ struct hgeVertex
 	float			tx, ty;		// texture coordinates
 };
 
+#ifdef __PSP
+struct pspVertex
+{
+	unsigned int color;
+	float x,y,z;
+};
+#endif // __PSP
+
 
 /*
 ** HGE Triple structure
@@ -655,14 +687,7 @@ public:
 	virtual	void		CALL	System_Log(const char *format, ...) = 0;
 	virtual bool		CALL	System_Launch(const char *url) = 0;
 	virtual void		CALL	System_Snapshot(const char *filename=0) = 0;
-
-	/************************************************************************/
-	/* These functions are added by h5nc (h5nc@yahoo.com.cn)                */
-	/************************************************************************/
-	// begin
-	virtual float			CALL	System_Transform3DPoint(hge3DPoint * pt, hge3DPoint *ptfar=NULL) = 0;
-	virtual float			CALL	System_Transform3DPoint(float &x, float &y, float &z, hge3DPoint *ptfar=NULL) = 0;
-	// end
+	virtual int			CALL	System_MessageBox(const char * text, const char * title, DWORD type) = 0;
 
 private:
 	virtual void		CALL	System_SetStateBool  (hgeBoolState   state, bool        value) = 0;
@@ -675,6 +700,7 @@ private:
 	virtual HWND		CALL	System_GetStateHwnd  (hgeHwndState   state) = 0;
 	virtual int			CALL	System_GetStateInt   (hgeIntState    state) = 0;
 	virtual const char*	CALL	System_GetStateString(hgeStringState state) = 0;
+
 public:
 	inline void					System_SetState(hgeBoolState   state, bool        value) { System_SetStateBool  (state, value); }
 	inline void					System_SetState(hgeFuncState   state, hgeCallback value) { System_SetStateFunc  (state, value); }
@@ -687,10 +713,18 @@ public:
 	inline int					System_GetState(hgeIntState    state) { return System_GetStateInt   (state); }
 	inline const char*			System_GetState(hgeStringState state) { return System_GetStateString(state); }
 
+	/************************************************************************/
+	/* These functions are added by h5nc (h5nc@yahoo.com.cn)                */
+	/************************************************************************/
+	// begin
+	virtual float		CALL	Math_Transform3DPoint(hge3DPoint * pt, hge3DPoint *ptfar=NULL) = 0;
+	virtual float		CALL	Math_Transform3DPoint(float &x, float &y, float &z, hge3DPoint *ptfar=NULL) = 0;
+	// end
 	virtual char*		CALL	Math_itoa(int ival, char * buffer) = 0;
 	virtual int			CALL	Math_atoi(const char * buffer) = 0;
 	virtual char*		CALL	Math_ftoa(float fval, char * buffer) = 0;
 	virtual float		CALL	Math_atof(const char * buffer) = 0;
+	virtual LONGLONG	CALL	Math_atoll(const char * buffer) = 0;
 	virtual D3DXMATRIX*	CALL	Math_MatrixIdentity( D3DXMATRIX * pOut ) = 0;
 	virtual D3DXMATRIX*	CALL	Math_MatrixTranslation( D3DXMATRIX *pOut, float x, float y, float z ) = 0;
 	virtual D3DXMATRIX*	CALL	Math_MatrixRotationX( D3DXMATRIX *pOut, float angle ) = 0;

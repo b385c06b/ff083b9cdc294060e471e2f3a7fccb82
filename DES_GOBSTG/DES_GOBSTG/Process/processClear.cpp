@@ -85,7 +85,7 @@ int Process::processClear()
 
 		if(!replaymode)
 		{
-			seed = timeGetTime();
+			seed = hge->Timer_GetCurrentSystemTime();
 			Replay::rpy.partFill(tpart);
 		}
 		gametime = 0;

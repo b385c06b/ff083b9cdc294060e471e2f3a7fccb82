@@ -1,0 +1,1 @@
+e:\cygwin\usr\local\pspdev\bin\psp-addr2line.exe -fCe e:\hge[0x073]\DES_GOBSTG\DES_GOBSTG\DES_GOBSTG.prx %1

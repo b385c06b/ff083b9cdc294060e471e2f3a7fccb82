@@ -81,7 +81,7 @@ void Fontsys::DoHeatUpBuffer( const char* str, list<int> * charcodelist )
 				continue;
 			}
 			int _charcode = i;
-			charcodelist->_Insert(it, _charcode);
+			charcodelist->insert(it, 1, _charcode);
 //			charcodelist->push_back(_charcode);
 		}
 	}

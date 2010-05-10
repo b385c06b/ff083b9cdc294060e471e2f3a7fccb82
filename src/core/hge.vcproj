@@ -517,6 +517,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Exception"
+				>
+				<File
+					RelativePath="..\Exception\exception.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\exception.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"

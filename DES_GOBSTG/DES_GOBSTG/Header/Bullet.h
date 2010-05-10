@@ -3,7 +3,11 @@
 
 #include "BObject.h"
 
+#ifdef __WIN32
 #define BULLETMAX			0x3000
+#else
+#define BULLETMAX			0x400
+#endif // __WIN32
 #define BULLETCOLORMAX		0x10
 #define BULLETTYPECOLORMAX	(BULLETTYPEMAX * BULLETCOLORMAX)
 
