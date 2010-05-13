@@ -4,6 +4,7 @@
 /* These functions are added by h5nc (h5nc@yahoo.com.cn)                */
 /************************************************************************/
 // begin
+
 float CALL HGE_Impl::Math_Transform3DPoint(float &x, float &y, float &z, hge3DPoint *ptfar)
 {
 	if (!ptfar || ptfar->z == 0.0f)
@@ -165,15 +166,23 @@ D3DXMATRIX * CALL HGE_Impl::Math_MatrixMultiply( D3DXMATRIX *pOut, const D3DXMAT
 	D3DXMatrixMultiply(pOut, pM1, pM2);
 #else
 
+	D3DXMATRIX outmat;
 	for (int i=0; i<4; i++)
 	{
 		for (int j=0; j<4; j++)
 		{
-			pOut->m[i][j] = 0.0f;
+			outmat.m[i][j] = 0.0f;
 			for (int k=0; k<4; k++)
 			{
-				pOut->m[i][j] += pM1->m[i][k] + pM2->m[k][j];
+				outmat.m[i][j] += pM1->m[i][k] * pM2->m[k][j];
 			}
+		}
+	}
+	for (int i=0; i<4; i++)
+	{
+		for (int j=0; j<4; j++)
+		{
+			pOut->m[i][j] = outmat.m[i][j];
 		}
 	}
 

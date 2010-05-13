@@ -4,16 +4,6 @@
 #include "../Header/Main.h"
 #include "../Header/keytable.h"
 
-#ifndef iswspace
-#define iswspace(X) ((X)==0x20 || (X)>=0x09&&(X)<=0x0D)
-#endif
-#ifndef iswdigit
-#define iswdigit(X) ((X)>='0' && (X)<='9')
-#endif
-#ifndef iswlower
-#define iswlower(X) ((X)>='a' && (X)<='z')
-#endif
-
 Scripter Scripter::scr;
 
 bool Scripter::stopEdefScript = false;
@@ -287,6 +277,7 @@ bool Scripter::LoadAll()
 		DWORD _size;
 		hge->Resource_AttachPack(Data::data.scriptfilename, Data::data.password);
 		_content = hge->Resource_Load(Data::data.scrbinname, &_size);
+		hge->Resource_RemovePack(Data::data.scriptfilename);
 
 		if(_content)
 		{
@@ -354,6 +345,7 @@ bool Scripter::LoadAll()
 		
 		hge->Resource_AttachPack(Data::data.scriptfilename, Data::data.password);
 		bincontent = hge->Resource_Load(Data::data.scrbinname, &binsize);
+		hge->Resource_RemovePack(Data::data.scriptfilename);
 		if(bincontent)
 		{
 			if(!Data::data.CheckMemHeader(bincontent, binsize, DATA_SCRIPTFILE))
@@ -361,6 +353,7 @@ bool Scripter::LoadAll()
 				Data::data.Init(DATA_SCRIPTFILE);
 				hge->Resource_AttachPack(Data::data.scriptfilename, Data::data.password);
 				bincontent = hge->Resource_Load(Data::data.scrbinname, &binsize);
+				hge->Resource_RemovePack(Data::data.scriptfilename);
 			}
 		}
 

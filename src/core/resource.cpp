@@ -92,6 +92,8 @@ bool CALL HGE_Impl::Resource_AddFileInPack(const char * filename, int password, 
 	zipCloseFileInZip(zip);
 	zipClose(zip, NULL);
 
+	Resource_RemovePack(filename);
+
 	return true;
 }
 
@@ -138,7 +140,9 @@ bool CALL HGE_Impl::Resource_CreatePack(const char * filename, int password, hge
 
 	va_end(ap);
 
-	return Resource_AttachPack(filename, password);
+	bool bret = Resource_AttachPack(filename, password);
+	Resource_RemovePack(filename);
+	return bret;
 }
 // end
 
@@ -248,25 +252,45 @@ void CALL HGE_Impl::Resource_DeleteFile(const char *filename)
 #endif // __WIN32
 }
 
-DWORD CALL HGE_Impl::Resource_FileSize(const char *filename)
+DWORD CALL HGE_Impl::Resource_FileSize(const char *filename, FILE * file)
 {
 	if (!filename)
 	{
 		return 0;
 	}
-	FILE * file = fopen(Resource_MakePath(filename), "rb");
+	bool toclose = false;
+	DWORD nowseek = 0;
+	if (!file)
+	{
+		file = fopen(Resource_MakePath(filename), "rb");
+		toclose = true;
+	}
+
 	if (!file)
 	{
 		return 0;
 	}
+	nowseek = ftell(file);
 	fseek(file, 0, SEEK_END);
-	return ftell(file);
+	DWORD size = ftell(file);
+	fseek(file, nowseek, SEEK_SET);
+	if (toclose)
+	{
+		fclose(file);
+	}
+	return size;
 }
 
 void CALL HGE_Impl::Resource_SetCurrentDirectory(const char *filename)
 {
 #ifdef __WIN32
 	SetCurrentDirectory(Resource_MakePath(filename));
+#else
+
+#ifdef __PSP
+//	sceIoChdir(Resource_MakePath(filename));
+#endif // __PSP
+
 #endif // __WIN32
 }
 
@@ -369,7 +393,7 @@ _fromfile:
 #ifdef __WIN32
 	file_info.uncompressed_size = GetFileSize(hF, NULL);
 #else
-	file_info.uncompressed_size = Resource_FileSize(filename);
+	file_info.uncompressed_size = Resource_FileSize(filename, hF);
 #endif
 	ptr = (BYTE *)malloc(file_info.uncompressed_size);
 	if(!ptr)
@@ -469,10 +493,15 @@ char* CALL HGE_Impl::Resource_MakePath(const char *filename)
 	int i;
 
 	if(!filename)
-		strcpy(szTmpFilename, szAppPath);
-	else if(filename[0]=='\\' || filename[0]=='/' || filename[1]==':')
+		strcpy(szTmpFilename, szResourcePath);
+	else if(filename[0]=='\\' || filename[0]=='/' || filename[1]==':'
+#ifndef __WIN32
+		|| strlen(filename) >= strlen(szResourcePath) && !strncmp(filename, szResourcePath, strlen(szResourcePath))
+#endif // __WIN32
+		)
+	{
 		strcpy(szTmpFilename, filename);
-	
+	}
 	else
 	{
 		char szTmp[256];

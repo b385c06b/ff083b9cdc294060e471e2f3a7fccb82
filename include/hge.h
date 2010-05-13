@@ -27,6 +27,7 @@
 #define ZLIB_USEPSW
 
 #include <math.h>
+#include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
@@ -34,10 +35,7 @@
 #ifdef __WIN32
 #ifdef WIN32
 #ifdef _DEBUG
-extern "C"
-{
 #include "../mmgr/mmgr.h"
-};
 #endif // _DEBUG
 #endif // WIN32
 #endif // __WIN32
@@ -140,6 +138,33 @@ typedef QWORD ULONGLONG;
 #define NULL	(0)
 #endif
 
+#ifndef isspace
+#define isspace(X) ((X)==0x20 || (X)>=0x09&&(X)<=0x0D)
+#endif
+#ifndef iswspace
+#define iswspace	isspace
+#endif
+
+#ifndef isdigit
+#define isdigit(X) ((X)>='0' && (X)<='9')
+#endif
+#ifndef iswdigit
+#define iswdigit	isdigit
+#endif
+
+#ifndef islower
+#define islower(X) ((X)>='a' && (X)<='z')
+#endif
+#ifndef iswlower
+#define iswlower	islower
+#endif
+
+#ifndef isupper
+#define isupper(X) ((X)>='A' && (X)<='Z')
+#endif
+#ifndef iswupper
+#define iswupper	isupper
+#endif
 /*
 ** Common math constants
 */
@@ -189,7 +214,6 @@ typedef struct tagHgeTextureInfo
 	float texh;
 }hgeTextureInfo;
 
-#ifdef __cplusplus
 class HTEXTURE
 {
 public:
@@ -249,9 +273,6 @@ public:
 	int texindex;
 	DWORD tex;
 };
-#else
-typedef DWORD HTEXTURE;
-#endif
 
 /************************************************************************/
 /* This define is added by Yuki                                         */
@@ -422,6 +443,13 @@ struct hgeVertex
 #ifdef __PSP
 struct pspVertex
 {
+	unsigned int color;
+	float x,y,z;
+};
+
+struct pspVertexUV
+{
+	float u, v;
 	unsigned int color;
 	float x,y,z;
 };
@@ -738,7 +766,7 @@ public:
 	/* This function is modified by h5nc (h5nc@yahoo.com.cn)                */
 	/************************************************************************/
 	virtual void		CALL	Resource_DeleteFile(const char *filename) = 0;
-	virtual DWORD		CALL	Resource_FileSize(const char *filename) = 0;
+	virtual DWORD		CALL	Resource_FileSize(const char *filename, FILE * file=NULL) = 0;
 	virtual void		CALL	Resource_SetCurrentDirectory(const char *filename) = 0;
 	virtual BYTE*		CALL	Resource_Load(const char *filename, DWORD *size=0) = 0;
 	virtual void		CALL	Resource_Free(void *res) = 0;

@@ -15,6 +15,7 @@
 
 #ifdef __PSP
 #include <psptypes.h>
+#include <pspgu.h>
 typedef s64	__int64;
 #define SCREEN_WIDTH 480.0f
 #define SCREEN_HEIGHT 272.0f
@@ -317,6 +318,7 @@ typedef	unsigned long		HWND;
 
 #define D3DFVF_RESERVED2         0x6000  // 2 reserved bits
 
+/*
 typedef enum _D3DTRANSFORMSTATETYPE {
 	D3DTS_VIEW          = 2,
 	D3DTS_PROJECTION    = 3,
@@ -328,14 +330,21 @@ typedef enum _D3DTRANSFORMSTATETYPE {
 	D3DTS_TEXTURE5      = 21,
 	D3DTS_TEXTURE6      = 22,
 	D3DTS_TEXTURE7      = 23,
-	D3DTS_FORCE_DWORD     = 0x7fffffff, /* force 32-bit size enum */
+	D3DTS_FORCE_DWORD     = 0x7fffffff, / * force 32-bit size enum * /
 } D3DTRANSFORMSTATETYPE;
 
 #define D3DTS_WORLDMATRIX(index) (D3DTRANSFORMSTATETYPE)(index + 256)
 #define D3DTS_WORLD  D3DTS_WORLDMATRIX(0)
 #define D3DTS_WORLD1 D3DTS_WORLDMATRIX(1)
 #define D3DTS_WORLD2 D3DTS_WORLDMATRIX(2)
-#define D3DTS_WORLD3 D3DTS_WORLDMATRIX(3)
+#define D3DTS_WORLD3 D3DTS_WORLDMATRIX(3)*/
+
+typedef enum _D3DTRANSFORMSTATETYPE {
+	D3DTS_WORLD			=	GU_MODEL,
+	D3DTS_VIEW          =	GU_VIEW,
+	D3DTS_PROJECTION    =	GU_PROJECTION,
+}D3DTRANSFORMSTATETYPE;
+
 
 #ifndef D3DMATRIX_DEFINED
 typedef struct _D3DMATRIX {

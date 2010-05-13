@@ -6,11 +6,8 @@
 
 #define RPYPARTMAX		7
 #define RPYPREFIXMAX	8
-#ifdef __WIN32
+
 #define RPYENUMMAX		0x40
-#else
-#define RPYENUMMAX		0x4
-#endif // __WIN32
 
 #define RPYFILENAME_CONTENTMAX	7
 

@@ -15,13 +15,19 @@ public:
 	void Save(char * filename);
 	bool Check(char * filename);
 
+	void AllocReplayFrame();
+	void FreeReplayFrame();
+
 	static void Free(char * filename);
+
+	static void Init();
+	static void Release();
 
 public:
 	partInfo partinfo[RPYPARTMAX];
 	replayInfo rpyinfo;
 
-	replayFrame replayframe[M_SAVEINPUTMAX];
+	replayFrame * replayframe;
 	DWORD replayIndex;
 
 	static Replay rpy;

@@ -140,6 +140,8 @@ void Process::Realease()
 	BResource::bres.Release();
 	Effectsys::Release();
 	BResource::bres.ReleaseCustomConst();
+
+	Replay::Release();
 /*
 	for(int i=0;i<TEXMAX;i++)
 	{

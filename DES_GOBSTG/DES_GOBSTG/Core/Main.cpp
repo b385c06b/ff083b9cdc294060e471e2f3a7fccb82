@@ -25,15 +25,9 @@ DWORD strdescIndex = 0;
 
 bool RenderFunc()
 {
-//	Export::clientSetMatrix(worldx, worldy, worldz);
-
 	hge->Gfx_BeginScene();
 	hge->Gfx_Clear(0x00000000);
 
-#ifdef __PSP
-	pspDebugScreenSetXY(0,0);
-	pspDebugScreenPrintf("%f", hge->Timer_GetFPS());
-#endif // __PSP
 	Process::mp.render();
 	hge->Gfx_EndScene();
 	

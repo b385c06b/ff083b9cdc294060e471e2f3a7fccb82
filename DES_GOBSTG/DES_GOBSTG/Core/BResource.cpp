@@ -50,6 +50,7 @@ bool BResource::LoadTextureSet( int texset/*=-1*/ )
 				tex[i] = LoadTexture(i);
 				if (!tex[i].tex && bret)
 				{
+					tex[i] = LoadTexture(TEX_WHITE);
 					bret = false;
 				}
 			}
@@ -398,6 +399,7 @@ bool BResource::Gain(void * pStrdesc, void * pCustomConstData)
 
 	hge->Resource_AttachPack(Data::data.resourcefilename, Data::data.password);
 	content = hge->Resource_Load(Data::data.resbinname, &size);
+	hge->Resource_RemovePack(Data::data.resourcefilename);
 	if(content)
 	{
 		spelldata.clear();

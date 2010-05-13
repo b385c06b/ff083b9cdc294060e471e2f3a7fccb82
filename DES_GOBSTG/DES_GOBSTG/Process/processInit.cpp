@@ -141,6 +141,7 @@ rebuild:
 #endif
 	hge->Resource_AttachPack(RESLOADING_PCK, Export::GetPassword());
 	texInit = hge->Texture_Load(RESLOADING_TEX);
+	hge->Resource_RemovePack(RESLOADING_PCK);
 
 	return PGO;
 }
@@ -159,7 +160,6 @@ int Process::processInit()
 		hge->Texture_Free(texInit);
 		texInit = NULL;
 	}
-	hge->Resource_RemovePack(RESLOADING_PCK);
 
 	bool binmode = Export::GetResourceFile();
 
@@ -236,11 +236,14 @@ int Process::processInit()
 	BGLayer::Init();
 
 	SE::vol = sevol;
+	SE::Initial();
+/*
 	if(!SE::Initial())
 	{
 		errorcode = PROC_ERROR_SOUND;
 		return PQUIT;
-	}
+	}*/
+
 
 	char tnbuffer[M_STRMAX];
 
@@ -313,7 +316,7 @@ int Process::processInit()
 #ifdef __DEBUG
 		HGELOG("%s\nFailed in Initializing Effectsys.", HGELOG_ERRSTR);
 #endif
-		return false;
+		return PQUIT;
 	}
 
 #ifdef __DEBUG
@@ -329,6 +332,7 @@ int Process::processInit()
 	}
 
 	Chat::chatitem.Init();
+	Replay::Init();
 
 	Selector::Clear();
 	InfoSelect::Clear();

@@ -15,6 +15,7 @@
 #include <pspthreadman.h>
 #include <pspaudiocodec.h> 
 #include <pspmpeg.h>
+#include <unistd.h>
 #endif // __PSP
 
 #define LOWORDINT(n) ((int)((signed short)(LOWORD(n))))
@@ -87,6 +88,7 @@ void CALL HGE_Impl::Release()
 #ifdef __PSP
 /* Exit callback */
 int exit_callback(int arg1, int arg2, void *common) {
+	sceKernelDelayThread(500000);
 	sceKernelExitGame();
 	return 0;
 }

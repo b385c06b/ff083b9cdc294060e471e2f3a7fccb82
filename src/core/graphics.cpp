@@ -25,6 +25,9 @@
 #include <pspgu.h>
 #include <pspgum.h>
 #include <psprtc.h>
+
+#include "../src/psp/PSP_graphics.h"
+
 static unsigned int __attribute__((aligned(16))) gulist[262144];
 #endif // __PSP
 
@@ -151,15 +154,19 @@ void CALL HGE_Impl::Gfx_SetTransform(float x, float y, float dx, float dy, float
 	}
 
 	_render_batch();
-#ifdef __WIN32
-	pD3DDevice->SetTransform(D3DTS_VIEW, &matView);
-#endif
+	Gfx_SetTransform(D3DTS_VIEW, &matView);
 }
 
 void CALL HGE_Impl::Gfx_SetTransform(D3DTRANSFORMSTATETYPE State, const D3DMATRIX * pMatrix)
 {
 #ifdef __WIN32
 	pD3DDevice->SetTransform(State, pMatrix);
+#else
+
+	sceGumMatrixMode((int)State);
+	sceGumLoadIdentity();
+	sceGumMultMatrix((ScePspFMatrix4*)pMatrix);
+
 #endif
 }
 
@@ -169,7 +176,8 @@ D3DMATRIX CALL HGE_Impl::Gfx_GetTransform(D3DTRANSFORMSTATETYPE State)
 #ifdef __WIN32
 	pD3DDevice->GetTransform(State, &mat);
 #else
-	Math_MatrixIdentity(&mat);
+	sceGumMatrixMode((int)State);
+	sceGumStoreMatrix((ScePspFMatrix4*)&mat);
 #endif
 	return mat;
 }
@@ -299,6 +307,29 @@ bool CALL HGE_Impl::Gfx_BeginScene(HTARGET targ)
 	return true;
 }
 
+#ifdef __PSP
+#include <malloc.h> 
+int __freemem() 
+{ 
+	void *ptrs[480]; 
+	int mem, x, i; 
+	void *ptr;
+
+	for (x = 0; x < 480; x++) 
+	{ 
+		ptr = malloc(51200); 
+		if (!ptr) break; 
+
+		ptrs[x] = ptr; 
+	} 
+	mem = x * 51200; 
+	for (i = 0; i < x; i++) 
+		free(ptrs[i]); 
+
+	return mem; 
+}
+#endif // __PSP
+
 void CALL HGE_Impl::Gfx_EndScene()
 {
 	_render_batch(true);
@@ -313,6 +344,11 @@ void CALL HGE_Impl::Gfx_EndScene()
 #ifdef __PSP
 	sceGuFinish();
 	sceGuSync(0,0);
+
+	pspDebugScreenSetXY(0, 0);
+	int freemem = __freemem();
+	pspDebugScreenPrintf("%f  %d(%.2fM)", Timer_GetFPS(), freemem, freemem*1.0f/(1024*1024));
+
 	sceGuSwapBuffers();
 #endif // __PSP
 
@@ -465,10 +501,50 @@ void CALL HGE_Impl::Gfx_RenderQuad(const hgeQuad *quad)
 		memcpy(&VertArray[nPrim*HGEPRIM_QUADS], quad->v, sizeof(hgeVertex)*HGEPRIM_QUADS);
 		nPrim++;
 	}
+#else
+
+#ifdef __PSP
+	struct pspVertexUV *vertices;
+	int i;
+
+	Image * pTex = (Image *)Texture_GetTexture(quad->tex);
+	if(pTex == 0 || pTex->textureWidth == 0 || pTex->textureHeight ==0 || !pTex->data)
+	{
+		return;
+	}
+
+	sceGuTexMode(GU_PSM_8888, 0, 0, 1);
+	sceKernelDcacheWritebackAll();
+	if((DWORD)pTex != CurTexture)
+	{
+		CurTexture = (DWORD)pTex;
+		sceGuTexImage(0, pTex->textureWidth, pTex->textureHeight, pTex->textureWidth, pTex->data);
+		sceKernelDcacheWritebackAll();
+	}
+
+	vertices = (struct pspVertexUV*)sceGuGetMemory(4 * sizeof(struct pspVertexUV));
+	if (!vertices)
+	{
+		return;
+	}
+	for (i=0; i<4; i++)
+	{
+		int j = i;
+		if (i > 1)
+		{
+			j = 5-i;
+		}
+		vertices[i].u = quad->v[j].tx;
+		vertices[i].v = quad->v[j].ty;
+		vertices[i].x = quad->v[j].x;
+		vertices[i].y = quad->v[j].y;
+		vertices[i].z = quad->v[j].z;
+		vertices[i].color = quad->v[j].col/*MAKE_RGBA_8888(GETR(quad->v[j].col), GETG(quad->v[j].col), GETB(quad->v[j].col), GETA(quad->v[j].col))*/;
+	}
+	sceGumDrawArray(GU_TRIANGLE_STRIP,GU_TEXTURE_32BITF|GU_COLOR_8888|GU_VERTEX_32BITF|GU_TRANSFORM_3D, 4, 0, vertices);
+#endif // __PSP
+
 #endif
-	/************************************************************************/
-	/* TODO                                                                 */
-	/************************************************************************/
 }
 
 hgeVertex* CALL HGE_Impl::Gfx_StartBatch(int prim_type, HTEXTURE tex, int blend, int *max_prim)
@@ -612,6 +688,7 @@ HTEXTURE CALL HGE_Impl::Texture_Create(int width, int height)
 #endif
 }
 
+
 HTEXTURE CALL HGE_Impl::Texture_Load(const char *filename, DWORD size, bool bMipmap)
 {
 	void *data;
@@ -675,10 +752,14 @@ HTEXTURE CALL HGE_Impl::Texture_Load(const char *filename, DWORD size, bool bMip
 	/************************************************************************/
 	/* TODO                                                                 */
 	/************************************************************************/
-	DWORD pTex = NULL;
+	Image * pTex = loadImageFromMemory((BYTE *)data, _size);
 #endif
 
-	if(!size) Resource_Free(data);
+	if (!pTex)
+	{
+		if(!size) Resource_Free(data);
+		return NULL;
+	}
 	
 	texItem=new CTextureList;
 	texItem->tex=(HTEXTURE)((DWORD)pTex);
@@ -686,11 +767,8 @@ HTEXTURE CALL HGE_Impl::Texture_Load(const char *filename, DWORD size, bool bMip
 	texItem->width=info.Width;
 	texItem->height=info.Height;
 #else
-	/************************************************************************/
-	/* TODO                                                                 */
-	/************************************************************************/
-	texItem->width=0;
-	texItem->height=0;
+	texItem->width=pTex->textureWidth;
+	texItem->height=pTex->textureHeight;
 #endif
 	texItem->next=textures;
 	textures=texItem;
@@ -703,6 +781,12 @@ void CALL HGE_Impl::Texture_Free(HTEXTURE tex)
 	DWORD ttex = Texture_GetTexture(tex);
 #ifdef __WIN32
 	LPDIRECT3DTEXTURE9 pTex=(LPDIRECT3DTEXTURE9)ttex;
+#else
+
+#ifdef __PSP
+	Image * pTex = (Image *)ttex;
+#endif // __PSP
+
 #endif
 	CTextureList *texItem=textures, *texPrev=0;
 
@@ -720,10 +804,16 @@ void CALL HGE_Impl::Texture_Free(HTEXTURE tex)
 	}
 #ifdef __WIN32
 	if(pTex != NULL) pTex->Release();
+#else
+
+#ifdef __PSP
+	if (pTex)
+	{
+		freeImage(pTex);
+	}
+#endif // __PSP
+
 #endif
-	/************************************************************************/
-	/* TODO                                                                 */
-	/************************************************************************/
 }
 
 DWORD CALL HGE_Impl::Texture_GetTexture(HTEXTURE tex)
@@ -760,7 +850,8 @@ int CALL HGE_Impl::Texture_GetWidth(HTEXTURE tex, bool bOriginal)
 		else return TDesc.Width;
 	}
 #else
-	return NULL;
+	Image * pTex = (Image *)ttex;
+	return pTex->textureWidth;
 #endif
 }
 
@@ -794,7 +885,8 @@ int CALL HGE_Impl::Texture_GetHeight(HTEXTURE tex, bool bOriginal)
 		else return TDesc.Height;
 	}
 #else
-	return NULL;
+	Image * pTex = (Image *)ttex;
+	return pTex->textureHeight;
 #endif
 }
 

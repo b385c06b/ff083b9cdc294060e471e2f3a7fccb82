@@ -20,16 +20,27 @@ void Process::frameStart()
 		playing = true;
 		if(!Player::p.ncCont)
 		{
-			Replay::rpy.replayIndex++;
-			Replay::rpy.replayframe[Replay::rpy.replayIndex].input = nowInput;
-			Export::rpySetBias(&(Replay::rpy.replayframe[Replay::rpy.replayIndex]));
+			if (Replay::rpy.replayIndex < M_SAVEINPUTMAX)
+			{
+				Replay::rpy.replayIndex++;
+				Replay::rpy.replayframe[Replay::rpy.replayIndex].input = nowInput;
+				Export::rpySetBias(&(Replay::rpy.replayframe[Replay::rpy.replayIndex]));
+			}
 		}
 	}
 	else if(!Player::p.ncCont)
 	{
-		Replay::rpy.replayIndex++;
-		nowInput = Replay::rpy.replayframe[Replay::rpy.replayIndex].input;
-		replayFPS = Export::rpyGetReplayFPS(Replay::rpy.replayframe[Replay::rpy.replayIndex]);
+		if (Replay::rpy.replayIndex < M_SAVEINPUTMAX)
+		{
+			Replay::rpy.replayIndex++;
+			nowInput = Replay::rpy.replayframe[Replay::rpy.replayIndex].input;
+			replayFPS = Export::rpyGetReplayFPS(Replay::rpy.replayframe[Replay::rpy.replayIndex]);
+		}
+		else
+		{
+			nowInput = 0xff;
+			replayFPS = 0;
+		}
 
 		if(nowInput == 0xff)
 		{

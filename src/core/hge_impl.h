@@ -124,7 +124,7 @@ public:
 	virtual D3DXMATRIX*	CALL	Math_MatrixOrthoOffCenterLH(D3DXMATRIX *pOut, float l, float r, float b, float t, float zn, float zf);
 
 	virtual void		CALL	Resource_DeleteFile(const char *filename);
-	virtual DWORD		CALL	Resource_FileSize(const char *filename);
+	virtual DWORD		CALL	Resource_FileSize(const char *filename, FILE * file=NULL);
 	virtual void		CALL	Resource_SetCurrentDirectory(const char *filename);
 	virtual BYTE*		CALL	Resource_Load(const char *filename, DWORD *size=0);
 	virtual void		CALL	Resource_Free(void *res);

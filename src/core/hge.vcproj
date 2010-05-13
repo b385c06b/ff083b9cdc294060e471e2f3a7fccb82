@@ -529,6 +529,26 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="PSP"
+				>
+				<File
+					RelativePath="..\PSP\PSP_framebuffer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\PSP\PSP_framebuffer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\PSP\PSP_graphics.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\PSP\PSP_graphics.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"

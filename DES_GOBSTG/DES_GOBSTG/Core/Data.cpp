@@ -543,6 +543,7 @@ bool Data::SetFile(const char * _filename, BYTE type)
 		BYTE * content;
 		DWORD size;
 		content = hge->Resource_Load(binname, &size);
+		hge->Resource_RemovePack(nowfilename);
 		if(content)
 		{
 			MemToList(content, size);
@@ -577,6 +578,7 @@ failed:
 		BYTE * content;
 		DWORD size;
 		content = hge->Resource_Load(rabinname, &size);
+		hge->Resource_RemovePack(nowfilename);
 		BYTE * it = NULL;
 		if(content)
 			it = content + M_BINHEADER_OFFSET;
@@ -735,6 +737,7 @@ bool Data::CheckHeader(BYTE type)
 		DWORD _size;
 		hge->Resource_AttachPack(fname, password);
 		_content = hge->Resource_Load(bname, &_size);
+		hge->Resource_RemovePack(fname);
 		if(!CheckMemHeader(_content, _size, type))
 		{
 			hge->Resource_Free(_content);

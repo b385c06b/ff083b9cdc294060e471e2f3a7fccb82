@@ -9,10 +9,36 @@ Replay Replay::rpy;
 Replay::Replay()
 {
 	ZeroMemory(&rpyinfo, sizeof(replayInfo));
+	replayframe = NULL;
 }
 
 Replay::~Replay()
 {
+	FreeReplayFrame();
+}
+
+void Replay::Init()
+{
+	rpy.AllocReplayFrame();
+}
+
+void Replay::Release()
+{
+	rpy.FreeReplayFrame();
+}
+
+void Replay::AllocReplayFrame()
+{
+	FreeReplayFrame();
+	replayframe = (replayFrame *)malloc(sizeof(replayFrame) * M_SAVEINPUTMAX);
+}
+
+void Replay::FreeReplayFrame()
+{
+	if (replayframe)
+	{
+		free(replayframe);
+	}
 }
 
 void Replay::Free(char * filename)
@@ -103,8 +129,8 @@ bool Replay::Check(char * filename)
 	strcpy(treplayfilename, BResource::bres.resdata.replayfoldername);
 	strcat(treplayfilename, filename);
 	hge->Resource_AttachPack(treplayfilename, Data::data.password ^ REPLAYPASSWORD_XORMAGICNUM);
-
 	content = hge->Resource_Load(hge->Resource_GetPackFirstFileName(treplayfilename));
+	hge->Resource_RemovePack(treplayfilename);
 	if(content)
 	{
 		if(strcmp((char *)(content + RPYOFFSET_SIGNATURE), BResource::bres.resdata.replaysignature11))
@@ -128,6 +154,10 @@ bool Replay::Load(char * filename, bool getInput)
         char treplayfilename[M_PATHMAX];
 		strcpy(treplayfilename, BResource::bres.resdata.replayfoldername);
 		strcat(treplayfilename, filename);
+		if (getInput)
+		{
+			AllocReplayFrame();
+		}
 		ret = Export::rpyLoad(treplayfilename, &rpyinfo, partinfo, getInput ? replayframe : NULL);
 		if (getInput)
 		{

@@ -225,11 +225,7 @@
 
 #define STRINGDESCMAX		0x400
 
-#ifdef __WIN32
 #define M_SAVEINPUTMAX		0x36000
-#else
-#define M_SAVEINPUTMAX		0x400
-#endif // __WIN32
 
 #ifdef __WIN32
 #ifdef __RELEASE
