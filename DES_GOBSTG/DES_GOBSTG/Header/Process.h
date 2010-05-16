@@ -6,6 +6,20 @@
 #include "Const.h"
 #include "ProcessDefine.h"
 
+#define KEYINDEX_UP			0
+#define KEYINDEX_DOWN		1
+#define KEYINDEX_LEFT		2
+#define KEYINDEX_RIGHT		3
+#define KEYINDEX_FIRE		4
+#define KEYINDEX_SPECIAL	5
+#define KEYINDEX_SLOW		6
+#define KEYINDEX_CHANGE		7
+#define KEYINDEX_PAUSE		8
+#define KEYINDEX_SKIP		9
+#define KEYINDEX_ENTER		10
+#define KEYINDEX_ESCAPE		11
+#define KEYINDEX_CAPTURE	12
+
 #define KS_UP		keyUp
 #define KS_DOWN		keyDown
 #define KS_LEFT		keyLeft

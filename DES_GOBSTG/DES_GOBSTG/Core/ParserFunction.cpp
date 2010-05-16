@@ -59,6 +59,12 @@ void * Scripter::Value(vector<Script>::iterator * p, int i, BYTE force)
 		else
 			idesc[i] = CINT(d[_tdi].value);
 	}
+	else if ((*p)->type & SCR_TOKEN_KEYSTATE)
+	{
+		int _tdi = (*p)->value;
+		idesc[i] = Process::mp.keyKey[_tdi];
+		d[i].bfloat = false;
+	}
 	else
 	{
 		_ParserFunction::Init(p, i);

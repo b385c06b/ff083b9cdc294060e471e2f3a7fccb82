@@ -397,9 +397,9 @@ bool BResource::Gain(void * pStrdesc, void * pCustomConstData)
 	DWORD size;
 	bool ret = false;
 
-	hge->Resource_AttachPack(Data::data.resourcefilename, Data::data.password);
+	hge->Resource_AttachPack(Data::data.resbinname, Data::data.password);
 	content = hge->Resource_Load(Data::data.resbinname, &size);
-	hge->Resource_RemovePack(Data::data.resourcefilename);
+	hge->Resource_RemovePack(Data::data.resbinname);
 	if(content)
 	{
 		spelldata.clear();

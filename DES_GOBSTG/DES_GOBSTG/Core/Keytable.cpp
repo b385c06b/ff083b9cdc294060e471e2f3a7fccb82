@@ -633,6 +633,20 @@ scrKeyWord scrKeyTable[] =
 
 	{SCR_KEYSTATE_STR,			SCR_KEYSTATE},
 
+	{"KS_UP",					KEYINDEX_UP},
+	{"KS_DOWN",					KEYINDEX_DOWN},
+	{"KS_LEFT",					KEYINDEX_LEFT},
+	{"KS_RIGHT",				KEYINDEX_RIGHT},
+	{"KS_FIRE",					KEYINDEX_FIRE},
+	{"KS_SPECIAL",				KEYINDEX_SPECIAL},
+	{"KS_SLOW",					KEYINDEX_SLOW},
+	{"KS_CHANGE",				KEYINDEX_CHANGE},
+	{"KS_PAUSE",				KEYINDEX_PAUSE},
+	{"KS_SKIP",					KEYINDEX_SKIP},
+	{"KS_ENTER",				KEYINDEX_ENTER},
+	{"KS_ESCAPE",				KEYINDEX_ESCAPE},
+	{"KS_CAPTURE",				KEYINDEX_CAPTURE},
+/*
 	{"KS_UP",					(DWORD)&(Process::mp.keyUp)},
 	{"KS_DOWN",					(DWORD)&(Process::mp.keyDown)},
 	{"KS_LEFT",					(DWORD)&(Process::mp.keyLeft)},
@@ -646,6 +660,8 @@ scrKeyWord scrKeyTable[] =
 	{"KS_ENTER",				(DWORD)&(Process::mp.keyEnter)},
 	{"KS_ESCAPE",				(DWORD)&(Process::mp.keyEscape)},
 	{"KS_CAPTURE",				(DWORD)&(Process::mp.keyCapture)},
+*/
+
 
 	{SCR_NULL_STR,				SCR_NULL},
 };

@@ -29,6 +29,9 @@
 #include "../src/psp/PSP_graphics.h"
 
 static unsigned int __attribute__((aligned(16))) gulist[262144];
+
+#define SLICE_SIZE_F			64.0f
+
 #endif // __PSP
 
 #endif
@@ -345,15 +348,28 @@ void CALL HGE_Impl::Gfx_EndScene()
 	sceGuFinish();
 	sceGuSync(0,0);
 
+
 	pspDebugScreenSetXY(0, 0);
 	int freemem = __freemem();
 	pspDebugScreenPrintf("%f  %d(%.2fM)", Timer_GetFPS(), freemem, freemem*1.0f/(1024*1024));
+
 
 	sceGuSwapBuffers();
 #endif // __PSP
 
 #endif
 }
+
+#ifdef __PSP
+DWORD _ARGBtoABGR(DWORD color)
+{
+	BYTE r = GETR(color);
+	BYTE b = GETB(color);
+	color = SETB(color, r);
+	color = SETR(color, b);
+	return color;
+}
+#endif // __PSP
 
 void CALL HGE_Impl::Gfx_RenderLine(float x1, float y1, float x2, float y2, DWORD color, float z)
 {
@@ -521,6 +537,10 @@ void CALL HGE_Impl::Gfx_RenderQuad(const hgeQuad *quad)
 		sceGuTexImage(0, pTex->textureWidth, pTex->textureHeight, pTex->textureWidth, pTex->data);
 		sceKernelDcacheWritebackAll();
 	}
+	if (CurBlendMode != quad->blend)
+	{
+		_SetBlendMode(quad->blend);
+	}
 
 	vertices = (struct pspVertexUV*)sceGuGetMemory(4 * sizeof(struct pspVertexUV));
 	if (!vertices)
@@ -539,7 +559,7 @@ void CALL HGE_Impl::Gfx_RenderQuad(const hgeQuad *quad)
 		vertices[i].x = quad->v[j].x;
 		vertices[i].y = quad->v[j].y;
 		vertices[i].z = quad->v[j].z;
-		vertices[i].color = quad->v[j].col/*MAKE_RGBA_8888(GETR(quad->v[j].col), GETG(quad->v[j].col), GETB(quad->v[j].col), GETA(quad->v[j].col))*/;
+		vertices[i].color = _ARGBtoABGR(quad->v[j].col);
 	}
 	sceGumDrawArray(GU_TRIANGLE_STRIP,GU_TEXTURE_32BITF|GU_COLOR_8888|GU_VERTEX_32BITF|GU_TRANSFORM_3D, 4, 0, vertices);
 #endif // __PSP
@@ -755,9 +775,9 @@ HTEXTURE CALL HGE_Impl::Texture_Load(const char *filename, DWORD size, bool bMip
 	Image * pTex = loadImageFromMemory((BYTE *)data, _size);
 #endif
 
+	if(!size) Resource_Free(data);
 	if (!pTex)
 	{
-		if(!size) Resource_Free(data);
 		return NULL;
 	}
 	
@@ -1014,12 +1034,24 @@ void HGE_Impl::_SetBlendMode(int blend)
 		else pD3DDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
 	}
 
-	CurBlendMode = blend;
 #else
-	/************************************************************************/
-	/* TODO                                                                 */
-	/************************************************************************/
+
+#ifdef __PSP
+	int toblend;
+	switch (blend)
+	{
+	case BLEND_ALPHAADD:
+		toblend = GU_TFX_ADD;
+	default:
+		toblend = GU_TFX_MODULATE;
+		break;
+	}	
+	sceGuTexFunc(toblend, GU_TCC_RGBA); 
+#endif // __PSP
+
 #endif
+
+	CurBlendMode = blend;
 }
 
 void HGE_Impl::_SetProjectionMatrix(int width, int height)

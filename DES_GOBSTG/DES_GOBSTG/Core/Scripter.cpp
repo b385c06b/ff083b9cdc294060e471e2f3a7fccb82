@@ -972,8 +972,8 @@ Token Scripter::GetToken()
 		{
 			if (!strcmp(buffer, scrKeyTable[kti].word))
 			{
-				ret.value |= *(DWORD *)scrKeyTable[kti].code;
-				ret.type |= SCR_TOKEN_VALUE;
+				ret.value |= scrKeyTable[kti].code;
+				ret.type |= SCR_TOKEN_KEYSTATE;
 				bFound = true;
 				break;
 			}

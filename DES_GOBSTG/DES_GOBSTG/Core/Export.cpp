@@ -108,8 +108,11 @@ void Export::clientSetMatrix(float _worldx, float _worldy, float _worldz)
 #else
 
 #ifdef __PSP
+
 	float scaleval = SCREEN_HEIGHT / M_CLIENT_HEIGHT;
 	float offsetval = (SCREEN_WIDTH - M_CLIENT_WIDTH*scaleval)/2.0f;
+
+	hge->Gfx_SetClipping(offsetval, 0, M_CLIENT_WIDTH-2*offsetval, M_CLIENT_HEIGHT);
 
 	D3DXMATRIX matView;
 	matView.m[0][0] = scaleval;
