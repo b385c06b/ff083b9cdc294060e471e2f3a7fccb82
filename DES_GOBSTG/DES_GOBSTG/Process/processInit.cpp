@@ -188,7 +188,7 @@ int Process::processInit()
 			errorcode = PROC_ERROR_SCRIPT;
 			return PQUIT;
 		}
-		if(!BResource::bres.Pack(Scripter::scr.strdesc, BResource::bres.customconstdata))
+		if(!BResource::bres.Pack(BResource::bres.strdesc, BResource::bres.customconstdata))
 		{
 #ifdef __DEBUG
 			HGELOG("Error in Packing Resource Data.");
@@ -202,7 +202,7 @@ int Process::processInit()
 			return PQUIT;
 		}
 	}
-	if(!BResource::bres.Gain(Scripter::scr.strdesc, binmode?BResource::bres.customconstdata:NULL))
+	if(!BResource::bres.Gain(BResource::bres.strdesc, binmode?BResource::bres.customconstdata:NULL))
 	{
 #ifdef __DEBUG
 		HGELOG("Error in Gaining Resource Data.");

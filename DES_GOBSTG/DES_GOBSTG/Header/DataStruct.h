@@ -39,11 +39,17 @@ struct spellData{
 	BYTE battleID;
 };
 
-struct textureData{
+struct textureData
+{
 	char texfilename[M_STRMAX];
 	int texset;
 	int width;
 	int height;
+};
+
+struct stringData
+{
+	char strname[M_STRMAX];
 };
 
 struct uiStringData 

@@ -140,6 +140,7 @@ void Process::Realease()
 	BResource::bres.Release();
 	Effectsys::Release();
 	BResource::bres.ReleaseCustomConst();
+	BResource::bres.ReleaseStrDesc();
 
 	Replay::Release();
 /*

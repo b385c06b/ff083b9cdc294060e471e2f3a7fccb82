@@ -20,16 +20,22 @@ void Process::frameStart()
 		playing = true;
 		if(!Player::p.ncCont)
 		{
+			Replay::rpy.SaveInput(nowInput, hge->Timer_GetFPS());
+/*
 			if (Replay::rpy.replayIndex < M_SAVEINPUTMAX)
 			{
 				Replay::rpy.replayIndex++;
 				Replay::rpy.replayframe[Replay::rpy.replayIndex].input = nowInput;
 				Export::rpySetBias(&(Replay::rpy.replayframe[Replay::rpy.replayIndex]));
-			}
+
+			}*/
+
 		}
 	}
 	else if(!Player::p.ncCont)
 	{
+		nowInput = Replay::rpy.ReadInput(&replayFPS);
+/*
 		if (Replay::rpy.replayIndex < M_SAVEINPUTMAX)
 		{
 			Replay::rpy.replayIndex++;
@@ -40,7 +46,8 @@ void Process::frameStart()
 		{
 			nowInput = 0xff;
 			replayFPS = 0;
-		}
+		}*/
+
 
 		if(nowInput == 0xff)
 		{

@@ -43,6 +43,9 @@ public:
 	void ReleaseCustomConst();
 	void MallocCustomConst();
 
+	void ReleaseStrDesc();
+	void MallocStrDesc(DWORD size);
+
 public:
 
 	musicData musdata[MUSICMAX];
@@ -57,6 +60,7 @@ public:
 	playerghostData playerghostdata[PLAYERGHOSTTYPEMAX];
 	customconstData * customconstdata;
 	textureData texturedata[TEXMAX];
+	stringData * strdesc;
 
 	static BResource bres;
 

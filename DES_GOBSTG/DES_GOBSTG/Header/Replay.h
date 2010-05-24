@@ -18,6 +18,11 @@ public:
 	void AllocReplayFrame();
 	void FreeReplayFrame();
 
+	bool SetBias(replayFrame * _replayframe);
+	float GetFPS(replayFrame * _replayframe);
+	bool SaveInput(BYTE input, float fps);
+	BYTE ReadInput(float * fps=NULL);
+
 	static void Free(char * filename);
 
 	static void Init();

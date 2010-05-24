@@ -111,6 +111,7 @@ public:
 	~Scripter();
 
 	Token GetToken();
+	Token GetBinToken();
 
 	void FillCustomConstDesc();
 
@@ -266,8 +267,6 @@ public:
 #endif
 
 	static bool stopEdefScript;
-
-	char strdesc[STRINGDESCMAX][M_STRMAX*2];
 	static Scripter scr;
 
 };

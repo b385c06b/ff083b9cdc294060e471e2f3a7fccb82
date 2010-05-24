@@ -101,7 +101,7 @@ void Fontsys::HeatUp(bool rebuildfont)
 
 		for (int i=0; i<STRINGDESCMAX; i++)
 		{
-			DoHeatUpBuffer(Scripter::scr.strdesc[i], &charcodelist);
+			DoHeatUpBuffer(BResource::bres.strdesc[i].strname, &charcodelist);
 		}
 		for (int i=0; i<PLAYERTYPEMAX; i++)
 		{

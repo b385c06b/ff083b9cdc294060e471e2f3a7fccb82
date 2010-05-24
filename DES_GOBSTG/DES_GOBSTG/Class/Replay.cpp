@@ -30,7 +30,9 @@ void Replay::Release()
 void Replay::AllocReplayFrame()
 {
 	FreeReplayFrame();
+#ifdef __WIN32
 	replayframe = (replayFrame *)malloc(sizeof(replayFrame) * M_SAVEINPUTMAX);
+#endif
 }
 
 void Replay::FreeReplayFrame()
@@ -210,4 +212,41 @@ void Replay::Save(char * filename)
 	hge->Resource_CreatePack(treplayfilename, Data::data.password ^ REPLAYPASSWORD_XORMAGICNUM, &memfile, NULL);
 
 	free(_rpydata);
+}
+
+bool Replay::SetBias(replayFrame * _replayframe)
+{
+	return Export::rpySetBias(_replayframe);
+}
+
+float Replay::GetFPS(replayFrame * _replayframe)
+{
+	return Export::rpyGetReplayFPS(_replayframe);
+}
+
+bool Replay::SaveInput(BYTE input, float fps)
+{
+	if (!replayframe || replayIndex >= M_SAVEINPUTMAX)
+	{
+		return false;
+	}
+
+	replayIndex++;
+	replayframe[replayIndex].input = input;
+	return SetBias(&(replayframe[replayIndex]));
+}
+
+BYTE Replay::ReadInput(float * fps/* =NULL */)
+{
+	if (!replayframe || replayIndex >= M_SAVEINPUTMAX)
+	{
+		return false;
+	}
+
+	replayIndex++;
+	if (fps)
+	{
+		*fps = GetFPS(&replayframe[replayIndex]);
+	}
+	return replayframe[replayIndex].input;
 }

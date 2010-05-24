@@ -110,7 +110,7 @@ public:
 	static bool rpyLoad(const char * filename, replayInfo * _rpyinfo = NULL, partInfo * _partinfo = NULL, replayFrame * _replayframe = NULL);
 	static bool rpyFree(const char * filename);
 	static bool rpySetBias(replayFrame * _replayframe);
-	static float rpyGetReplayFPS(replayFrame _replayframe);
+	static float rpyGetReplayFPS(replayFrame * _replayframe);
 	static bool packFile(const char * zipname, const char * filename);
 #ifdef __WIN32
 	static bool packFolder(const char * zipname, const char * foldername, const char * filterstr, int * initcount = 0);

@@ -586,6 +586,22 @@ void BResource::InitTexinfo()
 	}
 	hge->Gfx_SetTextureInfo(TEXMAX, texinfo);
 }
+
+void BResource::ReleaseStrDesc()
+{
+	if (strdesc)
+	{
+		free(strdesc);
+		strdesc = NULL;
+	}
+}
+
+void BResource::MallocStrDesc( DWORD size )
+{
+	ReleaseStrDesc();
+	strdesc = (stringData *)malloc(RSIZE_STRINGDESC);
+}
+
 /*
 int BResource::SplitString(const char * str)
 {

@@ -529,14 +529,14 @@ void CALL HGE_Impl::Gfx_RenderQuad(const hgeQuad *quad)
 		return;
 	}
 
-	sceGuTexMode(GU_PSM_8888, 0, 0, 1);
-	sceKernelDcacheWritebackAll();
+	sceGuTexMode(GU_PSM_8888, 0, 0, GU_TRUE);
 	if((DWORD)pTex != CurTexture)
 	{
 		CurTexture = (DWORD)pTex;
 		sceGuTexImage(0, pTex->textureWidth, pTex->textureHeight, pTex->textureWidth, pTex->data);
 		sceKernelDcacheWritebackAll();
 	}
+//	sceKernelDcacheWritebackAll();
 	if (CurBlendMode != quad->blend)
 	{
 		_SetBlendMode(quad->blend);

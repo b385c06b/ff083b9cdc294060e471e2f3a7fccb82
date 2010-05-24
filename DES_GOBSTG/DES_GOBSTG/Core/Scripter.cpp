@@ -85,7 +85,7 @@ bool Scripter::SetString(int index, char * str)
 	{
 		return false;
 	}
-	strcpy(strdesc[index], str);
+	strcpy(BResource::bres.strdesc[index].strname, str);
 	return true;
 }
 
@@ -95,7 +95,7 @@ char * Scripter::GetString(int index)
 	{
 		return NULL;
 	}
-	return strdesc[index];
+	return BResource::bres.strdesc[index].strname;
 }
 
 char * Scripter::GetStringSp(int descindex)
@@ -256,13 +256,9 @@ bool Scripter::LoadAll()
 
 	FillCustomConstDesc();
 
+	BResource::bres.MallocStrDesc(STRINGDESCMAX);
 	if(!binmode)
 	{
-		for(int i=0; i<STRINGDESCMAX; i++)
-		{
-			strcpy(strdesc[i], "");
-		}
-
 		ReleaseVarName();
 		varName = (char **)malloc(sizeof(char *) * (SCR_VARDESCNUM));
 		for (int i=0; i<SCR_VARDESCNUM; i++)
@@ -598,6 +594,11 @@ addblock:
 
 Token Scripter::GetToken()
 {
+	if (binmode)
+	{
+		return GetBinToken();
+	}
+
 	char buffer[M_STRMAX];
 	Token ret;
 	ret.type = 0;
@@ -608,11 +609,6 @@ Token Scripter::GetToken()
 	bool bIsAddress = false;
 	bool bFound = false;
 	int kti = 0;
-
-	if(binmode)
-	{
-		goto exit;
-	}
 
 	if(!file || feof(file))
 	{
@@ -1001,32 +997,32 @@ Token Scripter::GetToken()
 	}
 
 exit:
-	if(!binmode)
-	{
 #ifdef __DEBUG
-		if (file)
-		{
-			ret.fileindex = nowfileindex;
-			ret.line = nowline;
-			ret.pos = ftell(file);
-		}
-#endif
-		memcpy(bincontent+binoffset, &ret, sizeof(Token));
-		binoffset += sizeof(Token);
-		if(ret.type & SCR_TOKEN_HANDLE)
-		{
-			SetString(ret.value, &buffer[1]);
-//			strcpy(strdesc[ret.value], &buffer[1]);
-		}
-	}
-	else
+	if (file)
 	{
-		memcpy(&ret, bincontent+binoffset, sizeof(Token));
-		binoffset += sizeof(Token);
-		if(binoffset > binsize)
-		{
-			ret.type = SCR_TOKEN_EOF;
-		}
+		ret.fileindex = nowfileindex;
+		ret.line = nowline;
+		ret.pos = ftell(file);
+	}
+#endif
+	memcpy(bincontent+binoffset, &ret, sizeof(Token));
+	binoffset += sizeof(Token);
+	if(ret.type & SCR_TOKEN_HANDLE)
+	{
+		SetString(ret.value, &buffer[1]);
+//		strcpy(strdesc[ret.value], &buffer[1]);
+	}
+	return ret;
+}
+
+Token Scripter::GetBinToken()
+{
+	Token ret;
+	memcpy(&ret, bincontent+binoffset, sizeof(Token));
+	binoffset += sizeof(Token);
+	if(binoffset > binsize)
+	{
+		ret.type = SCR_TOKEN_EOF;
 	}
 	return ret;
 }
