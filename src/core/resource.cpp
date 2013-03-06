@@ -8,6 +8,7 @@
 
 
 #include "hge_impl.h"
+#include "io.h"
 
 #define NOCRYPT
 //#define NOUNCRYPT
